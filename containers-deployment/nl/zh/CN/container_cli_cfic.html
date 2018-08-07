@@ -1,0 +1,1534 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="使用 Bluemix 的 IBM Bluemix Container Service 插件可通过命令行来使用映像或单个和可扩展容器。">
+<meta name="keywords" content="容器, CLI, 插件, cf, bx ic, IBM Containers, Cloud Foundry, 安装, 登录, 升级, 卸载">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>用于管理单个和可扩展容器的 IBM Bluemix Container Service CLI 插件 (bx ic)</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d72e6" id="container_cli_cfic"><h1 class="topictitle1" id="d72e6">用于管理<span class="ph">单个和可扩展容器</span>的 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h1>
+<div class="body conbody"><p class="shortdesc">使用 <span class="keyword">Bluemix®</span> 的 <span class="keyword">IBM®
+Bluemix Container Service</span> 插件可通过命令行来使用映像或<span class="ph">单个和可扩展容器</span>。</p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d72e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d72e111" lang="zh-cn" id="container_cli_cfic_install"><h2 class="topictitle2" id="d72e111">设置 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 以对<span class="ph">单个和可扩展容器</span>使用本机 Docker CLI</h2>
+<div class="abstract"><div class="shortdesc">安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)，以运行本机 Docker CLI 命令来管理容器。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> <span class="ph"><span class="ph">单个和可扩展容器</span> 的免费试用版不可用。
+<a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">了解有关集群管理和在 <span class="keyword">Bluemix</span> Public 上迁移至 <span class="keyword">IBM
+Bluemix Container Service</span> 中的 Kubernetes 的信息。</a></span></div>
+</div>
+
+
+<div class="p">在此页面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#install_plugin">安装 IBM Bluemix Container Service 插件 (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 IBM Bluemix Container Service CLI 插件 (bx ic) </a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_upgrade" title="您可能想要定期更新插件以使用新功能。">升级 IBM Bluemix Container Service 插件 (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_uninstall" title="如果不再需要 IBM Bluemix Container Service 插件，可以使用 bx 命令将其卸载。">卸载 IBM Bluemix Container Service 插件 (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_install" title="要同时启动和停止一些单个容器，可以安装 Docker Compose CLI。">安装 Docker Compose 及其依赖项</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="您可能需要升级 Docker Compose 包的版本，才能使用最新功能。">升级 Docker Compose</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_uninstall" title="如果不再需要 Docker Compose 软件包，可以使用以下命令将其卸载。">卸载 Docker Compose</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d72e111"></aside><article class="topic task nested2" role="article" aria-labelledby="d72e312" id="install_plugin"><h3 class="topictitle3" id="d72e312">安装 IBM Bluemix Container Service 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h3>
+<div class="body taskbody"><div class="section context" id="install_plugin__context_e5s_szz_nz"><p>要运行命令，您的操作系统必须满足以下需求。此任务包含用于安装这些所需工具的信息。这些工具的较低版本无法与 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 配合使用。</p>
+
+<div class="p"><ul id="install_plugin__ul_f5s_szz_nz"><li><span class="ph">Docker V1.8 到 <span class="ph" id="install_plugin__d1147e257">V1.12</span></span></li>
+<li><span class="ph">Cloud Foundry CLI V<span class="ph" id="install_plugin__d1147e301">6.14.0</span> - 6.22.0</span><div class="steps note"><span class="notetitle">注：</span> MacOS Sierra 用户必须安装 Cloud Foundry CLI V6.22.0 或更新版本。</div>
+</li>
+<li><span class="keyword">Bluemix</span> CLI </li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span> 插件</li>
+</ul>
+</div>
+</div><p class="li stepsection">要安装 CLI，请执行以下操作：</p><ol class="steps" id="install_plugin__steps_g5s_szz_nz"><li class="step stepexpand" id="install_plugin__docker_install"><span class="cmd">安装 Docker <span class="ph">V1.12</span>。</span> 对于 Windows 和 OS X 操作系统，Docker 会随 Docker Toolbox 一起安装，其中包含 Docker Machine、Docker Engine 和 Kitematic。对于 Linux 操作系统，安装机制根据使用的 Linux 分发版的类型不同而变化。请参阅以下链接以安装 Docker <span class="ph">V1.12</span>；或者如果已安装 Docker，请升级到该版本。<div class="steps note"><span class="notetitle">注：</span> 如果已在计算机上安装 Docker，但并不想升级当前版本，那么可以跳过此步骤，继续安装 Cloud Foundry CLI。</div>
+
+<ul id="install_plugin__ul_h5s_szz_nz"><li>OS X<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.pkg" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://github.com/docker/toolbox/releases/download/v<span class="ph">V1.12</span>/DockerToolbox-<span class="ph">V1.12</span>.pkg</a></p>
+</li>
+<li>Windows<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.exe" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://github.com/docker/toolbox/releases/download/v<span class="ph">V1.12</span>/DockerToolbox-<span class="ph">V1.12</span>.exe</a></p>
+</li>
+<li>Linux<p>请参阅 <a href="https://docs.docker.com/engine/installation/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Docker 安装文档</a>以查找有关如何在使用的 Linux 分发版上安装 Docker V<span class="ph">V1.12</span>。</p>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">启动 Docker。</span> <ul class="ul choices" id="install_plugin__choices_i5s_szz_nz"><li class="li choice" id="install_plugin__start_qst">对于 OS X 和 Windows，双击 <span class="ph uicontrol">Docker 快速启动终端</span>图标。此时将启动 Docker 守护程序，并为您设置环境变量。</li>
+<li class="li choice">对于 Linux，在命令行实用程序中，验证 Docker 守护程序是否在运行。此外，将 Docker 守护程序设置为自动重新启动。有关更多信息，请参阅适用于您的操作系统的 <a href="https://docs.docker.com/installation/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Docker 文档</a>。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">通过在终端运行 <samp class="ph codeph">docker run
+hello-word</samp>，验证 Docker 安装已正确设置。</span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ Docker 会在本地查找 <samp class="ph codeph">hello-world</samp> 映像，以从中运行容器，因此如果这是您首次运行该命令，那么将会收到以下消息。
+<pre class="codeblock"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+映像是从公共映像存储库 Docker Hub 中拉取的，该命令完成后，输出将类似于以下内容：
+<pre class="codeblock"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ 如果命令未正确完成，请运行 <samp class="ph codeph">docker version</samp>，以查看是否正确安装 Docker。</li>
+<li class="step stepexpand" id="install_plugin__install_cf"><span class="cmd">从 <a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">GitHub 存储库</a>安装 Cloud Foundry CLI V<span class="ph">Cloud Foundry CLI V<span class="ph" id="install_plugin__d1147e301-d1138e288a1310">6.14.0</span> - 6.22.0</span>。</span> 必须将 Cloud Foundry CLI 安装在操作系统的缺省位置，否则 PATH 环境变量会与安装目录不匹配。 <div class="steps note"><span class="notetitle">注：</span> MacOS Sierra 用户必须安装 Cloud Foundry CLI V6.22.0 或更新版本。</div>
+
+
+<div class="p">要验证 Cloud Foundry CLI 是否已正确安装，或者要检查所安装的 Cloud Foundry CLI 是哪个版本，请运行以下命令：<pre class="codeblock"><code>cf -v </code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="install_plugin__install_bx"><span class="cmd">安装 <a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">Bluemix</span> CLI</a>。</span></li>
+<li class="step stepexpand" id="install_plugin__bx_login"><span class="cmd">登录到 <span class="keyword">Bluemix</span> CLI。</span> <pre class="codeblock"><code><span class="ph">bx</span> login -a https://api.ng.bluemix.net</code></pre>
+</li>
+<li class="step stepexpand" id="install_plugin__install"><span class="cmd" id="install_plugin__install_bx_ic">安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件。</span> <pre class="codeblock" id="install_plugin__bx_cs_install"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">要验证是否已正确安装该插件，请运行以下命令：<pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>该插件会在结果中显示为 IBM-Containers。</p>
+</li>
+</ol>
+<div class="section result" id="install_plugin__result_j5s_szz_nz"><p>您可随时登录并开始管理容器。</p>
+</div></div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d72e528" lang="zh-cn" id="container_cli_login"><h2 class="topictitle2" id="d72e528">登录到 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">安装 CLI 后，需要登录才能使用。</p>
+<div class="section prereq"><div class="p">开始之前，请完成以下任务。<ul><li><a href="container_cli_cfic_install.html#install_plugin">安装 <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 插件。</a></li>
+<li>决定在登录到 Cloud Foundry 时要使用的 <span class="keyword">Bluemix</span> 组织和空间。
+有关组织和空间的更多信息，请参阅<span class="ph"><a href="../admin/orgs_spaces.html">组织和空间</a></span>。</li>
+<li>有关可在 Cloud Foundry <samp class="ph codeph">login</samp> 命令中指定哪些选项的更多信息，请参阅 Cloud Foundry 文档中的 <a href="https://docs.cloudfoundry.org/devguide/installcf/whats-new-v6.html#login" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Login 命令</a>。</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">打开命令行实用程序。</span> <ul class="ul choices"><li class="li choice">对于 OS X 和 Windows，双击 <span class="ph uicontrol">Docker 快速启动终端</span>图标。此时将启动 Docker 守护程序，并为您设置环境变量。</li>
+<li class="li choice">对于 Linux，打开任何命令行实用程序。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">通过 Cloud Foundry CLI 登录到 <span class="keyword">Bluemix</span>。</span> 要指定特定区域，请使用 <samp class="ph codeph">-a</samp> 选项来指定该区域的 API 端点。第一次使用 CLI 时，如果未指定该选项，那么系统会提示您输入 API 端点。指定 API 端点后，在后续登录时就无需输入 API 端点。 <div class="p"><pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+</div>
+ <div class="p">要登录到特定区域，请在登录到 Cloud Foundry CLI 时包括该区域的 API 端点。<ul><li>美国南部<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>英国<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+
+<span class="ph">当您使用联合标识登录时，需要单点登录参数 <span class="keyword option">--sso</span>。如果使用此选项，请打开 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>，以获取一次性密码。如果您未包括 <span class="keyword option">--sso</span> 选项，请完成以下子步骤。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">对于<span class="ph uicontrol">电子邮件</span>，请输入您用于 <span class="keyword">Bluemix</span> 的 IBM 标识。</span></li>
+<li class="li substep"><span class="cmd">对于<span class="ph uicontrol">密码</span>，请输入 IBM 标识的密码。</span> 此时将检索您的 Bluemix 组织和空间。</li>
+<li class="li substep"><span class="cmd">输入代表您某个 <span class="keyword">Bluemix</span> 组织的数字。</span></li>
+<li class="li substep"><span class="cmd">输入代表其中一个现有 <span class="keyword">Bluemix</span> 空间的数字。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_cli_login__namespace"><span class="cmd"><span class="ph">设置组织的<dfn class="term">名称空间</dfn>。</span></span> 名称空间是用于识别专用 <span class="keyword">Bluemix</span> 映像注册表的唯一名称。创建容器时，必须通过包含具有映像名称的名称空间来指定映像的位置。<div class="p"><div class="steps note" id="container_cli_login__namespace_warning"><span class="notetitle">注：</span> 创建名称空间时，在创建后即不能进行更改，只能删除。
+如果您 <span class="keyword">Bluemix</span> 组织中的用户已经部署容器并设置<dfn class="term">名称空间</dfn>，那么会显示消息，其中显示您组织的名称空间。
+在此情况下，您可以继续执行下一步。</div>
+</div>
+
+
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">提示：</span> 请遵循名称空间的以下规则：<ul id="container_cli_login__d9179e142"><li>名称只能包含小写字母、数字或下划线 (_)。</li>
+<li>名称可以为 4 到 30 个字符。如果计划从命令行管理容器，那么您可能倾向于使用能够快速输入的简短名称空间。</li>
+<li>其名称在 <span class="keyword">Bluemix</span> 中必须是唯一的。</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_cli_login__login"><span class="cmd">初始化 <span class="keyword">IBM
+Bluemix Container Service</span>。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">决定您是要运行 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 还是本机 Docker 命令。</span> 您可以在每次登录到插件时选择以下某个选项，也可以使用 <samp class="ph codeph">shellinit</samp> 命令以始终选择“选项 2”。 <div class="p"><ul><li id="container_cli_login__option1_li"><span class="ph uicontrol">选项 1</span>（缺省）<p><span class="keyword">IBM
+Bluemix Container Service</span> 包装程序 Docker 的简单 shell。本地 Docker 守护程序不受 <span class="keyword">IBM
+Bluemix Container Service</span> 的影响。<span class="ph"><samp class="ph codeph">bx ic</samp></span> 命令用于在 <span class="keyword">Bluemix</span> 空间中管理容器，而 <samp class="ph codeph">docker</samp> 命令用于在本地管理容器。但是，本地映像开发始终需要 <samp class="ph codeph">docker</samp> 命令。</p>
+<p>例如，使用“选项 1”，<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 命令会在 <span class="keyword">Bluemix</span> 空间创建容器，而 <samp class="ph codeph">docker run</samp> 会在本地创建容器。如果您对 Docker 和 <span class="keyword">IBM
+Bluemix Container Service</span> 来说是新手，或者您想要在本地测试容器，那么您可能更愿意使用此选项。</p>
+</li>
+<li id="container_cli_login__option2_li"><span class="ph uicontrol">选项 2</span><p>将当前 CLI 会话的本地 Docker 守护程序重定向到 <span class="keyword">IBM
+Bluemix Container Service</span>，以便在 <samp class="ph codeph">docker</samp> 命令可用于在 <span class="keyword">Bluemix</span> 空间中管理容器时，替换 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 命令。</p>
+<p>例如，使用“选项 2”，<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 或 <samp class="ph codeph">docker run</samp> 命令可用于在您的空间中创建容器。如果您是经验丰富的 Docker 用户，熟悉 <samp class="ph codeph">docker</samp> 命令，或者您编写自动化脚本来使用 <span class="keyword">IBM
+Bluemix Container Service</span>，那么您可能更愿意使用此选项。</p>
+<p>某些例外情况仍需要使用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 命令来执行特定于 <span class="keyword">IBM
+Bluemix Container Service</span> 的任务。例如，要设置名称空间，您必须使用命令 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp>。<samp class="ph codeph">docker namespace-set</samp> 不是有效的命令。要获取此配置支持的 <samp class="ph codeph">docker</samp> 命令列表，请参阅<a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="使用 IBM Bluemix Container Service 插件 (bx ic) 时，支持使用某些 docker 命令来替代 bx ic 命令。登录到该插件后，请配置环境变量以使用 Docker CLI 命令。然后，可以运行 docker 命令，而尽可能不使用 bx ic 命令。例如，不使用 bx ic images 来查看专用 Bluemix 注册表中的映像，而改为运行 docker images。">IBM Bluemix Container Service 插件 (bx ic) 支持的 Docker 命令</a>。</p>
+<div class="p">要配置此选项，请复制并粘贴登录期间终端中提供的环境变量。
+<ul><li><samp class="ph codeph">DOCKER_HOST</samp> 用于将 Docker 主机设置为 <span class="keyword">IBM
+Bluemix Container Service</span>。</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp> 用于设置 <span class="keyword">IBM
+Bluemix Container Service</span> Cloud Foundry 插件的认证密钥位置。</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp> 使用 TLS 并验证远程服务器。</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">提示：</span> 完成 <span class="keyword">IBM
+Bluemix Container Service</span> 文档中的任务后，就可以在标记有星号 (*) 的所有步骤中运行 <samp class="ph codeph">docker</samp> 命令。</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e528"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d72e1059" lang="zh-cn" id="container_cli_cfic_upgrade"><h2 class="topictitle2" id="d72e1059">升级 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">您可能想要定期更新插件以使用新功能。</p>
+<div class="section context"><div class="tablenoborder"><table summary="IBM Bluemix Container Service 插件的当前版本" id="container_cli_cfic_upgrade__version_history" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="keyword">IBM
+Bluemix Container Service</span> 插件的当前版本</span></caption><thead><tr><th id="d72e1183" class="thleft thbot">发布日期</th>
+<th id="d72e1185" class="thleft thbot">版本</th>
+<th id="d72e1187" class="thleft thbot">更新</th>
+</tr>
+</thead>
+<tbody><tr id="container_cli_cfic_upgrade__current"><td headers="d72e1183 ">2016 年 11 月 16 日</td>
+<td headers="d72e1185 ">0.8.964</td>
+<td headers="d72e1187 "><ul><li>添加了通过 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 命令，使用 <samp class="ph codeph">--http_monitor_enabled</samp>、<samp class="ph codeph">--http_monitor_path</samp> 和 <samp class="ph codeph">--http_monitor_rs_list</samp> 选项管理容器组的运行状况检查的支持</li>
+<li>添加了对 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --session_affinity</samp> 选项的支持</li>
+<li>缺陷修订</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">要更新插件，请执行以下步骤。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">通过首次安装插件时配置的插件存储库来安装更新。</span> <pre class="codeblock"><code><span class="ph">bx</span> plugin update IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">通过运行以下命令并检查已安装的插件的列表来验证插件安装。</span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>该插件会在结果中显示为 IBM-Containers。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e1059"></aside></article><article class="topic reference nested1" role="article" aria-labelledby="d72e1253" lang="zh-cn" id="container_cli_reference_cfic"><h2 class="topictitle2" id="d72e1253"><span class="ph">用于管理<span class="ph">单个和可扩展容器</span>的 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 命令</span></h2>
+<div class="body refbody"><div class="abstract"><span class="shortdesc"><span class="ph">对于 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，请参考这些命令来创建和管理容器。</span></span>
+</div>
+<div id="container_cli_reference_cfic__d1504e101"><div class="note note" data-hd-status="deprecated"><span class="notetitle">cf ic CLI 已不推荐使用：</span> 请使用 <span class="keyword">Bluemix</span> 的 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，而不是使用 Cloud Foundry (<samp class="ph codeph">cfic</samp>) 的 <span class="keyword">IBM
+Bluemix Container Service</span> 插件。<samp class="ph codeph">cf ic</samp> CLI 可以继续使用到 2018 年 1 月 1 日。
+<div class="p">要改为开始使用 <span class="keyword">Bluemix</span> 的 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，请参阅以下主题。<ul><li><a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">安装 Bluemix CLI</a></li>
+<li><a href="container_cli_cfic_install.html">安装 <span class="ph">bx ic</span> 插件</a></li>
+<li><a href="container_cli_reference_cfic.html"><span class="ph">bx ic</span> 插件参考</a></li>
+</ul>
+</div>
+</div>
+以下任一命令均可不带选项运行，以查看帮助信息。您还可运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> --help</samp> 以查看这些命令的列表。</div><div id="container_cli_reference_cfic__d1504e108"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e110" class="defaultstyle"><caption><span class="tablecap">表 2. 用于在 <span class="keyword">Bluemix</span> 上管理 CLI 和服务的命令</span></caption><thead><tr><th colspan="4" id="d72e1406" class="thleft">用于在 <span class="keyword">Bluemix</span> 上管理 CLI 和服务的命令</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1825"><span class="ph">bx ic</span> info</a></td>
+<td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1861"><span class="ph">bx ic</span> init </a></td>
+<td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2261"><span class="ph">bx ic</span>组织的名称</a></td>
+<td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2559"><span class="ph">bx ic</span> reprovision</a></td>
+</tr>
+<tr><td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3729"><span class="ph">bx ic</span> unprovision</a></td>
+<td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3778">bx ic update</a></td>
+<td headers="d72e1406 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3798">bx icversion</a></td>
+<td headers="d72e1406 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e154"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e156" class="defaultstyle"><caption><span class="tablecap">表 3. 用于在 Bluemix 上创建和管理容器的命令</span></caption><thead><tr><th colspan="5" id="d72e1462" class="thleft">用于在 <span class="keyword">Bluemix</span> 上创建和管理容器的命令</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e429"><span class="ph">bx ic</span>attach</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e574"><span class="ph">bx ic</span>cp</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e747"><span class="ph">bx ic</span> exec</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e838"><span class="ph">bx ic</span> group-create</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1497"><span class="ph">bx ic</span> group-inspect</a></td>
+</tr>
+<tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1533"><span class="ph">bx ic</span> group-instances</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1569"><span class="ph">bx ic</span> group-remove</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1611"><span class="ph">bx ic</span> group-update</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1736"><span class="ph">bx ic</span> groups</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1897"><span class="ph">bx ic</span> inspect</a></td>
+</tr>
+<tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1954"><span class="ph">bx ic</span> ip-bind</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2008"><span class="ph">bx ic</span> ip-release</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2041"><span class="ph">bx ic</span> ip-request</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2070"><span class="ph">bx ic</span> ip-unbind</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2116"><span class="ph">bx ic</span> ips</a></td>
+</tr>
+<tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2151"><span class="ph">bx ic</span>kill</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2195"><span class="ph">bx ic</span>logs</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2303"><span class="ph">bx ic</span>pause</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2345"><span class="ph">bx ic</span>port</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2426"><span class="ph">bx ic</span>ps</a></td>
+</tr>
+<tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2510"><span class="ph">bx ic</span>rename</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2631"><span class="ph">bx ic</span>restart</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2680"><span class="ph">bx ic</span>rm</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2796"><span class="ph">bx ic</span> route-map</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2876"><span class="ph">bx ic</span> route-unmap</a></td>
+</tr>
+<tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2944"><span class="ph">bx ic</span>run</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3374"><span class="ph">bx ic</span> service-bind</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3425"><span class="ph">bx ic</span> service-unbind</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3474"><span class="ph">bx ic</span>start</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3514"><span class="ph">bx ic</span>stats</a></td>
+</tr>
+<tr><td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3556"><span class="ph">bx ic</span>stop</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3607"><span class="ph">bx ic</span>top</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3689"><span class="ph">bx ic</span>unpause</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4132"><span class="ph">bx ic</span>wait</a></td>
+<td headers="d72e1462 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4169"><span class="ph">bx ic</span> wait-status</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e319"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e321" class="defaultstyle"><caption><span class="tablecap">表 4. 用于在 <span class="keyword">Bluemix</span> 上管理映像的命令</span></caption><thead><tr><th colspan="5" id="d72e1668" class="thleft">用于在 <span class="keyword">Bluemix</span> 上管理映像的命令</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e485"><span class="ph">bx ic</span> 构建</a></td>
+<td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e654"><span class="ph">bx ic</span>cpi</a></td>
+<td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1764"><span class="ph">bx ic</span> images</a></td>
+<td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1897"><span class="ph">bx ic</span> inspect</a></td>
+<td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2261"><span class="ph">bx ic</span> namespace-get</a></td>
+</tr>
+<tr><td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2261"><span class="ph">bx ic</span> namespace-set</a></td>
+<td headers="d72e1668 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2727"><span class="ph">bx ic</span>rmi</a></td>
+<td headers="d72e1668 ">&nbsp;</td>
+<td headers="d72e1668 ">&nbsp;</td>
+<td headers="d72e1668 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e372"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e374" class="defaultstyle"><caption><span class="tablecap">表 5. 用于 <span class="keyword">Bluemix</span> 上容器存储的命令</span></caption><thead><tr><th colspan="5" id="d72e1732" class="thleft">用于 <span class="keyword">Bluemix</span> 上容器存储的命令</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3829"><span class="ph">bx ic</span> volume-create</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3875"><span class="ph">bx ic</span> volume-fs-create</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3930"><span class="ph">bx ic</span> volume-fs-flavors</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3948"><span class="ph">bx ic</span> volume-fs-inspect</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3980">bx ic volume-fs</a></td>
+</tr>
+<tr><td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3998"><span class="ph">bx ic</span> volume-fs-remove</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4031"><span class="ph">bx ic</span> volume-inspect</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4067"><span class="ph">bx ic</span> volume-remove</a></td>
+<td headers="d72e1732 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4103"><span class="ph">bx ic</span> 卷</a></td>
+<td headers="d72e1732 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><section role="region" aria-labelledby="d72e1787" id="container_cli_reference_cfic__d1504e429"><h3 class="sectiontitle" id="d72e1787"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach [--no-stdin] [--sig-proxy]</samp> CONTAINER </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>控制正在运行的容器或查看其输出。使用 CTRL+C 以退出并停止容器。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/attach/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">attach</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">--no-stdin</dt>
+<dd class="pd">（可选）不包含标准输入。</dd>
+<dt class="pt dlterm">--sig-proxy</dt>
+<dd class="pd">（可选）缺省值为 <span class="keyword option">true</span>。</dd>
+<dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或标识。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于连接到容器 <var class="keyword varname">my_container</var> 的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e1848" id="container_cli_reference_cfic__d1504e485"><h3 class="sectiontitle" id="d72e1848"><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t
+TAG [--no-cache] [--pull] [-q] DOCKERFILE_LOCATION </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e495">在本地或在专用 <span class="keyword">Bluemix</span> 映像注册表中构建 Docker 映像。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/build/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">build</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e507"><!-- --></a><var class="keyword varname">DOCKERFILE_LOCATION</var></dt>
+<dd class="pd">（必需）本地主机上 <span class="ph filepath">Dockerfile</span> 和上下文文件的路径。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e516"><!-- --></a>--no-cache</dt>
+<dd class="pd">（可选）首次构建映像时，会对整个组织的映像层进行高速缓存。构建映像的后续版本时，这些映像的高速缓存版本可用于加快构建过程。构建映像的新版本时，通过包含 <samp class="ph codeph">--no-cache</samp> 选项，还可确保映像的每层都重新构建。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e524"><!-- --></a>--pull</dt>
+<dd class="pd">（可选）缺省情况下，仅当基本映像在组织的映像高速缓存中不存在时，才会从注册表中拉取基本映像。通过包含此选项，可以确保使用最新版本的基本映像来构建新映像。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e529"><!-- --></a>-q, --quiet</dt>
+<dd class="pd">（可选）禁止显示容器生成的详细输出。缺省值为 <span class="keyword option">false</span>。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e537"><!-- --></a>-t <var class="keyword varname">TAG</var>, --tag <var class="keyword varname">TAG</var></dt>
+<dd class="pd">（必需）要应用到所创建映像的专用映像注册表的路径。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e551">以下示例是用于构建名为 <samp class="ph codeph">myimage</samp> 的映像的请求。要在该构建中使用的 <span class="ph filepath">Dockerfile</span> 和其他工件位于运行该命令的目录中。由于映像名称带有注册表和名称空间，因此会在组织的专用 <span class="keyword">Bluemix</span> 映像注册表中构建映像。</span><div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">myimage</var> .</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e1956" id="container_cli_reference_cfic__d1504e574"><h3 class="sectiontitle" id="d72e1956"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp SRC_PATH CONTAINER:DEST_PATH | <span class="ph"><samp class="ph codeph">bx ic</samp></span> cp CONTAINER:SRC_PATH DEST_PATH </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph">将文件或文件夹从运行中或已停止的单个容器复制到本地计算机或反之。
+有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/cp/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">cp</a> 命令。</span><div class="steps note"><span class="notetitle">注：</span> 仅支持此命令与单个容器一起使用。
+当您想要从容器组复制文件或将文件复制到容器组，您必须从组中的每一个容器实例中复制文件或将文件复制到组中的每一个容器实例。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">DEST_PATH</dt>
+<dd class="pd">（必需）要从源路径复制信息的本地计算机或容器上的文件或文件夹的路径。该文件或文件夹必须位于本地计算机或容器中，您才能开始复制。
+如果您要复制到本地计算机上，那么您可以使用绝对或相对路径。
+如果要复制到单个容器，<span class="ph" id="container_cli_reference_cfic__d1504e602">那么您必须包括容器的名称、定界符 <span class="q">“:”</span> 和目标文件或文件夹的路径。
+路径必须相对于容器的根目录。</span></dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">SRC_PATH</dt>
+<dd class="pd">（必需）要复制的文件或文件夹的路径。如果文件或文件夹位于本地计算机上，那么您可以使用绝对或相对路径。
+如果文件或文件夹位于单个容器中，那么您必须包括容器的名称、定界符 <span class="q">“:”</span> 和要复制的文件或文件夹的路径。
+路径必须相对于容器的根目录。
+<div class="steps note"><span class="notetitle">注：</span> 您无法复制存储在容器 <span class="ph filepath">/dev</span>、<span class="ph filepath">/etc</span>、<span class="ph filepath">/proc</span> 和 <span class="ph filepath">/sys</span> 文件夹下的特定系统文件。</div>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>此示例命令将名为 <span class="ph filepath">config.txt</span> 的文件从本地计算机的当前目录复制到名为 <var class="keyword varname">my_container</var> 的单个容器的 <span class="ph filepath">config</span> 目录中。</dd>
+<dd class="ddexpand"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath">./config.txt</span> <span class="ph filepath">my_container:/config</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2043" id="container_cli_reference_cfic__d1504e654"><h3 class="sectiontitle" id="d72e2043"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi SRC DST</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e664">访问 Docker Hub 映像或本地注册表中的映像，然后将其复制到专用 <span class="keyword">Bluemix</span> 映像注册表。</span><div class="steps note"><span class="notetitle">注：</span>  此命令是同时使用 <samp class="ph codeph">docker pull</samp> 和 <samp class="ph codeph">docker push</samp> 将映像添加到 <span class="keyword">Bluemix</span> 映像注册表的替代方法。如果您更愿意使用 <samp class="ph codeph">docker pull</samp> 和 <samp class="ph codeph">docker push</samp>，请参阅<a href="container_images_adding_ov.html#container_images_pulling" title="您可以从 Docker Hub 或专用注册表拉取映像，在本地对其进行修改，然后将其推送到组织的专用 Bluemix 注册表。">通过命令行将本地映像推送到专用 Bluemix 注册表</a>。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e690"><dl class="parml"><dt class="pt dlterm">DST</dt>
+<dd class="pd">（必需）专用 <span class="keyword">Bluemix</span> 映像注册表 URL，其中包含名称空间和目标映像名称。映像的标记是可选的。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">SRC</dt>
+<dd class="pd">（必需）源存储库和映像名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">source_repository</var>/<var class="keyword varname">source_image_name</var> <var class="keyword varname">private_registry_URL</var>/<var class="keyword varname">destination_image_name</var>:<var class="keyword varname">tag</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">mysinatra</var>:<var class="keyword varname">v1</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2166" id="container_cli_reference_cfic__d1504e747"><h3 class="sectiontitle" id="d72e2166"><span class="ph" id="container_cli_reference_cfic__d1504e749"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec [-d] [-it ] [-u USER] CONTAINER CMD </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>在容器内执行命令。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/exec/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">exec</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd">（必需）要在指定的一个或多个容器内执行的命令。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或标识。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-d , --detach </dt>
+<dd class="pd">（可选）在后台运行指定的命令。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-it</dt>
+<dd class="pd">（可选）交互方式。使标准输入保持显示。输入 <kbd class="ph userinput">exit</kbd> 以退出。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-u <var class="keyword varname">USER</var>, --user <var class="keyword varname">USER</var></dt>
+<dd class="pd">（可选）用户名</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e813">此示例命令将在容器 <var class="keyword varname">my_container</var> 中运行交互式 bash 终端。</span></dd>
+<dd class="ddexpand"><pre class="codeblock" id="container_cli_reference_cfic__d1504e819"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</dd>
+<dd class="ddexpand"><span class="ph" id="container_cli_reference_cfic__d1504e826">此示例命令将在容器 <var class="keyword varname">my_container</var> 中运行 date 命令。</span></dd>
+<dd class="ddexpand"><pre class="codeblock" id="container_cli_reference_cfic__d1504e832"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec <var class="keyword varname">my_container</var> date</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2264" id="container_cli_reference_cfic__d1504e838"><h3 class="sectiontitle" id="d72e2264"><span class="ph" id="container_cli_reference_cfic__d1504e840"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create [--anti] [--auto] [-d DOMAIN] [--desired DESIRED] [-e ENV] [--env-file
+ENVFILE]<span class="ph"> [--http_monitor_enabled] [--http_monitor_path] [--http_monitor_rc_list] [--ip
+IP_ADDRESS]</span> [-m MEMORY] [--max MAX] [--min MIN] [-n HOST] --name NAME [-p PORT] [--session-affinity] [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD] </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e852">创建扩展组。</span>缺省情况下，<span class="keyword">Bluemix</span> 中的容器以拆离模式运行。</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e860"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e862"><!-- --></a>--anti</dt>
+<dd class="pd">（可选）使用反亲缘关系，使您的容器组具有更高的可用性。<samp class="ph codeph">--anti</samp> 选项可强制组中的每一个容器实例置于不同的物理计算节点上，这可降低组中所有容器因硬件故障而发生崩溃的几率。
+<span class="ph" id="container_cli_reference_cfic__d1504e870">您可能无法对较大的组大小使用此选项，因为每一个 <span class="keyword">Bluemix</span> 区域和组织可用于部署的计算节点集有限制。
+如果部署不成功，请减少组中容器实例的数目，或者除去 <samp class="ph codeph">--anti</samp> 选项。</span></dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e877"><!-- --></a>--auto</dt>
+<dd class="pd">（可选）<span class="ph">针对容器组启用了自动恢复并且该组已运行了 10 分钟时，该组的负载均衡器会开始通过 HTTP 请求定期检查组中每个容器实例的运行状况。如果容器实例在 100 秒内未响应，即会将该实例标记为“不活动”。自动恢复会从组中除去不活动的容器实例并重新创建这些实例。自动恢复会尝试恢复组中的容器实例 3 次。在第三次尝试后，自动恢复在 60 分钟内不会再恢复组中的任何容器实例。60 分钟后，自动恢复进程将再次启动。</span>有关运行状况检查的更多信息，请参阅 <samp class="ph codeph">--http_monitor_enabled</samp> 选项。</dd>
+<dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e892">（可选）该命令及相应自变量将传递给容器组来执行。此命令必须是长时间运行命令。请不要使用短时间运行命令（例如 <span class="keyword cmdname">/bin/date</span>），因为此类命令可能会导致容器崩溃。</span><div class="p">长时间运行命令的示例（使用 <span class="keyword">IBM
+Bluemix Container Service</span> 提供的 <span class="keyword option">ibmnode</span> 映像）：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> ping localhost</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- tail -f /dev/null</code></pre>
+<div class="steps note"><span class="notetitle">注：</span> CMD 及其自变量必须位于 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 命令行的末尾。</div>
+</div>
+</dd>
+<dt class="pt dlterm">-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">（可选）缺省系统域为 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>，此域已提供 SSL 证书，所以可以使用 HTTPS 来访问容器组，而无需任何额外配置。要使用定制域，必须在公共 DNS 服务器上注册定制域，在 <span class="keyword">Bluemix</span> 中配置定制域，然后将定制域映射到公共 DNS 服务器上的 <span class="keyword">Bluemix</span> 系统域。
+定制域映射到 <span class="keyword">Bluemix</span> 系统域后，对定制域的请求会路由到 <span class="keyword">Bluemix</span> 中的应用程序。创建定制域时，不要在域名中包含下划线 (_)。有关定制域的更多信息，请参阅<a href="../manageapps/updapps.html#domain">创建和使用定制域</a>。为了保护定制域安全，请<a href="../manageapps/secapps.html#ssl_certificate">上传 SSL 证书</a>，以便可以使用 HTTPS 访问容器组。<p>主机和域组合在一起构成了完整的公共路径 URL（例如 <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>），并且该 URL 在 <span class="keyword">Bluemix</span> 中必须唯一。使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp> 命令来查看容器组的详细信息时，主机和域会作为路径一起列出。</p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e972"><!-- --></a>--desired <var class="keyword varname">DESIRED</var></dt>
+<dd class="pd">（可选）组中的实例数。缺省值为 <span class="keyword option">2</span>。<span class="ph">应用程序所需的容器组实例数取决于期望的工作负载和应用程序可以处理请求的时间。
+例如，多任务或网络连接会影响应用程序所需的实例数。</span>
+<span class="ph">要确定所需实例的数目，可在运行应用程序的 Bluemix 中部署单个容器，并在此容器上执行负载测试。例如，如果应用程序每秒可处理 100 个请求，但是您期望每秒平均工作负载为 300 个请求，那么容器组的所需实例数目为 3。</span>
+<span class="ph">要使容器组具有高可用性且对故障的处理更富弹性，请考虑除最低要求的实例数外，额外包含更多实例，以用于处理预期的工作负载。额外的实例可在其他实例崩溃时处理工作负载。要确保自动恢复发生故障的实例，而不影响工作负载，请包含一个额外实例。要避免两个实例同时发生故障，请包含两个额外实例。此设置是 <var class="keyword varname">N+2</var> 模式，其中 <var class="keyword varname">N</var> 是处理请求的实例数，<var class="keyword varname">+2</var> 是额外两个实例。</span><div class="note important"><span class="importanttitle">要点：</span> 容器组应该至少包含 2 个容器实例。
+如果组中仅包含 1 个实例，且该实例变得不可用，那么用户可能会遭遇应用程序停机时间。</div>
+</dd>
+<dt class="pt dlterm">-e <var class="keyword varname">ENV</var>, --env <var class="keyword varname">ENV</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e997"><span class="ph" id="container_cli_reference_cfic__d1504e998">（可选）设置环境变量，其中 <span class="keyword option">ENV</span> 是 <samp class="ph codeph">key=value</samp> 对。如果包含引号，并用引号将环境变量名称和值括起，那么将单独列出多个键。示例：<samp class="ph codeph">-e
+<span class="q">“<var class="keyword varname">key1</var>=<var class="keyword varname">value1</var>”</span> -e
+<span class="q">“<var class="keyword varname">key2</var>=<var class="keyword varname">value2a</var>,<var class="keyword varname">value2b</var>”</span> -e
+<span class="q">“<var class="keyword varname">key3</var>=<var class="keyword varname">value3</var>”</span></samp></span></span><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e1032" class="defaultstyle"><caption><span class="tablecap">表 6. 建议的环境变量</span></caption><thead><tr><th id="d72e2513" class="thleft">环境变量</th>
+<th id="d72e2515" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e2513 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d72e2515 ">某些 <span class="keyword">Bluemix</span> 服务不支持直接绑定到容器。在这种情况下，需要创建 Cloud Foundry 应用程序并将其与 <span class="keyword">Bluemix</span> 服务绑定。然后，使用 <samp class="ph codeph">CCS_BIND_APP</samp> 将该应用程序绑定到容器。该 Cloud Foundry 应用程序起到桥梁的作用，允许 <span class="keyword">Bluemix</span> 将桥接应用程序的 VCAP_SERVICES 信息注入到正在运行的容器实例中。</td>
+</tr>
+<tr><td headers="d72e2513 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">注：</span>  服务不支持使用 <samp class="ph codeph">CCS_BIND_SRV=</samp> 环境变量时，请改用 <samp class="ph codeph">CCS_BIND_APP=</samp>。</div>
+</td>
+<td headers="d72e2515 ">要在不使用桥接应用程序的情况下将 <span class="keyword">Bluemix</span> 服务直接绑定到容器，请使用 <samp class="ph codeph">CCS_BIND_SRV</samp>。通过此绑定，<span class="keyword">Bluemix</span> 可以将 VCAP_SERVICES 信息注入到正在运行的容器实例中。要列出多个 <span class="keyword">Bluemix</span> 服务，请将这些服务包含在同一环境变量中。</td>
+</tr>
+<tr><td headers="d72e2513 "><div class="lines">（不推荐）<samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d72e2515 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">此环境变量已不推荐使用：</span> 请改用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">exec</samp> 或 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp> 来对容器进行外部访问。有关更多信息，请参阅<a href="container_security.html#container_cli_login_exec" title="如果必须登录到正在运行的容器，可以使用 bx ic exec。">使用 exec 登录到容器</a>。</div>
+<span class="ph">要在创建容器时向其添加 SSH 密钥，可以使用 <samp class="ph codeph">CCS_API_KEY</samp>。</span></td>
+</tr>
+<tr><td headers="d72e2513 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d72e2515 "><span class="ph" id="container_cli_reference_cfic__d1504e1138">要添加要在容器中监视的日志文件，请包含 <samp class="ph codeph">LOG_LOCATIONS</samp> 环境变量以及日志文件的路径。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+示例：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -e CCS_BIND_SRV=<var class="keyword varname">&lt;service_instance_name&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+</dd>
+<dt class="pt dlterm">--env-file <var class="keyword varname">ENVFILE</var></dt>
+<dd class="pd">（可选）从文件导入环境变量，其中 <var class="keyword varname">ENVFILE</var> 是您的文件在本地目录上的路径。文件中的每一行表示一个 <samp class="ph codeph">key=value</samp> 对。<p>示例</p>
+<pre class="codeblock"><code>KEY1=VALUE1
+KEY2=VALUE2</code></pre>
+</dd>
+<dt class="pt dlterm">--http_monitor_enabled</dt>
+<dd class="pd">（可选）缺省值为 <samp class="ph codeph">true</samp>。<span class="ph">针对容器组启用了自动恢复并且该组已运行了 10 分钟时，该组的负载均衡器会开始通过 HTTP 请求定期检查组中每个容器实例的运行状况。如果容器实例在 100 秒内未响应，即会将该实例标记为“不活动”。自动恢复会从组中除去不活动的容器实例并重新创建这些实例。自动恢复会尝试恢复组中的容器实例 3 次。在第三次尝试后，自动恢复在 60 分钟内不会再恢复组中的任何容器实例。60 分钟后，自动恢复进程将再次启动。</span>一些应用程序可能不需要进行 HTTP 运行状况检查，如使用 TCP 而非 HTTP 进行通信的应用程序。要禁用 HTTP 监视器，请将该选项设置为 <samp class="ph codeph">false</samp>。示例：<samp class="ph codeph">--http_monitor_enabled=false</samp></dd>
+<dt class="pt dlterm">--http_monitor_path</dt>
+<dd class="pd">（可选）缺省值为 <samp class="ph codeph">/</samp>。当启用 <samp class="ph codeph">--http_monitor_enabled</samp> 时，您可以使用此选项来设置运行状况检查的定制路径，如 <samp class="ph codeph">--http_monitor_path=<span class="q">“/health/path”</span></samp>。</dd>
+<dt class="pt dlterm">--http_monitor_rc_list</dt>
+<dd class="pd">（可选）当启用 <samp class="ph codeph">--http_monitor_enabled</samp> 时，您可以指定运行状况检查的响应代码列表。
+缺省值包括 <samp class="ph codeph">200、201、202、204、300、301、302、401、403</samp> 和 <samp class="ph codeph">404</samp> 代码。如果出现不在有效响应列表中的任何响应，那么负载均衡器会将容器实例状态更改为 <samp class="ph codeph">INACTIVE</samp>。处于不活动状态的容器不会接收任何负载，而容器组的状态会更改为 HAS_INACTIVE_INSTANCES。如果没有容器处于 <samp class="ph codeph">ACTIVE</samp> 状态，那么容器组的状态会更改为 <samp class="ph codeph">NO_ACTIVE_INSTANCES</samp>。要了解状态的更多信息，请参阅<a href="container_cli_reference_cfic.html#container_cli_reference_cfic_states" title="您可以通过运行 bx ic inspect 命令并查找状态字段，查看当前容器状态。容器状态可为您提供容器实例可用性和可能已发生的问题的额外信息。">IBM Bluemix Container Service 中的容器状态</a>。</dd>
+<dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e1239">（必需）要包含在容器组中的每个容器实例内的映像。可以在映像之后列出命令，但不要在映像之后放置任何选项；请在指定映像之前包含所有选项。</span><p>如果要在组织的专用 <span class="keyword">Bluemix</span> 映像注册表中使用映像，请使用以下格式指定映像：<samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">NAMESPACE</var>/<var class="keyword varname">IMAGE</var></samp></p>
+<p>如果您要使用 <span class="keyword">IBM
+Bluemix Container Service</span> 提供的映像，请不要包含组织的名称空间。请使用以下格式指定映像：<samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">IMAGE</var></samp></p>
+</dd>
+<dt class="pt dlterm"> --ip <var class="keyword varname">IP_ADDRESS</var></dt>
+<dd class="pd">（可选）如果您有可用的 IP 地址，请将公共 IP 地址绑定到容器组。此外，还必须使用 <samp class="ph codeph">-p</samp> 标志来公开端口。容器组可以具有公共路径或公共 IP 地址，但不能同时具有公共路径和公共 IP 地址。要取消绑定 IP 地址，并将该 IP 还给空间的配额，请除去容器组，然后重新创建不使用该 IP 地址的容器组。要在创建容器组之前请求 IP 地址，请运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp>。<div class="steps note"><span class="notetitle">注：</span> 绑定公共 IP 地址不会包含 SSL 证书，此证书用于加密发送到容器组和从容器组发送的数据。如果应用程序需要 SSL 加密，那么可以实施您自己的 SSL 解决方案，或者将公共路径映射到容器组，而不绑定公共 IP 地址。公共路径已经包含 SSL 证书，所以可以使用 HTTPS 访问容器组，而无需任何其他配置。</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1281"><!-- --></a>-m <var class="keyword varname">MEMORY</var>, --memory <var class="keyword varname">MEMORY</var></dt>
+<dd class="pd">（可选）<span class="ph" id="container_cli_reference_cfic__d1504e1291">输入容器的内存限制 (MB)。内存限制是容器大小的一部分，用于定义在运行时容器在计算主机上所获取的内存和磁盘空间的最大量。
+分配容器大小后，此值无法更改。</span><span class="keyword">IBM
+Bluemix Container Service</span> 中可用的大小为：
+<ul data-hd-audience="yellow" id="container_cli_reference_cfic__d1504e1295"><li>Pico（64 MB 内存，4 GB 磁盘空间）</li>
+<li>Nano（128 MB 内存，8 GB 磁盘空间）</li>
+<li>Micro（256 MB 内存，16 GB 磁盘空间）</li>
+<li>Tiny（512 MB 内存，32 GB 磁盘空间）</li>
+<li>Small（1024 MB 内存，64 GB 磁盘空间）</li>
+<li>Medium（2048 MB 内存，128 GB 磁盘空间）</li>
+<li>Large（4096 MB 内存，256 GB 磁盘空间）</li>
+<li>X-Large（8192 MB 内存，512 GB 磁盘空间）</li>
+<li>2X-Large（16384 MB 内存，1 TB 磁盘空间）</li>
+</ul>
+如果您未设置容器的大小，那么会使用 <span class="keyword option">256</span> MB 创建每一个容器实例。<div class="note important"><span class="importanttitle">要点：</span> 在没有单位标签的情况下，输入容器内存 (MB)。例如，如果您想要创建 Pico 容器，请输入 <samp class="ph codeph">-m 64</samp>。</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1323"><!-- --></a>--max <var class="keyword varname">MAX</var></dt>
+<dd class="pd">（可选）最大实例数。缺省值为 <span class="keyword option">2</span>。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1333"><!-- --></a>--min <var class="keyword varname">MIN</var></dt>
+<dd class="pd">（可选）最小实例数。缺省值为 <span class="keyword option">1</span>。</dd>
+<dt class="pt dlterm"> -n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">（可选）主机名，例如 <var class="keyword varname">mycontainerhost</var>。不要在主机名中包含下划线 (_)。主机和域组合在一起构成了完整的公共路径 URL，例如 <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp> 命令来查看容器组的详细信息时，主机和域会作为路径一起列出。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1364"><!-- --></a>--name <var class="keyword varname">NAME</var></dt>
+<dd class="pd">（必需）为组分配名称。不推荐使用 <samp class="ph codeph">-n</samp>。<div class="note tip" id="container_cli_reference_cfic__d1504e1374"><span class="tiptitle">提示：</span> 容器名称必须以字母开头，并且可以包含大写字母、小写字母、数字、句点 (.)、下划线 (_) 或连字符 (-)。</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1376"><!-- --></a>-p <var class="keyword varname">PORT</var>, --publish <var class="keyword varname">PORT</var></dt>
+<dd class="pd"><p>（必需）显示用于 HTTP 和专用网络流量的端口。如果您未显示端口，虽然容器组会运行，但是无法通过公用或专用网络上的组负载均衡器来访问容器组。</p>
+<p>对于容器组，不能包含多个端口。如果列出多个端口，那么仅会公开最后一个列出的端口。该命令会忽略其他端口。</p>
+<span class="ph" id="container_cli_reference_cfic__d1504e1389">绑定路径时，组中的容器必须在组的公开端口上侦听 HTTP 流量。非 HTTP 端口不能向公用网络公开。HTTPS 流量到达公开的端口时，(Go)Router 会完成 HTTPS 终止。随后，专用虚拟网络上 (Go)Router 和容器之间的连接将使用 HTTP 协议。</span><span class="ph">绑定 IP 地址时，组中的容器可以侦听 HTTP 或 HTTPS 流量，但您仍然只能公开一个端口。</span><div class="p">如果在 Dockerfile 中为要使用的映像指定了端口，请包含该端口。<div class="note tip"><span class="tiptitle">提示：</span> <ul id="container_cli_reference_cfic__d2114e235"><li>对于 IBM 认证的 Liberty Server 映像或此映像的修改版本，请输入端口 <kbd class="ph userinput">9080</kbd>。</li>
+<li>对于 IBM 认证的 Node.js 映像或此映像的修改版本，请输入任意端口，例如端口 <kbd class="ph userinput">8000</kbd>。</li>
+</ul>
+</div>
+</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1394"><!-- --></a>--session_affinity</dt>
+<dd class="pd"><p>（可选）缺省值为 <samp class="ph codeph">false</samp>。当 <samp class="ph codeph">--http_monitor_enabled</samp> 设置为 <kbd class="ph userinput">true</kbd> 时，您可以将 <samp class="ph codeph">--session_affinity</samp> 选项设置为 <kbd class="ph userinput">true</kbd>，以允许 <span class="keyword">IBM
+Bluemix Container Service</span> 代表应用程序创建和管理会话 cookie。
+如果 <samp class="ph codeph">--http_monitor_enabled</samp> 设置为 <kbd class="ph userinput">false</kbd> 或者如果您使用 TCP 而非 HTTP 来进行通信，那么此选项不可用。</p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1424"><!-- --></a>--volume <var class="keyword varname">VOLUME</var>:<var class="keyword varname">/DIRECTORY_PATH</var>[:ro]</dt>
+<dd class="pd">（可选）通过使用以下格式指定详细信息来将卷附加到容器：<samp class="ph codeph">VOLUME:/DIRECTORY_PATH[:ro]</samp>。<ul id="container_cli_reference_cfic__d1504e1438"><li><var class="keyword varname">VOLUME</var>：卷标识或卷名。</li>
+<li><var class="keyword varname">DIRECTORY_PATH</var>：容器中目录的绝对路径。</li>
+<li><samp class="ph codeph">ro</samp>：可选。指定 <samp class="ph codeph">ro</samp> 会将卷设为只读，而不是缺省的读/写。</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于通过公共路径创建扩展组的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --auto -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">mycontainerhost</var>  --name <var class="keyword varname">my_container_group</var> -p <var class="keyword varname">9080</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</dd>
+<dd class="ddexpand">以下示例是用于通过公共 IP 地址创建扩展组的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --auto --ip <var class="keyword varname">198.51.100.27</var>  --name <var class="keyword varname">my_container_group</var> -p <var class="keyword varname">9080</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3067" id="container_cli_reference_cfic__d1504e1497"><h3 class="sectiontitle" id="d72e3067"><span class="ph" id="container_cli_reference_cfic__d1504e1499"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd id="container_cli_reference_cfic__d1504e1507">查看在创建容器组时为其指定的详细信息，例如环境变量、端口或内存。此外，运行此命令可查看分配给组的公共路径。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1514"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">（必需）组标识或名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于检查组 <var class="keyword varname">my_container_group</var> 的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3107" id="container_cli_reference_cfic__d1504e1533"><h3 class="sectiontitle" id="d72e3107"><span class="ph" id="container_cli_reference_cfic__d1504e1535"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances GROUP </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd id="container_cli_reference_cfic__d1504e1543">列出作为容器组成员的所有容器及其容器标识、名称、IP 地址和公共端口。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">（必需）组标识或名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于检索组 <var class="keyword varname">my_container_group</var> 中所有容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3147" id="container_cli_reference_cfic__d1504e1569"><h3 class="sectiontitle" id="d72e3147"><span class="ph" id="container_cli_reference_cfic__d1504e1571"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd id="container_cli_reference_cfic__d1504e1579">从空间中除去一个或多个容器组。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1586"><!-- --></a>-f, --force</dt>
+<dd class="pd">（可选）强制除去正在运行的或失败的容器。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1593"><!-- --></a>GROUP</dt>
+<dd class="pd">（必需）至少一个容器组的组标识或名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于除去容器组的请求，其中 <var class="keyword varname">my_container_group</var> 是组的名称。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3193" id="container_cli_reference_cfic__d1504e1611"><h3 class="sectiontitle" id="d72e3193"><span class="ph" id="container_cli_reference_cfic__d1504e1613"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update [--desired DESIRED] [-e
+<span class="q">“<var class="keyword varname">KEY</var>=<var class="keyword varname">VALUE</var>”</span>]<span class="ph"> [--max MAX] [--min
+MIN]</span> GROUP </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd id="container_cli_reference_cfic__d1504e1631">使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update</samp> 命令，可以对组执行以下更新。
+<ul id="container_cli_reference_cfic__d1504e1637"><li>更新想要在容器组中运行的实例数。</li>
+<li>向组添加新的环境变量。</li>
+<li>更新现有环境变量的值。</li>
+</ul>
+<div class="steps note"><span class="notetitle">注：</span> 一次只能执行一个更新。</div>
+</dd>
+<dd class="ddexpand"><div class="note tip"><span class="tiptitle">提示：</span> 要更新容器组的主机名或域，请使用 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2796">bx ic route-map [-d DOMAIN] [-n HOST] GROUP</a>。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml" id="container_cli_reference_cfic__d1504e1655"><dt class="pt dlterm">--desired <var class="keyword varname">DESIRED</var></dt>
+<dd class="pd">（可选）需要的实例数。缺省值为 <span class="keyword option">2</span>。</dd>
+<dt class="pt dlterm">-e <span class="q">“<var class="keyword varname">KEY</var>=<var class="keyword varname">VALUE</var>”</span></dt>
+<dd class="pd">（可选）向容器组添加新的环境变量，或者更改现有环境变量的值。</dd>
+<dt class="pt dlterm">--max <var class="keyword varname">MAX</var></dt>
+<dd class="pd">（可选）最大实例数。缺省值为 <span class="keyword option">2</span>。</dd>
+<dt class="pt dlterm">--min <var class="keyword varname">MIN</var></dt>
+<dd class="pd">（可选）最小实例数。缺省值为 <span class="keyword option">1</span>。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于更新名为 <var class="keyword varname">my_container_group</var> 的容器组中所需容器实例数的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update --desired <var class="keyword varname">5</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+<dd class="ddexpand">以下示例是请求向名为 <var class="keyword varname">my_container_group</var> 的容器组，添加值为 <var class="keyword varname">Linux</var> 的新环境变量 <var class="keyword varname">environment</var>。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update -e <span class="q">“<var class="keyword varname">environment</var>=<var class="keyword varname">Linux</var>”</span> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3328" id="container_cli_reference_cfic__d1504e1736"><h3 class="sectiontitle" id="d72e3328"><span class="ph" id="container_cli_reference_cfic__d1504e1738"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd id="container_cli_reference_cfic__d1504e1746">列出空间中的容器组。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">（可选）仅列出每个容器组的容器组标识。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3362" id="container_cli_reference_cfic__d1504e1764"><h3 class="sectiontitle" id="d72e3362"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images [-a] [-f CONDITION] [--no-trunc] [q]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>查看组织的专用 <span class="keyword">Bluemix</span> 映像注册表中所有可用映像的列表。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/images" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">images</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-a, --all</dt>
+<dd class="pd">（可选）包含组织的注册表中每个映像的所有映像层，而不仅仅包含最近的层。</dd>
+</dl>
+
+
+<dl class="parml"><dt class="pt dlterm">-f, --filter <var class="keyword varname">CONDITION</var></dt>
+<dd class="pd">（可选）根据所提供的条件过滤映像列表。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">--no-trunc</dt>
+<dd class="pd">（可选）不截断输出。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-q, --quiet</dt>
+<dd class="pd">（可选）仅显示数字标识。</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1812"><!-- --></a>响应</dt>
+<dd>您收到映像的列表，其中包含映像标识、创建日期和映像名称。</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于接收组织的可用映像列表的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3430" id="container_cli_reference_cfic__d1504e1825"><h3 class="sectiontitle" id="d72e3430"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> info [--json]</samp></h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1832"><!-- --></a>用途</dt>
+<dd>接收用于描述容器云服务实例状态的一组信息。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">--json</var></dt>
+<dd class="pd">（可选）以 JSON 格式排列命令的输出。</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1848"><!-- --></a>响应</dt>
+<dd>您收到读出消息，其中包含有关容器限制、容器使用情况、正在运行的容器数、内存限制、内存使用情况、浮动 IP 限制、浮动 IP 使用情况、CCS 主机 URL、注册表主机 URL 和调试方式状态的信息。</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于接收有关容器云服务实例的信息的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> info</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3470" id="container_cli_reference_cfic__d1504e1861"><h3 class="sectiontitle" id="d72e3470"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>初始化 <span class="keyword">IBM
+Bluemix Container Service</span> CLI。<div class="steps note" id="container_cli_reference_cfic__d1504e1875"><span class="notetitle">注：</span> 登录之前，您必须确保已安装 Cloud Foundry 命令工具 (cf) 以及 Docker CLI (docker)，并且已在您的环境路径中配置这两个工具。</div>
+<div class="note tip" id="container_cli_reference_cfic__d1504e1877"><span class="tiptitle">提示：</span> 要切换到其他区域，请在登录到 Cloud Foundry CLI（而不是 <span class="keyword">IBM
+Bluemix Container Service</span> CLI）时指定该区域的 API 端点。<ul id="container_cli_reference_cfic__d1504e1881"><li>美国南部：<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>英国：<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3522" id="container_cli_reference_cfic__d1504e1897"><h3 class="sectiontitle" id="d72e3522"><span class="ph" id="container_cli_reference_cfic__d1504e1899"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect [IMAGE | images | CONTAINER] </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e1908">检索有关一个或多个容器或容器映像的信息。</span>一次只能指定 IMAGE、images 或 CONTAINER 选项中的一个选项。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/inspect" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">inspect</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1918"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）通过指定容器名称或标识来获取有关特定容器的详细信息。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以检索多个容器的信息。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">（必需）通过指定映像的完整专用 <span class="keyword">Bluemix</span> 注册表路径来获取有关特定映像的详细信息。可以通过在命令中列出每个注册表路径（各路径之间用空格分隔），以检索多个映像的信息。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">images</dt>
+<dd class="pd">（必需）获取有关注册表中所有映像的详细信息。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于检查名为 <kbd class="ph userinput">my_container</kbd> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3586" id="container_cli_reference_cfic__d1504e1954"><h3 class="sectiontitle" id="d72e3586"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind ADDRESS CONTAINER </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1960"><!-- --></a>用途</dt>
+<dd>将可用浮动 IP 地址绑定到单个容器。<div class="steps note"><span class="notetitle">注：</span> 要将浮动 IP 地址绑定到容器组，请在 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e838"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp></a> 命令中使用 <samp class="ph codeph">--ip</samp> 标志。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1980"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">（必需）要绑定到单个容器的 IP 地址。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1986"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）要绑定到 IP 地址的容器标识或名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于将 IP 地址 192.0.2.23 绑定到名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">192.0.2.23</var> <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3646" id="container_cli_reference_cfic__d1504e2008"><h3 class="sectiontitle" id="d72e3646"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release ADDRESS </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2014"><!-- --></a>用途</dt>
+<dd>释放浮动 IP 地址。释放浮动 IP 地址后，即无法将其绑定到空间中的单个容器或容器组。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2024"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">（必需）要释放的 IP 地址。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于释放 IP 地址 192.0.2.23 的请求<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release <var class="keyword varname">192.0.2.23</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3683" id="container_cli_reference_cfic__d1504e2041"><h3 class="sectiontitle" id="d72e3683"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request [-q]</h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2047"><!-- --></a>用途</dt>
+<dd>请求新的浮动 IP。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">（可选）在命令输出中仅显示 IP 地址。不包括消息文本。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于获取新浮动 IP 地址的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3716" id="container_cli_reference_cfic__d1504e2070"><h3 class="sectiontitle" id="d72e3716"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind ADDRESS CONTAINER </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2076"><!-- --></a>用途</dt>
+<dd>将浮动 IP 地址从单个容器取消绑定。<div class="steps note"><span class="notetitle">注：</span> 要从容器组取消绑定 IP 地址，请除去该容器组，然后在不使用该 IP 地址的情况下重新创建该组。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2088"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">（必需）要取消绑定的 IP 地址。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2094"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）要取消绑定的容器标识或名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于从名为 <var class="keyword varname">my_container</var> 的容器取消绑定 IP 地址 192.0.2.23 的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">192.0.2.23</var> <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3766" id="container_cli_reference_cfic__d1504e2116"><h3 class="sectiontitle" id="d72e3766"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips [-q] </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2122"><!-- --></a>用途</dt>
+<dd>列出组织的可用浮动 IP 地址和绑定到这些 IP 地址的单个容器或组的标识。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">（可选）仅列出 IP 地址，而不列出绑定到那些 IP 地址的单个容器的标识。</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2137"><!-- --></a>响应</dt>
+<dd>您收到 IP 地址列表以及与这些 IP 地址链接的单个容器的标识。如果 IP 地址是未用过的，那么不会显示容器标识。</dd>
+<dt class="dlterm">示例</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2146">以下示例是用于接收组织的所有 IP 地址（无论是否可用）的列表的请求。</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-list -q</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3805" id="container_cli_reference_cfic__d1504e2151"><h3 class="sectiontitle" id="d72e3805"><span class="ph"><samp class="ph codeph">bx ic</samp></span> kill [-s
+CMD] CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>停止一个或多个容器中正在运行的进程而不停止容器。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/kill/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">kill</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器标识或名称。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以对多个容器运行此命令。</dd>
+<dt class="pt dlterm">-s, --signal <var class="keyword varname">CMD</var></dt>
+<dd class="pd">（可选）向正在容器中运行的进程发送任何命令。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于终止容器中名为 <var class="keyword varname">my_container</var> 的进程的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> kill <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3854" id="container_cli_reference_cfic__d1504e2195"><h3 class="sectiontitle" id="d72e3854"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs [-f | --since TIMESTAMP  | --tail
+STRING | -t] CONTAINER </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2205">显示正在运行的容器的输出日志或错误日志。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/logs" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">logs</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2215"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或标识。</dd>
+<dt class="pt dlterm">-f, --follow</dt>
+<dd class="pd"><p>（可选）包含容器的 <samp class="ph codeph">STDOUT</samp> 和 <samp class="ph codeph">STDERR</samp> 日志文件中的新输出。</p>
+</dd>
+<dt class="pt dlterm">--since TIMESTAMP</dt>
+<dd class="pd">（可选）显示自该时间戳记以来的所有日志。</dd>
+<dt class="pt dlterm">--tail STRING</dt>
+<dd class="pd">（可选）指定日志中要显示的最近行数。缺省值为显示所有日志。</dd>
+<dt class="pt dlterm">-t, --timestamps</dt>
+<dd class="pd">（可选）显示日志上的时间戳记。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于获取名为 <var class="keyword varname">my_container</var> 的容器的输出日志的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs -o <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3925" id="container_cli_reference_cfic__d1504e2261"><h3 class="sectiontitle" id="d72e3925"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-[get | set] NAME</h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2267"><!-- --></a>用途</dt>
+<dd>设置或检索用户登录到的组织的专用 <span class="keyword">Bluemix</span> 映像注册表的名称。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2279"><!-- --></a>get</dt>
+<dd class="pd">（可选）请求组织的专用映像注册表的名称空间。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2284"><!-- --></a>set <var class="keyword varname">NAME</var></dt>
+<dd class="pd">（可选）仅一次性功能，用于设置组织的专用映像注册表的名称空间（如果尚未设置）。设置名称空间后，从 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 注销并重新登录，然后再继续。<div class="note restriction"><span class="restrictiontitle">限制：</span> 不能在注册表名称空间的名称中使用连字符 (-)。</div>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于查询用户登录到的组织的名称空间的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3979" id="container_cli_reference_cfic__d1504e2303"><h3 class="sectiontitle" id="d72e3979"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pause CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2313">暂停正在运行的一个或多个容器内的所有进程。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/pause" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">pause</a> 命令。要重新启动容器，请运行 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3689">unpause</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2326"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器名称或标识。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以对多个容器运行此命令。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于暂停名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> pause <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4026" id="container_cli_reference_cfic__d1504e2345"><h3 class="sectiontitle" id="d72e4026"><span class="ph" id="container_cli_reference_cfic__d1504e2347"><span class="ph"><samp class="ph codeph">bx ic</samp></span> port
+CONTAINER</span> [PRIVATE_PORT[/PROTOCOL]]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2357">列出容器的所有端口映射，或检索映射到专用端口的公共端口和 IP 地址。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/port" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">port</a> 命令。</dd>
+</dl>
+
+<dl><dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e2367"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器标识或名称。</dd>
+<dt class="pt dlterm"><var class="keyword varname">PRIVATE PORT</var></dt>
+<dd class="pd">（可选）要查找为其分配的公共端口和 IP 地址的专用端口。</dd>
+<dt class="pt dlterm"><var class="keyword varname">PROTOCOL</var></dt>
+<dd class="pd">（可选）分配给专用端口的协议。此值可以为 <var class="keyword varname">tcp</var> 或 <var class="keyword varname">udp</var>。</dd>
+</dl>
+</dd>
+</dl>
+
+<dl><dt class="dlterm">示例</dt>
+<dd id="container_cli_reference_cfic__d1504e2398">以下示例是用于列出名为 <var class="keyword varname">my_container</var> 的容器的所有端口和 IP 映射的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> port <var class="keyword varname">my_container</var></code></pre>
+</dd>
+<dt class="dlterm">系统输出</dt>
+<dd><pre class="codeblock"><code><samp class="ph systemoutput">9080/tcp -&gt; 192.0.2.25:9080</samp></code></pre>
+</dd>
+<dd class="ddexpand">在此示例中，<samp class="ph systemoutput">9080/tcp</samp> 是正在使用 TCP/IP 协议的专用端口。此端口映射到公共 IP 地址 <samp class="ph systemoutput">192.0.2.25</samp> 和公共端口 <samp class="ph systemoutput">9080</samp>。</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4112" id="container_cli_reference_cfic__d1504e2426"><h3 class="sectiontitle" id="d72e4112"><span class="ph" id="container_cli_reference_cfic__d1504e2428"><span class="ph"><samp class="ph codeph">bx ic</samp></span> <span class="ph" id="container_cli_reference_cfic__d1504e2431">ps [-a] [--filter
+env=<var class="keyword varname">SEARCH_CRITERIA</var>] [-l <var class="keyword varname">NUM</var>] [-q] [-s]</span></span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2445">检索正在空间中运行的容器的列表。缺省情况下，仅显示正在运行的容器。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/ps" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">ps</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e2453"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2455"><!-- --></a>-a, --all</dt>
+<dd class="pd">（可选）显示空间中的所有容器（包括正在运行的容器和已停止的容器）。</dd>
+<dt class="pt dlterm">--filter env=<var class="keyword varname">SEARCH_CRITERIA</var></dt>
+<dd class="pd">（可选）搜索具有特定环境变量值的容器。检查容器时，可以按 CLI 响应的 <var class="keyword varname">Env</var> 部分中列出的任何环境变量键或值来过滤容器。将 <var class="keyword varname">SEARCH_CRITERIA</var> 替换为要查找的键或值。搜索条件无需完全匹配。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2473"><!-- --></a>-l <var class="keyword varname">NUM</var>, --limit <var class="keyword varname">NUM</var></dt>
+<dd class="pd">（可选）列出最新创建的容器，其中 <var class="keyword varname">NUM</var> 是要返回的最新创建的容器数。<p>例如，如果按顺序创建了容器 node1 到 node5，那么选项 <samp class="ph codeph">--limit 2</samp> 会返回 node4 和 node5，因为它们是最后创建的两个容器。</p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2491"><!-- --></a>-q, --quiet</dt>
+<dd class="pd">（可选）仅显示容器标识。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2496"><!-- --></a>-s, --size</dt>
+<dd class="pd">（可选）列出容器的大小。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><div class="p">以下示例是用于查看所有正在运行和已停止的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</div>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4201" id="container_cli_reference_cfic__d1504e2510"><h3 class="sectiontitle" id="d72e4201"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rename OLD_NAME NEW_NAME </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>重命名容器。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/rename" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">rename</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">NEW_NAME</var></dt>
+<dd class="pd">（必需）容器的新名称。</dd>
+<dt class="pt dlterm"><var class="keyword varname">OLD_NAME</var></dt>
+<dd class="pd">（必需）容器的旧名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于将当前名为 <var class="keyword varname">my_container</var> 的容器重命名为 <var class="keyword varname">container_renamed</var> 的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rename <var class="keyword varname">my_container</var> <var class="keyword varname">container_renamed</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4255" id="container_cli_reference_cfic__d1504e2559"><h3 class="sectiontitle" id="d72e4255"><span class="ph"><samp class="ph codeph">bx ic</samp></span> reprovision [-f]
+[AVAILABILITY_ZONE]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>更改空间的 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域。此时会维护空间的原始配额。通过在不同可用性区域中的多个容器组中部署应用程序，可提高发生硬件故障时应用程序的可用性。<div class="note attention"><span class="attentiontitle">注意：</span> 运行此命令时，此空间内的所有单个容器和组、公共 IP 地址和卷都不会迁移到新的可用性区域，且在迁移过程中将会除去。映像将不会受到影响。<a href="container_volumes_ov.html#container_volume_different_dc" title="如果您计划将当前 Bluemix 空间移动到新的数据中心，请确保已备份卷，以便您可以在新数据中心对数据进行复原和使用。">备份卷</a>以确保您可以在迁移到新的可用性区域之后复原数据。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">AVAILABILITY_ZONE</dt>
+<dd class="pd">（可选）部署了容器的 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域的名称。如果未指定 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域，那么将会使用针对区域设置的缺省 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域。
+<div class="note important"><span class="importanttitle">要点：</span> 如果包含 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域，那么还必须包含 <samp class="ph codeph">-f</samp> 选项。</div>
+<div class="tablenoborder"><table summary="IBM Bluemix Container Service 可用性区域" id="container_cli_reference_cfic__d1504e2600" class="defaultstyle"><caption><span class="tablecap">表 7. <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域</span></caption><thead><tr><th id="d72e4359" class="thleft">区域</th>
+<th id="d72e4361" class="thleft">数据中心位置</th>
+<th id="d72e4363" class="thleft"><span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域名称</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e4359 ">美国南部</td>
+<td headers="d72e4361 ">达拉斯 1</td>
+<td headers="d72e4363 ">dal09-01</td>
+</tr>
+<tr><td headers="d72e4359 ">美国南部</td>
+<td headers="d72e4361 ">达拉斯 2</td>
+<td headers="d72e4363 ">dal09-02</td>
+</tr>
+<tr><td headers="d72e4359 ">美国南部</td>
+<td headers="d72e4361 ">达拉斯 3</td>
+<td headers="d72e4363 ">dal10-03</td>
+</tr>
+<tr><td headers="d72e4359 ">英国</td>
+<td headers="d72e4361 ">伦敦</td>
+<td headers="d72e4363 ">lon02-01</td>
+</tr>
+<tr><td headers="d72e4359 ">英国</td>
+<td headers="d72e4361 ">阿姆斯特丹</td>
+<td headers="d72e4363 ">ams03-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-f, --force</dt>
+<dd class="pd">（可选）强制在 <span class="keyword">Bluemix</span> 空间中重新创建 <span class="keyword">IBM
+Bluemix Container Service</span>。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于将当前空间的 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域更改为 <kbd class="ph userinput">dal09-02</kbd> 的请求。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> reprovision -f dal09-02</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4450" id="container_cli_reference_cfic__d1504e2631"><h3 class="sectiontitle" id="d72e4450"><span class="ph"><samp class="ph codeph">bx ic</samp></span> restart CONTAINER [CONTAINER] [-t SECS] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2641">重新启动一个或多个容器。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/restart" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">restart</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2651"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器名称或标识。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以对多个容器运行此命令。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2657"><!-- --></a>-t <var class="keyword varname">SECS</var>, --time <var class="keyword varname">SECS</var></dt>
+<dd class="pd">重新启动容器之前要等待的秒数。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于重新启动名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> restart <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4504" id="container_cli_reference_cfic__d1504e2680"><h3 class="sectiontitle" id="d72e4504"><span class="ph" id="container_cli_reference_cfic__d1504e2682"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2691">除去一个或多个容器。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/rm" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">rm</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e2699"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2701"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器名称或标识。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以对多个容器运行此命令。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2709"><!-- --></a>-f, --force</dt>
+<dd class="pd">（可选）强制除去正在运行的或失败的容器。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于除去名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4556" id="container_cli_reference_cfic__d1504e2727"><h3 class="sectiontitle" id="d72e4556"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi [-R REGISTRY] IMAGE [IMAGE] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2737">从已登录组织的专用 <span class="keyword">Bluemix</span> 映像注册表中除去一个或多个映像。</span>有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/rmi" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">rmi</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2749"><!-- --></a><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">（必需）要除去的映像的完整专用 <span class="keyword">Bluemix</span> 注册表路径。如果未在映像路径中指定标记，那么缺省情况下会删除标记为 <samp class="ph codeph">latest</samp> 的映像。可以通过在命令中列出每个专用 <span class="keyword">Bluemix</span> 注册表路径（各路径之间用空格分隔），以对多个映像运行此命令。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2762"><!-- --></a>-R <var class="keyword varname">REGISTRY</var>, --registry <var class="keyword varname">REGISTRY</var></dt>
+<dd class="pd">（可选）更改注册表主机。缺省情况下会使用您用于 <span class="keyword cmdname">init</span> 命令的注册表。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于除去映像 <samp class="ph codeph">mynamespace/myimage:latest</samp> 的请求：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">myimage</var>:<var class="keyword varname">latest</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4637" id="container_cli_reference_cfic__d1504e2796"><h3 class="sectiontitle" id="d72e4637"><span class="ph" id="container_cli_reference_cfic__d1504e2798"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-map [-d DOMAIN] [-n HOST] GROUP </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2807">建立用于访问容器组的因特网流量传输路径。可以使用此命令来建立新路径或更新现有路径。</span></dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e2812"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2814"><!-- --></a>-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">（可选）路径的域名，这是完整公共路径 URL 的第二部分。
+在大多数情况下，域为 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。您还可使用此参数来指定定制域。如果使用定制域，请不要在域名中包含下划线 (_)。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2827"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">（必需）组标识或名称。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2833"><!-- --></a>-n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">（可选）路径的主机名。不要在主机名中包含下划线 (_)。主机名是完整公共路径 URL 的第一部分，例如 URL <samp class="ph codeph"><var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> 中的 <var class="keyword varname">mycontainerhost</var>。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于映射名为 <samp class="ph codeph">my_container_group</samp> 的容器组的路径的请求。主机名为 <samp class="ph codeph">my_host</samp>，<samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> 是域。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-map -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">my_host</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4725" id="container_cli_reference_cfic__d1504e2876"><h3 class="sectiontitle" id="d72e4725"><span class="ph" id="container_cli_reference_cfic__d1504e2878"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap [-d DOMAIN] [-n HOST] GROUP </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2887">取消映射容器组的路径。如果组没有路径，那么无法从因特网访问该组。</span></dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2894"><!-- --></a>-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">（可选）路径的域名。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2904"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">（必需）组标识或名称。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2910"><!-- --></a>-n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">（可选）路径的主机名。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于取消映射名为 <samp class="ph codeph">my_container_group</samp> 的组的路径的请求，其中 <samp class="ph codeph">my_host</samp> 是主机名，<samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> 是域。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">my_host</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4799" id="container_cli_reference_cfic__d1504e2944"><h3 class="sectiontitle" id="d72e4799"><span class="ph" id="container_cli_reference_cfic__d1504e2946"><span class="ph"><samp class="ph codeph">bx ic</samp></span><span class="ph" id="container_cli_reference_cfic__d1504e2948"> run [-p PORT] [-P] [-d] [-e ENV] [--env-file
+ENVFILE] [-it] [--link NAME:ALIAS] [-m MEMORY] --name NAME [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD [CMD ...]] </span></span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2956">通过映像名称在容器云服务中启动新容器。</span>缺省情况下，<span class="keyword">Bluemix</span> 中的容器以拆离模式运行。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/run" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">run</a> 命令。<div class="steps note"><span class="notetitle">注：</span> 您必须确保已安装 Cloud Foundry 命令工具，并且您拥有 Cloud Foundry 令牌。使用 <samp class="ph codeph">bx login</samp> 和 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp> 成功登录后，会生成所需令牌。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e2975"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd">（可选）该命令及相应自变量将传递给容器来执行。此命令必须是长时间运行命令。请不要使用短时间运行命令（例如 <span class="keyword cmdname">/bin/date</span>），因为此类命令可能会导致容器崩溃。<div class="p">长时间运行命令的示例（假定您要使用在 <span class="keyword">IBM
+Bluemix Container Service</span> 注册表中提供的 <span class="keyword option">ibmnode</span> 映像）：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> ping localhost</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- tail -f /dev/null</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- sh -c <span class="q">“while true; do date; sleep 20; done”</span></code></pre>
+<div class="steps note"><span class="notetitle">注：</span> CMD 及其自变量必须位于 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 命令行的末尾。</div>
+</div>
+</dd>
+<dt class="pt dlterm">-d</dt>
+<dd class="pd">（可选）以拆离模式运行容器。当您使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 时，缺省情况下容器会以拆离模式运行。在拆离模式下，当容器中的根进程退出时，容器也会退出。
+例如，通过 ibmnode 映像部署容器时，容器构建后将立即关闭，因为不再存在运行中的进程。<div class="note tip"><span class="tiptitle">提示：</span> 如果您选择使用 <samp class="ph codeph">docker run</samp> 而非 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp>，那么需要 <samp class="ph codeph">-d</samp> 选项。</div>
+</dd>
+<dt class="pt dlterm">-e <var class="keyword varname">ENV</var>, --env <var class="keyword varname">ENV</var></dt>
+<dd class="pd">（可选）设置多个环境变量，其中 <span class="keyword option">ENV</span> 是 <samp class="ph codeph">key=value</samp> 对。如果包含引号，并用引号将环境变量名称和值括起，那么将单独列出多个键。<p>示例</p>
+<samp class="ph codeph">-e
+<span class="q">“<var class="keyword varname">key1</var>=<var class="keyword varname">value1</var>”</span> -e
+<span class="q">“<var class="keyword varname">key2</var>=<var class="keyword varname">value2</var>”</span> -e
+<span class="q">“<var class="keyword varname">key3</var>=<var class="keyword varname">value3</var>”</span></samp><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e3096" class="defaultstyle"><caption><span class="tablecap">表 8. 建议的环境变量</span></caption><thead><tr><th id="d72e4986" class="thleft">环境变量</th>
+<th id="d72e4988" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e4986 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d72e4988 ">某些 <span class="keyword">Bluemix</span> 服务不支持直接绑定到容器。在这种情况下，需要创建 Cloud Foundry 应用程序并将其与 <span class="keyword">Bluemix</span> 服务绑定。然后，使用 <samp class="ph codeph">CCS_BIND_APP</samp> 将该应用程序绑定到容器。该 Cloud Foundry 应用程序起到桥梁的作用，允许 <span class="keyword">Bluemix</span> 将桥接应用程序的 VCAP_SERVICES 信息注入到正在运行的容器实例中。</td>
+</tr>
+<tr><td headers="d72e4986 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">注：</span>  服务不支持使用 <samp class="ph codeph">CCS_BIND_SRV=</samp> 环境变量时，请改用 <samp class="ph codeph">CCS_BIND_APP=</samp>。</div>
+</td>
+<td headers="d72e4988 ">要在不使用桥接应用程序的情况下将 <span class="keyword">Bluemix</span> 服务直接绑定到容器，请使用 <samp class="ph codeph">CCS_BIND_SRV</samp>。通过此绑定，<span class="keyword">Bluemix</span> 可以将 VCAP_SERVICES 信息注入到正在运行的容器实例中。要列出多个 <span class="keyword">Bluemix</span> 服务，请将这些服务包含在同一环境变量中。</td>
+</tr>
+<tr><td headers="d72e4986 "><div class="lines">（不推荐）<samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d72e4988 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">此环境变量已不推荐使用：</span> 请改用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">exec</samp> 或 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp> 来对容器进行外部访问。有关更多信息，请参阅<a href="container_security.html#container_cli_login_exec" title="如果必须登录到正在运行的容器，可以使用 bx ic exec。">使用 exec 登录到容器</a>。</div>
+<span class="ph">要在创建容器时向其添加 SSH 密钥，可以使用 <samp class="ph codeph">CCS_API_KEY</samp>。</span></td>
+</tr>
+<tr><td headers="d72e4986 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d72e4988 "><span class="ph" id="container_cli_reference_cfic__d1504e1138-d1500e3794a1310">要添加要在容器中监视的日志文件，请包含 <samp class="ph codeph">LOG_LOCATIONS</samp> 环境变量以及日志文件的路径。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</dd>
+<dt class="pt dlterm">--env-file <var class="keyword varname">ENVFILE</var></dt>
+<dd class="pd">（可选）从文件导入环境变量，其中 <var class="keyword varname">ENVFILE</var> 是您的文件在本地目录上的路径。文件中的每一行表示一个 <samp class="ph codeph">key=value</samp> 对。<p>示例</p>
+<pre class="codeblock"><code>KEY1=VALUE1
+KEY2=VALUE2</code></pre>
+</dd>
+<dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">（必需）要包含在容器中的映像。可以在映像之后列出命令，但不要在映像之后放置任何选项；请在指定映像之前包含所有选项。<p>如果要使用组织的专用 <span class="keyword">Bluemix</span> 注册表中的映像，请使用以下格式指定映像：<samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">NAMESPACE</var>/<var class="keyword varname">IMAGE</var></samp></p>
+<p>如果要使用 <span class="keyword">IBM
+Bluemix Container Service</span> 提供的映像，请使用以下格式指定映像：<samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">IMAGE</var></samp></p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e3147"><!-- --></a>-it</dt>
+<dd class="pd">（可选）以交互方式运行容器。创建容器后，保持标准输入显示。输入 <kbd class="ph userinput">exit</kbd> 以退出。</dd>
+<dt class="pt dlterm">--link <var class="keyword varname">NAME</var>:<var class="keyword varname">ALIAS</var></dt>
+<dd class="pd">（可选）如果您想让某个容器与另一个正在运行的容器进行通信，可以使用主机名的别名来指代该容器。有关更多信息，请参阅<a href="container_single_ui.html#container_linking" title="一个容器链接到同一空间中的另一个容器时，IBM Bluemix Container Service 会在接收方容器上为源容器创建一个主机条目。您可使用别名来指代源容器，而不要使用可能会频繁更改的特定 IP 地址。">链接单个容器与命令行界面 (CLI)</a>。</dd>
+<dt class="pt dlterm">-m <var class="keyword varname">MEMORY</var>, --memory <var class="keyword varname">MEMORY</var></dt>
+<dd class="pd">（可选）<span class="ph" id="container_cli_reference_cfic__d1504e1291-d1500e3887a1310">输入容器的内存限制 (MB)。内存限制是容器大小的一部分，用于定义在运行时容器在计算主机上所获取的内存和磁盘空间的最大量。
+分配容器大小后，此值无法更改。</span><span class="keyword">IBM
+Bluemix Container Service</span> 中可用的大小为：
+<ul data-hd-audience="yellow" id="container_cli_reference_cfic__d1504e1295-d1500e3897a1310"><li>Pico（64 MB 内存，4 GB 磁盘空间）</li>
+<li>Nano（128 MB 内存，8 GB 磁盘空间）</li>
+<li>Micro（256 MB 内存，16 GB 磁盘空间）</li>
+<li>Tiny（512 MB 内存，32 GB 磁盘空间）</li>
+<li>Small（1024 MB 内存，64 GB 磁盘空间）</li>
+<li>Medium（2048 MB 内存，128 GB 磁盘空间）</li>
+<li>Large（4096 MB 内存，256 GB 磁盘空间）</li>
+<li>X-Large（8192 MB 内存，512 GB 磁盘空间）</li>
+<li>2X-Large（16384 MB 内存，1 TB 磁盘空间）</li>
+</ul>
+如果您未设置容器的大小，那么会使用 <span class="keyword option">256</span> MB 创建每一个容器实例。<div class="note important"><span class="importanttitle">要点：</span> 在没有单位标签的情况下，输入容器内存 (MB)。例如，如果您想要创建 Pico 容器，请输入 <samp class="ph codeph">-m 64</samp>。</div>
+</dd>
+<dt class="pt dlterm">--name <var class="keyword varname">NAME</var></dt>
+<dd class="pd">（必需）为容器分配名称。<div class="note tip"><span class="tiptitle">提示：</span> 容器名称必须以字母开头，并且可以包含大写字母、小写字母、数字、句点 (.)、下划线 (_) 或连字符 (-)。</div>
+</dd>
+<dt class="pt dlterm">-p <var class="keyword varname">PORT</var>, --publish <var class="keyword varname">PORT</var></dt>
+<dd class="pd"><p>（可选）<span class="ph" id="container_cli_reference_cfic__d1504e3191">如果要使应用程序可通过因特网进行访问，您必须公开公共端口。公开公共端口时，将为容器创建公用网络安全组，该组只允许您在公开的端口上发送和接收公共数据。其他所有公共端口都将关闭，且无法用于从因特网访问应用程序。可以使用多个 <span class="keyword option">-p</span> 选项包含多个端口。端口无法映射或转发。如果未公开端口，那么只能从专用容器网络访问容器。可以使用分配的专用 IP 地址在专用网络上与容器通信。</span></p>
+
+<div class="p">如果在 Dockerfile 中为要使用的映像指定了端口，请包含该端口。<div class="note tip"><span class="tiptitle">提示：</span> <ul id="container_cli_reference_cfic__d2114e235-d1500e3954a1310"><li>对于 IBM 认证的 Liberty Server 映像或此映像的修改版本，请输入端口 <kbd class="ph userinput">9080</kbd>。</li>
+<li>对于 IBM 认证的 Node.js 映像或此映像的修改版本，请输入任意端口，例如端口 <kbd class="ph userinput">8000</kbd>。</li>
+</ul>
+</div>
+</div>
+
+<p>您可以选择 UDP 或 TCP，以指示要使用的 IP 协议。如果未指定协议，那么端口会自动公开用于 TCP 流量。</p>
+
+<div class="p">示例<ul id="container_cli_reference_cfic__d1504e3204"><li><samp class="ph codeph">-p 9080</samp></li>
+<li><samp class="ph codeph">-p 9080/udp</samp></li>
+<li><samp class="ph codeph">-p 9080/udp -o 8000/tcp</samp></li>
+</ul>
+</div>
+
+<p>如果空间中有要绑定到容器的现有 IP 地址，那么可以指定该 IP 地址以及端口信息。请包含 IP 地址、端口或 IP 地址和容器端口号，例如 <var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;port_on_IP&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var>。IP 地址上的端口必须与 Dockerfile 中公开的容器端口相匹配。</p>
+
+<div class="p">示例<pre class="codeblock"><code>-p 192.0.2.23:9080:9080</code></pre>
+</div>
+
+<div class="steps note" id="container_cli_reference_cfic__d1504e3233"><span class="notetitle">注：</span> 绑定公共 IP 地址不会包含 SSL 证书，此证书用于加密发送到单个容器和从单个容器发送的数据。如果应用程序需要 SSL 加密，那么可以实施您自己的 SSL 解决方案，或者使用容器组，而不使用单个容器。容器组已绑定到已经包含 SSL 证书的公共路径，所以可以使用 HTTPS 来访问容器组，而无需任何额外配置。有关更多信息，请参阅<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">使用 Bluemix GUI 创建容器组</a>。</div>
+</dd>
+<dt class="pt dlterm">-P</dt>
+<dd class="pd">（可选）自动公开在映像的 Dockerfile 中为 HTTP 流量指定的端口。</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e3244"><!-- --></a>--volume <var class="keyword varname">VOLUME</var>:<var class="keyword varname">/DIRECTORY_PATH</var>[:ro]</dt>
+<dd class="pd">（可选）通过使用以下格式指定详细信息来将卷附加到容器：<samp class="ph codeph">VOLUME:/DIRECTORY_PATH[:ro]</samp>。<ul id="container_cli_reference_cfic__d1504e3258"><li><var class="keyword varname">VOLUME</var>：卷标识或卷名。</li>
+<li><var class="keyword varname">DIRECTORY_PATH</var>：容器中目录的绝对路径。</li>
+<li><samp class="ph codeph">ro</samp>：可选。指定 <samp class="ph codeph">ro</samp> 会将卷设为只读，而不是缺省的读/写。</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于通过使用 <span class="ph filepath"><var class="keyword varname">my_namespace</var>/nginx</span> 映像来创建和启动新容器（其名称为 <var class="keyword varname">my_container</var> 且内存限制为 1024 MB）的有效请求，其中 <var class="keyword varname">my_namespace</var> 是与已登录用户关联的名称空间。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m <var class="keyword varname">1024</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">nginx</var></code></pre>
+<div class="p">以下示例是用于通过使用 <span class="ph filepath">my_namespace/blog</span> 映像并将一些凭证作为环境变量传入来创建和启动新容器的有效请求，其中 <var class="keyword varname">my_namespace</var> 是与已登录用户关联的名称空间。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -e <var class="keyword varname">USER</var>=<var class="keyword varname">johnsmith</var> -e <var class="keyword varname">PASS</var>=<var class="keyword varname">password</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">blog</var></code></pre>
+</div>
+<div class="p">以下示例是用于通过使用 <span class="ph filepath">my_namespace/blog</span> 映像将卷添加到容器的有效请求，其中 <var class="keyword varname">my_namespace</var> 是与已登录用户关联的名称空间。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">VolId1</var>:<var class="keyword varname">/first/path</var> --volume <var class="keyword varname">VolId2</var>:<var class="keyword varname">/second/path</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">blog</var></code></pre>
+</div>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5493" id="container_cli_reference_cfic__d1504e3374"><h3 class="sectiontitle" id="d72e5493"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind</samp> GROUP SERVICE_INSTANCE </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>将服务添加到正在运行的容器组。此命令仅可用于容器组。
+单个容器必须将服务绑定为 <span class="ph">bx ic</span> run 命令的一部分。要取消绑定服务，请参阅 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3425">service-unbind</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">（必需）组标识或名称。</dd>
+<dt class="pt dlterm"><var class="keyword varname">SERVICE_INSTANCE</var></dt>
+<dd class="pd">（必需）要添加到容器组的服务实例的名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于将名为 MyDataCache 的数据高速缓存服务的实例绑定到 <var class="keyword varname">my_container_group</var> 容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind <var class="keyword varname">my_container_group</var> <var class="keyword varname">MyDataCache</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5549" id="container_cli_reference_cfic__d1504e3425"><h3 class="sectiontitle" id="d72e5549"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-unbind</samp> GROUP SERVICE_INSTANCE </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>将服务从运行中容器组除去。此命令仅可用于容器组。
+单个容器必须除去容器并创建不带服务的新容器。
+要绑定服务，请参阅 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3374">service-bind</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">（必需）组标识或名称。</dd>
+<dt class="pt dlterm"><var class="keyword varname">SERVICE_INSTANCE</var></dt>
+<dd class="pd">（必需）要从容器组除去的服务实例的名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于将名为 MyDataCache 的数据高速缓存服务的实例从 <var class="keyword varname">my_container_group</var> 容器取消绑定的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-unbind <var class="keyword varname">my_container_group</var> <var class="keyword varname">MyDataCache</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5602" id="container_cli_reference_cfic__d1504e3474"><h3 class="sectiontitle" id="d72e5602"><span class="ph"><samp class="ph codeph">bx ic</samp></span> start CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>启动一个或多个停止的容器。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/start">start</a> 命令。要停止容器，请参阅 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3556">stop</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器名称或标识。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以对多个容器运行此命令。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于启动名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> start <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5647" id="container_cli_reference_cfic__d1504e3514"><h3 class="sectiontitle" id="d72e5647"><span class="ph"><samp class="ph codeph">bx ic</samp></span> stats --no-stream CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>对于一个或多个容器，查看容器资源的实时使用情况统计信息。这将显示实时生成的数据。使用 <kbd class="ph userinput">CTRL+C</kbd> 以退出。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/stats/">stats</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或标识。</dd>
+<dt class="pt dlterm">--no-stream</dt>
+<dd class="pd">（必需）显示最新的结果。不会显示运行此命令后生成的新信息。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于获取有关容器的最近统计信息的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stats --no-stream <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5694" id="container_cli_reference_cfic__d1504e3556"><h3 class="sectiontitle" id="d72e5694"><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop CONTAINER [CONTAINER] [-t SECS]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>停止一个或多个正在运行的容器。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/stop">stop</a> 命令。要启动容器，请参阅 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3474">start</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器名称或标识。可以通过在命令中列出多个容器的名称和标识（各名称和标识之间用空格分隔），以对多个容器运行此命令。</dd>
+<dt class="pt dlterm">-t <var class="keyword varname">SECS</var>, --time <var class="keyword varname">SECS</var></dt>
+<dd class="pd">终止容器之前要等待的秒数。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于停止名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5750" id="container_cli_reference_cfic__d1504e3607"><h3 class="sectiontitle" id="d72e5750"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top CONTAINER [CONTAINER] [<samp class="ph codeph">ps</samp> options]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>列出正在容器中运行的进程。<p>与 Linux 中的本机 <samp class="ph codeph">top</samp> 命令不同，<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top</samp> 命令针对在容器内运行的主进程，显示 Linux <samp class="ph codeph">ps</samp> 命令的输出。因此，当内存和 CPU 使用量针对进程而更改时，该使用量不会在 CLI 输出中更新。</p>
+<div class="steps note"><span class="notetitle">注：</span> 如果您需要查看本机 Linux <samp class="ph codeph">top</samp> 命令的输出，请在容器中 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e747">exec</a>，并运行 <samp class="ph codeph">top</samp> 命令。</div>
+ 有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/top/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">top</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或标识。</dd>
+</dl>
+</dd>
+<dd class="ddexpand"><dl class="parml"><dt class="pt dlterm"><samp class="ph codeph"><var class="keyword varname">ps</var></samp> 选项</dt>
+<dd class="pd">（可选）使用本机 Linux <samp class="ph codeph">ps</samp> 命令提供的选项，以进一步详细列出或过滤 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top</samp> 命令的输出。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例请求显示在名为 <var class="keyword varname">my_container</var> 的容器中运行的所有当前进程的详细信息。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> top <var class="keyword varname">my_container</var> -aux</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5841" id="container_cli_reference_cfic__d1504e3689"><h3 class="sectiontitle" id="d72e5841"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unpause CONTAINER [CONTAINER]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>取消暂停正在运行的一个或多个容器内的所有进程。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/unpause">unpause</a> 命令。要暂停容器，请参阅 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2303">pause</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）至少一个容器的容器名称或标识。可以通过在命令中列出多个容器的名称或标识（各名称或标识之间用空格分隔），以对多个容器运行此命令。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于取消暂停名为 <var class="keyword varname">my_container</var> 的容器的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> unpause <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5886" id="container_cli_reference_cfic__d1504e3729"><h3 class="sectiontitle" id="d72e5886"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unprovision [-f]</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>从您登录的 <span class="keyword">Bluemix</span> 空间中删除 <span class="keyword">IBM
+Bluemix Container Service</span>。
+<div class="note attention"><span class="attentiontitle">注意：</span> 运行此命令后，所有单个容器和容器组都会丢失。您的空间在 <span class="keyword">Bluemix</span> 中仍可用。要再次开始使用 <span class="keyword">IBM
+Bluemix Container Service</span>，您必须运行 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1861">bx ic init</a> 以再次初始化 <span class="keyword">IBM
+Bluemix Container Service</span>。</div>
+</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-f, --force</dt>
+<dd class="pd">（可选）强制从 <span class="keyword">Bluemix</span> 空间删除 <span class="keyword">IBM
+Bluemix Container Service</span>。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例请求从空间中删除 <span class="keyword">IBM
+Bluemix Container Service</span>。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> unprovision</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5977" id="container_cli_reference_cfic__d1504e3778"><h3 class="sectiontitle" id="d72e5977"><span class="ph" id="container_cli_reference_cfic__d1504e3780"><span class="ph"><samp class="ph codeph">bx ic</samp></span> update </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>检查以了解是否有比已安装版本更新的 <span class="keyword">IBM
+Bluemix Container Service</span> 插件版本。</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> update </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6009" id="container_cli_reference_cfic__d1504e3798"><h3 class="sectiontitle" id="d72e6009"><span class="ph" id="container_cli_reference_cfic__d1504e3800"><span class="ph"><samp class="ph codeph">bx ic</samp></span>version</span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>显示 Docker 和 <span class="keyword">IBM
+Bluemix Container Service</span> API 的版本。要查看 <span class="keyword">IBM
+Bluemix Container Service</span> 的已安装插件的版本，请运行 <samp class="ph codeph">cf plugins</samp> 或 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+info</samp>。有关更多信息，请查看 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/version/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">version</a> 命令。</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>version</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6061" id="container_cli_reference_cfic__d1504e3829"><h3 class="sectiontitle" id="d72e6061"><span class="ph" id="container_cli_reference_cfic__d1504e3831"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>创建卷。</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e3844"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（可选）文件共享名称。如果没有可用的文件共享或未指定任何文件共享，那么将在空间的缺省文件共享上构建卷。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必需）卷名。<span class="ph" id="container_cli_reference_cfic__d1504e3860">名称可以包含大写字母、小写字母、数字、下划线 (_) 和连字符 (-)。</span></dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于创建卷的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create <var class="keyword varname">my_volume</var> <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6111" id="container_cli_reference_cfic__d1504e3875"><h3 class="sectiontitle" id="d72e6111"><span class="ph" id="container_cli_reference_cfic__d1504e3877"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>创建文件共享。</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e3890"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">（必需）文件共享 IOPS。有效值为 0.25、2 或 4 IOPS/GB。</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（必需）文件共享名称。<span class="ph">名称可以包含大写字母、小写字母、数字、下划线 (_) 和连字符 (-)。</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">（必需）文件共享系统大小 (GB)。使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp> 可列出所有有效大小。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create <var class="keyword varname">my_fileshare</var> <var class="keyword varname">20</var> <var class="keyword varname">0.25</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6173" id="container_cli_reference_cfic__d1504e3930"><h3 class="sectiontitle" id="d72e6173"><span class="ph" id="container_cli_reference_cfic__d1504e3932"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>列出可用的文件共享大小。</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6197" id="container_cli_reference_cfic__d1504e3948"><h3 class="sectiontitle" id="d72e6197"><span class="ph" id="container_cli_reference_cfic__d1504e3950"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>检查文件共享。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（必需）文件共享名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6233" id="container_cli_reference_cfic__d1504e3980"><h3 class="sectiontitle" id="d72e6233"><span class="ph" id="container_cli_reference_cfic__d1504e3982"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>列出组织中的文件共享。</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6257" id="container_cli_reference_cfic__d1504e3998"><h3 class="sectiontitle" id="d72e6257"><span class="ph" id="container_cli_reference_cfic__d1504e4000"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>除去文件共享。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（必需）文件共享名称。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6294" id="container_cli_reference_cfic__d1504e4031"><h3 class="sectiontitle" id="d72e6294"><span class="ph" id="container_cli_reference_cfic__d1504e4033"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect VOLNAME </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>检查卷。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必需）卷名。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于检查卷的请求，其中 <var class="keyword varname">my_volume</var> 是卷的名称。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect <var class="keyword varname">my_volume</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6334" id="container_cli_reference_cfic__d1504e4067"><h3 class="sectiontitle" id="d72e6334"><span class="ph" id="container_cli_reference_cfic__d1504e4069"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>除去卷。</dd>
+<dt class="dlterm">参数</dt>
+<dd id="container_cli_reference_cfic__d1504e4082"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必需）卷名。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于除去卷的请求，其中 <var class="keyword varname">my_volume</var> 是卷的名称。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove <var class="keyword varname">my_volume</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6374" id="container_cli_reference_cfic__d1504e4103"><h3 class="sectiontitle" id="d72e6374"><span class="ph" id="container_cli_reference_cfic__d1504e4105"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>列出卷。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm">--table</dt>
+<dd class="pd">（可选）以表格式组织列表输出。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于列出所有卷的请求。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6409" id="container_cli_reference_cfic__d1504e4132"><h3 class="sectiontitle" id="d72e6409"><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>等待容器退出。在此等待时间内，命令行不会返回任何内容，您也无法输入命令。容器退出或停止后，CLI 输出中会立即显示退出代码。有关更多信息，请参阅 Docker 帮助中的 <a href="https://docs.docker.com/engine/reference/commandline/wait/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">wait</a> 命令。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或标识。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于等待名为 <var class="keyword varname">my_container</var> 的容器退出的请求。容器退出后，CLI 中会立即显示退出代码。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6451" id="container_cli_reference_cfic__d1504e4169"><h3 class="sectiontitle" id="d72e6451"><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait-status CONTAINER</h3>
+<dl><dt class="dlterm">用途</dt>
+<dd>等待单个容器或容器组达到非瞬时状态。在此等待时间内，命令行不会返回任何内容，您也无法输入命令。当容器达到非瞬时状态后，会立即显示 <span class="ph uicontrol">OK</span> 消息。对于单个容器，非瞬时状态包括 <samp class="ph codeph">Running</samp>、<samp class="ph codeph">Shutdown</samp>、<samp class="ph codeph">Crashed</samp>、<samp class="ph codeph">Paused</samp> 或 <samp class="ph codeph">Suspended</samp>。对于容器组，非瞬时状态包括 <samp class="ph codeph">CREATE_COMPLETE</samp>、<samp class="ph codeph">UPDATE_COMPLETE</samp> 或 <samp class="ph codeph">FAILED</samp>。</dd>
+<dt class="dlterm">参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">（必需）容器名称或组名，或者容器标识或组标识。</dd>
+</dl>
+</dd>
+<dt class="dlterm">示例</dt>
+<dd>以下示例是用于等待名为 <var class="keyword varname">my_container</var> 的容器达到非瞬时状态的请求。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait-status <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section></div>
+<aside role="complementary" aria-labelledby="d72e1253"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d72e6522" lang="zh-cn" id="container_cli_cfic_uninstall"><h2 class="topictitle2" id="d72e6522">卸载 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">如果不再需要 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，可以使用 <span class="ph">bx</span> 命令将其卸载。</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">注：</span> 要卸载 <span class="keyword">IBM
+Bluemix Container Service</span> Cloud
+Foundry 插件，请运行以下命令。<pre class="codeblock"><code>cf uninstall-plugin IBM-Containers</code></pre>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">要为 <span class="keyword">Bluemix</span> CLI 卸载 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，请运行以下命令。</span> <pre class="codeblock"><code><span class="ph">bx</span> plugin uninstall IBM-Containers</code></pre>
+</li>
+<li class="step stepexpand" id="container_cli_cfic_uninstall__verify"><span class="cmd">通过运行以下命令并检查已安装的插件的列表，验证该插件是否已卸载。</span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p><span class="keyword">IBM
+Bluemix Container Service</span> 插件未显示在结果中。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e6522"></aside></article><article class="topic concept nested1" role="article" aria-labelledby="d72e6683" lang="zh-cn" id="container_nav_help"><h2 class="topictitle2" id="d72e6683">其余的 <span class="keyword">IBM
+Bluemix Container Service</span> 文档在哪里？</h2>
+<div class="body conbody"><div class="abstract">
+
+
+<p>查看此内容后，请返回到主 <a href="container_index.html" title="管理 IBM Cloud 上 Docker 容器和 Kubernetes 集群内的高可用性应用程序。容器是一种标准的方法，用于打包应用程序及其所有依赖项，以便应用程序可以在环境之间移动并无更改地运行。与虚拟机不同，容器不会捆绑操作系统。容器中仅打包有应用程序代码、运行时、系统工具、库和设置，这使得容器比虚拟机更轻便、可移植性更高且更高效。"><span class="keyword">IBM
+Bluemix Container Service</span> 文档</a>。</p>
+</div>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d72e6683"></aside></article></article></div></main></body></html>

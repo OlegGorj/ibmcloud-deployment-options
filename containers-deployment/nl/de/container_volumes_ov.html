@@ -1,0 +1,652 @@
+<!DOCTYPE html><html lang="de-de">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Ein Speicherdatenträger dient dazu, Daten im Bluemix-Bereich einer Organisation zu speichern oder Containern für die gemeinsame Nutzung zur Verfügung zu stellen.">
+<meta name="keywords" content="IBM Containers, Container, Persistenter Speicher, Datenträger, Erstellen, CLI (Befehlszeilenschnittstelle), Dateien hinzufügen, Anhängen, exec, docker cp, Datensicherung, Schreiben, Entfernen, Dateifreigaben, Speicher, Dashboard, GUI, Hinzufügen, fs">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "de-de",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Persistente Daten in IBM Bluemix Container Service für einzelne und skalierbare Container speichern</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d90268e6" id="container_volumes_ov"><h1 class="topictitle1" id="d90268e6">Persistente Daten in einem Datenträger für <span class="ph">einzelne und skalierbare Container</span> speichern</h1>
+<div class="abstract"><div class="shortdesc">Ein Speicherdatenträger dient dazu, Daten im
+<span class="keyword">Bluemix</span>-Bereich einer Organisation
+zu speichern oder Containern für die gemeinsame Nutzung zur Verfügung zu stellen.</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Achtung:</span> <span class="ph">Kostenlose Testversionen für <span class="ph">einzelne und skalierbare Container</span> sind nicht verfügbar. <a href="cs_ov.html" title="IBM Bluemix Container Service kombiniert Docker und Kubernetes, um leistungsstarke Tools, ein intuitives Benutzererlebnis sowie integrierte Sicherheit und Isolation zu bieten und um die Bereitstellung, den Betrieb, die Skalierung und die Überwachung von containerisierten Apps über einen Cluster unabhängiger Berechnungshosts anhand der Kubernetes-APIs zu automatisieren.">Lesen Sie die Informationen
+zum Cluster-Management und zur Migration auf Kubernetes in <span class="keyword">IBM®
+Bluemix Container Service</span> unter
+<span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Diese Seite enthält folgende Abschnitte: <div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#about_volumes">Informationen zu Datenträgern</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Datenträger über die <a href="container_volumes_ov.html#container_volumes_ui" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Bluemix-GUI können Sie einen Datenträger für Ihren Container erstellen.">GUI</a> oder die <a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">CLI</a> erstellen<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_mount" title="Nach der Erstellung eines Datenträgers können Sie den Datenträger an einen Container anhängen und Dateien hinzufügen, auf die alle Container zugreifen können, an die der Datenträger angehängt ist.">Dateien zu Datenträgern hinzufügen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Datenträger <a href="container_volumes_ov.html#container_volumes_backup" title="Containerdatenträger werden im persistenten Speicher gehostet, Backups sind jedoch keine verfügbar. Falls Sie eine Sicherung (Backup) Ihrer Datenträgerdaten benötigen, können Sie mit bx ic cp eine manuelle Sicherung erstellen.">sichern und wiederherstellen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_write" title="Benutzer ohne Rootberechtigung verfügen nicht über die Schreibberechtigung für den Mountpfad für Datenträger. Um die Schreibberechtigung zu erteilen, müssen Sie die Dockerfile des Image bearbeiten und im Mountpfad ein Verzeichnis mit der entsprechenden Berechtigung zu erstellen.">Datenträgerzugriff für Benutzer ohne Rootberechtigung</a> hinzufügen<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volume_different_dc" title="Wenn Sie planen, Ihren momentan verfügbaren Bluemix-Bereich auf ein neues Rechenzentrum zu verlagern, dann sollten Sie sich vergewissern, dass von Ihren Datenträgern eine Sicherungskopie erstellt wurde, sodass die Daten im neuen Rechenzentrum wiederhergestellt und verwendet werden können.">Daten auf anderes Rechenzentrum migrieren</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_remove" title="Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container zu speichern, können Sie den Datenträger entfernen.">Datenträger entfernen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben hinzufügen und entfernen</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d90268e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d90268e154" id="about_volumes"><h2 class="topictitle2" id="d90268e154">Informationen zu Datenträgern</h2>
+<div class="body taskbody"><div class="section context" id="about_volumes__context_kjv_lg1_4z"><figure class="fignone" id="about_volumes__file_share"><figcaption>Abbildung 1. Dateifreigabe und Datenträgerstruktur in einer Organisation</figcaption><object id="about_volumes__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="Dateifreigaben enthalten Datenträger, die Dateien enthalten."></object></figure>
+
+<p><span class="ph" id="about_volumes__volume_intro">Ein Container ist kein dauerhaftes Element, sodass Anwendungsdaten dort nicht persistent gespeichert werden können.
+Mit einem Datenträger ist es jedoch möglich, Daten zwischen Containerneustarts persistent zu speichern,
+Containerdaten in einem Bereich zur gemeinsamen Nutzung bereitzustellen und auf die Anwendungsdaten zuzugreifen, wenn der Container nicht verfügbar ist. Wenn Sie einen Container löschen, wird der
+Speicherdatenträger nicht gelöscht.
+Der Lebenszyklus eines Speicherdatenträgers ist unabhängig vom Lebenszyklus eines Containers. Da von Docker-Containern in <span class="keyword">Bluemix</span> nicht auf den lokalen Host zugegriffen werden kann, werden die Datenträger an bereitgestellte <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben</a> angehängt.</span></p>
+
+<p>Der Lebenszyklus für einen persistenten Speicher beinhaltet die folgenden Tasks: </p>
+</div><ol class="steps" id="about_volumes__steps_ljv_lg1_4z"><li class="step">Optional: <span class="cmd">Erstellen Sie über die <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">GUI</a>
+oder die <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">CLI</a>
+eine angepasste Dateifreigabe, die Ihre Datenträger bereitstellt. </span> Sie müssen die Rolle eines Organisationsmanagers haben, um eine Dateifreigabe erstellen zu können. Wenn Sie kein
+Organisationsmanager sind, fahren Sie mit dem Erstellen eines Datenträgers fort. Für jede Bluemix-Organisation wird
+standardmäßig eine Dateifreigabe von 20 GB bereitgestellt. </li>
+<li class="step"><span class="cmd">Erstellen Sie einen Datenträger über die <a href="container_volumes_ov.html#container_volumes_ui" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Bluemix-GUI können Sie einen Datenträger für Ihren Container erstellen.">GUI</a> oder
+die <a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">CLI</a>. </span></li>
+<li class="step"><span class="cmd">Erstellen Sie eine automatische Sicherung (Backup) Ihres Datenträgers mit dem
+<a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html#ibmbackup_restore_starter">Image 'ibm-backup-restore'</a>. </span></li>
+<li class="step"><span class="cmd">Löschen Sie einen <a href="container_volumes_ov.html#container_volumes_remove" title="Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container zu speichern, können Sie den Datenträger entfernen.">Datenträger</a>. </span></li>
+<li class="step"><span class="cmd">Löschen Sie eine <a href="container_volumes_ov.html#container_filestorage_managing" title="Ein Organisationsmanager kann vorhandene Dateifreigaben entfernen und feststellen, welche Datenträger an eine Dateifreigabe angehängt sind.">Dateifreigabe</a>. </span></li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d90268e265" lang="de-de" id="container_volumes_ui"><h2 class="topictitle2" id="d90268e265">Datenträger mit der <span class="keyword">Bluemix</span>-GUI erstellen</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. </span> Über die
+<span class="keyword">Bluemix</span>-GUI können Sie einen Datenträger für Ihren Container
+erstellen. </p>
+<div class="section prereq"></div><div class="section context"><figure class="fignone" id="container_volumes_ui__file_share"><figcaption>Abbildung 2. Dateifreigabe und Datenträgerstruktur in einer Organisation</figcaption><object id="container_volumes_ui__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="Dateifreigaben enthalten Datenträger, die Dateien enthalten."></object></figure>
+
+<p><span class="ph" id="container_volumes_ui__volume_intro">Ein einzelner Container ist designbedingt kurzlebig. Mit einem Datenträger können Sie jedoch Daten zwischen Containerneustarts persistent speichern, Daten zwischen den Containern in einem Bereich gemeinsam nutzen und Daten zwischen den Containerinstanzen in einer Gruppe gemeinsam nutzen. Wenn Sie einen Datenträger in Docker anhängen, wird
+der Datenträger an Ihr lokales Dateisystem angehängt. In
+<span class="keyword">IBM
+Bluemix Container Service</span> ist der Zugriff auf den Rechenhost
+eingeschränkt, sodass Sie Hostverzeichnisse nicht an einen Container anhängen können. Stattdessen werden
+organisationsbezogene Datenträger verwendet, um Daten zwischen Containerneustarts zu erhalten. Datenträger werden auf isolierten
+<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben</a>
+gehostet, die App-Daten sicher speichern und den Dateizugriff und Dateiberechtigungen
+verwalten. Aktualisierungen, die Sie an einem Container oder Image vornehmen, wirken sich nicht auf einen Datenträger aus. Wenn Sie einen Container löschen,
+wird der Speicherdatenträger nicht gelöscht. </span></p>
+</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">Wählen Sie im Katalog
+<span class="ph uicontrol">Container</span> und anschließend ein Image aus.</span></span></li>
+<li class="step"><span class="cmd">Wählen Sie <span class="ph uicontrol">Erweiterte Optionen</span> aus, um die Felder für die Datenträgererstellung zu erweitern.</span></li>
+<li class="step"><span class="cmd">Klicken Sie auf <span class="ph uicontrol">Datenträger erstellen</span>.</span></li>
+<li class="step"><span class="cmd">Geben Sie einen Namen in das Feld <span class="ph uicontrol">Datenträgername</span> ein. </span> Datenträger sind pro Bereich eindeutig. Daher können Datenträgernamen innerhalb eines Bereichs nicht wiederverwendet werden. Der Datenträgername darf Großbuchstaben, Kleinbuchstaben, Ziffern, Unterstreichungszeichen (_) und Bindestriche (-) enthalten.</li>
+<li class="step"><span class="cmd">Wenn eine Dateifreigabe vorhanden ist, wählen Sie im Dropdown-Menü
+<span class="ph uicontrol">Dateifreigabe</span> eine vorhandene Dateifreigabe aus.</span> Wenn keine Dateifreigabe vorhanden ist, wird automatisch eine Standarddateifreigabe
+von 20 GB erstellt. Der Organisationsmanager kann Dateifreigaben mit bestimmten Speichergrößen und
+IOPS-Werten zuordnen. Weitere Informationen finden Sie unter <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben
+für Datenträger hinzufügen</a>.  Für Datenträger gelten keine Größenbeschränkungen. Datenträger können bis zu der Größe der Dateifreigabe skaliert werden, auf der sie gehostet werden. </li>
+<li class="step"><span class="cmd">Klicken Sie auf <span class="ph uicontrol">Erstellen</span>. </span> Die Erstellung des Datenträgers kann einige Minuten dauern.</li>
+</ol>
+<div class="section result">Der Datenträger ist nun in Ihrem Bereich verfügbar und kann an Ihren
+<a href="container_single_ui.html#gui__volume">einzelnen Container</a> oder
+Ihre <a href="container_ha.html#container_group_ui__volume">Containergruppe</a>
+angehängt werden, indem Sie ihn im Dropdown-Menü über <span class="ph uicontrol">Vorhandenen Datenträger zuweisen</span> unter
+<span class="ph uicontrol">Erweiterte Optionen</span> auswählen. Nachdem Sie den Datenträger ausgewählt haben,
+weisen Sie den Dateipfad zu, an den der Datenträger innerhalb des Containers angehängt wird, wie z. B.
+<span class="ph filepath">/var/lib/my_volume</span>. Falls Sie eine Sicherung (Backup) Ihres Containers benötigen, lesen Sie die Informationen in <a href="container_volumes_ov.html#container_volumes_remove" title="Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container zu speichern, können Sie den Datenträger entfernen.">Daten sichern und wiederherstellen</a>. </div></div>
+<aside role="complementary" aria-labelledby="d90268e265"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e440" lang="de-de" id="container_volumes_cli"><h2 class="topictitle2" id="d90268e440">Datenträger über die Befehlszeile (CLI) erstellen </h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. </span> Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen. </p>
+<div class="section prereq"></div><div class="section context"><p><span class="ph">Ein einzelner Container ist designbedingt kurzlebig. Mit einem Datenträger können Sie jedoch Daten zwischen Containerneustarts persistent speichern, Daten zwischen den Containern in einem Bereich gemeinsam nutzen und Daten zwischen den Containerinstanzen in einer Gruppe gemeinsam nutzen. Wenn Sie einen Datenträger in Docker anhängen, wird
+der Datenträger an Ihr lokales Dateisystem angehängt. In
+<span class="keyword">IBM
+Bluemix Container Service</span> ist der Zugriff auf den Rechenhost
+eingeschränkt, sodass Sie Hostverzeichnisse nicht an einen Container anhängen können. Stattdessen werden
+organisationsbezogene Datenträger verwendet, um Daten zwischen Containerneustarts zu erhalten. Datenträger werden auf isolierten
+<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben</a>
+gehostet, die App-Daten sicher speichern und den Dateizugriff und Dateiberechtigungen
+verwalten. Aktualisierungen, die Sie an einem Container oder Image vornehmen, wirken sich nicht auf einen Datenträger aus. Wenn Sie einen Container löschen,
+wird der Speicherdatenträger nicht gelöscht. </span></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Erstellen Sie einen Datenträger, indem Sie den folgenden Befehl ausführen.</span> Datenträger können bis zu der Größe der Dateifreigabe skaliert werden, auf der sie gehostet werden. Die
+Angabe einer Dateifreigabe ist optional.
+Sie können bestehende Dateifreigaben mit dem Befehl <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</samp> anzeigen.  Wenn keine Dateifreigabe vorhanden ist, wird automatisch eine Standarddateifreigabe
+von 20 GB erstellt. Der Organisationsmanager kann Dateifreigaben mit bestimmten Speichergrößen und
+IOPS-Werten zuordnen. Weitere Informationen finden Sie unter <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben
+für Datenträger hinzufügen</a>.  <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create</samp>-Parameter</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(Erforderlich) Der Name der Dateifreigabe. Wenn keine Dateifreigabe verfügbar ist oder benannt wurde, wird zur
+Erstellung des Datenträgers die Standarddateifreigabe des Bereichs verwendet.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Erforderlich) Der Name des Datenträgers. <span class="ph" id="container_volumes_cli__d44205e4836">Der Name darf Großbuchstaben, Kleinbuchstaben, Ziffern, Unterstreichungszeichen (_) und Bindestriche (-) enthalten.</span></dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Vergewissern Sie sich mit dem folgenden Befehl, dass der Datenträger ordnungsgemäß erstellt wurde. </span> <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>Als Nächstes weisen Sie den Datenträger Ihrem <a href="container_single_ui.html#container_single_cli" title="Erstellen Sie mit dem Befehl run einen Container. Ein Container muss ein Image enthalten. Wenn Sie noch nicht über ein Image verfügen, können Sie eines der von IBM zertifizierten Images verwenden, die standardmäßig in der privaten Image-Registry Ihrer Organisation verfügbar sind.">einzelnen Container</a> oder
+Ihrer <a href="container_ha.html#container_group_cli" title="Erstellen Sie eine skalierbare Containergruppe über die IBM Bluemix Container Service-CLI und stellen Sie die Gruppe bereit. Eine Containergruppe enthält zwei oder mehr Container, von denen dasselbe Image ausgeführt wird. Die Verwendung von Containergruppen ist ratsam zur Ausführung von langfristigen Services mit Arbeitslasten (Workloads), die skalierbar und zuverlässig sein müssen, oder zum Testen im erforderlichen Umfang.">Containergruppe</a> zu.
+Datenträger werden mit der Option <samp class="ph codeph">--volume</samp> im Befehl <samp class="ph codeph">run</samp> bzw. im Befehl <samp class="ph codeph">group-create</samp> zugewiesen. <span class="ph">Falls Sie eine Sicherung (Backup) Ihres Containers benötigen, lesen Sie die Informationen in <a href="container_volumes_ov.html#container_volumes_remove" title="Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container zu speichern, können Sie den Datenträger entfernen.">Daten sichern und wiederherstellen</a>. </span></p>
+</div></div>
+<aside role="complementary" aria-labelledby="d90268e440"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e638" lang="de-de" id="container_volumes_mount"><h2 class="topictitle2" id="d90268e638">Dateien über die
+Befehlszeilenschnittstelle (CLI) zu Datenträgern hinzufügen</h2>
+<div class="body taskbody"><p class="shortdesc">Nach der Erstellung eines Datenträgers können Sie den Datenträger an einen Container anhängen und
+Dateien hinzufügen, auf die alle Container zugreifen können, an die der Datenträger angehängt ist. </p>
+<div class="section prereq">Erstellen Sie
+<a href="container_volumes_ov.html#container_volumes_ui" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Bluemix-GUI können Sie einen Datenträger für Ihren Container erstellen.">mit
+der
+<span class="keyword">Bluemix</span>-GUI</a> oder der
+<a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">Befehlszeilenschnittstelle
+(CLI)</a> einen Datenträger, bevor Sie mit dem Folgenden fortfahren. </div><div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">Erstellen Sie einen Container mit einem angehängten Datenträger.* </span> Ersetzen Sie <samp class="ph codeph"><var class="keyword varname">mein_datenträger</var></samp> durch den Namen Ihres Datenträgers,
+<samp class="ph codeph"><var class="keyword varname">containerpfad</var></samp> durch den Mountpfad des Datenträgers,
+<samp class="ph codeph"><var class="keyword varname">mein_container</var></samp> durch den Namen des Containers und
+'registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mein_namensbereich</var>/<var class="keyword varname">mein_image</var>'
+durch das Image.  <pre class="codeblock"><code><span class="ph">bx ic</span> run --volume <var class="keyword varname">mein_datenträger</var>:/<var class="keyword varname">containerpfad</var> --name <var class="keyword varname">mein_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">mein_image</var></code></pre>
+
+
+<div class="note tip"><span class="tiptitle">Tipp:</span> <span class="ph">Führen Sie <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> aus, um Ihren Namensbereich abzurufen, und ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch Ihren Namensbereich.</span></div>
+
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_volumes_mount__d44368e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_volumes_mount__d44368e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Kopieren Sie mit dem Befehl <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> Dateien aus einem
+lokalen Verzeichnis auf den Datenträger.* </span> <p>In diesem Beispiel kopieren Sie eine Datei <var class="keyword varname">config.txt</var> auf
+Ihren Datenträger, der im Container an den Pfad
+<var class="keyword varname">/src/usr/tmp</var> angehängt ist. Ersetzen Sie die Datei durch
+Ihre eigene Datei bzw. Ihr eigenes Verzeichnis, die/das Sie kopieren und ändern
+Sie den Containerpfad so, dass er auf Ihren Datenträger verweist.
+In dem Befehl wird die Quellendatei bzw. das Ursprungsverzeichnis als Erstes und der Zielpfad als Zweites angegeben. Wenn Sie in einen oder aus einem Container kopieren,
+<span class="ph">müssen Sie den Namen des Containers, das Begrenzungszeichen <span class="q">":"</span> und den Pfad zu der Zieldatei bzw. zum Zielordner einschließen. Der Pfad muss relativ zum Stammverzeichnis des Containers angegeben werden. </span>Weitere Information enthält die Dokumentation zu
+<a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp"><span class="ph">bx ic</span> cp</a>.</p>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath"><var class="keyword varname">./config.txt</var></span> <var class="keyword varname">mein_container</var>:<span class="ph filepath"><var class="keyword varname">/src/usr/tmp</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Bestätigen Sie, dass Ihre Dateien auf den Datenträger kopiert wurden. Melden Sie sich dazu mit dem Befehl
+<samp class="ph codeph"><span class="ph">bx ic</span> exec</samp> bei Ihrem aktiven Container an.* </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">mein_container</var> bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Navigieren Sie zu dem Verzeichnis, an das Sie Ihren Datenträger angehängt haben, und listen Sie die Dateien auf. </span> Ihre Datei wird in der Ausgabe aufgelistet. Alle Container, die an diesen Datenträger angehängt sind, haben Zugriff auf diese Datei.
+<pre class="codeblock"><code># cd <var class="keyword varname">containerpfad</var>
+# ls
+config.txt  </code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90268e638"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e882" lang="de-de" id="container_volumes_backup"><h2 class="topictitle2" id="d90268e882">Daten über die Befehlszeilenschnittstelle (CLI) sichern und wiederherstellen</h2>
+<div class="body taskbody"><p class="shortdesc">Containerdatenträger werden im persistenten Speicher gehostet, Backups sind jedoch keine verfügbar. Falls Sie eine Sicherung (Backup) Ihrer Datenträgerdaten benötigen, können Sie mit <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> eine manuelle Sicherung erstellen. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Ermitteln Sie den Pfad des angehängten Datenträgers für den aktiven oder gestoppten Container, für den
+Sie eine Sicherung ausführen wollen.* </span>  <div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">mein_container</var></code></pre>
+</div>
+
+
+<p>Die Ausgabe enthält einen Abschnitt ähnlich dem folgenden Beispiel mit dem Namen für den Datenträger und dem Mountpunkt des Containers. 
+In diesem Beispiel ist der Ordner <span class="ph filepath">/mnt/data</span> der Mountpunkt. </p>
+
+
+<pre class="codeblock"><code>        "Mounts": [
+            {
+                "Destination": "<span class="ph filepath">/mnt/data</span>",
+                "Driver": "",
+                "Mode": "rw",
+                "Name": "",
+                "RW": true,
+                "Source": "/vol/<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>/<var class="keyword varname">beispiel_container-id</var>"
+            }</code></pre>
+
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_volumes_backup__d43984e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_volumes_backup__d43984e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Stoppen Sie alle aktiven Container, die zu diesem Zeitpunkt Daten auf den Datenträger schreiben.* </span> Durch das Stoppen der Container verhindern Sie, dass Daten kopiert werden, für die ein Schreibvorgang ausgeführt wird.
+<div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">mein_container</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Kopieren Sie die Dateien aus dem einzelnen Container auf Ihren lokalen Computer.* </span> Wenn Sie einen Datenträger für eine Containergruppe sichern wollen, reicht es, diesen Befehl auf nur einer Instanz der Gruppe auszuführen, da ja alle Instanzen denselben Mountpunkt mit dem Datenträger gemeinsam nutzen.
+<p>Sie besitzen nun eine lokale Sicherung (Backup) ihrer Datenträgerdaten. </p>
+
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">mein_container</var>:<var class="keyword varname">/mnt/data</var> <var class="keyword varname">mein_lokaler_ordner</var></code></pre>
+
+<div class="tablenoborder"><table summary="" id="container_volumes_backup__table_wrq_nbl_nw" class="defaultstyle"><caption><span class="tablecap">Tabelle 1. Elemente des Befehls '<span class="ph">bx ic</span> cp'</span></caption><thead><tr><th colspan="2" id="d90268e1039" class="thleft">Erklärung der Bestandteile dieses Befehls </th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d90268e1039 "><samp class="ph codeph">cp</samp></td>
+<td style="width: 50%" headers="d90268e1039 "><a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp">Der Befehl zum Kopieren</a>.</td>
+</tr>
+<tr><td style="width: 50%" headers="d90268e1039 "><var class="keyword varname">mein_container</var>:<var class="keyword varname">/mnt/data</var></td>
+<td style="width: 50%" headers="d90268e1039 ">An erster Stelle steht der Quellenpfad. In diesem Fall kopieren Sie die Daten Ihres Containers an ein lokales Ziel. Daher ist der Containerdateipfad die Quelle. Sie müssen den Namen des Containers gefolgt von einem Doppelpunkt und dem Dateipfad innerhalb des Containers einschließen. Im vorliegenden Beispiel haben Sie den Mountpunkt des Datenträgers aus dem vorherigen Schritt ausgewählt, sodass Sie alle enthaltenen Dateien kopieren können. </td>
+</tr>
+<tr><td style="width: 50%" headers="d90268e1039 "><var class="keyword varname">mein_lokaler_ordner</var></td>
+<td style="width: 50%" headers="d90268e1039 ">An zweiter Stelle steht der Zielpfad. Der lokale Pfad kann als absoluter Pfad oder als relativer Pfad angegeben werden. In diesem Beispiel kopieren Sie die Daten Ihres Containers in den relativen Pfad <var class="keyword varname">mein_lokaler_ordner</var>. </td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Kopieren Sie Ihre Daten aus dem lokalen Ordner auf einen neuen Datenträger.* </span> Dieser Befehl bewirkt die Wiederherstellung Ihrer Daten in einem neuen Container oder auf einem neuen Datenträger. Ein Grund, der für eine Übertragung von Daten auf einen neuen Datenträger spricht, wäre der Umstand, dass dieser Datenträger auf einer neu erstellten Dateifreigabe angehängt ist, die ihrerseits über mehr Speicher und einen höheren IOPS-Wert verfügt als die alte Dateifreigabe. Informationen zum Erstellen einer neuen Dateifreigabe enthält <a href="container_volumes_ov.html#container_fileshares_adding_cli" title="Eine Dateifreigabe wird mit dem Befehl bx ic volume-fs-create erstellt.">Dateifreigaben über die Befehlszeilenschnittstelle (CLI) hinzufügen</a>. Informationen zum Erstellen eines neuen Datenträgers finden Sie unter <a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">Datenträger über die Befehlszeile (CLI) erstellen</a>.
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">mein_lokaler_ordner</var> <var class="keyword varname">mein_neuer_container</var>:<var class="keyword varname">/mnt/data</var> </code></pre>
+</li>
+</ol>
+<div class="section result">Ihre Daten werden nun in Ihren lokalen Ordner kopiert und Sie verfügen über eine manuelle Sicherung. Außerdem haben Sie die Daten auf einen Datenträger auf einem neuen Container kopiert. </div></div>
+<aside role="complementary" aria-labelledby="d90268e882"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e1112" lang="de-de" id="container_volumes_write"><h2 class="topictitle2" id="d90268e1112">Datenträgerzugriff für Benutzer ohne Rootberechtigung über die Befehlszeilenschnittstelle (CLI) hinzufügen</h2>
+<div class="body taskbody"><p class="shortdesc">Benutzer ohne Rootberechtigung verfügen nicht über die Schreibberechtigung für den Mountpfad für Datenträger. Um die
+Schreibberechtigung zu erteilen, müssen Sie die Dockerfile des Image bearbeiten und im Mountpfad ein Verzeichnis mit der
+entsprechenden Berechtigung zu erstellen. </p>
+<div class="section context"><p>Bei <span class="keyword">IBM
+Bluemix Container Service</span> ist die
+Funktion für Benutzernamensbereiche für Docker Engine aktiviert. Für Benutzernamensbereiche wird
+eine Isolationsfunktion bereitgestellt, d. h. der Rootbenutzer kann weder auf andere
+Container noch auf den Rechenhost zugreifen. Datenträger befinden sich jedoch auf
+externen NFS-Dateifreigaben außerhalb der Rechenhosts für Container. Die Datenträger
+sind so konfiguriert, dass der Rootbenutzer im Container erkannt wird. Da sich
+die Datenträger jedoch außerhalb des Containers befinden, können sie die Benutzernamensbereiche
+nicht erkennen. </p>
+<p>Bei einigen Anwendungen ist nur der Rootbenutzer
+innerhalb des Containers registriert. In vielen Anwendungen wird jedoch
+ein
+Benutzer ohne Rootberechtigung angegeben, der in den Container-Mountpfad
+schreibt. Wenn Sie eine Anwendung erstellen, in der ein Benutzer
+ohne Rootberechtigung die Schreibberechtigung für den Datenträger benötigt, müssen Sie die folgenden
+Prozesse in Ihrer Dockerfile und in Ihrem Script für den Einstiegspunkt hinzufügen: </p>
+<ul><li>Einen Benutzer ohne Rootberechtigung erstellen</li>
+<li>Den Benutzer temporär zu Rootgruppe hinzufügen</li>
+<li>Ein Verzeichnis mit den entsprechenden Benutzerberechtigungen im Datenträger-Mountpfad erstellen</li>
+</ul>
+<p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Erstellen Sie eine Dockerfile in einem lokalen Verzeichnis. </span> Die nachfolgende Beispiel-Dockerfile erstellt einen Benutzer ohne Rootberechtigung mit dem Namen <var class="keyword varname">myguest</var>.  <pre class="codeblock"><code>FROM registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode:latest
+
+#Gruppe und Benutzer mit Gruppen-ID &amp; Benutzer-ID <var class="keyword varname">1010</var> erstellen.
+#In diesem Fall wird eine Gruppe und ein Benutzer mit dem Namen <var class="keyword varname">myguest</var> erstellt.
+#Die Gruppen-ID und die Benutzer-ID <var class="keyword varname">1010</var> verursacht wahrscheinlich keinen Konflikt mit bestehenden GUIDs oder UIDs in dem Image.
+#Die Gruppen-ID und Benutzer-ID muss im Bereich von 0 bis 65536 liegen. Andernfalls schlägt die Containererstellung fehl.
+RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">myguest</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">myguest</var>
+
+ENV MY_USER=myguest
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
+
+EXPOSE 22
+ENTRYPOINT ["/sbin/entrypoint.sh"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie das Einstiegspunktscript im selben lokalen Ordner wie die Dockerfile. </span>  In diesem Beispiel wird im Einstiegspunktscript der Datenträger-Mountpfad
+<span class="ph filepath"><var class="keyword varname">/mnt/myvol</var></span> angegeben.
+<pre class="codeblock"><code>#!/bin/bash
+set -e
+
+#Dies ist der Mountpunkt für den gemeinsam genutzten Datenträger.
+#Verwenden Sie diesen Mountpunkt mit dem Ausführungsbefehl '<span class="ph"><samp class="ph codeph">bx ic</samp></span>'.
+#Standardmäßig ist der Rootbenutzer Eigner des Mountpunkts.
+MOUNTPATH="/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span>"
+MY_USER=${MY_USER:-"myguest"}
+
+#Diese Funktion erstellt ein Unterverzeichnis, dessen Eigner
+#der Benutzer ohne Rootberechtigung im Mountpfad des gemeinsamen Datenträgers ist.
+create_data_dir() {
+  #Den Benutzer ohne Rootberechtigung zur Primärgruppe für Rootbenutzer hinzufügen.
+  usermod -aG root $MY_USER
+
+  #Der Gruppe Lese-, Schreib- und Ausführungsberechtigung für den Mountpfad des gemeinsamen Datenträgers erteilen.
+  chmod 775 $MOUNTPATH
+  #Im gemeinsamen Pfad des Eigners <var class="keyword varname">myguest</var> ohne Rootberechtigung ein Verzeichnis erstellen.
+  su -c "mkdir -p ${MOUNTPATH}/mydata" -l $MY_USER
+  su -c "chmod 700 ${MOUNTPATH}/mydata" -l $MY_USER
+  ls -al ${MOUNTPATH}
+
+  #Den Benutzer ohne Rootberechtigung aus Sicherheitsgründen aus der Rootbenutzergruppe entfernen.
+  deluser $MY_USER root
+
+  #Die ursprünglichen Lese-, Schreib- und Ausführungsberechtigungen für den Mountpfad des Datenträgers wiederherstellen.
+  chmod 755 $MOUNTPATH
+  echo "Datenverzeichnis wurde erstellt..."
+}
+
+create_data_dir
+
+#Dieser Befehl erstellt einen Prozess mit langer Laufzeit für dieses Beispiel.
+tail -F /dev/null</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Melden Sie sich bei <span class="keyword">IBM
+Bluemix</span> an.</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+<span class="ph">Der Parameter
+<span class="keyword option">--sso</span> für Single Sign-on ist erforderlich, wenn Sie sich mit einer
+eingebundenen ID anmelden. Rufen Sie bei Verwendung dieser Option
+<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>
+auf, um einen nur für eine einzige Anmeldung gültigen Kenncode
+abzurufen. Führen Sie die folgenden
+untergeordneten Schritte aus, wenn Sie die Option
+<span class="keyword option">--sso</span> nicht angeben: </span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Geben Sie für <span class="ph uicontrol">Email</span> Ihre
+IBM ID für
+<span class="keyword">Bluemix</span> an. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie für <span class="ph uicontrol">Kennwort </span> das Kennwort für die
+IBM ID an. </span> Daraufhin werden die
+Bluemix-Organisationen und -Bereiche abgerufen. </li>
+<li class="li substep"><span class="cmd">Geben Sie die Nummer für eine Ihrer <span class="keyword">Bluemix</span>-Organisationen ein. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie die Nummer für einen Ihrer bestehenden <span class="keyword">Bluemix</span>-Bereiche an. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Initialisieren Sie die <span class="keyword">IBM
+Bluemix Container Service</span>-CLI.</span> <pre class="codeblock"><code><span class="ph">bx ic</span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Fügen Sie das Image zu Ihrer Bluemix-Registry hinzu.* </span> Ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch den Namensbereich für
+Ihre private Image-Registry. Führen Sie <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> aus,
+um Ihren Namensbereich zu finden.  <pre class="codeblock"><code><span class="ph">bx ic</span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domänenname</var>/&lt;mein_namensbereich&gt;/nonroot. </code></pre>
+
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_volumes_write__d45121e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_volumes_write__d45121e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie einen Datenträger. </span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-create <var class="keyword varname">mein_datenträger</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Hängen Sie den Datenträger an und führen Sie den Container über das Image <var class="keyword varname">nonroot</var> aus.* </span>  Der Datenträger-Mountpfad <samp class="ph codeph">/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span></samp>
+stimmt mit dem in der Dockerfile angegebenen Mountpfad überein.
+<pre class="codeblock"><code><span class="ph">bx ic</span> run --name <var class="keyword varname">mein_container</var> --volume <var class="keyword varname">mein_datenträger</var>:/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span> registry.ng.bluemix.net/&lt;mein_namensbereich&gt;/nonroot</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass <var class="keyword varname">mein_container</var> ausgeführt wird.* </span> Wenn der Container den Status <samp class="ph codeph">BUILDING</samp> (WIRD ERSTELLT) aufweist, können Sie sich
+nicht bei dem Container anmelden.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+d92ee43d-2af        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">nonroot</var>:latest   ""                  41 seconds ago      Running 29 seconds ago               <var class="keyword varname">mein_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Melden Sie sich bei dem Container an, sobald der Container aktiv ist.* </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">mein_container</var> /bin/bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Zeigen Sie die Berechtigungen für Ihren Datenträger-Mountpfad an.</span> <pre class="codeblock"><code>ls -al <span class="ph filepath">/mnt/myvol/</span></code></pre>
+
+
+<pre class="pre screen"><code>root@instance-006ff76b:/# ls -al /mnt/myvol/
+total 12
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 .
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 ..
+drwx------ 2 myguest myguest 4096 Jul 13 19:03 mydata</code></pre>
+
+
+<p>Diese Ausgabe zeigt, dass der Rootbenutzer über Lese-, Schreib- und
+Ausführungsberechtigungen für den Datenträger-Mountpfad
+<var class="keyword varname">mnt/myvol/</var> verfügt, und der Benutzer
+<var class="keyword varname">myguest</var> ohne Rootberechtigung über die Lese- und
+Schreibberechtigung für den Ordner <var class="keyword varname">mnt/myvol/mydata</var>.
+Diese aktualisierten Berechtigungen ermöglichen dem Benutzer ohne Rootberechtigung
+das Schreiben von Daten auf das Persistent Volume. </p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90268e1112"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e1496" lang="de-de" id="container_volume_different_dc"><h2 class="topictitle2" id="d90268e1496">Datenträgerdaten auf anderes Rechenzentrum migrieren</h2>
+<div class="body taskbody"><p class="shortdesc">Wenn Sie planen, Ihren momentan verfügbaren <span class="keyword">Bluemix</span>-Bereich auf ein neues Rechenzentrum zu verlagern, dann sollten Sie sich vergewissern, dass von Ihren Datenträgern eine Sicherungskopie erstellt wurde, sodass die Daten im neuen Rechenzentrum wiederhergestellt und verwendet werden können. </p>
+<div class="section context"><div class="p"><div class="note attention"><span class="attentiontitle">Achtung:</span> Wenn Sie Ihren Bereich in ein neues Rechenzentrum verlagern, indem Sie den Befehl
+<samp class="ph codeph"><span class="ph">bx ic</span> reprovision</samp> benutzen, dann werden alle Container, öffentlichen IP-Adressen und Datenträger, die sich in diesem Bereich befinden, dauerhaft entfernt und nicht auf das neue Rechenzentrum migriert. Um sicherzustellen, dass nach der Verlagerung in das neue Rechenzentrum kein Datenverlust auftritt, müssen alle Datenträger gesichert und die Daten müssen wiederhergestellt werden, nachdem Ihr Bereich im neuen Rechenzentrum wieder bereitgestellt wird. </div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Listen Sie alle Datenträger auf, die im <span class="keyword">Bluemix</span>-Bereich vorhanden sind und die erneut bereitgestellt werden sollen. </span> <pre class="codeblock"><code><span class="ph">bx ic</span>volumes</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie für jeden Datenträger, der im neuen Rechenzentrum verwendet werden soll, eine Sicherungskopie. Wählen Sie eine der folgenden Optionen aus. </span> <ul class="ul choices"><li class="li choice">Verwenden Sie den
+<a href="container_volumes_ov.html#container_volumes_backup" title="Containerdatenträger werden im persistenten Speicher gehostet, Backups sind jedoch keine verfügbar. Falls Sie eine Sicherung (Backup) Ihrer Datenträgerdaten benötigen, können Sie mit bx ic cp eine manuelle Sicherung erstellen.">Befehl <span class="ph">bx ic</span> cp</a>,
+um den Datenträger auf Ihrem lokalen System zu sichern. </li>
+<li class="li choice">Erstellen Sie einen Sicherungscontainer anhand des
+<a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM Backup and Restore-Images</a>, um Daten in einer <span class="keyword">IBM Object
+Storage for Bluemix</span>-Instanz zu sichern. </li>
+</ul>
+<div class="note attention"><span class="attentiontitle">Achtung:</span> Wenn Sie keine Sicherungskopie Ihres Datenträgers erstellen und den Bereich für das neue Rechenzentrum erneut bereitstellen, dann gehen die Daten verloren und können nicht wiederhergestellt werden. </div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_remove" title="Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container zu speichern, können Sie den Datenträger entfernen.">Entfernen Sie alle Datenträger in Ihrem Bereich</a>. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_filestorage_managing" title="Ein Organisationsmanager kann vorhandene Dateifreigaben entfernen und feststellen, welche Datenträger an eine Dateifreigabe angehängt sind.">Entfernen Sie alle Dateifreigaben in Ihrem Bereich</a>. </span></li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie Ihren Bereich im neuen Rechenzentrum erneut bereit. Ersetzen Sie dabei <var class="keyword varname">&lt;rechenzentrum&gt;</var> durch das
+<a href="container_cli_reference_cfic.html#container_cli_reference_cfic__reprovision">Rechenzentrum</a>, in dem der neue Bereich erstellt werden soll. </span> <pre class="codeblock"><code><span class="ph">bx ic</span> reprovision <var class="keyword varname">&lt;rechenzentrum&gt;</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="Eine Dateifreigabe wird mit dem Befehl bx ic volume-fs-create erstellt.">Erstellen Sie eine Dateifreigabe in dem neuen Bereich</a>. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">Erstellen Sie einen Datenträger</a>, den Sie zur Wiederherstellung der gesicherten Daten verwenden können. </span></li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie die Daten auf Ihrem neuen Datenträger wieder her. Abhängig davon, wie Sie bei der Sicherung Ihres Datenträgers vorgegangen sind, können Sie zwischen den folgenden Optionen wählen. </span> <ul class="ul choices"><li class="li choice">Verwenden Sie den <a href="container_volumes_ov.html#container_volumes_backup" title="Containerdatenträger werden im persistenten Speicher gehostet, Backups sind jedoch keine verfügbar. Falls Sie eine Sicherung (Backup) Ihrer Datenträgerdaten benötigen, können Sie mit bx ic cp eine manuelle Sicherung erstellen.">Befehl <span class="ph">bx ic</span> cp</a>, um die Daten über das lokale System wiederherzustellen. </li>
+<li class="li choice">Erstellen Sie einen Wiederherstellungscontainer anhand des <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM Backup and Restore-Images</a>, um Daten aus Ihrer <span class="keyword">IBM Object
+Storage for Bluemix</span>-Instanz wiederherzustellen. </li>
+</ul>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90268e1496"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e1671" lang="de-de" id="container_volumes_remove"><h2 class="topictitle2" id="d90268e1671">Datenträger über die Befehlszeilenschnittstelle (CLI) entfernen</h2>
+<div class="body taskbody"><p class="shortdesc">Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container
+zu speichern, können Sie den Datenträger entfernen. </p>
+<div class="section prereq"><ul><li><div class="note important"><span class="importanttitle">Wichtig:</span> Beim Entfernen eines Datenträgers werden alle auf dem Datenträger gespeicherten Daten oder Dateien dauerhaft entfernt. Datenträger werden nicht automatisch gesichert. <a href="container_volumes_ov.html#container_volumes_backup" title="Containerdatenträger werden im persistenten Speicher gehostet, Backups sind jedoch keine verfügbar. Falls Sie eine Sicherung (Backup) Ihrer Datenträgerdaten benötigen, können Sie mit bx ic cp eine manuelle Sicherung erstellen.">Sichern Sie den Datenträger</a> daher, bevor Sie ihn entfernen. </div>
+</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Geben Sie den Namen des Datenträgers an.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Untersuchen Sie den Datenträger, um zu überprüfen, an welche Container der Datenträger angehängt ist. </span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-inspect <var class="keyword varname">beispieldatenträger</var></code></pre>
+
+
+<p>Die Ausgabe enthält einen Abschnitt mit dem Namen <span class="ph uicontrol">mounted_on_containers</span>, in dem die Container aufgeführt sind, an die der Datenträger angehängt ist. </p>
+
+
+<pre class="codeblock"><code>    "mounted_on_containers": [
+        "<var class="keyword varname">beispielcontainer</var>"
+    ],</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Wenn der Datenträger an einen Container angehängt wird, dann entfernen Sie alle vertraulichen Daten, bevor Sie den Datenträger löschen. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand">Optional: <span class="cmd">Überprüfen Sie Ihren Container, um den Mountpfad zu ermitteln, über den der Datenträger angehängt wird. </span> <pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">beispielcontainer</var></code></pre>
+Der Mountpfad befindet sich im Abschnitt
+<span class="ph uicontrol">Volumes</span> der CLI-Antwort.
+
+<pre class="pre screen"><code>"Volumes": {
+        "/mount_path": "/vol/0e65c452-62413-46f2-8b22-ff06ab74ac21/<var class="keyword varname">beispieldatenträger</var>"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Melden Sie sich am Container an. </span> <pre class="codeblock"><code><span class="ph">bx ic</span> exec -it <var class="keyword varname">beispielcontainer</var> bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Navigieren Sie zu Ihrem Mountpfad. </span> <pre class="codeblock"><code>cd /<var class="keyword varname">mountpfad</var></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Entfernen Sie alle vertraulichen Daten von Ihrem Datenträger. </span> <pre class="codeblock"><code>rm -rf *</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Überprüfen Sie, ob alle Daten entfernt wurden. </span> <pre class="codeblock"><code>ls</code></pre>
+Wenn keine Verzeichnisse oder Dateien angezeigt werden, dann wurden die Daten erfolgreich aus dem Datenträgermountpfad entfernt. </li>
+<li class="li substep substepexpand"><span class="cmd">Wiederholen Sie die Schritte a - e für alle Container, die an den Datenträger angehängt werden und deren Datenträgermountpfad vertrauliche Daten enthält. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Stoppen Sie alle Container, die an Ihren Datenträger angehängt wurden, bevor Sie den Datenträger entfernen.* </span> <pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">beispielcontainer</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_volumes_remove__d44731e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_volumes_remove__d44731e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Wenn der Container nicht mehr benötigt wird, entfernen Sie ihn.* </span> <pre class="codeblock"><code><span class="ph">bx ic</span> rm <var class="keyword varname">beispielcontainer</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Wenn alle Container, an die der Datenträger angehängt ist, gestoppt wurden, entfernen Sie den Datenträger. </span> <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove</samp>-Parameter</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Erforderlich) Der Name des Datenträgers. </dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Stellen Sie sicher, dass der Datenträger entfernt wurde.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90268e1671"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90268e1916" lang="de-de" id="container_fileshares_adding_ui"><h2 class="topictitle2" id="d90268e1916">Dateifreigaben für Datenträger über die
+<span class="keyword">Bluemix</span>-GUI
+hinzufügen</h2>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc"><span class="ph">Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem <span class="keyword">Bluemix</span>-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen
+Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.</span></span>
+</div>
+<div class="section prereq"><div class="p"><div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn Sie bereits die Obergrenze Ihres Kontingents erreicht haben, können Sie ein
+zusätzliches Kontingent anfordern, indem Sie ein
+<a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span>-Support-Ticket
+öffnen</a>. </div>
+</div>
+</div><div class="section context"><p>Da von Containern in <span class="keyword">Bluemix</span> nicht auf den lokalen Host zugegriffen werden kann, werden die Datenträger an bereitgestellte NFS-Dateifreigaben angehängt. Die Datenträger in einer Dateifreigabe sind den Verzeichnissen auf einem Hostcomputer ähnlich. Beide Dateifreigaben und Datenträger sind pro Bereich eindeutig, so dass ein Container in demselben Bereich erstellt werden muss, um auf die persistenten Daten auf dem Datenträger zuzugreifen. Weitere Informationen zum Einrichten von Organisationen und Bereichen finden Sie unter <a href="../admin/orgs_spaces.html">Öffentliche Bluemix-Umgebung verwalten</a>. Bei der ersten Erstellung eines Datenträgers in einer Organisation, wird automatisch eine Dateifreigabe von 20 GB und 4 E/A-Operationen pro Sekunde (IOPS) bereitgestellt, um den Datenträger zu hosten. Um die Leistungsanforderungen für die Daten zu erfüllen, kann der Organisationsmanager neue <a href="http://knowledgelayer.softlayer.com/learning/introduction-endurance-storage" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Dateifreigabegrößen</a> von 20 GB bis 12 TB und mit einer Geschwindigkeit von 0,25, 2 oder 4 E/A-Operationen pro Sekunde pro GB erstellen.</p>
+
+<figure class="fignone" id="container_fileshares_adding_ui__fig_ac1_lzt_q5"><figcaption>Abbildung 3. Dateifreigabe und Datenträgerstruktur in einer Organisation</figcaption><object id="container_fileshares_adding_ui__d27594e49" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="Dateifreigaben enthalten Datenträger, die Dateien enthalten."></object></figure>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph">Wählen Sie in der Anzeige 'Organisationen verwalten'
+bei Ihren Kontodetails eine Organisation aus.</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">Sehen Sie sich im Abschnitt 'Kontingent' die Details
+für Container an.</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">Erstellen
+Sie eine Dateifreigabe.
+Am Ende der Tabelle wird eine Zeile erstellt.</span></span></li>
+<li class="step stepexpand"><span class="cmd">Wählen Sie einen vorhandenen Bereich aus, in dem die Dateifreigabe erstellt werden soll.</span></li>
+<li class="step stepexpand"><span class="cmd">Geben Sie einen Namen für die Dateifreigabe ein. </span> <span class="ph">Der Name darf Großbuchstaben, Kleinbuchstaben, Ziffern, Unterstreichungszeichen (_) und Bindestriche (-) enthalten.</span></li>
+<li class="step stepexpand"><span class="cmd">Bestimmen Sie die Kapazität Ihrer Dateifreigabeanforderungen. </span> Die Dateifreigabegröße und die E/A-Operationen pro Sekunde pro GB (Ein-/Ausgabeoperationen pro Sekunde) werden miteinander multipliziert und bilden die Summe der E/A-Operationen pro Sekunde. Die Tabelle illustriert die Beziehung zwischen der Dateifreigabegröße und den E/A-Operationen pro Sekunde (IOPS).
+<div class="tablenoborder"><table summary="" id="container_fileshares_adding_ui__file_share_ex" class="defaultstyle"><caption><span class="tablecap">Tabelle 2. Beispiele für Dateifreigabegrößen und E/A-Operationen pro Sekunde (IOPS) pro GB </span></caption><thead><tr><th id="d90268e2050" class="thleft"> Dateifreigabegrößen</th>
+<th id="d90268e2052" class="thleft">E/A-Operationen pro Sekunde pro GB</th>
+<th id="d90268e2054" class="thleft">Summe von E/A-Operationen pro Sekunde</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d90268e2050 ">20 GB</td>
+<td headers="d90268e2052 ">4</td>
+<td headers="d90268e2054 ">80</td>
+</tr>
+<tr><td headers="d90268e2050 ">100 GB</td>
+<td headers="d90268e2052 ">4</td>
+<td headers="d90268e2054 ">400</td>
+</tr>
+<tr><td headers="d90268e2050 ">1000 GB</td>
+<td headers="d90268e2052 ">4</td>
+<td headers="d90268e2054 ">4000</td>
+</tr>
+<tr><td headers="d90268e2050 ">4000 GB</td>
+<td headers="d90268e2052 ">4</td>
+<td headers="d90268e2054 ">16.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+Apps mit höheren Arbeitslasten erfordern einen höheren Wert für die Summe von E/A-Operationen pro Sekunde. Berücksichtigen Sie daher bei der Auswahl der Dateifreigabenkonfiguration, welche Apps auf Ihre Datenträger schreiben. <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Wählen Sie für <span class="ph uicontrol">Größe</span> einen Wert in Gigabyte aus.</span></li>
+<li class="li substep"><span class="cmd">Wählen Sie für <span class="ph uicontrol">E/A-Operationen pro Sekunde</span> einen Wert pro Gigabyte aus.</span> Basierend auf den Eingaben für <span class="ph uicontrol">Größe</span> und <span class="ph uicontrol">E/A-Operationen pro
+Sekunde</span> wird ein monatlicher Preis berechnet. Bevor Sie fortfahren, können Sie die Werte für
+<span class="ph uicontrol">Größe</span> und <span class="ph uicontrol">E/A-Operationen pro Sekunde</span> anpassen, um die monatliche
+Preisberechnung zu ändern.  </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Klicken Sie auf <span class="ph uicontrol">Speichern</span>. </span></li>
+</ol>
+<div class="section result"><p><span class="ph" id="container_fileshares_adding_ui__fs_results"> Die Erstellung der Dateifreigabe kann einige Minuten dauern.
+Nach Abschluss der Erstellung wird das Statussymbol mit einem Häkchen angezeigt. Im angegebenen Bereich Ihrer Organisation ist nun
+eine Dateifreigabe verfügbar. Sie können weitere Dateifreigaben erstellen, um weitere Datenträger zu hosten, oder Sie können mehrere Datenträger auf einer Dateifreigabe hosten. Jeder Datenträger nutzt die Ressourcen der Dateifreigabe, von der er gehostet wird. Daher kann sich das Hosten mehrerer Datenträger auf einer Dateifreigabe nachteilig auf die Leistung auswirken. </span></p>
+</div><div class="section postreq">Wenn Sie ein Organisationsmanager sind, können Sie als Nächstes die Abrechnung für Dateifreigaben für
+Ihre Organisation anzeigen.<div class="p"><ol><li>Klicken Sie auf den Benutzeravatar.</li>
+<li>Klicken Sie auf <span class="ph uicontrol">Konto</span>.</li>
+<li>Erweitern Sie Ihre Organisation, indem Sie auf die Schaltfläche <span class="ph uicontrol">+</span> klicken. </li>
+<li>Wählen Sie <span class="ph uicontrol">Nutzungsdashboard</span> aus und überprüfen Sie die Nutzungs- und Abrechnungsdetails. </li>
+</ol>
+<span class="ph">Weitere Informationen
+finden Sie unter <span class="ph"><a href="../admin/account.html">Konto verwalten</a></span>.</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90268e1916"></aside><article class="topic task nested2" role="article" aria-labelledby="d90268e2154" lang="de-de" id="container_fileshares_adding_cli"><h3 class="topictitle3" id="d90268e2154">Dateifreigaben über die Befehlszeilenschnittstelle (CLI) hinzufügen </h3>
+<div class="body taskbody"><div class="abstract"><p></p>
+
+
+<div class="shortdesc">Eine Dateifreigabe wird mit dem Befehl <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> erstellt.</div>
+</div>
+<div class="section prereq"></div><ol class="steps"><li class="step stepexpand">Optional: <span class="cmd">Führen Sie den folgenden Befehl aus, um die gültigen Größen für Dateifreigaben aufzulisten.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Führen Sie den folgenden Befehl aus, um eine Dateifreigabe zu erstellen.</span> Wenn Sie vor der Erstellung der Dateifreigabe die berechneten Kosten der Dateifreigabe in Erfahrung bringen möchten,
+lesen Sie die Informationen unter <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Eine Dateifreigabe ist ein persistentes NFS-basiertes Speichersystem (NFS - Network File System), das Docker-Datenträger in einem Bluemix-Bereich hostet und Benutzern das Speichern von sowie Zugreifen auf container- und app-bezogene Dateien ermöglicht. Um Dateien in einer Dateifreigabe speichern zu können, müssen Sie zunächst einen Containerdatenträger speichern und dann die Daten in diesem Datenträger speichern.">Dateifreigaben für Datenträger über die Bluemix-GUI hinzufügen</a>. <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></code></pre>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp>-Parameter</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">(Erforderlich) Die E/A-Operationen pro Sekunde der Dateifreigabe. Gültige Werte sind 0,25, 2 oder 4 E/A-Operationen pro Sekunde pro GB.</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(Erforderlich) Der Name der Dateifreigabe. <span class="ph">Der Name darf Großbuchstaben, Kleinbuchstaben, Ziffern, Unterstreichungszeichen (_) und Bindestriche (-) enthalten.</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">(Erforderlich) Die Größe des Dateifreigabesystems in GB. Verwenden Sie <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp>, um alle gültigen Größen aufzulisten. </dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Führen Sie den folgenden Befehl aus, um sicherzustellen, dass die Dateifreigabe ordnungsgemäß
+erstellt wurde. </span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+<div class="section result"><span class="ph"> Die Erstellung der Dateifreigabe kann einige Minuten dauern.
+Nach Abschluss der Erstellung wird das Statussymbol mit einem Häkchen angezeigt. Im angegebenen Bereich Ihrer Organisation ist nun
+eine Dateifreigabe verfügbar. Sie können weitere Dateifreigaben erstellen, um weitere Datenträger zu hosten, oder Sie können mehrere Datenträger auf einer Dateifreigabe hosten. Jeder Datenträger nutzt die Ressourcen der Dateifreigabe, von der er gehostet wird. Daher kann sich das Hosten mehrerer Datenträger auf einer Dateifreigabe nachteilig auf die Leistung auswirken. </span></div><div class="section postreq">Wenn Sie ein Organisationsmanager sind, können Sie als Nächstes die Abrechnung für Dateifreigaben für
+Ihre Organisation anzeigen.<div class="p"><ol><li>Klicken Sie auf den Benutzeravatar.</li>
+<li>Klicken Sie auf <span class="ph uicontrol">Konto</span>.</li>
+<li>Erweitern Sie Ihre Organisation, indem Sie auf die Schaltfläche <span class="ph uicontrol">+</span> klicken. </li>
+<li>Wählen Sie <span class="ph uicontrol">Nutzungsdashboard</span> aus und überprüfen Sie die Nutzungs- und Abrechnungsdetails. </li>
+</ol>
+<span class="ph">Weitere Informationen
+finden Sie unter <span class="ph"><a href="../admin/account.html">Konto verwalten</a></span>.</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90268e2154"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d90268e2334" lang="de-de" id="container_filestorage_managing"><h3 class="topictitle3" id="d90268e2334"> Dateifreigaben entfernen</h3>
+<div class="body taskbody"><p class="shortdesc">Ein Organisationsmanager kann vorhandene Dateifreigaben entfernen und feststellen, welche Datenträger
+an eine Dateifreigabe angehängt sind.</p>
+<div class="section context">Der Organisationsmanager kann mithilfe der
+<span class="keyword">Bluemix</span>-GUI
+oder -CLI feststellen, welche Datenträger an eine Dateifreigabe angehängt
+sind, und die Dateifreigaben entfernen. Dateifreigaben können entfernt werden, wenn sie zum aktuellen Zeitpunkt nicht in der Entwicklung oder
+in der Produktion zum Einsatz kommen.<div class="steps note"><span class="notetitle">Anmerkung:</span> Dateifreigaben können aufgrund des Abrechnungsverarbeitungszyklus
+nicht am Ende des Monats gelöscht werden. Wenn Sie am Ende des Monats beim Löschen einer Dateifreigabe eine
+Fehlernachricht empfangen, warten Sie bis zum ersten Tag des folgenden Monats, um die Dateifreigabe zu löschen. </div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d90268e2399" id="task_ets_khp_y5"><h4 class="topictitle4" id="d90268e2399"><span class="keyword">Bluemix</span>-GUI verwenden</h4>
+<div class="body taskbody"><ol class="steps"><li class="step"><span class="cmd"><span class="ph">Wählen Sie in der Anzeige 'Organisationen verwalten'
+bei Ihren Kontodetails eine Organisation aus.</span></span></li>
+<li class="step"><span class="cmd"><span class="ph">Sehen Sie sich im Abschnitt 'Kontingent' die Details
+für Container an.</span></span></li>
+</ol>
+<div class="section result">Die Dateispeichertabelle enthält eine Spalte <span class="ph uicontrol">Aktion</span> und eine Spalte <span class="ph uicontrol">Name</span>.<ul><li>Klicken Sie auf den Namen der Dateifreigabe, um die angehängten Datenträger anzuzeigen.</li>
+<li>Klicken Sie auf <span class="ph uicontrol">Löschen</span>, um die Dateifreigabe zu löschen. Vor dem Löschen der Dateifreigabe müssen
+alle angehängten Datenträger entfernt werden. Nach dem Löschen einer Dateifreigabe wird diese dauerhaft aus Ihrem
+Konto entfernt. Informationen zum Entfernen eines Datenträgers finden Sie unter <a href="container_volumes_ov.html#container_volumes_remove" title="Wenn Sie keinen Datenträger mehr benötigen, um Daten für Ihre Container zu speichern, können Sie den Datenträger entfernen.">Datenträger über die Befehlszeilenschnittstelle (CLI) entfernen</a>.</li>
+</ul>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d90268e2437" id="task_uvm_chp_y5"><h4 class="topictitle4" id="d90268e2437">Befehlszeile verwenden</h4>
+<div class="body taskbody"><div class="section result">Führen Sie die folgenden Befehle aus, um eine Dateifreigabe über die CLI zu entfernen.<div class="p"><ol><li>Geben Sie den Namen der Dateifreigabe an.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+<li>Überprüfen Sie, ob Datenträger an die Dateifreigabe angehängt sind.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></code></pre>
+</li>
+<li>Entfernen Sie gegebenenfalls vorhandene Datenträger.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></code></pre>
+</li>
+<li>Entfernen Sie eine vorhandene Dateifreigabe.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></code></pre>
+</li>
+<li>Listen Sie die vorhandenen Dateifreigaben auf, um sicherzustellen, dass die Dateifreigabe entfernt wurde.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article></article></article></article></div></main></body></html>

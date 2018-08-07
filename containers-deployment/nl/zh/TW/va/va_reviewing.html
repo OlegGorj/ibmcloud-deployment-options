@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="部署映像檔之前，您可以檢閱其漏洞警告器報告，此報告詳述所有有漏洞的套件、不安全的容器或應用程式設定，以及映像檔是否符合組織原則。">
+<meta name="keywords" content="漏洞警告器, 漏洞, 容器安全, 映像檔安全">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>檢閱漏洞警告器映像檔報告</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d351e2"><h1 class="topictitle1" id="d351e2">檢閱映像檔 VA 報告</h1>
+<div class="body taskbody"><p class="shortdesc">部署映像檔之前，您可以檢閱其漏洞警告器報告，此報告詳述所有有漏洞的套件、不安全的容器或應用程式設定，以及映像檔是否符合組織原則。</p>
+<div class="section context"><p>容器映像檔是由 IBM 所提供，也可以是由組織所新增。您可能需要先配置映像檔才能進行部署，以符合組織原則所設定的需求。只有組織管理員才能變更原則，以容許部署有漏洞的映像檔。如需檢視及變更組織原則的步驟，請參閱<a href="va_managing_policy.html" title="如果您是 Bluemix 組織的管理員，則可以設定原則來警告使用者，或封鎖從含有特定安全及配置問題的映像檔來部署容器。">檢閱組織原則</a>。</p>
+
+<p>請完成下列步驟來檢閱潛在映像檔安全及配置問題：</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">登入 <span class="keyword">Bluemix</span>。</span> 只有在已登入時，才能在使用者介面中使用「<span class="ph">漏洞警告器</span>」。</li>
+<li class="step stepexpand"><span class="cmd">在<span class="ph uicontrol">漏洞評量</span>區段中，檢閱漏洞評量的狀態。</span> 即會以下列其中一種狀況顯示狀態：
+<ul><li><span class="keyword wintitle">可安心部署</span> - 未發現安全問題。</li>
+<li><span class="keyword wintitle">小心部署</span> - 發現安全或配置問題，而且組織原則允許部署有漏洞的映像檔。如果您部署此映像檔，則會接收一則警告。</li>
+<li><span class="keyword wintitle">已封鎖部署</span> - 發現安全或配置問題，而且必須予以解決，才能部署映像檔，因為組織原則不允許部署有漏洞的映像檔。</li>
+<li><span class="keyword wintitle">未完成</span> - 掃描未完成。掃描可能仍在執行中，或映像檔的作業系統可能不相容。請稍候，然後重試掃描。如果掃描仍未完成，請重新推送映像檔來啟動新的掃描。掃描未完成的映像檔，不會遭到部署封鎖。</li>
+</ul>
+
+<p>請檢閱形成漏洞警告器安全評量的詳細報告：</p>
+</li>
+<li class="step stepexpand"><span class="cmd">選取映像檔，按一下<span class="ph uicontrol">漏洞評量</span>區段中的<span class="ph uicontrol">檢視報告</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">檢閱各區段，以查看映像檔中每一個套件的潛在安全及配置問題：</span> <div class="p"><ul id="va_reviewing__report"><li><span class="ph uicontrol">組織原則</span><p>列出映像檔是否遵守組織管理員所設定的原則。</p>
+</li>
+<li><span class="ph uicontrol">風險分析</span><p>如果映像檔有一個以上的漏洞，此區段會顯示「漏洞警告器」所計算的風險評級。風險的計算方式是使用 <a href="https://www.first.org/cvss" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">CVSS</a> 計算機及 <a href="https://exchange.xforce.ibmcloud.com/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）"><span class="keyword">IBM® X-Force® Exchange</span></a> 技術。</p>
+</li>
+<li><span class="ph uicontrol">有漏洞的套件</span><p>列出具有已知漏洞問題的套件，每日會從<a href="va_index.html" title="「漏洞警告器」會檢查容器映像檔在部署之前的安全狀態，也會檢查執行中容器的狀態。">使用漏洞警告器管理容器及映像檔安全</a>中所列 Docker 映像檔類型的已發佈安全注意事項進行更新。一般而言，為了讓有漏洞的套件通過掃描，需要有包含漏洞修正程式的更新版本套件。相同的套件可能會列出多個漏洞，而在此情況下，單一套件升級可能會更正多個問題。按一下安全注意事項代碼，以檢閱套件的相關資訊，以及更新套件的步驟。</p>
+</li>
+<li><span class="ph uicontrol">容器設定</span><p>列出可針對增加映像檔安全所採取的建議。「<span class="keyword wintitle">更正動作</span>」直欄說明如何改善安全。</p>
+</li>
+<li><span class="ph uicontrol">應用程式配置</span><p>列出不安全映像檔的應用程式設定。「<span class="keyword wintitle">更正動作</span>」直欄說明如何改善安全。</p>
+</li>
+<li><span class="ph uicontrol">容器實例</span><p>列出使用此映像檔且已在組織中執行的容器。</p>
+</li>
+</ul>
+</div>
+
+
+<p>會針對每一個列出的項目，提供更正動作或建議。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">修正<span class="ph uicontrol">漏洞評量</span>報告中所述的問題，然後重建映像檔。</span> 使用<a href="va_report.html" title="檢視漏洞報告之後，請瞭解如何修正報告的漏洞。">解決容器或映像檔中的漏洞</a>中所提供的程式碼，可以解決 Dockerfile 中的一些問題。</li>
+</ol>
+<div class="section result"></div><div class="section postreq">部署映像檔之後，「漏洞警告器」將繼續掃描容器中的安全及配置問題。您可以遵循<a href="va_reviewing_container.html" title="在儀表板中，您可以查看容器的狀態，來判斷其安全是否符合組織的原則。您也可以檢閱容器的漏洞報告，此漏洞報告詳述所有有漏洞的套件及不安全的容器或應用程式設定。">檢閱容器漏洞</a>中所述的步驟，來解決所有發現的問題。</div></div>
+<aside role="complementary" aria-labelledby="d351e2"></aside></article></main></body></html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="es-es">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="Antes de desplegar una imagen, puede revisar su informe de Vulnerability Advisor, que detalla los paquetes vulnerables, el contenedor no seguro o los valores de aplicaciones, y si la imagen cumple con las políticas de la organización.">
+<meta name="keywords" content="Vulnerability Advisor, vulnerabilidades, seguridad del contenedor, seguridad de la imagen">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "es-es",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Revisión de un informe de imágenes de Vulnerability Advisor</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d351e2"><h1 class="topictitle1" id="d351e2">Revisión de un informe de VA de imágenes</h1>
+<div class="body taskbody"><p class="shortdesc">Antes de desplegar una imagen, puede revisar su informe de Vulnerability Advisor, que detalla los
+paquetes vulnerables, el contenedor no seguro o los valores de aplicaciones, y si la imagen cumple
+con las políticas de la organización.</p>
+<div class="section context"><p>Las imágenes del contenedor las proporciona IBMo las puede añadir
+la organización. Es posible que tenga que configurar una imagen para poder desplegarla de modo que satisfaga
+los requisitos establecidos por la política de la organización. Sólo el gestor de organización puede cambiar la política para permitir que se despliegue una imagen vulnerable. Para obtener los pasos para ver y cambiar la directiva de la organización, consulte
+<a href="va_managing_policy.html" title="Si es el gestor de una organización Bluemix, puede establecer una política que avise a los usuarios o que bloquee el despliegue de contenedores desde imágenes con determinados problemas de configuración y de seguridad.">Revisión de las políticas de la organización</a>.</p>
+
+<p>Revise los problemas potenciales de configuración y seguridad completando los siguientes pasos:</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Inicie una sesión en <span class="keyword">Bluemix</span>. </span> <span class="ph">Vulnerability Advisor</span> esta disponible en la interfaz de usuario solo cuando haya iniciado sesión.</li>
+<li class="step stepexpand"><span class="cmd">En la sección <span class="ph uicontrol">Valoración de la vulnerabilidad</span>, revise el estado de la valoración de la vulnerabilidad.</span> El estado se muestra como una de las siguientes condiciones:
+<ul><li><span class="keyword wintitle">Seguro para desplegar</span>: no se han encontrado problemas de seguridad.</li>
+<li><span class="keyword wintitle">Desplegar con cuidado</span>: se han encontrado problemas de seguridad o de configuración que hay que solucionar, y la
+política organizativa permite el despliegue de imágenes vulnerables. Si despliega esta imagen, recibirá
+un aviso.</li>
+<li><span class="keyword wintitle">Despliegue bloqueado</span>: se han encontrado problemas de seguridad o de configuración que deberían corregirse para poder desplegar la imagen porque la política organizativa no permite el despliegue de
+imágenes vulnerables.</li>
+<li><span class="keyword wintitle">Incompleto</span>: la exploración no se ha completado. La exploración puede seguir en ejecución o
+el sistema operativo de la imagen puede no ser compatible. Espere y vuelva a intentar la exploración de nuevo. Si la exploración no se ha completado
+aún, envíe por push la imagen de nuevo para iniciar una nueva exploración. Las imágenes con exploraciones incompletas no se bloquean
+para el despliegue.</li>
+</ul>
+
+<p>Revise el informe detallado que forma la evaluación de seguridad de Vulnerability Advisor:</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Seleccione la imagen y en la sección <span class="ph uicontrol">Valoración de la vulnerabilidad</span>, pulse <span class="ph uicontrol">Ver informe</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Revise las secciones para ver los problemas potenciales de seguridad y de configuración para cada paquete de la imagen:</span> <div class="p"><ul id="va_reviewing__report"><li><span class="ph uicontrol">Políticas de la organización</span><p>Lista si la imagen cumple con la
+política establecida por el gestor de la organización.</p>
+</li>
+<li><span class="ph uicontrol">Análisis de riesgos</span><p>Si la imagen tiene una o varias vulnerabilidades, esta sección muestra la tasa de riesgo calculada por Vulnerability Advisor. El riesgo se calcula mediante el calculador de <a href="https://www.first.org/cvss" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">CVSS</a> y la tecnología <a href="https://exchange.xforce.ibmcloud.com/" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)"><span class="keyword">IBM® X-Force Exchange</span></a>. </p>
+</li>
+<li><span class="ph uicontrol">Paquetes vulnerables</span><p>Lista los paquetes con problemas de vulnerabilidad conocidos, que se actualizan a diario a partir de avisos de seguridad publicados para los tipos de imagen de Docker que se muestran en la lista
+de <a href="va_index.html" title="Vulnerability Advisor comprueba el estado de seguridad de las imágenes del contenedor antes del despliegue, y también comprueba el estado de los contenedores en ejecución.">Gestión de la seguridad de los contenedores y de las imágenes con Vulnerability Advisor</a>. Por lo general, para que un paquete vulnerable pase la exploración, se necesita una versión posterior del paquete que incluya una corrección para la vulnerabilidad en cuestión. El mismo paquete puede tener varias vulnerabilidades; en tal caso, una única actualización del paquete puede corregir varios problemas. Pulse el código de aviso de seguridad para revisar más información sobre el paquete y para ver los pasos para
+actualizar el paquete.</p>
+</li>
+<li><span class="ph uicontrol">Valores de contenedor</span><p>Lista sugerencias que puede adoptar para aumentar la seguridad de la imagen. La columna <span class="keyword wintitle">Acción de corrección</span> describe cómo mejorar la seguridad.</p>
+</li>
+<li><span class="ph uicontrol">Configuraciones de aplicación</span><p>Lista valores de aplicaciones para la
+imagen que no son seguros. La columna <span class="keyword wintitle">Acción de corrección</span> describe cómo mejorar la seguridad.</p>
+</li>
+<li><span class="ph uicontrol">Instancias de contenedor</span><p>Lista contenedores que utilizan esta imagen
+que ya están en ejecución en su organización.</p>
+</li>
+</ul>
+</div>
+
+
+<p>Para cada elemento mostrado, se suministran acciones de corrección o sugerencias.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Solucione los problemas descritos en el informe <span class="ph uicontrol">Valoración de la vulnerabilidad</span> y vuelva a crear la imagen.</span> Algunos problemas del Dockerfile se pueden resolver usando el código suministrado en <a href="va_report.html" title="Después de ver el informe de vulnerabilidad, obtenga información sobre cómo arreglar las vulnerabilidades de las que se ha informado.">Resolución de vulnerabilidades en contenedores o imágenes</a>. </li>
+</ol>
+<div class="section result"></div><div class="section postreq">Tras desplegar la imagen, Vulnerability Advisor seguirá buscando problemas de seguridad y de configuración
+en el contenedor. Puede resolver cualquier problema encontrado siguiendo los pasos
+que se describen en <a href="va_reviewing_container.html" title="En el panel de control, puede ver el estado de un contenedor para determinar si su seguridad cumple con la política de la organización. También puede revisar el informe de vulnerabilidad de un contenedor, que detalla los paquetes vulnerables y los valores de aplicaciones o de contenedores no seguros.">Revisión de vulnerabilidades de contenedores</a>.</div></div>
+<aside role="complementary" aria-labelledby="d351e2"></aside></article></main></body></html>

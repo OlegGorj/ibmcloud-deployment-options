@@ -1,0 +1,1203 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="开发应用程序或服务时，或者用于无需高可用性的短期进程时，请使用单个容器来运行简单测试。要使用自己的网络前端，可以为容器分配公共 IP 地址。">
+<meta name="keywords" content="单个容器, 仪表板, GUI, IBM Containers, 容器, CLI, docker run, bx ic, run, 更新, 命令行, 链接, --link, IP 地址, 公共, ip-bind, ip-request, ips, ip-unbind, 除去, release, docker rm, rm, 教程, 入门, 安装, 插件, 映像, 部署, docker compose, 多容器部署, 多容器应用程序, docker-compose.yml, 扩展, 负载均衡器, nginx, 工作负载, yml, 支持的选项, 常见问题">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>在 IBM Bluemix Container Service 中作为单个容器运行短期任务</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d75717e6" id="container_single_ui"><h1 class="topictitle1" id="d75717e6">作为单个容器运行短期任务</h1>
+<div class="abstract"><div class="shortdesc"><span class="ph">开发应用程序或服务时，或者用于无需高可用性的短期进程时，请使用单个容器来运行简单测试。要使用自己的网络前端，可以为容器分配公共 IP 地址。</span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> <span class="ph"><span class="ph">单个和可扩展容器</span> 的免费试用版不可用。
+<a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">了解有关集群管理和在 <span class="keyword">Bluemix®</span> Public 上迁移至 <span class="keyword">IBM®
+Bluemix Container Service</span> 中的 Kubernetes 的信息。</a></span></div>
+</div>
+
+
+<div class="p">在此页面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • 通过 <a href="container_single_ui.html#gui" title="通过 Bluemix GUI 创建和部署容器。">GUI</a> 或 <a href="container_single_ui.html#container_single_cli" title="使用 run 命令来创建容器。容器必须包含映像。如果尚未包含映像，可以使用 IBM 认证的某个缺省映像，此类映像在缺省情况下位于组织的专用映像注册表中。">CLI</a> 作为单个容器运行短期任务<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_single_updating" title="要更新应用程序，您必须部署新的容器。如果只推送新映像，那么容器不会自动重新启动。">更新容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_linking" title="一个容器链接到同一空间中的另一个容器时，IBM Bluemix Container Service 会在接收方容器上为源容器创建一个主机条目。您可使用别名来指代源容器，而不要使用可能会频繁更改的特定 IP 地址。">链接容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_cli_ips" title="请求公共 IP 地址并将其绑定到 Bluemix 中的容器。">请求和绑定 IP 地址</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_single_remove" title="要最充分地利用配额，请不时除去未使用的容器。">除去单个容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 教程：<a href="container_single_ui.html#container_gettingstarted_tutorial" title="IBM Bluemix 提供了在公共云中运行 Docker 容器的能力。使用容器可部署独立于主机操作系统运行的自包含、安全 Web 应用程序。容器是轻量级的，无需大量系统资源，因为容器使用相同的系统内核，所以与虚拟机相比，容器的运行效率更高。本教程显示了如何在 Bluemix 中使用 Docker 容器来构建消息传递 Web 应用程序。在此过程中，您将编写 Dockerfile，将 Docker 映像添加到专用 Bluemix 映像注册表，以及将容器链接在一起。">创建单个容器 Web 应用程序</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 教程：<a href="container_single_ui.html#container_compose_intro" title="如果应用程序具有多个组件，例如数据库、服务和高速缓存，那么将所有容器编排为一起启动和关闭是很难做到的。在本教程中，您将学习如何使用单个 Docker Compose 命令，在微服务体系结构中将应用程序作为多容器部署进行部署并运行。属于此系统的每个容器都基于一个 Docker Compose 服务定义，并且在其自己的独立环境中运行。">创建多容器部署</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d75717e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d75717e173" id="gui"><h2 class="topictitle2" id="d75717e173">通过 <span class="keyword">Bluemix</span> GUI 作为单个容器运行短期任务</h2>
+<div class="body taskbody"><p class="shortdesc">通过 <span class="keyword">Bluemix</span> GUI 创建和部署容器。</p>
+<div class="section prereq" id="gui__prereq_oh5_421_4z"><div class="p">开始之前，请考虑以下信息。<ul id="gui__ul_ph5_421_4z"><li id="gui__role">您必须具有对 <span class="keyword">Bluemix</span> 空间的“开发者”角色才能在该空间中创建容器。有关每一个角色许可权以及如何编辑角色的更多信息，请参阅<span class="ph"><a href="../iam/users_roles.html">用户和角色</a></span>。</li>
+<li id="gui__add_image">在 <span class="keyword">Bluemix</span> GUI 中，基于 IBM 提供的公共映像或基于您组织的专用 <span class="keyword">Bluemix</span> 注册表中的现有映像创建容器。有关向“<span class="keyword wintitle">目录</span>”添加映像的更多信息，请参阅<a href="container_images_adding_ov.html#container_images_adding_ov" title="容器映像是所创建的每一个容器的基础。映像通过 Dockerfile 进行创建，此文件包含用于构建映像的指令以及构建工件（例如，应用程序、应用程序配置及其依赖项）。将容器映像看成是可执行文件（.exe 或 .bin）。当您运行可执行应用程序文件时，即会创建应用程序的实例。 当您运行容器时，将从映像创建容器实例。">向组织的专用 Bluemix 映像注册表添加 Docker 映像</a>。</li>
+<li id="gui__existing_ip">检查该空间是否存在可以使用的 IP 地址，而无需创建新的 IP 地址。有关更多信息，请参阅<a href="container_single_ui.html#container_cli_ips_list" title="要使单个容器可从因特网访问，您必须将其与公共 IP 地址进行绑定。在请求 IP 地址之前，请复查已分配给您组织的公共 IP 地址的列表，然后查看其中一个现有 IP 地址是否可用。">使用命令行界面 (CLI) 查找组织的现有公共 IP 地址</a>。</li>
+<li id="gui__bind_service">如果您确定要将 <span class="keyword">Bluemix</span> 服务绑定到容器，请将该 <span class="keyword">Bluemix</span> 服务添加到空间中。有关更多信息，请参阅<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一个服务列表，它会代表开发者来管理这些服务。要添加 Bluemix 服务以供容器使用，必须请求此服务的实例，然后将此服务绑定到容器。">通过 Bluemix GUI 绑定服务</a>。</li>
+<li>如果您确定需要一个共享磁盘，以便能够从容器内对文件进行访问，请在创建容器前先创建卷。有关更多信息，请参阅<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用命令行 (CLI) 创建卷</a>。</li>
+</ul>
+</div>
+</div><p class="li stepsection">要使用映像创建和部署容器，请执行以下操作：</p><ol class="steps" id="gui__steps_qh5_421_4z"><li class="step stepexpand" id="gui__start"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">在目录中，选择<span class="ph uicontrol">容器</span>，然后选择映像。</span></span> 这将显示 IBM 提供的映像以及存储在专用 <span class="keyword">Bluemix</span> 注册表中的映像。</li>
+<li class="step stepexpand" id="gui__namespace"><span class="cmd">如果已经为您的组织设置了名称空间，那么系统不会提示您创建名称空间，您可以继续执行下一步。</span> 如果还没有为您的组织指定名称空间，那么系统会提示您为映像注册表设置名称空间。 名称空间是用于在 <span class="keyword">Bluemix</span> 中标识专用注册表的唯一名称。为组织分配名称空间是一次性的，名称空间一旦创建即不能进行更改。如果要在多个 <span class="keyword">Bluemix</span> 区域中使用 <span class="keyword">IBM
+Bluemix Container Service</span>，您必须为每个区域设置一个名称空间。<div class="note tip" id="gui__namespace_naming"><span class="tiptitle">提示：</span> 请遵循名称空间的以下规则：<ul id="gui__ul_rh5_421_4z"><li>名称只能包含小写字母、数字或下划线 (_)。</li>
+<li>名称可以为 4 到 30 个字符。如果计划从命令行管理容器，那么您可能倾向于使用能够快速输入的简短名称空间。</li>
+<li>其名称在 <span class="keyword">Bluemix</span> 中必须是唯一的。</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">接下来，开始定义您的容器。</span> 缺省情况下，窗口打开时会显示<span class="ph uicontrol">单个</span>容器选项卡。</li>
+<li class="step stepexpand" id="gui__tag">可选： <span class="cmd">在映像名称下，选择要使用的映像的标记或版本。</span></li>
+<li class="step stepexpand" id="gui__space"><span class="cmd">选择您组织中的某个 <span class="keyword">Bluemix</span> 空间。</span></li>
+<li class="step stepexpand"><span class="cmd">在<span class="ph uicontrol">容器名称</span>字段中，输入容器的名称。</span> <div class="note tip"><span class="tiptitle">提示：</span> 容器名称必须以字母开头，并且可以包含大写字母、小写字母、数字、句点 (.)、下划线 (_) 或连字符 (-)。</div>
+</li>
+<li class="step stepexpand" id="gui__size"><span class="cmd">在<span class="ph uicontrol">大小</span>字段中，选择容器大小。</span> 缺省大小为 <span class="ph uicontrol" data-hd-audience="yellow">Micro（256 MB 内存，16 GB 存储器）</span>。所选择的大小会影响运行时容器在计算主机上所获取的内存和磁盘空间量，且在创建容器之后无法更改。
+其他可用大小为
+<ul data-hd-audience="yellow" id="gui__ul_sh5_421_4z"><li>Pico（64 MB 内存，4 GB 磁盘空间）</li>
+<li>Nano（128 MB 内存，8 GB 磁盘空间）</li>
+<li>Tiny（512 MB 内存，32 GB 磁盘空间）</li>
+<li>Small（1 GB 内存，64 GB 磁盘空间）</li>
+<li>Medium（2 GB 内存，128 GB 磁盘空间）</li>
+<li>Large（4 GB 内存，256 GB 磁盘空间）</li>
+<li>X-Large（8 GB 内存，512 GB 磁盘空间）</li>
+<li>2X-Large（16 GB 内存，1 TB 磁盘空间）</li>
+</ul>
+
+</li>
+<li class="step stepexpand"><span class="cmd">在<span class="ph uicontrol">公共 IP 地址</span>字段中，选择是否请求并分配新的公共 IP 地址。</span> 公共 IP 地址允许与容器建立公共连接。有一个不需要使用公共 IP 地址的实例，那就是您要使用仅在专用网络中用户应用程序可视的数据库。<div class="steps note"><span class="notetitle">注：</span> 绑定公共 IP 地址不会包含 SSL 证书，此证书用于加密发送到单个容器和从单个容器发送的数据。如果应用程序需要 SSL 加密，那么可以实施您自己的 SSL 解决方案，或者使用容器组，而不使用单个容器。容器组已绑定到已经包含 SSL 证书的公共路径，所以可以使用 HTTPS 来访问容器组，而无需任何额外配置。有关更多信息，请参阅<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">使用 Bluemix GUI 创建容器组</a>。</div>
+
+<p>如果有可以使用的 IP 地址，请选择<span class="ph uicontrol">保持未分配</span>，然后在创建容器后，将其绑定到容器。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">在<span class="ph uicontrol">公共端口</span>字段中，指定要发布的任何公共端口。</span> 该字段已使用构建映像时在映像的 Dockerfile 中指定的端口进行预填充。指定公共端口时，可以选择 UDP 或 TCP，以指示要使用的 IP 协议。如果未指定协议，那么端口会自动公开用于 TCP 流量。公开公共端口时，将为容器创建公用网络安全组，该组只允许您在公开的端口上发送和接收公共数据。其他所有公共端口都将关闭，且无法用于从因特网访问应用程序。可以包含多个端口，只要使用逗号 (,) 分隔各端口即可。 <div class="p" id="gui__ports_p">如果在 Dockerfile 中为要使用的映像指定了端口，请包含该端口。<div class="note tip"><span class="tiptitle">提示：</span> <ul id="gui__ul_uh5_421_4z"><li>对于 IBM 认证的 Liberty Server 映像或此映像的修改版本，请输入端口 <kbd class="ph userinput">9080</kbd>。</li>
+<li>对于 IBM 认证的 Node.js 映像或此映像的修改版本，请输入任意端口，例如端口 <kbd class="ph userinput">8000</kbd>。</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">如果想要添加卷、添加环境变量或绑定 <span class="keyword">Bluemix</span> 服务，请展开“<span class="ph uicontrol">高级选项</span>”。</span></li>
+<li class="step stepexpand" id="gui__volume">可选： <span class="cmd">定义数据或文件存储器。将现有卷与容器或容器组相关联。</span> 卷是一种共享磁盘，允许从容器内对文件进行访问。容器中的路径指示卷在容器的文件系统中的安装位置。<div class="note restriction"><span class="restrictiontitle">限制：</span> 只能使用命令行在 <span class="keyword">Bluemix</span> 空间中删除卷。</div>
+<ol type="a" class="ol substeps" id="gui__substeps_vh5_421_4z"><li class="li substep"><span class="cmd">单击<span class="ph uicontrol">分配现有卷</span>。</span></li>
+<li class="li substep"><span class="cmd">从下拉列表中选择卷。</span></li>
+<li class="li substep"><span class="cmd">在下一个字段中，指定容器上用于映射该卷的路径。</span> 例如，<span class="ph filepath">/var/lib/my_volume</span></li>
+<li class="li substep"><span class="cmd">要指定某个卷为只读，请选择<span class="ph uicontrol">只读</span>。</span> 缺省情况下，卷为读/写。</li>
+<li class="li substep"><span class="cmd">要添加多个卷，请单击<span class="ph uicontrol">分配现有卷</span>图标，并重复这些步骤。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="gui__env_var">可选： <span class="cmd">定义环境变量。</span> <ol type="a" class="ol substeps" id="gui__substeps_wh5_421_4z"><li class="li substep substepexpand"><span class="cmd">单击<span class="ph uicontrol">添加新环境变量</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">输入环境变量的名称。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在下一个字段中，指定环境变量的值。</span></li>
+<li class="li substep substepexpand"><span class="cmd">要添加多个环境变量，请单击<span class="ph uicontrol">添加新环境变量</span>，并重复这些步骤。</span> <div class="tablenoborder"><table summary="" id="gui__env_keys_group" class="defaultstyle"><caption><span class="tablecap">表 1. 建议的环境变量</span></caption><thead><tr><th id="d75717e519" class="thleft">环境变量</th>
+<th id="d75717e521" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d75717e519 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d75717e521 ">某些 <span class="keyword">Bluemix</span> 服务不支持直接绑定到容器。在这种情况下，需要创建 Cloud Foundry 应用程序并将其与 <span class="keyword">Bluemix</span> 服务绑定。然后，使用 <samp class="ph codeph">CCS_BIND_APP</samp> 将该应用程序绑定到容器。该 Cloud Foundry 应用程序起到桥梁的作用，允许 <span class="keyword">Bluemix</span> 将桥接应用程序的 VCAP_SERVICES 信息注入到正在运行的容器实例中。</td>
+</tr>
+<tr><td headers="d75717e519 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">注：</span>  服务不支持使用 <samp class="ph codeph">CCS_BIND_SRV=</samp> 环境变量时，请改用 <samp class="ph codeph">CCS_BIND_APP=</samp>。</div>
+</td>
+<td headers="d75717e521 ">要在不使用桥接应用程序的情况下将 <span class="keyword">Bluemix</span> 服务直接绑定到容器，请使用 <samp class="ph codeph">CCS_BIND_SRV</samp>。通过此绑定，<span class="keyword">Bluemix</span> 可以将 VCAP_SERVICES 信息注入到正在运行的容器实例中。要列出多个 <span class="keyword">Bluemix</span> 服务，请将这些服务包含在同一环境变量中。</td>
+</tr>
+<tr><td headers="d75717e519 "><div class="lines">（不推荐）<samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d75717e521 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">此环境变量已不推荐使用：</span> 请改用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">exec</samp> 或 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp> 来对容器进行外部访问。有关更多信息，请参阅<a href="container_security.html#container_cli_login_exec" title="如果必须登录到正在运行的容器，可以使用 bx ic exec。">使用 exec 登录到容器</a>。</div>
+<span class="ph">要在创建容器时向其添加 SSH 密钥，可以使用 <samp class="ph codeph">CCS_API_KEY</samp>。</span></td>
+</tr>
+<tr><td headers="d75717e519 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d75717e521 "><span class="ph" id="gui__d42736e1442">要添加要在容器中监视的日志文件，请包含 <samp class="ph codeph">LOG_LOCATIONS</samp> 环境变量以及日志文件的路径。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="gui__bind_service_step">可选： <span class="cmd">定义应用程序的其他服务。将 <span class="keyword">Bluemix</span> 空间中的 <span class="keyword">Bluemix</span> 服务绑定到容器。在<span class="ph uicontrol">服务绑定</span>部分中，选择 <span class="keyword">Bluemix</span> 服务实例并单击<span class="ph uicontrol">添加</span>，以将服务绑定到容器。</span> 如果还没有向空间添加任何 <span class="keyword">Bluemix</span> 服务，那么菜单中不会显示任何服务。</li>
+<li class="step stepexpand" id="gui__deploy"><span class="cmd">部署容器并等待其完成。单击<span class="ph uicontrol">创建</span>。</span> 创建容器后（可能会花费一些时间），还将在 <span class="keyword">Bluemix</span> 中启动该容器。请查看<span class="ph uicontrol">容器运行状况</span>部分以了解容器的状态。创建完成后，状态为<span class="ph uicontrol">正在运行</span>。</li>
+</ol>
+<div class="section result" id="gui__result_xh5_421_4z"><p>如果因为有现有 IP 地址可使用而对<span class="ph uicontrol">公共 IP 地址</span>选择了<span class="ph uicontrol">保持未分配</span>，请将该 IP 地址绑定到容器。有关更多信息，请参阅<a href="container_single_ui.html#container_cli_ips" title="请求公共 IP 地址并将其绑定到 Bluemix 中的容器。">请求公共 IP 地址并将其绑定到容器</a>。</p>
+
+<div class="p" id="gui__wait">如果要从容器连接到外部应用程序，那么需要在启动容器进程后最长等待 5 分钟时间，才能连接到指定的 IP 地址。然后，可以通过执行以下某个选项，验证该应用程序是否在容器中正常运行：<ul id="gui__ul_yh5_421_4z"><li>可以通过使用公共 IP 地址和端口来创建 URL，以在浏览器中打开应用程序。<p>示例</p>
+<span class="ph filepath">http://<var class="keyword varname">public_IP</var>:<var class="keyword varname">public_port</var></span>
+<div class="steps note"><span class="notetitle">注：</span> 如果应用程序中存在未公开 HTTP 端点的服务，那么此选项可能不会在浏览器中显示应用程序。</div>
+</li>
+<li>在 Linux 或 UNIX 命令行中，可以运行 <span class="ph filepath">nc -zv <var class="keyword varname">&lt;public_IP&gt;</var>
+<var class="keyword varname">&lt;public_port&gt;</var></span> 以验证服务器是否在侦听指定的端口。</li>
+</ul>
+</div>
+</div><div class="section postreq" id="gui__postreq_zh5_421_4z"><p>接下来，如果您是组织管理员，那么可以查看组织的容器记帐情况。</p>
+
+<ol id="gui__ol_a35_421_4z"><li><span class="ph">在帐户详细信息的“管理组织”中，选择组织。</span></li>
+<li>选择<span class="ph uicontrol">使用情况仪表板</span>并复查使用情况和帐单详细信息。</li>
+</ol>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d75717e754" lang="zh-cn" id="container_single_cli"><h2 class="topictitle2" id="d75717e754">使用命令行界面 (CLI) 作为单个容器运行短期任务</h2>
+<div class="body taskbody"><p class="shortdesc">使用 <samp class="ph codeph">run</samp> 命令来创建容器。容器必须包含映像。如果尚未包含映像，可以使用 IBM 认证的某个缺省映像，此类映像在缺省情况下位于组织的专用映像注册表中。</p>
+<div class="section prereq"><div class="p" id="container_single_cli__prereq">开始之前，请考虑以下步骤。<ul><li>您必须具有对 <span class="keyword">Bluemix</span> 空间的“开发者”角色才能在该空间中创建容器。有关每一个角色许可权以及如何编辑角色的更多信息，请参阅<span class="ph"><a href="../iam/users_roles.html">用户和角色</a></span>。</li>
+<li id="container_single_cli__identify_images">通过运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> 命令，确定要在容器中使用组织专用映像注册表中的哪个现有映像。要将映像添加到注册表，请参阅<a href="container_images_adding_ov.html#container_images_adding_ov" title="容器映像是所创建的每一个容器的基础。映像通过 Dockerfile 进行创建，此文件包含用于构建映像的指令以及构建工件（例如，应用程序、应用程序配置及其依赖项）。将容器映像看成是可执行文件（.exe 或 .bin）。当您运行可执行应用程序文件时，即会创建应用程序的实例。 当您运行容器时，将从映像创建容器实例。">向组织的专用 Bluemix 映像注册表添加 Docker 映像</a>。</li>
+<li>检查该空间是否存在可以使用的 IP 地址，而无需创建新的 IP 地址。有关更多信息，请参阅<a href="container_single_ui.html#container_cli_ips_list" title="要使单个容器可从因特网访问，您必须将其与公共 IP 地址进行绑定。在请求 IP 地址之前，请复查已分配给您组织的公共 IP 地址的列表，然后查看其中一个现有 IP 地址是否可用。">使用命令行界面 (CLI) 查找组织的现有公共 IP 地址</a>。</li>
+<li>如果您确定要将 <span class="keyword">Bluemix</span> 服务绑定到容器，请将该 <span class="keyword">Bluemix</span> 服务添加到空间中。有关更多信息，请参阅<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一个服务列表，它会代表开发者来管理这些服务。要添加 Bluemix 服务以供容器使用，必须请求此服务的实例，然后将此服务绑定到容器。">通过 Bluemix GUI 绑定服务</a>。</li>
+<li id="container_single_cli__create_shared_volume">如果您确定需要一个共享磁盘，以便能够从多个容器对文件进行访问，请在创建容器前先创建卷。有关更多信息，请参阅<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用命令行 (CLI) 创建卷</a>。</li>
+</ul>
+</div>
+</div><p class="li stepsection">创建容器。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">使用组织专用映像注册表中的现有 IP 地址和现有映像来创建容器。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;port_on_IP&gt;</var>:<var class="keyword varname">&lt;public_port&gt;</var> -e <var class="keyword varname">&lt;env_variable&gt;</var> -m <var class="keyword varname">&lt;container_size&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> --volume <var class="keyword varname">&lt;volname:mount_path&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;namespace&gt;</var>/<var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_single_cli__d41693e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_single_cli__d41693e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+
+<p>示例</p>
+
+<div class="p">以下示例将创建具有以下详细信息的单个容器。
+<ul><li>名称：<var class="keyword varname">my_container</var></li>
+<li>大小：<var class="keyword varname">64 MB</var></li>
+<li>映像：<var class="keyword varname">ibmliberty</var></li>
+<li>安装的卷：<var class="keyword varname">myvol</var></li>
+<li>公开的公共端口：<var class="keyword varname">9080</var></li>
+<li>绑定的 IP 地址：<var class="keyword varname">192.0.2.23</var></li>
+<li>定制日志文件位置：标准 Ubuntu 日志文件。在创建容器之后，可以在 Kibana 中查看来自定制日志文件位置的日志。</li>
+</ul>
+</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p 192.0.2.23:9080:9080 -e <span class="q">“LOG_LOCATION=/var/log/dpkg.log”</span> -m 64 --name my_container --volume myvol:/var/tmp registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty </code></pre>
+
+创建容器后，还会启动该容器。显示容器的标识时，说明容器已部署。</li>
+<li class="step stepexpand">可选： <span class="cmd">列出正在运行的容器。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>ps</code></pre>
+</li>
+</ol>
+<div class="section postreq"><div class="p">如果要从容器连接到外部应用程序，那么需要在启动容器进程后最长等待 5 分钟时间，才能连接到指定的 IP 地址。然后，可以通过执行以下某个选项，验证该应用程序是否在容器中正常运行：<ul id="container_single_cli__d41698e378"><li>可以通过使用公共 IP 地址和端口来创建 URL，以在浏览器中打开应用程序。<p>示例</p>
+<span class="ph filepath">http://<var class="keyword varname">public_IP</var>:<var class="keyword varname">public_port</var></span>
+<div class="steps note"><span class="notetitle">注：</span> 如果应用程序中存在未公开 HTTP 端点的服务，那么此选项可能不会在浏览器中显示应用程序。</div>
+</li>
+<li>在 Linux 或 UNIX 命令行中，可以运行 <span class="ph filepath">nc -zv <var class="keyword varname">&lt;public_IP&gt;</var>
+<var class="keyword varname">&lt;public_port&gt;</var></span> 以验证服务器是否在侦听指定的端口。</li>
+</ul>
+</div>
+
+<p>接下来，如果您是组织管理员，那么可以查看组织的容器记帐情况。</p>
+
+<div class="p"><ol><li>单击用户头像。</li>
+<li>单击<span class="ph uicontrol">帐户</span>。</li>
+<li>单击 <span class="ph uicontrol">+</span> 按钮以展开组织。</li>
+<li>选择<span class="ph uicontrol">使用情况仪表板</span>并复查使用情况和帐单详细信息。</li>
+</ol>
+<span class="ph">有关更多信息，请转至<span class="ph"><a href="../admin/account.html">管理帐户</a></span>。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d75717e754"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75717e1077" lang="zh-cn" id="container_single_updating"><h2 class="topictitle2" id="d75717e1077">使用命令行界面 (CLI) 在单个容器中更新短期任务</h2>
+<div class="body taskbody"><p class="shortdesc">要更新应用程序，您必须部署新的容器。如果只推送新映像，那么容器不会自动重新启动。</p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_single_updating__updating_group_cli_table" class="defaultstyle"><caption><span class="tablecap">表 2. 用于更新应用程序的可选工具</span></caption><thead><tr><th id="d75717e1143" class="thleft">更新工具</th>
+<th id="d75717e1145" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d75717e1143 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d75717e1145 ">使用所提供的 <span class="keyword">Bluemix</span> 服务 <span class="keyword">Delivery Pipeline</span>，对 <span class="keyword">Bluemix</span> 自动执行应用程序构建和容器部署。有关更多信息，请参阅<a href="container_integrations.html#container_single_pipeline_ov" title="使用 Delivery Pipeline 自动构建和部署单个容器。">使用 Delivery Pipeline 创建单个容器</a>。</td>
+</tr>
+<tr><td headers="d75717e1143 ">UrbanCode Deploy</td>
+<td headers="d75717e1145 ">使用 UrbanCode Deploy 对 <span class="keyword">Bluemix</span> 自动执行应用程序构建和容器部署。有关购买 UrbanCode Deploy 的更多信息，请参阅 <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">IBM UrbanCode Deploy</a>。</td>
+</tr>
+<tr><td headers="d75717e1143 ">使用 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 自行更新应用程序</td>
+<td headers="d75717e1145 ">完成此任务中的步骤以自行更新应用程序。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">要使用 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 自行更新容器：</p><ol class="steps"><li class="step stepexpand"><span class="cmd">本地更新应用程序。</span></li>
+<li class="step stepexpand"><span class="cmd">选择直接在 <span class="keyword">Bluemix</span> 中构建映像，或者先在本地构建并测试映像，然后再将其推送到 <span class="keyword">Bluemix</span>。</span> <ul><li>要直接在 <span class="keyword">Bluemix</span> 中构建映像，请运行以下命令。*<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+示例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_single_updating__d43243e240">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_single_updating__d43243e259">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li>要先在本地构建映像，然后再将其推送到 <span class="keyword">Bluemix</span>，请执行以下步骤。<div class="p"><ol type="a"><li>如果要使用 <span class="keyword">IBM
+Bluemix Container Service</span> 的插件，请重新登录。对于选项 2，请不要设置环境变量，这样 <samp class="ph codeph">docker</samp> 命令将发送到本地计算机上的 Docker 引擎。<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>基于 Dockerfile 在本地构建映像。<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>使用以下命令从映像运行容器，以测试新应用程序是否在本地运行；其中 <var class="keyword varname">Port</var> 是 HTTP 流量的端口。<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>如果应用程序运行正常，CLI 输出中将显示容器标识。要查看容器的日志，请运行 <samp class="ph codeph">docker logs <var class="keyword varname">&lt;container_name_or_id&gt;</var></samp>。</p>
+</li>
+<li id="container_single_updating__d43243e340">使用专用 <span class="keyword">Bluemix</span> 注册表和新名称标记本地映像。<span class="ph">在映像名称中仅使用小写字母数字字符或下划线 (_)。其他符号（如连字符 (-) 或斜杠 (/)）可能会使映像无法推送到映像注册表。</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>示例</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>使用以下命令将映像推送到专用 <span class="keyword">Bluemix</span> 注册表。<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">要点：</span> <span class="ph">将映像推送到专用 <span class="keyword">Bluemix</span> 注册表时，报告的映像大小小于本地 Docker 引擎中相同映像的大小。大小之间存在差异并不表示推送映像时发生问题。映像的压缩大小在 <span class="keyword">IBM
+Bluemix Container Service</span> 中进行报告。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">从容器取消绑定公共 IP 地址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+ <p>容器不再与该 IP 地址绑定，但该 IP 仍会计入您组织的公共 IP 配额。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">通过运行以下命令来验证 IP 地址是否已取消绑定。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+
+
+<p>如果 <samp class="ph systemoutput">PublicIpAddress</samp> 的值不为空，请再稍等几分钟，然后在继续进行下一步之前重新运行命令。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">从现有容器中除去 IP 地址后，使用更新的映像创建另一个容器。*</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span><span class="ph" id="container_single_updating__d43257e3588"> run [-p PORT] [-P] [-d] [-e ENV] [--env-file
+ENVFILE] [-it] [--link NAME:ALIAS] [-m MEMORY] --name NAME [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD [CMD ...]] </span></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">将 IP 地址绑定到新容器。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">删除旧容器。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75717e1077"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75717e1545" lang="zh-cn" id="container_linking"><h2 class="topictitle2" id="d75717e1545">链接单个容器与命令行界面 (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">一个容器链接到同一空间中的另一个容器时，<span class="keyword">IBM
+Bluemix Container Service</span> 会在接收方容器上为源容器创建一个主机条目。您可使用别名来指代源容器，而不要使用可能会频繁更改的特定 IP 地址。</p>
+<div class="section context"><p>如果您想让某个容器与另一个正在运行映像（例如 <samp class="ph codeph">dbimage</samp>）的容器进行通信，可以使用主机名的别名（例如 <samp class="ph codeph">dbserver</samp>）来指代该容器。通过此功能，您可以使用 <samp class="ph codeph">dbserver</samp> 主机名创建一个 <samp class="ph codeph">webserver</samp> 映像来指代数据库服务器映像，而无需考虑相应的 IP 地址或实际名称为何。您可以在同一映像中运行此对的多个实例，而不必切换配置或 IP 信息。您始终都可以将数据库服务器称为 <samp class="ph codeph">dbserver</samp>。</p>
+
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">通过运行以下命令来创建源容器。*</span> <div class="note tip"><span class="tiptitle">提示：</span> 一定要指定用于发布端口的 <samp class="ph codeph">-p</samp> 选项，该选项会将端口号公开给接收方容器。在 Dockerfile 中，通过 EXPOSE 语句在映像中公开的端口目前未由链接运行时所使用。</div>
+
+<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;port&gt;</var> --name <var class="keyword varname">&lt;source_container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;source_container_image_name&gt;</var> </code></pre>
+示例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">17546</var> --name <var class="keyword varname">source</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">dbimage</var> </code></pre>
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_linking__d36723e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_linking__d36723e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">通过运行以下命令来创建接收方容器，并将其链接到源容器。*</span> 针对别名，选择源容器中使用的映像的定制名称。您可通过多次指定 <span class="keyword option">-p</span> 选项，将接收方容器的多个端口公开给主机容器。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;port&gt;</var> -p <var class="keyword varname">&lt;port&gt;</var> --name <var class="keyword varname">&lt;recipient_container_name&gt;</var> --link <var class="keyword varname">&lt;source_container_name&gt;</var>:<var class="keyword varname">&lt;alias&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;recipient_container_image_name&gt;</var> </code></pre>
+示例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p 12534 -p 15256 --name <var class="keyword varname">recipient</var> --link <var class="keyword varname">source</var>:<var class="keyword varname">dbserver</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">webserver</var> </code></pre>
+
+<p>显示接收方容器的标识时，说明容器已链接。</p>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">通过使用 <samp class="ph codeph">exec</samp> 登录到容器来验证由链接注入的环境变量。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">&lt;recipient_container_name&gt;</var> bash</code></pre>
+ <div class="p">在 Bash 窗口中运行 <samp class="ph codeph">env</samp> 命令，以查看别名的详细信息。<pre class="codeblock"><code>"Env": [
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_&lt;source_container_port&gt;/tcp_TCP_PORT=&lt;source_container_port&gt;/tcp",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_&lt;source_container_port&gt;/tcp_TCP=tcp://<var class="keyword varname">&lt;recipient_container_private_IP&gt;</var>:&lt;source_container_port&gt;/tcp",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_space_id=<var class="keyword varname">&lt;space_ID&gt;</var>",
+    "logging_password=",
+    "space_id=<var class="keyword varname">&lt;space_ID&gt;</var>",
+    "logstash_target=logs.opvis.bluemix.net:9091",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_<var class="keyword varname">&lt;source_container_port&gt;</var>/tcp_TCP_ADDR=<var class="keyword varname">&lt;recipient_container_private_ip&gt;</var>",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_metrics_target=metrics.opvis.bluemix.net:9095",
+    "<var class="keyword varname">&lt;alias&gt;</var>_NAME=/<var class="keyword varname">&lt;recipient_container&gt;</var>/<var class="keyword varname">&lt;alias&gt;</var>",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_logstash_target=logs.opvis.bluemix.net:9091",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_logging_password=",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_<var class="keyword varname">&lt;source_container_port&gt;</var>/tcp_TCP_PROTO=tcp",
+    "metrics_target=metrics.opvis.bluemix.net:9095"
+],</code></pre>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75717e1545"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75717e1862" lang="zh-cn" id="container_cli_ips"><h2 class="topictitle2" id="d75717e1862">请求公共 IP 地址并将其绑定到容器</h2>
+<div class="body taskbody"><p class="shortdesc">请求公共 IP 地址并将其绑定到 <span class="keyword">Bluemix</span> 中的容器。</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">注：</span> 绑定公共 IP 地址不会包含 SSL 证书，此证书用于加密发送到单个容器和从单个容器发送的数据。如果应用程序需要 SSL 加密，那么可以实施您自己的 SSL 解决方案，或者使用容器组，而不使用单个容器。容器组已绑定到已经包含 SSL 证书的公共路径，所以可以使用 HTTPS 来访问容器组，而无需任何额外配置。有关更多信息，请参阅<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">使用 Bluemix GUI 创建容器组</a>。</div>
+
+<p>开始之前，请先检查是否存在可用于该空间的公共 IP 地址，如存在就无需创建新的。要执行该操作，请参阅<a href="container_single_ui.html#container_cli_ips_list" title="要使单个容器可从因特网访问，您必须将其与公共 IP 地址进行绑定。在请求 IP 地址之前，请复查已分配给您组织的公共 IP 地址的列表，然后查看其中一个现有 IP 地址是否可用。">使用命令行界面 (CLI) 查找组织的现有公共 IP 地址</a>。</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">请求公共 IP 地址。</span>  请求公共 IP 地址时，会从公共 IP 地址池随机分配一个到空间。
+当分配到空间时，IP 地址不会更改。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">记下 IP 地址。</span></li>
+<li class="step stepexpand"><span class="cmd">将地址绑定到新容器或正在运行的现有容器。</span> <ul class="ul choices"><li class="li choice">绑定到正在运行的现有容器<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+示例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind 192.0.2.23 my_container</code></pre>
+</li>
+<li class="li choice">绑定到新容器<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<div class="section result">此时将立即发出绑定请求，但可能需要几分钟时间才能连接到具有该 IP 地址的容器上。</div></div>
+<aside role="complementary" aria-labelledby="d75717e1862"></aside><article class="topic task nested2" role="article" aria-labelledby="d75717e2014" lang="zh-cn" id="container_cli_ips_list"><h3 class="topictitle3" id="d75717e2014">使用命令行界面 (CLI) 查找组织的现有公共 IP 地址</h3>
+<div class="body taskbody"><p class="shortdesc">要使单个容器可从因特网访问，您必须将其与公共 IP 地址进行绑定。在请求 IP 地址之前，请复查已分配给您组织的公共 IP 地址的列表，然后查看其中一个现有 IP 地址是否可用。</p>
+<div class="section context"><div class="steps note"><span class="notetitle">注：</span> 绑定公共 IP 地址不会包含 SSL 证书，此证书用于加密发送到单个容器和从单个容器发送的数据。如果应用程序需要 SSL 加密，那么可以实施您自己的 SSL 解决方案，或者使用容器组，而不使用单个容器。容器组已绑定到已经包含 SSL 证书的公共路径，所以可以使用 HTTPS 来访问容器组，而无需任何额外配置。有关更多信息，请参阅<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">使用 Bluemix GUI 创建容器组</a>。</div>
+</div><div class="step"><span class="cmd">列出空间的可用公共 IP 地址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</div>
+<div class="section postreq">如果没有任何 IP 地址或想要请求一个 IP 地址，那么可以在以下两个选项中进行选择。您可以在使用 <span class="keyword">Bluemix</span> GUI 创建单个容器时请求一个 IP 地址，或者在通过命令行运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp> 时请求一个 IP 地址。要使用命令行请求 IP 地址，请参阅<a href="container_single_ui.html#container_cli_ips" title="请求公共 IP 地址并将其绑定到 Bluemix 中的容器。">请求公共 IP 地址并将其绑定到容器</a>。</div></div>
+<aside role="complementary" aria-labelledby="d75717e2014"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d75717e2116" lang="zh-cn" id="container_cli_ips_unbind"><h3 class="topictitle3" id="d75717e2116">取消容器与公共 IP 地址的绑定</h3>
+<div class="body taskbody"><p class="shortdesc">您可以取消容器与公共 IP 地址的绑定，但该 IP 地址仍可用于其他容器，并且计入您组织的公共 IP 配额。</p>
+<ol class="steps"><li class="step stepexpand" id="container_cli_ips_unbind__unbind"><span class="cmd">从容器取消绑定公共 IP 地址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+ <p>容器不再与该 IP 地址绑定，但该 IP 仍会计入您组织的公共 IP 配额。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">验证该 IP 地址是否已成功取消绑定。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75717e2116"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d75717e2199" lang="zh-cn" id="container_cli_ips_remove"><h3 class="topictitle3" id="d75717e2199">从配额中除去公共 IP 地址</h3>
+<div class="body taskbody"><p class="shortdesc">如果不想使用某个公共 IP 地址，或者必须删除一个公共 IP 地址才能请求新的公共 IP 地址，那么可以从您组织的配额中除去某个公共 IP 地址。</p>
+<div class="section prereq">开始之前，请先将该公共 IP 地址与正在使用它的任何容器取消绑定。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">从组织的配额中除去该 IP 地址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release <var class="keyword varname">&lt;public_IP_address&gt;</var> </code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">验证该 IP 地址是否不再作为已分配的公共 IP 地址列出。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75717e2199"></aside></article></article><article class="topic task nested1" role="article" aria-labelledby="d75717e2280" lang="zh-cn" id="container_single_remove"><h2 class="topictitle2" id="d75717e2280">除去单个容器</h2>
+<div class="body taskbody"><p class="shortdesc">要最充分地利用配额，请不时除去未使用的容器。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">通过使用以下某种方法来除去容器。</span> <ul class="ul choices"><li class="li choice">通过 <span class="keyword">Bluemix</span> GUI<ol type="a"><li>在 <span class="keyword">Bluemix</span>“仪表板”中，选择要删除的容器。</li>
+<li>展开<span class="ph uicontrol">更多操作...</span> 菜单并单击<span class="ph uicontrol">删除</span>。</li>
+</ol>
+<ul><li>在容器的磁贴中，单击齿轮图标，并单击<span class="ph uicontrol">删除容器</span>。</li>
+</ul>
+</li>
+<li class="li choice">通过 CLI*<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_single_remove__d42520e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_single_remove__d42520e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">通过运行以下命令并确认容器是否未显示在列表中，验证是否除去了该容器。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75717e2280"></aside></article><article class="topic tutorial nested1" role="article" aria-labelledby="d75717e2432" lang="zh-cn" id="container_gettingstarted_tutorial"><h2 class="topictitle2" id="d75717e2432">教程：创建单个容器 Web 应用程序</h2>
+<div class="body tutorialBody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix</span> 提供了在公共云中运行 Docker 容器的能力。使用容器可部署独立于主机操作系统运行的自包含、安全 Web 应用程序。容器是轻量级的，无需大量系统资源，因为容器使用相同的系统内核，所以与虚拟机相比，容器的运行效率更高。本教程显示了如何在 <span class="keyword">Bluemix</span> 中使用 Docker 容器来构建消息传递 Web 应用程序。在此过程中，您将编写 Dockerfile，将 Docker 映像添加到专用 <span class="keyword">Bluemix</span> 映像注册表，以及将容器链接在一起。</p>
+<div class="section tutorialDesc"></div><section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d75717e2499"><h3 class="sectiontitle" id="d75717e2499">目标</h3>
+<p>在此场景中，您将在 <span class="keyword">Bluemix</span> 空间中创建名为 Let's Chat 的 Web 应用程序。Let's Chat 是一种联机消息传递应用程序，专为小型开发团队而设计。使用 <span class="keyword">Bluemix</span>，可管理专用 Docker 映像注册表，并将 Web 应用程序部署为可公共访问。</p>
+
+<figure class="fignone" id="container_gettingstarted_tutorial__getting_started_tutorial"><figcaption>图 1. 运行 Web 应用程序的体系结构</figcaption><div class="image"><object width="480" data="images/getting_started_tutorial.svg"><img width="480" src="images/getting_started_tutorial.jpg" alt="Lets Chat 教程图"></object></div></figure>
+
+<div class="p">此场景提供了有关以下任务的指示信息：<ul><li>设置 <span class="keyword">Bluemix</span> 帐户</li>
+<li>设置 <span class="keyword">IBM
+Bluemix Container Service</span> 命令行界面</li>
+<li>创建 Dockerfile</li>
+<li>将映像推送到专用 <span class="keyword">Bluemix</span> 映像注册表</li>
+<li>链接两个容器，以创建容器之间的网络连接</li>
+<li>构建可由公用网络访问的容器</li>
+</ul>
+</div>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d75717e2552"><h3 class="sectiontitle" id="d75717e2552">所需时间</h3>45 分钟</section>
+<section role="region" aria-labelledby="d75717e2556"><h3 class="sectiontitle" id="d75717e2556">受众</h3>
+<p>本教程适用于 <span class="keyword">Bluemix</span> 中 Docker 容器的新用户，他们希望了解如何在 <span class="keyword">Bluemix</span> 公共云中部署正在运行的应用程序。</p>
+</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e2570" lang="zh-cn" id="container_gettingstarted_tutorial_lesson_1"><h3 class="topictitle3" id="d75717e2570">第 1 课：设置 <span class="keyword">IBM
+Bluemix Container Service</span></h3>
+<div class="body taskbody"><p class="shortdesc">在本课程中，您将创建自己的 <span class="keyword">Bluemix</span> 帐户，安装 <span class="keyword">IBM
+Bluemix Container Service</span> CLI，登录到您的帐户以及查看缺省 IBM 映像。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">转至 <a href="https://console.ng.bluemix.net/registration/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">Bluemix</span> 注册页面</a>以创建帐户。</span> 记下您的用户名和密码，以后会需要这些信息。</li>
+<li class="step stepexpand"><span class="cmd">从 <a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">GitHub 存储库</a>安装 Cloud Foundry CLI V<span class="ph">Cloud Foundry CLI V<span class="ph" id="container_gettingstarted_tutorial_lesson_1__d28124e288">6.14.0</span> - 6.22.0</span>。</span> 必须将 Cloud Foundry CLI 安装在操作系统的缺省位置，否则 PATH 环境变量会与安装目录不匹配。 <div class="steps note"><span class="notetitle">注：</span> MacOS Sierra 用户必须安装 Cloud Foundry CLI V6.22.0 或更新版本。</div>
+
+
+<div class="p">要验证 Cloud Foundry CLI 是否已正确安装，或者要检查所安装的 Cloud Foundry CLI 是哪个版本，请运行以下命令：<pre class="codeblock"><code>cf -v </code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">从 Docker Web 站点<a href="https://www.docker.com/products/docker" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">安装 Docker 1.10.0 或更高版本</a>。</span></li>
+<li class="step stepexpand"><span class="cmd">打开 Docker 终端。</span> 如果使用的是 Docker Toolbox for Windows 或 OS X，请打开名为 Docker Quickstart Terminal 的程序。</li>
+<li class="step stepexpand"><span class="cmd">安装 <a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">Bluemix</span> CLI</a>。</span></li>
+<li class="step stepexpand"><span class="cmd" id="container_gettingstarted_tutorial_lesson_1__d28124e324">安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件。</span> <pre class="codeblock" id="container_gettingstarted_tutorial_lesson_1__d28124e335"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">要验证是否已正确安装该插件，请运行以下命令：<pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>该插件会在结果中显示为 IBM-Containers。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">现在，您已安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，请在 Docker 终端中运行 <samp class="ph codeph">docker run hello-world</samp>。</span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ 这将验证 Docker 配置是否已正确设置。Docker 会查找本地映像，所以如果这是您首次运行该命令，那么将会看到以下消息：
+<pre class="pre screen"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+映像是从公共映像存储库 Docker Hub 中拉取的，该命令完成后，输出将类似于以下内容：
+<pre class="pre screen"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the <span class="q">“hello-world”</span> image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ 如果 hello-world 未执行，请运行 <samp class="ph codeph">docker version</samp> 来确定该 Docker 是否安装正确。对于 Windows 和 OS X 用户，请确认正在运行的是 Docker Quickstart Terminal，而不是标准终端窗口。</li>
+<li class="step stepexpand">可选： <span class="cmd">如果这是首次使用 <span class="keyword">Bluemix</span>，请指定 API 端点。下面的代码样本将缺省为 <span class="keyword">Bluemix</span> 帐户的区域，但可以手动更改区域。</span> <pre class="codeblock"><code>bx api https://api.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">现在，登录到您的 <span class="keyword">Bluemix</span> 帐户。</span> 输入创建 <span class="keyword">Bluemix</span> 帐户时指定的电子邮件和密码。如果需要，请在系统提示时选择您的首选组织和空间。
+<pre class="codeblock"><code>bx login [-sso]</code></pre>
+<span class="ph">当您使用联合标识登录时，需要单点登录参数 <span class="keyword option">--sso</span>。如果使用此选项，请打开 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>，以获取一次性密码。如果您未包括 <span class="keyword option">--sso</span> 选项，请完成以下子步骤。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">对于<span class="ph uicontrol">电子邮件</span>，请输入您用于 <span class="keyword">Bluemix</span> 的 IBM 标识。</span></li>
+<li class="li substep"><span class="cmd">对于<span class="ph uicontrol">密码</span>，请输入 IBM 标识的密码。</span> 此时将检索您的 Bluemix 组织和空间。</li>
+<li class="li substep"><span class="cmd">输入代表您某个 <span class="keyword">Bluemix</span> 组织的数字。</span></li>
+<li class="li substep"><span class="cmd">输入代表其中一个现有 <span class="keyword">Bluemix</span> 空间的数字。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">创建名称空间。</span> 组织的名称空间是在 <span class="keyword">Bluemix</span> 区域中容器映像注册表的唯一标识。可将名称空间视为区别您的 <span class="keyword">Bluemix</span> 映像注册表与 IBM 公共云中其他所有映像注册表的一种方式。<div class="steps note"><span class="notetitle">注：</span> 如果您或任何其他用户已经登录到 <span class="keyword">Bluemix</span> 组织并创建了容器，那么您已经具有名称空间。
+您可以通过运行以下命令，找出其值：
+<pre class="codeblock"><code><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp></code></pre>
+</div>
+ <div class="p">下面是有关创建名称空间的一些提示：
+<ul><li>名称空间必须唯一。名称空间不能由 IBM 公共云相同区域中的其他任何组织使用。</li>
+<li>名称空间可以为 4-30 个字符，并且只能包含小写字母、数字或下划线 (_)。</li>
+<li>使名称空间保持简短。如果使用命令行，那么在标记和推送映像时，要频繁输入名称空间。</li>
+</ul>
+</div>
+
+
+<p>在以下命令中，将 <var class="keyword varname">your_registry_name_here</var> 替换为所选的名称空间：</p>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">your_registry_name_here</var></code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">为名称空间设置变量。</span> 在本教程中，示例命令将包含 <samp class="ph codeph">$your_namespace</samp> 字符串，以显示放置名称空间的位置。要避免手动编辑这些命令，请在终端中创建变量。 <pre class="codeblock"><code>your_namespace=<var class="keyword varname">your_registry_name_here</var></code></pre>
+ 以下示例中将 <samp class="ph codeph">ljenkins1</samp> 用作用户名称空间 <pre class="pre screen"><code>$ your_namespace=<var class="keyword varname">ljenkins1</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">初始化 <span class="keyword">IBM
+Bluemix Container Service</span>。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">现在，您已登录到 <span class="keyword">IBM
+Bluemix Container Service</span>，下面我们将检查可供您使用的缺省映像。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                        TAG                 IMAGE ID            CREATED             SIZE
+registry.ng.bluemix.net/ibm-mobilefirst-starter   latest              d61c09fd0af7        4 weeks ago         510.2 MB
+registry.ng.bluemix.net/ibm-node-strong-pm        latest              322b9ca7b2dc        2 weeks ago         255.5 MB
+registry.ng.bluemix.net/ibmliberty                latest              33fdda9431c7        2 days ago          292.5 MB
+registry.ng.bluemix.net/ibmnode                   latest              c33c25d4af3b        2 days ago          187.8 MB
+registry.ng.bluemix.net/ibmnode                   v4                  c33c25d4af3b        2 days ago          187.8 MB
+registry.ng.bluemix.net/ibmnode                   v1.1                ef3425f90e1e        2 days ago          175.3 MB
+registry.ng.bluemix.net/ibmnode                   v1.2                c5546bf5e891        2 days ago          183.6 MB</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_1__table_lqp_hkm_2v" class="defaultstyle"><caption><span class="tablecap">表 3. 了解有关映像和容器的更多信息</span></caption><thead><tr><th colspan="2" id="d75717e2964" class="thleft"><span class="ph"><img src="images/idea.png" alt="此图标指示这个任务步骤有要了解的更多信息。"></span> 关于映像和容器的更多信息</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: NaN%" headers="d75717e2964 ">映像与容器</td>
+<td style="width: NaN%" headers="d75717e2964 "><p> 那么，映像与容器有哪些区别呢？从本质上说，映像是所定义层和命令的只读快照。映像只有在运行后才会变成容器。使用此过程的一个优点是，不管对容器进行哪些更改，映像快照都保持不变。根据设计，单个容器是用作临时进程的。需要跨容器持久存储的配置或数据必须写入映像或存储在持久性卷中。请参阅 Docker 词汇表以获取<a href="https://docs.docker.com/glossary/?term=image" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">映像定义</a>。</p>
+</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75717e2964 ">IBM 映像</td>
+<td style="width: NaN%" headers="d75717e2964 "><p>在本教程中，将使用 Docker Hub 中的映像。而 IBM 还提供了四个映像“快照”，既可用于构建您自己的映像，也可用于运行容器。请在此阅读有关 <a href="container_images_adding_ov.html#container_images_adding_ov" title="容器映像是所创建的每一个容器的基础。映像通过 Dockerfile 进行创建，此文件包含用于构建映像的指令以及构建工件（例如，应用程序、应用程序配置及其依赖项）。将容器映像看成是可执行文件（.exe 或 .bin）。当您运行可执行应用程序文件时，即会创建应用程序的实例。 当您运行容器时，将从映像创建容器实例。">IBM 映像</a>的更多信息。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="section result"><p>祝贺您！您已成功创建 Bluemix 帐户，安装了 CLI 插件并已登录，可查看可用于构建 Web 应用程序的映像。</p>
+
+<p>要向注册表添加映像，请继续学习下一课。</p>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e3004" lang="zh-cn" id="container_gettingstarted_tutorial_lesson_2"><h3 class="topictitle3" id="d75717e3004">第 2 课：向专用 <span class="keyword">Bluemix</span> 映像注册表添加映像</h3>
+<div class="body taskbody"><p class="shortdesc">在本课程中，您将使用两种方法向专用映像注册表添加映像：一种方法是从 Docker Hub 复制映像，另一种方法是创建 Dockerfile。通过创建自己的 Dockerfile，您可以向映像添加自己的命令。这样，基于该映像启动的每个容器都会包含这些命令。容器的优点之一是，这些映像可帮助维护源控制，使得组织中的每个人都能使用一致的操作环境来构建容器。</p>
+<div class="section context">本课中使用以下映像。您可以复查 Dockerfile 以获取 Docker Hub 中的映像和其他信息。<ul><li><a href="https://hub.docker.com/_/mongo/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">MongoDB</a></li>
+<li><a href="https://hub.docker.com/r/sdelements/lets-chat/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Let's Chat</a></li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">将 MongoDB 映像从 Docker Hub 复制到专用 <span class="keyword">Bluemix</span> 映像注册表中。</span> MongoDB 映像用于存储数据。尽管 MongoDB 容器可用于存储数据，但在除去容器时，写入容器的任何数据都会丢失。要持久存储写入容器的任何数据，必须在运行容器时安装卷。 <p>如果未设置变量替换，请记住将 <samp class="ph codeph"><var class="keyword varname">$your_namespace</var></samp> 替换为在第 1 课中创建的名称空间。如果需要确认哪个是您的名称空间，请运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace get</samp>。</p>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">mongo</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></code></pre>
+ 初始输出代码将类似于以下示例。
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi mongo registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM mongo
+ ---&gt; 32427ae49eff
+Successfully built 32427ae49eff
+The push refers to a repository [registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>] (len: 1)</code></pre>
+ 在后台，正在将 mongo 映像从 Docker Hub 复制到您的 Bluemix 映像注册表。<samp class="ph codeph">cpi</samp> 命令可能需要几分钟才能完成；该命令完成后，完整输出将类似于以下示例。
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi mongo registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM mongo
+ ---&gt; 32427ae49eff
+Successfully built 32427ae49eff
+The push refers to a repository [registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>] (len: 1)
+32427ae49eff: Pushed
+424ec4bd7fc4: Pushed
+9e3490ec0722: Pushed
+166aa7bca9c1: Pushed
+c79deeebd6f0: Pushed
+c181e50c0e8b: Pushed
+438e27bd44bf: Pushed
+af6f43fa45bb: Pushed
+605e5767a4ac: Pushed
+33e8076f6b28: Pushed
+e63969171eec: Pushed
+latest: digest: sha256:ab092d78d331337cf6cf0ceeda28489f5e154b1403ca1220e9de6b417
+b7cfb95 size: 32158</code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_2__table_sdf_nkm_2v" class="defaultstyle"><thead><tr><th colspan="2" id="d75717e3172" class="thleft"><span class="ph"><img src="images/idea.png" alt="此图标指示这个任务步骤有要了解的更多信息。"></span> 了解此命令的组成部分</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: NaN%" headers="d75717e3172 "><samp class="ph codeph">cpi</samp></td>
+<td style="width: NaN%" headers="d75717e3172 ">复制命令。</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75717e3172 "><samp class="ph codeph">mongo</samp></td>
+<td style="width: NaN%" headers="d75717e3172 ">源存储库和名称。在本例中，映像名称为 <var class="keyword varname">mongo</var>，并且由于该映像位于 Docker Hub 中，因此无需进一步的存储库定义。</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75717e3172 "><samp class="ph codeph">registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></samp></td>
+<td style="width: NaN%" headers="d75717e3172 ">目标注册表路径，其中包含唯一名称空间以及目标映像的名称。对于本示例，我们将使映像名称保持为 <var class="keyword varname">mongo</var>，但您可以为专用注册表中的映像选择任何名称。在 CLI 中使用此映像时，使用完整路径指定映像：<samp class="ph codeph">registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></samp></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">创建并浏览到 Dockerfile 的新本地文件夹。</span> 现在您已通过 <samp class="ph codeph">cpi</samp> 命令向注册表添加了映像，接着将根据 Dockerfile 创建另一个映像。通过 Dockerfile，可以本地构建映像，并可以为 Web 应用程序添加所需的任何其他命令或变量。其中一些命令可以在容器构建期间添加，但这会导致分段存储同一映像的多个版本。向 Dockerfile 添加命令可确保基于此映像构建的每个容器都具有这些命令。 <pre class="codeblock"><code>mkdir wrapper &amp;&amp; cd wrapper</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">在 <span class="ph filepath">wrapper</span> 文件夹内创建 Dockerfile。</span> 此命令将创建 Dockerfile，并添加指定的 <var class="keyword varname">FROM</var> 命令，此命令在所有 Dockerfile 中都是必需的。<var class="keyword varname">FROM</var> 用于表明哪个是父映像。在本例中，将使用 <var class="keyword varname">lets-chat</var> 映像作为父映像。 <pre class="codeblock"><code>echo <span class="q">“FROM sdelements/lets-chat:latest”</span> &gt; Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">通过列出当前目录中的文件来确认 Dockerfile 是否已创建。</span> <pre class="codeblock"><code>ls</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">将网络延迟命令添加到 Dockerfile。</span> 当 Lets-Chat 容器启动时，<span class="keyword">IBM
+Bluemix Container Service</span> 会设置专用容器网络，并向容器分配专用 IP 地址。
+Lets-Chat 应用程序启动时，需要活动的网络连接。
+添加网络延迟可确保在应用程序启动时有足够的时间完成 <span class="keyword">IBM
+Bluemix Container Service</span> 联网。 <pre class="codeblock"><code>echo <span class="q">“CMD (sleep 60; npm start)”</span> &gt;&gt; Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">构建和标记映像。</span> 不要忘了命令末尾要有 <samp class="ph codeph">.</samp>！句点将通知 Docker 可在当前本地文件夹中查找所需的 Dockerfile。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/lets-chat .</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">确认 <var class="keyword varname">mongo</var> 映像和 <var class="keyword varname">lets-chat</var> 映像是否位于 <span class="keyword">Bluemix</span> 映像注册表中。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                                  TAG                 IMAGE ID            CREATED             SIZE
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>                          latest              8de059ee71fc        2 minutes ago         317.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat </var>                      latest              d4de00f58363        5 minutes ago          0 B
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibm-node-strong-pm                  latest              322b9ca7b2dc        2 weeks ago         616.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty                          latest              6595ea483bf5        2 weeks ago         552.8 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             latest              b2c351248227        2 weeks ago         472.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v4                  b2c351248227        2 weeks ago         472.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v1.1                7d11220193d6        2 weeks ago         449.2 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v1.2                84efce0c747b        2 weeks ago         465.2 MB</code></pre>
+</li>
+</ol>
+<div class="section result"><p>现在，必需的映像已经位于专用 <span class="keyword">Bluemix</span> 映像注册表中！您已成功复制 Docker Hub 映像，还创建了 Dockerfile，构建了新映像，并已将该映像推送到 <span class="keyword">Bluemix</span> 映像注册表。</p>
+
+<p>在下一课中，您将创建容器，将容器链接在一起，并将部署 Web 应用程序。</p>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e3385" lang="zh-cn" id="container_gettingstarted_tutorial_lesson_3"><h3 class="topictitle3" id="d75717e3385">第 3 课：构建和部署容器</h3>
+<div class="body taskbody"><p class="shortdesc">您的 <span class="keyword">Bluemix</span> 映像注册表中已经有了部署 Let's Chat 消息传递 Web 应用程序所必需的映像。在本课程中，您将构建容器，将其链接在一起，以及向应用程序分配公共 IP 地址。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">基于 mongo 映像运行容器。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">lc-mongo</var> -p <var class="keyword varname">27017</var> -m <var class="keyword varname">128</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/mongo</code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_3__table_lqp_hkm_2v" class="defaultstyle"><thead><tr><th colspan="2" id="d75717e3472" class="thleft"><span class="ph"><img src="images/idea.png" alt="此图标指示这个任务步骤有要了解的更多信息。"></span> 了解此命令的组成部分</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 22.22222222222222%" headers="d75717e3472 ">run</td>
+<td style="width: 77.77777777777779%" headers="d75717e3472 "><p> rum 命令用于通过指定映像创建容器。</p>
+</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75717e3472 ">--name</td>
+<td style="width: 77.77777777777779%" headers="d75717e3472 ">定义容器的名称。在本例中，容器已命名为 <var class="keyword varname">lc-mongo</var>。</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75717e3472 ">-p</td>
+<td style="width: 77.77777777777779%" headers="d75717e3472 "><span class="ph">如果要使应用程序可通过因特网进行访问，您必须公开公共端口。公开公共端口时，将为容器创建公用网络安全组，该组只允许您在公开的端口上发送和接收公共数据。其他所有公共端口都将关闭，且无法用于从因特网访问应用程序。可以使用多个 <span class="keyword option">-p</span> 选项包含多个端口。端口无法映射或转发。如果未公开端口，那么只能从专用容器网络访问容器。可以使用分配的专用 IP 地址在专用网络上与容器通信。</span>在本例中，我们将公开端口 27017，因为 Dockerfile 中指定了该端口。</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75717e3472 ">-m</td>
+<td style="width: 77.77777777777779%" headers="d75717e3472 "><span class="ph">输入容器的内存限制 (MB)。内存限制是容器大小的一部分，用于定义在运行时容器在计算主机上所获取的内存和磁盘空间的最大量。
+分配容器大小后，此值无法更改。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">确认容器是否正在运行。</span> 等待状态更新为正在运行后，再继续执行下一步。如果需要，可以运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</samp>，直到容器状态为正在运行。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>ps</code></pre>
+
+
+<pre class="pre screen"><code>$<span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                PORTS               NAMES
+9f73abc2-9a1        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>:latest       <span class="q">“”</span>                  40 seconds ago          Running 5 seconds ago    27017/tcp           lc-mongo</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><var class="keyword varname">mongo</var> 容器正在运行后，运行 <var class="keyword varname">lets-chat</var> 容器。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">lets-chat</var> --link lc-mongo:mongo -p <var class="keyword varname">8080</var> -m <var class="keyword varname">128</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat</var></code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_3__table_o22_ttv_4x" class="defaultstyle"><thead><tr><th colspan="2" id="d75717e3581" class="thleft"><span class="ph"><img src="images/idea.png" alt="此图标指示这个任务步骤有要了解的更多信息。"></span> 了解此命令的组成部分</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 22.22222222222222%" headers="d75717e3581 ">--link</td>
+<td style="width: 77.77777777777779%" headers="d75717e3581 "><p>将数据库容器（如 <samp class="ph codeph">lc-mongo</samp>）链接到其他容器是 <samp class="ph codeph">--link</samp> 的常见用法之一。<samp class="ph codeph">--link</samp> 标志会在 <var class="keyword varname">lets-chat</var> 容器上为 <var class="keyword varname">lc-mongo</var> 容器创建一个主机条目，以允许容器彼此进行通信。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">查看容器。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>ps</code></pre>
+
+
+<pre class="pre screen"><code>$<span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+68f6536a-82f        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat</var>:latest   <span class="q">“”</span>                  3 days ago          Running 6 seconds ago   8080/tcp                      <var class="keyword varname">lets-chat</var>
+9f73abc2-9a1        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>:latest       <span class="q">“”</span>                  3 days ago          Running 3 days ago      27017/tcp                     <var class="keyword varname">lc-mongo</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">列出可用的 IP 地址。</span> 绑定 IP 地址后，就可以通过因特网对单个容器 Web 应用程序进行访问。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">如果未列出任何 IP 地址，请请求 IP 地址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">选择可用的 IP 地址，并将其绑定到 <var class="keyword varname"> lets-chat</var> 容器。</span> 请注意，如果所有 IP 地址都已绑定，那么需要首先<a href="container_cli_reference_cfic.html#container_cli_reference_cfic__ip_unbind">取消绑定 IP 地址</a>。将此示例 IP 地址替换为 Bluemix 组织中可用的 IP 地址。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">192.0.2.100</var> lets-chat</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">等待绑定 IP 地址的操作完成。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect lets-chat</code></pre>
+当 IP 地址绑定到容器时，它会在 CLI 输出的<span class="ph uicontrol">网络</span>部分列示为 <span class="ph uicontrol">PublicIpAdress</span>。
+<pre class="pre screen"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect lets-chat
+...
+<span class="q">“PortMapping”</span>: null,
+<span class="q">“Ports”</span>: {
+    <span class="q">“8080/tcp”</span>: [
+      {
+         <span class="q">“HostIp”</span>: <span class="q">“192.0.2.100”</span>,
+         <span class="q">“HostPort”</span>: <span class="q">“8080”</span>
+      }
+    ]
+ },
+ <span class="q">“PublicIpAddress”</span>: <span class="q">“192.0.2.100”</span>
+...</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">查看 Web 应用程序是否已启动并正在运行！将绑定的公共 IP 地址（包括端口）粘贴到 Web 浏览器。</span> <pre class="codeblock"><code>http://<var class="keyword varname">192.0.2.100</var>:8080</code></pre>
+ <p><img src="images/lets-chat_screenshot.jpg" alt="登录到 Let's Chat Web 应用程序。"></p>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">在 Let's Chat 中创建帐户，然后登录以查看 Web 应用程序在 IBM Containers 中运行！</span> <p><img src="images/lets-chat-room.png" alt="lets-chat 空间"></p>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">停止容器。</span> 如果不希望容器使用资源，可以停止并除去容器。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop <var class="keyword varname">lets-chat</var> <var class="keyword varname">lc-mongo</var></code></pre>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">lets-chat</var> <var class="keyword varname">lc-mongo</var></code></pre>
+</li>
+</ol>
+<div class="section result" id="container_gettingstarted_tutorial_lesson_3__quiz">测试您掌握的情况！现在，您已完成教程，请<a href="http://bluemix-quizzes.mybluemix.net/containers/single_containers_gettingstarted_tutorial/quiz.php" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">进行测验以了解掌握的情况</a>。</div><div class="section postreq"><div class="p"> 接下来做什么？还有其他许多 <span class="keyword">IBM
+Bluemix Container Service</span> 功能可应用于本教程：<ul><li>尝试将单个容器替换为<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">高可用性容器组</a>，然后启用自动恢复，这将自动替换不可用的容器</li>
+<li>创建<a href="container_volumes_ov.html#container_volumes_ui" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以通过 Bluemix GUI 创建容器的卷。">存储卷</a>并将其安装到 mongo 和 lets-chat 容器，以便容器数据可在容器重新启动后持久存储，并可供专用网络中的多个容器访问</li>
+<li>查看<a href="va/va_index.html#va_reviewing">漏洞顾问程序</a>中的映像，这可通过扫描注册表中的映像是否有潜在漏洞，帮助组织保证安全</li>
+</ul>
+...等等。立即开始吧！</div>
+</div></div>
+</article></article><article class="topic tutorial tutorialIntro nested1" role="article" aria-labelledby="d75717e3835" lang="zh-cn" id="container_compose_intro"><h2 class="topictitle2" id="d75717e3835">教程：使用 Docker Compose 和 <span class="keyword">IBM
+Bluemix Container Service</span> 创建多容器部署</h2>
+<div class="body  tutorialIntroBody"><p class="shortdesc">如果应用程序具有多个组件，例如数据库、服务和高速缓存，那么将所有容器编排为一起启动和关闭是很难做到的。在本教程中，您将学习如何使用单个 Docker Compose 命令，在微服务体系结构中将应用程序作为多容器部署进行部署并运行。属于此系统的每个容器都基于一个 Docker Compose 服务定义，并且在其自己的独立环境中运行。</p>
+<section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d75717e3897"><h3 class="sectiontitle" id="d75717e3897">场景</h3>本教程显示了软件开发者可以怎样使用 Docker Compose 和 <span class="keyword">IBM
+Bluemix Container Service</span> 来部署多容器部署，用于运行链接到 Mongo 数据库以及 nginx 负载均衡器（用于均衡入局用户流量）的 Lets-Chat Web 应用程序。<div class="p"><figure class="fignone" id="container_compose_intro__fig_compose"><figcaption>图 2. 多容器 Lets-Chat 应用程序的目标场景</figcaption><a href="../api/content/containers/images/container_compose_tutorial.png" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><div class="image"><img src="images/container_compose_tutorial.png" width="700" alt="多容器 Lets-Chat 应用程序的目标场景"></div></a></figure>
+</div>
+<div class="p">您将逐步学习以下课程。<dl><dt class="dlterm"><a href="container_single_ui.html#container_compose_config" title="首先，在名为 docker-compose.yml 的 YAML 文件中配置多容器部署的每个服务。对于每个服务，可指定映像、要公开的端口以及系统中其他服务的链接。">第 1 课：配置多容器部署</a></dt>
+<dd>在名为 <span class="ph filepath">docker-compose.yml</span> 的配置文件中，为 Lets-Chat Web 应用程序和 Mongo 数据库定义服务。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_run" title="接下来，您将部署并运行多容器部署。您可以使用单个 Docker Compose 命令基于 docker-compose.yml 文件中的服务定义来创建多个容器，而不必分别创建和启动多个 Lets-Chat 和 Mongo 数据库容器，并手动将其链接在一起。">第 2 课：运行多容器部署</a></dt>
+<dd>在多容器部署上运行 Lets-Chat 应用程序，并使用单个 Docker Compose 命令通过因特网对其进行访问。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_scale" title="现在多容器部署已经在运行，增加 Lets-Chat 容器实例数可提高应用程序可靠性。">第 3 课：扩展多容器部署</a></dt>
+<dd>通过增加容器实例数来提高 Lets-Chat Web 应用程序的可靠性。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_loadbalance" title="向多容器部署添加 nginx 负载均衡器，以便在多个 Lets-Chat 容器实例之间均衡入局用户流量，从而对较高工作负载做出响应。">第 4 课：向多容器部署添加负载均衡器</a></dt>
+<dd>向多容器部署添加 nginx 负载均衡器，以便在多个 Lets-Chat 容器实例之间均衡入局网络流量，从而对工作时间的较高工作负载做出响应。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_remove" title="最后一步是除去多容器部署，以释放已使用的资源，以及最充分地利用配额。">第 5 课：除去多容器部署</a></dt>
+<dd>删除多容器部署，以释放已使用的资源，以及最充分地利用配额。</dd>
+</dl>
+<div class="note tip"><span class="tiptitle">提示：</span> 如果不熟悉 <span class="keyword">IBM
+Bluemix Container Service</span>，请查看<a href="container_single_ui.html#container_gettingstarted_tutorial" title="IBM Bluemix 提供了在公共云中运行 Docker 容器的能力。使用容器可部署独立于主机操作系统运行的自包含、安全 Web 应用程序。容器是轻量级的，无需大量系统资源，因为容器使用相同的系统内核，所以与虚拟机相比，容器的运行效率更高。本教程显示了如何在 Bluemix 中使用 Docker 容器来构建消息传递 Web 应用程序。在此过程中，您将编写 Dockerfile，将 Docker 映像添加到专用 Bluemix 映像注册表，以及将容器链接在一起。">入门教程</a>并了解 <a href="container_ov.html#container_docker_ov" title="IBM Bluemix Container Service 是一种利用 Docker 技术的 Bluemix 运行时。现有 Docker 用户和 Docker 新用户都可以使用 IBM Bluemix Container Service 的以下功能。">Docker 和 IBM Containers</a> 之间的差异。</div>
+</div>
+<p>有关 Docker Compose 的进一步信息，请查看 <a href="container_single_ui.html#container_compose_faq" title="复查 Docker Compose 的以下常见问题。">Docker Compose 常见问题</a>和 <a href="container_cli_reference_cfic.html#container_cli_reference_docker-compose" title="请参考这些命令以通过 IBM Bluemix Container Service 插件 (bx ic) 来运行和管理多容器部署。">Docker Compose 命令参考</a>。</p>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d75717e4046"><h3 class="sectiontitle" id="d75717e4046">所需时间</h3>45 分钟</section>
+<section role="region" aria-labelledby="d75717e4050" class="section section prerequisites"><h3 class="sectiontitle" id="d75717e4050">先决条件</h3>
+在计算机上<a href="container_cli_cfic_install.html#container_cli_compose_install" title="要同时启动和停止一些单个容器，可以安装 Docker Compose CLI。">安装</a>最新版本的 Docker Compose 软件包，或<a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="您可能需要升级 Docker Compose 包的版本，才能使用最新功能。">升级</a>到最新版本的 Docker Compose 软件包。</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e4064" lang="zh-cn" id="container_compose_config"><h3 class="topictitle3" id="d75717e4064">第 1 课：配置多容器部署</h3>
+<div class="body taskbody"><p class="shortdesc">首先，在名为 <span class="ph filepath">docker-compose.yml</span> 的 YAML 文件中配置多容器部署的每个服务。对于每个服务，可指定映像、要公开的端口以及系统中其他服务的链接。</p>
+<div class="section prereq">开始之前，请考虑以下步骤。<ul><li>运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</samp> 来检索您的名称空间信息，然后将这些信息存储在名为 <var class="keyword varname">$your_namespace</var> 的环境变量中。<pre class="codeblock"><code><var class="keyword varname">$your_namespace</var>=&lt;my_namespace_information&gt;</code></pre>
+</li>
+<li>在专用 <span class="keyword">Bluemix</span> 映像注册表中构建 <a href="container_single_ui.html#container_gettingstarted_tutorial_lesson_2" title="在本课程中，您将使用两种方法向专用映像注册表添加映像：一种方法是从 Docker Hub 复制映像，另一种方法是创建 Dockerfile。通过创建自己的 Dockerfile，您可以向映像添加自己的命令。这样，基于该映像启动的每个容器都会包含这些命令。容器的优点之一是，这些映像可帮助维护源控制，使得组织中的每个人都能使用一致的操作环境来构建容器。">Lets-Chat 和 MongoDB 容器映像</a>。</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">在计算机上创建名为 <var class="keyword varname">composetutorial</var> 的 Docker Compose 项目目录，可以在其中保存 Docker Compose 配置文件并浏览到此目录。</span> 在运行 Docker Compose 命令时，您需要位于此目录中，这样才能找到配置文件。否则，您会收到来自 Docker 守护程序的错误消息。要缩短部署时间，请勿选择包含子目录的目录，因为在运行时，所有文件都会发送到 Docker 守护程序。<pre class="codeblock"><code>mkdir <var class="keyword varname">composetutorial</var> &amp;&amp; cd <var class="keyword varname">composetutorial</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">创建 <span class="ph filepath">docker-compose.yml</span> 文件。</span> 您可使用计算机上的首选 CLI 编辑器或文本编辑器来创建配置文件。以下示例显示了如何使用 <a href="http://www.nano-editor.org/dist/v2.2/nano.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">nano 编辑器</a>来创建 <span class="ph filepath">docker-compose.yml</span> 文件。<ol type="a"><li>打开 nano 编辑器，然后输入 <span class="ph filepath">docker-compose.yml</span> 作为文件名。<pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li>定义运行 Lets-Chat 应用程序的多容器部署的服务。您可使用 <var class="keyword varname">#</var> 输入注释。<pre class="codeblock"><code>#Name of your Lets-Chat service. 
+#The first container that is started for this service is named:
+#<span class="ph filepath">composetutorial_lets-chat_1</span>
+lets-chat: 
+  #Container image that is used to run the lets-chat service.   #Use the full path to your private Bluemix images registry.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat  
+  #Enter a public IP address and port 8080. Run <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</samp>
+  #to list available public IP addresses in your space. 
+  #Option 1: If you do not have a public IP address 
+  #that you can use, you can request a new one as follows: 
+  #ports:
+  #- "request:8080:8080". 
+  #Option 2: If you want to bind a public IP address after your Lets-Chat container
+  #is created by using the <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind</samp> command, enter the following:
+  #ports:
+  #- "8080"
+  #Option 3: Bind a public IP address directly to your Lets-Chat container
+  #ports:
+  #- "<var class="keyword varname">YOUR_PUBLIC_IP_ADDRESS</var>:8080:8080"
+  #Choose one of the port options described. 
+  ports:
+   - "<var class="keyword varname">SELECT_YOUR_PORT_OPTION</var>"
+  #lets-chat service is linked to the mongo service. 
+  links: 
+    - mongo
+#Name of your Mongo database service. 
+#The first container that is started for this service is named:
+#<span class="ph filepath">composetutorial_mongo_1</span>
+mongo:
+  #Container image that is used to run the mongo service.   #Use the full path to your private Bluemix images registry.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/mongo
+  #Container port 27017 is published within your private container network.   #If a container instance wants to send messages to a mongo container, 
+  #requests need to be sent to this port. 
+  expose:
+    - "27017"</code></pre>
+<div class="note tip"><span class="tiptitle">提示：</span>  创建自己的 <span class="ph filepath">docker-compose.yml</span> 文件时，请添加服务名称（至少一个）以及要使用的容器映像的链接，这样 <samp class="ph codeph">docker-compose up</samp> 命令才能根据您的配置文件来构建容器。</div>
+<div class="steps note"><span class="notetitle">注：</span> <span class="keyword">IBM
+Bluemix Container Service</span> 只支持 V1 <span class="ph filepath">docker-compose.yml</span> 文件格式。目前，不支持 V2。请参阅 <a href="https://docs.docker.com/compose/compose-file/compose-file-v1/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Docker file version 1 reference</a>，以查找有关如何创建 <span class="ph filepath">docker-compose.yml</span> 文件的更多示例。</div>
+</li>
+<li>按 <span class="ph uicontrol">ctrl + o</span> 保存更改。按 <span class="ph uicontrol">ENTER</span> 键确认更改。</li>
+<li>按 <span class="ph uicontrol">ctrl + x</span> 退出 nano 编辑器。</li>
+</ol>
+</li>
+</ol>
+<div class="section result">祝贺您！现在，您随时可以使用 <span class="keyword">IBM
+Bluemix Container Service</span> 和 DockerCompose 来<a href="container_single_ui.html#container_compose_run" title="接下来，您将部署并运行多容器部署。您可以使用单个 Docker Compose 命令基于 docker-compose.yml 文件中的服务定义来创建多个容器，而不必分别创建和启动多个 Lets-Chat 和 Mongo 数据库容器，并手动将其链接在一起。">部署运行 Lets-Chat 应用程序的多容器部署</a>。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e4293" lang="zh-cn" id="container_compose_run"><h3 class="topictitle3" id="d75717e4293">第 2 课：运行多容器部署</h3>
+<div class="body taskbody"><p class="shortdesc">接下来，您将部署并运行多容器部署。您可以使用单个 Docker Compose 命令基于 <span class="ph filepath">docker-compose.yml</span> 文件中的服务定义来创建多个容器，而不必分别创建和启动多个 Lets-Chat 和 Mongo 数据库容器，并手动将其链接在一起。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">如果尚未执行此操作，请<a href="container_cli_cfic_install.html#container_cli_login__option2_li">登录到 IBM Containers 插件</a>，然后将 CLI 配置为运行本机 Docker 命令。</span></li>
+<li class="step stepexpand"><span class="cmd">转至 <span class="ph filepath">docker-compose.yml</span> 文件所在的目录。</span> 要运行 Docker Compose 命令，您必须位于 <span class="ph filepath">docker-compose.yml</span> 文件的存储目录中。</li>
+<li class="step stepexpand"><span class="cmd">基于 <span class="ph filepath">docker-compose.yml</span> 文件中的服务定义，部署并运行多容器部署。</span> 在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，大多数服务和应用程序都属于长时间运行的任务。因此，请使用 <samp class="ph codeph">-d</samp> 选项来避免卡在容器的控制台输出中而无法断开连接的状况。<pre class="codeblock"><code>docker-compose up -d</code></pre>
+ 如果使用 <samp class="ph codeph">-d</samp> 选项，那么因为创建容器实例后会在 CLI 中显示其名称，所以仍可以对其进行跟踪。<pre class="codeblock"><code>$ docker-compose up -d
+
+Creating composetutorial_mongo_1
+Creating composetutorial_lets-chat_1</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">验证多容器部署的容器是否正在运行。</span> <pre class="codeblock"><code>docker-compose ps</code></pre>
+容器实例运行后，将立即显示为<span class="ph uicontrol">运行</span>状态。此过程可能需要几分钟时间。输出类似于以下内容：
+<pre class="codeblock"><code>$ docker-compose ps
+
+        Name                   Command      State             Ports             
+-----------------------------------------------------------------------
+composetutorial_lets-chat_1                  Up      192.0.2.100:8080-&gt;8080/tcp    
+composetutorial_mongo_1                    Up      203.0.113.23:27017-&gt;27017/tcp</code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">如果尚未在 <span class="ph filepath">docker-compose.yml</span> 文件中配置 IP 地址，请将可用的公共 IP 地址绑定到 Lets-Chat 容器。</span> 运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</samp> 以列出空间中的可用公共 IP 地址，或运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp> 以请求新的公共 IP 地址。将 <var class="keyword varname">&lt;IP_address&gt;</var> 替换为您的公共 IP 地址。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_address&gt;</var> composetutorial_lets-chat_1</code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">等待将 IP 地址绑定到容器的操作完成。</span> 此过程可能需要几分钟时间。此过程完成后，将立即在 CLI 中显示 <span class="ph uicontrol">OK</span> 消息。</li>
+<li class="step stepexpand"><span class="cmd">通过因特网访问 Lets-Chat 应用程序。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">打开 Web 浏览器。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在 Web 浏览器中，输入公共 IP 地址和公共 Lets-Chat 端口 8080，如本示例中所示：<samp class="ph codeph">192.0.2.100:8080</samp>。</span> Lets-Chat 登录页面将显示在 Web 浏览器中。<p><img src="images/lets-chat_screenshot.jpg" alt="登录到 Let's Chat Web 应用程序。"></p>
+</li>
+</ol>
+</li>
+</ol>
+<div class="section result">非常好！现在随时可以使用您的 Lets-Chat 应用程序。放心创建一个 Lets-Chat 帐户吧，尝试一下应用程序的各种功能。要提高 Lets-Chat 应用程序的可靠性，请<a href="container_single_ui.html#container_compose_scale" title="现在多容器部署已经在运行，增加 Lets-Chat 容器实例数可提高应用程序可靠性。">增加 Lets-Chat 容器实例数</a>。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e4472" lang="zh-cn" id="container_compose_scale"><h3 class="topictitle3" id="d75717e4472">第 3 课：扩展多容器部署</h3>
+<div class="body taskbody"><p class="shortdesc">现在多容器部署已经在运行，增加 Lets-Chat 容器实例数可提高应用程序可靠性。</p>
+<div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">更新 <span class="ph filepath">docker-compose.yml</span> 文件。</span> 由于为此服务所启动的所有容器实例都会尝试使用同一端口，因此只有未公开公共端口的服务才能扩展。由于在上一课中定义了端口 8080 对 Lets-Chat 服务公共公开，因此需要在 <span class="ph filepath">docker-compose.yml</span> 文件中更改此设置。<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">打开 <span class="ph filepath">docker-compose.yml</span></span> <pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">将 <span class="ph uicontrol">ports</span> 参数替换为 Lets-Chat 服务定义中的 <span class="ph uicontrol">expose</span>，然后删除公共 IP 地址。</span> expose 参数只会在专用容器网络内发布端口。Lets-Chat 服务定义将类似于以下内容。
+
+<pre class="codeblock"><code>lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat 
+  expose:
+   - "8080"
+  links: 
+    - mongo</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + o</span> 保存更改。按 <span class="ph uicontrol">ENTER</span> 键确认更改。</span></li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + x</span> 退出 nano 编辑器。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">重新创建多容器部署。使用 <samp class="ph codeph">--force-recreate</samp> 选项可重新创建部署中的所有实例。</span> <pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">将 Lets-Chat 服务向上扩展到 2 个容器实例。</span> 使用以下命令，<span class="keyword">IBM
+Bluemix Container Service</span> 将基于 <span class="ph filepath">docker-compose.yml</span> 文件中的服务定义，自动创建新的 Lets-Chat 容器实例。
+<div class="steps note"><span class="notetitle">注：</span> 如果减少容器实例数，那么 <span class="keyword">IBM
+Bluemix Container Service</span> 会自动停止并除去多容器部署中额外的容器实例。</div>
+
+<pre class="codeblock"><code>docker-compose scale lets-chat=2</code></pre>
+CLI 输出将类似于以下内容。
+<pre class="codeblock"><code>$ docker-compose scale lets-chat=2
+
+Creating and starting composetutorial_lets-chat_2 ... done</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">重新创建多容器部署以链接新的容器实例。</span> Docker Compose 目前不支持对链接进行自动连接或断开连接，所以您需要使用 <samp class="ph codeph">--force-recreate</samp> 选项重新创建多容器部署中的所有容器实例。<pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">验证 Mongo 容器实例是否已链接到 Lets-Chat 容器实例。</span> <pre class="codeblock"><code>docker inspect composetutorial_lets-chat_1</code></pre>
+
+<pre class="codeblock"><code>docker inspect composetutorial_lets-chat_2</code></pre>
+您可在每个响应的 <var class="keyword varname">HostConfig &gt; Links</var> 部分中查看链接的 Mongo 容器实例。<pre class="codeblock"><code>...
+"HostConfig": {
+        "Binds": [],
+        "CapAdd": [],
+        "CapDrop": [],
+        "ContainerIDFile": "",
+        "Links": [
+            "composetutorial_mongo_1:mongo",
+            "composetutorial_mongo_1:composetutorial_mongo_1",
+            "composetutorial_mongo_1:composetutorial_mongo_1"
+        ],
+        "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+        },
+        "LxcConf": [],
+        "PortBindings": {
+            "8080/tcp": [
+                {
+                    "HostPort": "8080"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false
+    },
+...</code></pre>
+</li>
+</ol>
+<div class="section result">很好。您已成功向上扩展 Lets-Chat 服务，并提高了应用程序的可靠性。为了能够响应更高的用户流量，请向多容器部署<a href="container_single_ui.html#container_compose_loadbalance" title="向多容器部署添加 nginx 负载均衡器，以便在多个 Lets-Chat 容器实例之间均衡入局用户流量，从而对较高工作负载做出响应。">添加 nginx 负载均衡器</a>，用于在 Lets-Chat 容器实例之间均衡工作负载。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e4661" lang="zh-cn" id="container_compose_loadbalance"><h3 class="topictitle3" id="d75717e4661">第 4 课：向多容器部署添加负载均衡器</h3>
+<div class="body taskbody"><p class="shortdesc">向多容器部署添加 nginx 负载均衡器，以便在多个 Lets-Chat 容器实例之间均衡入局用户流量，从而对较高工作负载做出响应。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">配置 <span class="ph uicontrol">nginx</span> 负载均衡器。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">创建 <span class="ph filepath">nginx.conf</span> 配置文件。</span> <pre class="codeblock"><code>nano <span class="ph filepath">nginx.conf</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">将以下信息复制到配置文件中。</span> 要在 Lets-Chat 容器实例之间均衡工作负载，您需要在配置文件中将所有容器实例添加为上游服务器。通过这种方式，所有入局请求都会转发到其中一个 Lets-Chat 容器。
+<pre class="codeblock"><code>worker_processes 3;
+
+events { worker_connections 1024; }
+
+http {
+
+        upstream lets-chat-app {
+              ip_hash;
+              server composetutorial_lets-chat_1:8080 weight=10 max_fails=3 fail_timeout=30s;
+              server composetutorial_lets-chat_2:8080 weight=10 max_fails=3 fail_timeout=30s;
+        }
+         
+        server {
+              listen 80;
+         
+              location / {
+                proxy_pass http://lets-chat-app;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+              }
+        }
+}</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + o</span> 保存更改。按 <span class="ph uicontrol">ENTER</span> 键确认更改。</span></li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + x</span> 退出 nano 编辑器。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">在专用 <span class="keyword">Bluemix</span> 映像注册表中创建 <span class="ph uicontrol">nginx</span> 映像。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">创建 Dockerfile。</span> <pre class="codeblock"><code>nano Dockerfile</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">将以下信息复制到 Dockerfile 中。</span> 您所创建的映像基于 DockerHub 提供的公共 <span class="ph uicontrol">nginx</span> 映像。要应用上一步中指定的定制设置，请使用 <samp class="ph codeph">COPY</samp> 命令将 <span class="ph filepath">nginx.conf</span> 文件复制到 <span class="ph uicontrol">nginx</span> 配置文件位置。<pre class="codeblock"><code>#Uses the public nginx image available on Dockerhub.
+FROM nginx
+#Copies your custom <span class="ph filepath">nginx.conf</span> file into the nginx configuration file location.
+COPY nginx.conf /etc/nginx/nginx.conf</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + o</span> 保存更改。按 <span class="ph uicontrol">ENTER</span> 键确认更改。</span></li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + x</span> 退出 nano 编辑器。</span></li>
+<li class="li substep substepexpand"><span class="cmd">构建 <span class="ph uicontrol">nginx</span> 映像，然后将其推送到专用 <span class="keyword">Bluemix</span> 映像注册表中。</span> <pre class="codeblock"><code>docker build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx .</code></pre>
+
+CLI 输出类似于以下内容：
+<pre class="codeblock"><code>Sending build context to Docker daemon 9.728 kB
+Step 1 : FROM nginx
+ ---&gt; 6f62f48c4e55
+Step 2 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---&gt; bc40817f0593
+Removing intermediate container 64c5e180943f
+Successfully built bc40817f0593
+The push refers to a repository [registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx] (len: 1)
+bc40817f0593: Pushed 
+6f62f48c4e55: Pushed 
+50ed65ac2e2d: Pushed 
+fed44c33bce9: Pushed 
+73e8d4f6bf84: Pushed 
+latest: digest: sha256:99587168cbf699b32804c4ff0de610460dfa150120b12385b194c2f9236903f5 size: 15270</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">将 <span class="ph uicontrol">nginx</span> 服务定义添加到 <span class="ph filepath">docker-compose.yml</span> 文件中。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">打开 <span class="ph filepath">docker-compose.yml</span> 文件。</span> <pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">将以下信息复制到 <span class="ph filepath">docker-compose.yml</span> 中。将 <var class="keyword varname">IP_ADDRESS</var> 替换为要用于访问 <span class="ph uicontrol">nginx</span> 负载均衡器的公共 IP 地址。</span> <pre class="codeblock"><code>nginx:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx  
+  ports:
+   - "<var class="keyword varname">IP_ADDRESS</var>:80:80"
+  links: 
+    - lets-chat</code></pre>
+<span class="ph filepath">docker-compose.yml</span> 文件将类似于以下内容。
+<pre class="codeblock"><code>nginx:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx
+  ports:
+   - "<var class="keyword varname">IP_ADDRESS</var>:80:80"
+  links: 
+    - lets-chat
+lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat
+  expose:
+   - "8080"
+  links: 
+    - mongo
+mongo:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/mongo
+  expose:
+    - "27017"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + o</span> 保存更改。按 <span class="ph uicontrol">ENTER</span> 键确认更改。</span></li>
+<li class="li substep substepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + x</span> 退出 nano 编辑器。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">部署使用 <span class="ph uicontrol">nginx</span> 负载均衡器运行 Lets-Chat 应用程序的多容器部署。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">重新创建多容器部署。</span> 使用 <samp class="ph codeph">--force-recreate</samp> 选项可在多容器部署中重新创建所有容器实例，这样链接将能够正确连接。
+<pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">验证该容器是否正确链接。</span> <pre class="codeblock"><code>docker inspect composetutorial_nginx_1</code></pre>
+您可在响应的 <var class="keyword varname">HostConfig &gt; Links</var> 部分中查看链接的 Lets-Chat 容器实例。<pre class="codeblock"><code>...
+"HostConfig": {
+        "Binds": [],
+        "CapAdd": [],
+        "CapDrop": [],
+        "ContainerIDFile": "",
+        "Links": [
+            "composetutorial_lets-chat_2:composetutorial_lets-chat_2",
+            "composetutorial_lets-chat_1:composetutorial_lets-chat_1",
+            "composetutorial_lets-chat_1:composetutorial_lets-chat_1",
+            "composetutorial_lets-chat_2:lets-chat",
+            "composetutorial_lets-chat_2:composetutorial_lets-chat_2"
+        ],
+        "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+        },
+        "LxcConf": [],
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostPort": "80"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false
+    },
+...</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">验证定制 <span class="ph filepath">nginx.config</span> 设置是否已应用于 <span class="ph uicontrol">nginx</span> 容器实例。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">登录到 <span class="ph uicontrol">nginx</span> 容器。</span> <pre class="codeblock"><code>docker exec -it composetutorial_nginx_1 bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">查看主机配置。</span> <pre class="codeblock"><code>cat <span class="ph filepath">/etc/hosts</span></code></pre>
+如果应用了定制设置，那么您可在 CLI 输出中看到链接的 Lets-Chat 容器实例与其专用 IP 地址一并列出。<pre class="codeblock"><code>127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+198.51.100.19	composetutorial_lets-chat_1
+198.51.100.18	composetutorial_lets-chat_2
+198.51.100.20	instance-000f2b2b
+198.51.100.18	lets-chat
+198.51.100.20	composetutorial-nginx-1
+198.51.100.19	composetutoral_lets-chat_1
+198.51.100.18	composetutorial_lets-chat_2
+198.51.100.20	instance-000f2b2b</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">通过在 CLI 中输入 <samp class="ph codeph">exit</samp> 从容器注销。</span></li>
+</ol>
+</li>
+</ol>
+<div class="section result">很好。现在，您可以在 Lets-Chat 容器之间均衡工作负载，并响应更高的用户流量。最后一步，可以<a href="container_single_ui.html#container_compose_remove" title="最后一步是除去多容器部署，以释放已使用的资源，以及最充分地利用配额。">删除多容器部署</a>，以释放已使用的资源，以及最充分地利用配额。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75717e5004" lang="zh-cn" id="container_compose_remove"><h3 class="topictitle3" id="d75717e5004">第 5 课：除去多容器部署</h3>
+<div class="body taskbody"><p class="shortdesc">最后一步是除去多容器部署，以释放已使用的资源，以及最充分地利用配额。</p>
+<div class="section context"><div class="note attention"><span class="attentiontitle">注意：</span> 删除多容器部署的操作无法撤销。如果要保留多容器部署的配置，请勿除去 <span class="ph filepath">docker-compose.yml</span> 文件。</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">停止多容器部署中正在运行的所有容器实例。</span> <pre class="codeblock"><code>docker-compose stop</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">除去多容器部署中的所有容器实例。</span> <pre class="codeblock"><code>docker-compose rm</code></pre>
+ 在除去过程中，系统将要求您确认是否要除去所有容器实例。通过输入 <span class="ph uicontrol">y</span> 以确认。</li>
+<li class="step stepexpand">可选： <span class="cmd">验证是否所有容器实例都已从容器系统中除去。</span> <pre class="codeblock"><code>docker-compose ps</code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">删除 <span class="ph filepath">docker-compose.yml</span> 文件。</span> <div class="note tip"><span class="tiptitle">提示：</span> 如果要复用该文件，请将其存储在源代码控制系统中，而不要删除该文件。</div>
+
+
+<pre class="codeblock"><code>rm <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">删除 Docker Compose 项目目录。</span> <pre class="codeblock"><code>cd &amp;&amp; rmdir composetutorial</code></pre>
+</li>
+</ol>
+<div class="section result">您已成功除去多容器部署，并且在最充分地利用配额。</div></div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d75717e5111" lang="zh-cn" id="container_compose_yml"><h3 class="topictitle3" id="d75717e5111"><span class="ph filepath">docker-compose.yml</span> 文件中支持的选项</h3>
+<div class="body conbody"><p class="shortdesc"></p>
+<div>复查 <span class="keyword">IBM
+Bluemix Container Service</span> 中支持的 <span class="ph filepath">docker-compose.yml</span> 文件选项。<ul><li><a href="container_single_ui.html#container_compose_yml__environment">environment</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__expose">expose</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__image">image</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__links">links</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__mem">mem_limit</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__ports">ports</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__volumes">volumes</a></li>
+</ul>
+</div><section role="region" aria-labelledby="d75717e5201" id="container_compose_yml__environment"><h4 class="sectiontitle" id="d75717e5201"><span class="ph"><samp class="ph codeph">environment</samp></span></h4>使用 <span class="ph uicontrol">environment</span> 参数，设置环境变量或将 <span class="keyword">Bluemix</span> 服务或应用程序绑定到 Docker Compose 服务。
+<div class="steps note"><span class="notetitle">注：</span>  如果要向多容器部署添加 <span class="keyword">Bluemix</span> 服务，必须在空间中创建此服务的实例。有关更多信息，请参阅<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一个服务列表，它会代表开发者来管理这些服务。要添加 Bluemix 服务以供容器使用，必须请求此服务的实例，然后将此服务绑定到容器。">通过 Bluemix GUI 绑定服务</a>。<p>某些服务不支持将服务直接绑定到容器。在这种情况下，必须创建 Cloud Foundry 应用程序。有关更多信息，请参阅<a href="container_troubleshoot.html#ts_bridge_app">Bluemix 服务未直接绑定到容器</a>。</p>
+</div>
+<ul><li><span class="keyword option">绑定 Bluemix 服务</span><p>要绑定服务，请使用 <span class="ph uicontrol">CCS_BIND_SRV</span> 键。将 <var class="keyword varname">&lt;service_instance_name&gt;</var> 替换为您在专用 <span class="keyword">Bluemix</span> 映像注册表中创建的服务实例的名称。</p>
+<pre class="codeblock"><code>environment: 
+  - "CCS_BIND_SRV=<var class="keyword varname">&lt;service_instance_name&gt;</var>"</code></pre>
+</li>
+<li><span class="keyword option">绑定 Cloud Foundry 应用程序</span><p>要绑定应用程序，请使用 <span class="ph uicontrol">CCS_BIND_APP</span> 键。将 <var class="keyword varname">&lt;app_name&gt;</var> 替换为您在专用 <span class="keyword">Bluemix</span> 映像注册表中创建的 Cloud Foundry 应用程序的名称。</p>
+<pre class="codeblock"><code>environment:
+  - "CCS_BIND_APP=<var class="keyword varname">&lt;app_name&gt;</var>"</code></pre>
+</li>
+</ul>
+<dl><dt class="dlterm">示例</dt>
+<dd>以下示例显示了绑定名为 <var class="keyword varname">containerbridge</var> 的 Cloud Foundry 应用程序并将名为 <var class="keyword varname">tmp_folder</var> 的环境变量添加到 Lets-Chat 服务的样本 <span class="ph filepath">docker-compose.yml</span> 文件。<pre class="codeblock"><code>#Name of your service
+lets-chat: 
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat  
+  #Use <span class="ph uicontrol">CCS_BIND_SRV</span> to bind a <span class="keyword">Bluemix</span> service or <span class="ph uicontrol">CCS_BIND_APP</span> to bind a Cloud Foundry app to your Docker Compose service. 
+  environment:
+   - "CCS_BIND_APP=containerbridge"   - "tmp_folder=/tmp"</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75717e5320" id="container_compose_yml__expose"><h4 class="sectiontitle" id="d75717e5320"><span class="ph"><samp class="ph codeph">expose</samp></span></h4>仅将端口向专用网络公开。
+所有链接的服务都可以访问此端口。<dl><dt class="dlterm">示例</dt>
+<dd>以下示例显示了仅将端口 8080 向内部网络公开的样本 <span class="ph filepath">docker-compose.yml</span> 文件。链接的 Mongo 容器使用此端口向 Lets-Chat 容器发送请求。
+<pre class="codeblock"><code>lets-chat: 
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat  
+  #Make a port available to the private network only. 
+  expose:
+   - "8080"
+  links: 
+    - mongo
+mongo:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/mongo</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75717e5352" id="container_compose_yml__image"><h4 class="sectiontitle" id="d75717e5352"><span class="ph"><samp class="ph codeph">image</samp></span></h4>定义您要用于运行 Docker Compose 服务的基本映像。映像必须在专用 <span class="keyword">Bluemix</span> 注册表中提供，您才能在 <span class="ph filepath">docker-compose.yml</span> 文件中对其进行使用。<p>要定义该映像，请以下列格式，使用专用 <span class="keyword">Bluemix</span> 注册表的完整路径：registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var>。</p>
+<dl><dt class="dlterm">示例</dt>
+<dd>以下示例显示了将 Lets-Chat 映像定义为 Lets-Chat 服务基础的样本 <span class="ph filepath">docker-compose.yml</span> 文件。<pre class="codeblock"><code>#Name of your service
+lets-chat: 
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat  
+  </code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75717e5403" id="container_compose_yml__links"><h4 class="sectiontitle" id="d75717e5403"><span class="ph"><samp class="ph codeph">links</samp></span></h4>将容器链接到针对其他服务启动的所有容器。
+链接可决定服务之间的依赖关系，因此也会决定运行 <samp class="ph codeph">docker-compose up</samp> 命令时容器的启动顺序。
+要链接服务，请输入服务名称。<dl><dt class="dlterm">示例</dt>
+<dd>以下示例显示了将 nginx 容器链接到针对 Lets-Chat 服务启动的所有容器的样本 <span class="ph filepath">docker-compose.yml</span> 文件。
+<pre class="codeblock"><code>#Name of your service
+nginx:
+  #Container image that is used to run the nginx service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/nginx  
+  #Enter the name of the service that you want to link. 
+  links: 
+    - lets-chat
+lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace</var>/lets-chat  </code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75717e5438" id="container_compose_yml__mem"><h4 class="sectiontitle" id="d75717e5438"><span class="ph"><samp class="ph codeph">mem_limit</samp></span></h4>设置容器实例的大小。
+容器大小会定义在运行时容器在计算主机上所获取的内存和磁盘空间的最大量。
+分配容器大小后，此值无法更改。<p>在 <span class="keyword">IBM
+Bluemix Container Service</span> 中选择以下其中一个大小。</p>
+<ul data-hd-audience="yellow"><li>Pico（64 MB 内存，4 GB 磁盘空间）</li>
+<li>Nano（128 MB 内存，8 GB 磁盘空间）</li>
+<li>Micro（256 MB 内存，16 GB 磁盘空间）</li>
+<li>Tiny（512 MB 内存，32 GB 磁盘空间）</li>
+<li>Small（1024 MB 内存，64 GB 磁盘空间）</li>
+<li>Medium（2048 MB 内存，128 GB 磁盘空间）</li>
+<li>Large（4096 MB 内存，256 GB 磁盘空间）</li>
+<li>X-Large（8192 MB 内存，512 GB 磁盘空间）</li>
+<li>2X-Large（16384 MB 内存，1 TB 磁盘空间）</li>
+</ul>
+输入所需大小 (MB)，不要加上“<samp class="ph codeph">M</samp>”单位标签。如果您未指定大小，那么缺省情况下会使用 <span class="ph uicontrol">micro</span> 大小创建所有容器。
+<dl><dt class="dlterm">示例</dt>
+<dd>以下示例显示了将 Lets-Chat 服务的容器大小设置为 512 MB 的样本 <span class="ph filepath">docker-compose.yml</span> 文件。<pre class="codeblock"><code>#Name of your service
+lets-chat: 
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat  
+  #Enter the size you want in megabytes
+  mem_limit: 512</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75717e5500" id="container_compose_yml__ports"><h4 class="sectiontitle" id="d75717e5500"><span class="ph"><samp class="ph codeph">ports</samp></span></h4>使用 <span class="ph uicontrol">ports</span> 选项，可以针对为您服务启动的每一个容器，公开公共端口。
+选择以下其中一个配置。<ul><li><span class="keyword option">请求公共 IP 地址</span><div class="p">此配置会为空间请求新的公共 IP 地址，将端口 8080 向公用网络公开，并将所请求的 IP 地址绑定到容器。
+<div class="steps note"><span class="notetitle">注：</span> 您必须具有足够的公共 IP 地址配额，才能将新 IP 地址分配给空间。</div>
+</div>
+<pre class="codeblock"><code>ports:
+  - "request:8080:8080"</code></pre>
+</li>
+<li><span class="keyword option">公开公共端口</span><p>使用此配置，端口 8080 会向公用网络公开。
+没有 IP 地址绑定到容器。要使应用程序可从因特网进行访问，请在创建容器之后，<a href="container_single_ui.html#container_cli_ips" title="请求公共 IP 地址并将其绑定到 Bluemix 中的容器。">绑定公共 IP 地址</a>。</p>
+<pre class="codeblock"><code>ports:
+  - "8080"</code></pre>
+</li>
+<li><span class="keyword option">绑定现有公共 IP 地址</span><div class="p">使用此配置，端口 8080 会向公用网络公开，且现有公共 IP 地址会在容器创建之后，自动绑定到容器。
+<div class="steps note"><span class="notetitle">注：</span> 您所使用的 IP 地址必须分配给空间且可供使用。
+如果 IP 地址已绑定到容器，那么您必须先<a href="container_single_ui.html#container_cli_ips_unbind" title="您可以取消容器与公共 IP 地址的绑定，但该 IP 地址仍可用于其他容器，并且计入您组织的公共 IP 配额。">取消绑定</a>。</div>
+</div>
+<pre class="codeblock"><code>ports:
+  - "<var class="keyword varname">IP_ADDRESS</var>:8080:8080"</code></pre>
+</li>
+</ul>
+</section><section role="region" aria-labelledby="d75717e5552" id="container_compose_yml__volumes"><h4 class="sectiontitle" id="d75717e5552"><span class="ph"><samp class="ph codeph">volumes</samp></span></h4>使用 <span class="ph uicontrol">volumes</span> 参数，可将现有卷添加到服务中。<div class="steps note"><span class="notetitle">注：</span> 您必须先创建卷，才能将其添加到 <span class="ph filepath">docker-compose.yml</span> 文件内的服务定义中。有关更多信息，请参阅<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用命令行 (CLI) 创建卷</a>主题。要在将卷安装到容器之前，先将数据填充到卷中，请参阅<a href="container_volumes_ov.html#container_volumes_mount" title="创建卷后，可以将卷安装到容器上，然后向其中添加文件。安装了该卷的任何容器都可访问这些文件。">使用命令行界面 (CLI) 添加文件到卷</a>。</div>
+<dl><dt class="dlterm">示例</dt>
+<dd>以下示例显示了将名为 <var class="keyword varname">my_volume</var> 的外部卷添加到 lets-chat 服务中的样本 <span class="ph filepath">docker-compose.yml</span> 文件。卷会安装到允许读写操作的 <span class="ph filepath">/tmp/data</span> 文件夹中。<pre class="codeblock"><code>version: '2'
+#Name of your service
+lets-chat: 
+  #container image that is used to run the lets-chat service. Replace &lt;my_namespace&gt; with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat  
+  #You need to first create your volume before you can add it 
+  volumes:
+   - <var class="keyword varname">my_volume</var>:<span class="ph filepath">/tmp/data</span>:rw
+#declare volume as external
+volumes:
+  my_volume:
+    external: true</code></pre>
+</dd>
+</dl>
+</section></div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d75717e5610" lang="zh-cn" id="container_compose_faq"><h3 class="topictitle3" id="d75717e5610">Docker Compose 常见问题</h3>
+<div class="body conbody"><p class="shortdesc">复查 Docker Compose 的以下常见问题。</p>
+<div class="p"><dl><dt class="dlterm">如何设置 Docker Compose 客户机，使其指向 IBM Containers 服务？</dt>
+<dd>登录到 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 时，可以选择运行 <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 命令，也可以设置环境变量，以便能够使用本机 Docker 命令 (<samp class="ph codeph">docker</samp>)。要对 <span class="keyword">IBM
+Bluemix Container Service</span> 执行 Docker Compose 命令，必须设置环境变量才能对 <span class="keyword">IBM
+Bluemix Container Service</span> 运行本机 Docker 命令。有关更多信息，请参阅<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 IBM Bluemix Container Service CLI 插件 (bx ic)</a>。</dd>
+<dt class="dlterm">如何将可扩展容器组与 Docker Compose 配合使用？</dt>
+<dd>Docker Compose 不支持 <span class="keyword">IBM
+Bluemix Container Service</span> 组的概念，此类组可均衡多个容器实例之间的工作负载。如果您要均衡容器实例之间的工作负载，您需要另外添加一个用于运行负载均衡器的容器，然后将该容器链接到您的容器实例。</dd>
+<dt class="dlterm"><span class="keyword">IBM
+Bluemix Container Service</span> 支持哪个版本的 <span class="ph filepath">docker-compose.yml</span> 文件格式？</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> 只支持 V1 <span class="ph filepath">docker-compose.yml</span> 文件格式。目前，不支持 V2。</dd>
+<dt class="dlterm">如何在连接模式下运行 Docker Compose 命令？</dt>
+<dd>在连接模式下运行 <samp class="ph codeph">docker-compose up</samp> 命令时，可能会遇到错误。目前，<span class="keyword">IBM
+Bluemix Container Service</span> 仅支持在断开连接的模式下运行 Docker Compose。利用 <samp class="ph codeph">-d</samp> 选项，可避免卡在容器的控制台输出中而无法断开连接的状况。</dd>
+<dt class="dlterm">如何访问在我的多容器部署中运行的每个容器实例的日志？</dt>
+<dd>目前，<span class="keyword">IBM
+Bluemix Container Service</span> 不支持 <samp class="ph codeph">docker-compose logs</samp> 命令。</dd>
+<dt class="dlterm"><span class="ph filepath">docker-compose.yml</span> 文件中支持哪些参数选项？</dt>
+<dd>要复查受支持的参数选项列表，请参阅<a href="container_single_ui.html#container_compose_yml">docker-compose.yml 文件中支持的选项</a>。</dd>
+</dl>
+</div>
+</div>
+</article></article></article></div></main></body></html>

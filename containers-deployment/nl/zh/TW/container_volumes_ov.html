@@ -1,0 +1,484 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="儲存磁區用來在組織的 Bluemix 空間中的容器之間，持續保存或共用資料。">
+<meta name="keywords" content="IBM Containers, 容器, 持續性儲存空間, 磁區, 建立, CLI, 新增檔案, 裝載, exec, docker cp, 資料備份, 寫入, 移除, 檔案共用, 儲存空間, 儀表板, gui, 新增, cli, fs">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>將持續性資料儲存在單一及可擴充容器的 IBM Bluemix Container Service 中</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d90117e6" id="container_volumes_ov"><h1 class="topictitle1" id="d90117e6">將持續性資料儲存在<span class="ph">單一及可擴充容器</span>的磁區中</h1>
+<div class="abstract"><div class="shortdesc">儲存磁區用來在組織的 <span class="keyword">Bluemix®</span> 空間中的容器之間，持續保存或共用資料。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">小心：</span> 不提供<span class="ph"><span class="ph">單一及可擴充容器</span>的免費試用。<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">瞭解在「<span class="keyword">Bluemix</span> 公用」上，如何在 <span class="keyword">IBM®
+Bluemix Container Service</span> 中進行叢集管理並移轉至 Kubernetes。</a></span></div>
+</div>
+
+
+<div class="p">在此頁面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#about_volumes">關於磁區</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 使用 <a href="container_volumes_ov.html#container_volumes_ui" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從 Bluemix GUI 建立容器的磁區。">GUI</a> 或 <a href="container_volumes_ov.html#container_volumes_cli" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從指令行建立容器的磁區。">CLI</a> 來建立磁區<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_mount" title="在建立磁區之後，您可以將磁區裝載至容器，並新增磁區裝載至其中的任何容器可以存取的檔案。">新增檔案</a>至磁區<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_backup" title="容器磁區在持續性儲存空間上管理，但沒有備份。如果需要磁區資料的備份，您可以使用 bx ic cp 來建立手動備份。">備份及還原</a>磁區<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 新增對磁區的<a href="container_volumes_ov.html#container_volumes_write" title="非 root 使用者對磁區裝載路徑沒有寫入權。若要授與寫入權，您必須編輯映像檔的 Dockerfile，以使用正確許可權在裝載路徑上建立目錄。">非 root 使用者存取權</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volume_different_dc" title="如果您計劃將現行 Bluemix 空間移到新的資料中心，請確定已備份您的磁區，以便能在新的資料中心還原並使用資料。">移轉資料</a>至不同的資料中心<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要磁區來儲存容器的資料，則可以移除磁區。">移除磁區</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">新增及移除檔案共用</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d90117e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d90117e154" id="about_volumes"><h2 class="topictitle2" id="d90117e154">關於磁區</h2>
+<div class="body taskbody"><div class="section context" id="about_volumes__context_kjv_lg1_4z"><figure class="fignone" id="about_volumes__file_share"><figcaption>圖 1. 組織中的檔案共用及磁區結構。</figcaption><object id="about_volumes__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="檔案共用包含磁區，而磁區包含檔案。"></object></figure>
+
+<p><span class="ph" id="about_volumes__volume_intro">容器是暫時性的，因此無法將應用程式資料持續保存在其中。
+不過，您可以使用磁區，在重新啟動容器之間持續保存資料、在空間的容器之間共用資料，以及在您的容器無法使用時存取您的應用程式資料。如果您刪除容器，並不會刪除儲存磁區。儲存磁區的生命週期與容器的生命週期無關。因為 <span class="keyword">Bluemix</span> 中的 Docker 容器無法存取本端主機，所以會在佈建的<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">檔案共用</a>上裝載磁區。</span></p>
+
+<p>以下是持續性儲存空間生命週期中的作業：</p>
+</div><ol class="steps" id="about_volumes__steps_ljv_lg1_4z"><li class="step">選擇性的： <span class="cmd">使用 <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">GUI</a> 或 <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">CLI</a>，以建立可管理磁區的自訂檔案共用。</span> 您必須具有組織管理員角色，才能建立檔案共用。如果您不是組織管理員，請繼續建立磁區。針對每一個 Bluemix 組織，都會提供一個預設 20 GB 檔案共用。</li>
+<li class="step"><span class="cmd">使用 <a href="container_volumes_ov.html#container_volumes_ui" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從 Bluemix GUI 建立容器的磁區。">GUI</a> 或 <a href="container_volumes_ov.html#container_volumes_cli" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從指令行建立容器的磁區。">CLI</a>，以建立磁區。</span></li>
+<li class="step"><span class="cmd">使用 <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html#ibmbackup_restore_starter">ibm-backup-restore image</a>，以建立磁區的自動備份。</span></li>
+<li class="step"><span class="cmd">刪除<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要磁區來儲存容器的資料，則可以移除磁區。">磁區</a>。</span></li>
+<li class="step"><span class="cmd">刪除<a href="container_volumes_ov.html#container_filestorage_managing" title="組織管理員可以移除現有的檔案共用，以及檢視檔案共用上裝載的磁區。">檔案共用</a>。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d90117e265" lang="zh-tw" id="container_volumes_ui"><h2 class="topictitle2" id="d90117e265">使用 <span class="keyword">Bluemix</span> GUI 建立磁區</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。</span> 您可以從 <span class="keyword">Bluemix</span> GUI 建立容器的磁區。</p>
+<div class="section prereq"></div><div class="section context"><figure class="fignone" id="container_volumes_ui__file_share"><figcaption>圖 2. 組織中的檔案共用及磁區結構。</figcaption><object id="container_volumes_ui__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="檔案共用包含磁區，而磁區包含檔案。"></object></figure>
+
+<p><span class="ph" id="container_volumes_ui__volume_intro">單一容器是設計為短期容器。不過，您可以使用磁區在容器重新啟動之間持續保存資料、在空間裡的容器之間共用資料，以及在群組裡的容器實例之間共用資料。在 Docker 中裝載磁區時，會將磁區裝載到本端檔案系統。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，運算主機的存取權受限，因此您無法將主機目錄裝載到容器。而是使用組織範圍的磁區，在容器重新啟動之間持續保存資料。磁區是在隔離的<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">檔案共用</a>上進行管理，這些檔案共用可安全地儲存應用程式資料，以及管理對檔案的存取權及許可權。您對容器或映像檔所做的任何更新，都不會影響磁區。如果您刪除容器，並不會刪除儲存磁區。</span></p>
+</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">從型錄中，選取<span class="ph uicontrol">容器</span>，然後選擇映像檔。</span></span></li>
+<li class="step"><span class="cmd">選取<span class="ph uicontrol">進階選項</span>，以展開磁區建立欄位。</span></li>
+<li class="step"><span class="cmd">按一下<span class="ph uicontrol">建立磁區</span>。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">磁區名稱</span>欄位中，輸入名稱。</span> 每個空間的磁區都是唯一的，因此無法在空間內重複使用磁區名稱。磁區名稱可以包含大寫字母、小寫字母、數字、底線 (_) 及連字號 (-)。</li>
+<li class="step"><span class="cmd">如果檔案共用存在，請從<span class="ph uicontrol">檔案共用</span>下拉功能表中選取現有的檔案共用。</span> 如果沒有檔案共用存在，則會自動建立 20 GB 的預設檔案共用。組織管理員可以配置具有特定儲存空間大小及 IOPS 的檔案共用。如需相關資訊，請參閱<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">新增磁區的檔案共用</a>。 磁區沒有大小限制。磁區最大可以擴充到管理它們所在之檔案共用的大小。</li>
+<li class="step"><span class="cmd">按一下<span class="ph uicontrol">建立</span>。</span> 可能需要幾分鐘才能建立磁區。</li>
+</ol>
+<div class="section result">此磁區可以用於您的空間中，而且可以裝載到<a href="container_single_ui.html#gui__volume">單一容器</a>或<a href="container_ha.html#container_group_ui__volume">容器群組</a>，方法是從<span class="ph uicontrol">進階選項</span>中的<span class="ph uicontrol">指派現有磁區</span>的下拉功能表中進行選取。在您選取磁區之後，請指派容器內裝載磁區的檔案路徑（例如 <span class="ph filepath">/var/lib/my_volume</span>）。如果需要容器的備份，請參閱<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要磁區來儲存容器的資料，則可以移除磁區。">備份及還原資料</a>。</div></div>
+<aside role="complementary" aria-labelledby="d90117e265"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e440" lang="zh-tw" id="container_volumes_cli"><h2 class="topictitle2" id="d90117e440">使用指令行 (CLI) 建立磁區</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。</span> 您可以從指令行建立容器的磁區。</p>
+<div class="section prereq"></div><div class="section context"><p><span class="ph">單一容器是設計為短期容器。不過，您可以使用磁區在容器重新啟動之間持續保存資料、在空間裡的容器之間共用資料，以及在群組裡的容器實例之間共用資料。在 Docker 中裝載磁區時，會將磁區裝載到本端檔案系統。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，運算主機的存取權受限，因此您無法將主機目錄裝載到容器。而是使用組織範圍的磁區，在容器重新啟動之間持續保存資料。磁區是在隔離的<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">檔案共用</a>上進行管理，這些檔案共用可安全地儲存應用程式資料，以及管理對檔案的存取權及許可權。您對容器或映像檔所做的任何更新，都不會影響磁區。如果您刪除容器，並不會刪除儲存磁區。</span></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">執行下列指令，以建立磁區。</span> 磁區最大可以擴充到管理它們所在之檔案共用的大小。指定檔案共用是選用作業。您可以執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</samp> 來檢視現有檔案共用。 如果沒有檔案共用存在，則會自動建立 20 GB 的預設檔案共用。組織管理員可以配置具有特定儲存空間大小及 IOPS 的檔案共用。如需相關資訊，請參閱<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">新增磁區的檔案共用</a>。 <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create</samp> 參數</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（選用）檔案共用名稱。如果沒有可用或具名的檔案共用，將在空間的預設檔案共用上建置磁區。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必要）磁區名稱。<span class="ph" id="container_volumes_cli__d44258e4836">名稱可以包含大寫字母、小寫字母、數字、底線 (_) 及連字號 (-)。</span></dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">執行下列指令，驗證已正確建立磁區。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>接著，將磁區指派給您的<a href="container_single_ui.html#container_single_cli" title="使用 run 指令來建立容器。容器必須內含映像檔。如果還沒有映像檔，您可以使用組織專用映像檔登錄中預設提供的其中一個預設 IBM 認證映像檔。">單一容器</a>或您的<a href="container_ha.html#container_group_cli" title="從 IBM Bluemix Container Service CLI 建立及部署可擴充群組容器。容器群組包含兩個以上執行相同映像檔的容器。對於執行具有需要可擴充性及可靠性之工作負載的長期服務，或是進行所需規模的測試，都可以使用容器群組。">容器群組</a>。磁區是分別使用 <samp class="ph codeph">run</samp> 指令及 <samp class="ph codeph">group-create</samp> 指令中的 <samp class="ph codeph">--volume</samp> 選項來指派。<span class="ph">如果需要容器的備份，請參閱<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要磁區來儲存容器的資料，則可以移除磁區。">備份及還原資料</a>。</span></p>
+</div></div>
+<aside role="complementary" aria-labelledby="d90117e440"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e638" lang="zh-tw" id="container_volumes_mount"><h2 class="topictitle2" id="d90117e638">使用指令行介面 (CLI) 將檔案新增至磁區</h2>
+<div class="body taskbody"><p class="shortdesc">在建立磁區之後，您可以將磁區裝載至容器，並新增磁區裝載至其中的任何容器可以存取的檔案。</p>
+<div class="section prereq">開始之前，先<a href="container_volumes_ov.html#container_volumes_ui" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從 Bluemix GUI 建立容器的磁區。">使用 <span class="keyword">Bluemix</span> GUI</a> 或<a href="container_volumes_ov.html#container_volumes_cli" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從指令行建立容器的磁區。">使用 CLI</a> 建立磁區。</div><div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">使用裝載磁區建立容器。*</span> 將 <samp class="ph codeph"><var class="keyword varname">my_volume</var></samp> 取代為磁區名稱、將 <samp class="ph codeph"><var class="keyword varname">container_path</var></samp> 取代為磁區的裝載路徑、將 <samp class="ph codeph"><var class="keyword varname">my_container</var></samp> 取代為容器名稱，以及將 registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var> 取代為映像檔。 <pre class="codeblock"><code><span class="ph">bx ic</span> run --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">container_path</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+
+<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>，以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+
+
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_volumes_mount__d44421e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_mount__d44421e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">使用 <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> 指令，將檔案從本端目錄複製到磁區。*</span> <p>在此範例中，您會將 <var class="keyword varname">config.txt</var> 檔案複製到裝載至容器內 <var class="keyword varname">/src/usr/tmp</var> 路徑的磁區。請將檔案取代為正在複製的專屬檔案或目錄，並且變更容器路徑以指向磁區。在此指令中，原始檔或路徑是第一個，目的地路徑是第二個。從容器複製或複製到容器時，<span class="ph">則必須包含容器的名稱、定界字元 <span class="q">":"</span>，以及目的地檔案或資料夾的路徑。此路徑必須相對於容器的根目錄。</span>請參閱 <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp"><span class="ph">bx ic</span> cp</a> 文件，以取得相關資訊。</p>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath"><var class="keyword varname">./config.txt</var></span> <var class="keyword varname">my_container</var>:<span class="ph filepath"><var class="keyword varname">/src/usr/tmp</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">使用 <samp class="ph codeph"><span class="ph">bx ic</span> exec</samp> 指令登入執行中容器，以確認檔案已複製到磁區。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">導覽至您已在其中裝載磁區的目錄，並列出檔案。</span> 您的檔案已列在輸出中。已裝載這個磁區的任何容器都可存取此檔案。<pre class="codeblock"><code># cd <var class="keyword varname">container_path</var>
+# ls
+config.txt  </code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90117e638"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e881" lang="zh-tw" id="container_volumes_backup"><h2 class="topictitle2" id="d90117e881">使用指令行介面 (CLI) 備份及還原資料</h2>
+<div class="body taskbody"><p class="shortdesc">容器磁區在持續性儲存空間上管理，但沒有備份。如果需要磁區資料的備份，您可以使用 <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> 來建立手動備份。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">識別您要備份的執行中或已停止容器上的磁區裝載路徑。*</span>  <div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">my_container</var></code></pre>
+</div>
+
+
+<p>此輸出包含的區段類似此範例，含有磁區名稱和容器裝載點。在此範例中，裝載點是 <span class="ph filepath">/mnt/data</span> 資料夾。</p>
+
+
+<pre class="codeblock"><code>        "Mounts": [
+            {
+                "Destination": "<span class="ph filepath">/mnt/data</span>",
+                "Driver": "",
+                "Mode": "rw",
+                "Name": "",
+                "RW": true,
+                "Source": "/vol/<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>/<var class="keyword varname">example_container_id</var>"
+            }</code></pre>
+
+
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_volumes_backup__d44037e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_backup__d44037e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">停止所有正在寫入磁區的執行中容器。*</span> 停止容器，即可避免複製正在寫入的資料。
+<div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">my_container</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">將檔案從單一容器複製到您的本端電腦。*</span> 當您要備份容器群組的磁區時，在該群組的某個實例上執行此指令就已足夠，因為所有實例都共用該磁區的相同裝載點。<p>現在，您具有磁區資料的本端備份。</p>
+
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">my_container</var>:<var class="keyword varname">/mnt/data</var> <var class="keyword varname">my_local_folder</var></code></pre>
+
+<div class="tablenoborder"><table summary="" id="container_volumes_backup__table_wrq_nbl_nw" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="ph">bx ic</span> cp 指令的元素</span></caption><thead><tr><th colspan="2" id="d90117e1036" class="thleft">瞭解此指令</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d90117e1036 "><samp class="ph codeph">cp</samp></td>
+<td style="width: 50%" headers="d90117e1036 "><a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp">copy 指令</a>。</td>
+</tr>
+<tr><td style="width: 50%" headers="d90117e1036 "><var class="keyword varname">my_container</var>:<var class="keyword varname">/mnt/data</var></td>
+<td style="width: 50%" headers="d90117e1036 ">來源路徑是第一個。在此情況下，您要將容器的資料複製到本端目的地，因此，容器檔案路徑是來源。您必須包含容器名稱、冒號及容器內的檔案路徑。在此範例中，您從之前的步驟中選取了磁區裝載點，因此您可以複製所有包含的檔案。</td>
+</tr>
+<tr><td style="width: 50%" headers="d90117e1036 "><var class="keyword varname">my_local_folder</var></td>
+<td style="width: 50%" headers="d90117e1036 ">目的地路徑是第二個。本端路徑可以是絕對或相對路徑。在此範例中，您要將容器資料複製到相對路徑 <var class="keyword varname">my_local_folder</var>。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">將本端資料夾的資料複製到新磁區。*</span> 此指令將資料還原至新容器或新磁區。將資料傳送至新磁區的一個理由，是該磁區裝載在新建的檔案共用上，而它比舊的檔案共用具有更多的儲存空間或更高的 IOPS。請參閱<a href="container_volumes_ov.html#container_fileshares_adding_cli" title="使用 bx ic volume-fs-create 指令建立檔案共用。">使用指令行介面 (CLI) 新增檔案共用</a>來建立新的檔案共用，並參閱<a href="container_volumes_ov.html#container_volumes_cli" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從指令行建立容器的磁區。">使用指令行 (CLI) 建立磁區</a>來建立新磁區。
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">my_local_folder</var> <var class="keyword varname">my_new_container</var>:<var class="keyword varname">/mnt/data</var> </code></pre>
+</li>
+</ol>
+<div class="section result">現在您的資料已複製到您的本端資料夾，您已具有手動備份。此外，您已將資料複製到新容器上的磁區。</div></div>
+<aside role="complementary" aria-labelledby="d90117e881"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e1109" lang="zh-tw" id="container_volumes_write"><h2 class="topictitle2" id="d90117e1109">使用指令行介面 (CLI) 新增非 root 使用者對磁區的存取權</h2>
+<div class="body taskbody"><p class="shortdesc">非 root 使用者對磁區裝載路徑沒有寫入權。若要授與寫入權，您必須編輯映像檔的 Dockerfile，以使用正確許可權在裝載路徑上建立目錄。</p>
+<div class="section context"><p>若為 <span class="keyword">IBM
+Bluemix Container Service</span>，已對 Docker Engine 啟用使用者名稱空間特性。使用者名稱空間提供隔離功能，讓容器 root 使用者無法存取其他容器或運算主機。不過，磁區位於容器運算主機外部的 NFS 檔案共用上。磁區設定成辨識容器中的 root 使用者，但因為磁區是在容器外部，所以無法得知使用者名稱空間。</p>
+<p>對於一些應用程式，容器內的唯一使用者就是 root 使用者。不過，許多應用程式會指定寫入至容器裝載路徑的非 root 使用者。如果您是使用需要磁區寫入權的非 root 使用者來設計應用程式，則必須將下列處理程序新增至 Dockerfile 及進入點 Script：</p>
+<ul><li>建立非 root 使用者。</li>
+<li>暫時將使用者新增至 root 群組。</li>
+<li>使用正確的使用者許可權在磁區裝載路徑中建立目錄。</li>
+</ul>
+<p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">在本端目錄中建立 Dockerfile。</span> 此範例 Dockerfile 會建立名為 <var class="keyword varname">myguest</var> 的非 root 使用者。 <pre class="codeblock"><code>FROM registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode:latest
+
+#Create group and user with GID &amp; UID <var class="keyword varname">1010</var>.
+#In this case your are creating a group and user named <var class="keyword varname">myguest</var>. 
+#The GUID and UID <var class="keyword varname">1010</var> is unlikely to create a conflict with any existing user GUIDs or UIDs in the image.
+#The GUID and UID must be between 0 and 65536. Otherwise, container creation fails.
+RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">myguest</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">myguest</var>
+
+ENV MY_USER=myguest
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
+
+EXPOSE 22
+ENTRYPOINT ["/sbin/entrypoint.sh"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">在與 Dockerfile 相同的本端資料夾中，建立進入點 Script。</span>  此範例進入點 Script 會將 <span class="ph filepath"><var class="keyword varname">/mnt/myvol</var></span> 指定為磁區裝載路徑。
+<pre class="codeblock"><code>#!/bin/bash
+set -e
+
+#This is the mount point for the shared volume.
+# Use this mount point with the <span class="ph"><samp class="ph codeph">bx ic</samp></span> run command.
+#By default the mount point is owned by the root user.
+MOUNTPATH="/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span>"
+MY_USER=${MY_USER:-"myguest"}
+
+#This function creates a subdirectory that is owned by 
+#the non-root user under the shared volume mount path.
+create_data_dir() {
+  #Add the non-root user to primary group of root user.
+  usermod -aG root $MY_USER
+
+  #Provide read-write-execute permission to the group for the shared volume mount path.
+  chmod 775 $MOUNTPATH
+  #Create a directory under the shared path owned by non-root user <var class="keyword varname">myguest</var>.
+  su -c "mkdir -p ${MOUNTPATH}/mydata" -l $MY_USER
+  su -c "chmod 700 ${MOUNTPATH}/mydata" -l $MY_USER
+  ls -al ${MOUNTPATH}
+
+  #For security, remove the non-root user from root user group.
+  deluser $MY_USER root
+
+  #Change the shared volume mount path back to its original read-write-execute permission.
+  chmod 755 $MOUNTPATH
+  echo "Created Data directory..."
+}
+
+create_data_dir
+
+#This command creates a long-running process for the purpose of this example.
+tail -F /dev/null</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">登入 <span class="keyword">IBM
+Bluemix</span>。</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+<span class="ph">當您使用聯合 ID 登入時，需要單一登入參數 <span class="keyword option">--sso</span>。如果使用此選項，請開啟 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a> 以取得一次性密碼。如果您未併入 <span class="keyword option">--sso</span> 選項，請完成下列子步驟。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">對於<span class="ph uicontrol">電子郵件</span>，輸入 <span class="keyword">Bluemix</span> 的 IBM ID。</span></li>
+<li class="li substep"><span class="cmd">對於<span class="ph uicontrol">密碼</span>，輸入 IBM ID 的密碼。</span> 即會擷取您的 Bluemix 組織及空間。</li>
+<li class="li substep"><span class="cmd">輸入代表其中一個 <span class="keyword">Bluemix</span> 組織的號碼。</span></li>
+<li class="li substep"><span class="cmd">輸入代表其中一個現有 <span class="keyword">Bluemix</span> 空間的號碼。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">起始設定 <span class="keyword">IBM
+Bluemix Container Service</span> CLI。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">將映像檔新增至 Bluemix 登錄。*</span> 請記得將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為專用映像檔登錄的名稱空間。如果您需要尋找名稱空間，請執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>。 <pre class="codeblock"><code><span class="ph">bx ic</span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/&lt;my_namespace&gt;/nonroot .</code></pre>
+
+
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_volumes_write__d45174e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_write__d45174e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">建立磁區。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-create <var class="keyword varname">my_volume</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">裝載磁區，然後從 <var class="keyword varname">nonroot</var> 映像檔中執行容器。*</span>  磁區裝載路徑 <samp class="ph codeph">/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span></samp> 符合 Dockerfile 中所指定的裝載路徑。
+<pre class="codeblock"><code><span class="ph">bx ic</span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">my_volume</var>:/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span> registry.ng.bluemix.net/&lt;my_namespace&gt;/nonroot</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">確認 <var class="keyword varname">my_container</var> 正在執行中。*</span> 如果容器的狀態為 <samp class="ph codeph">BUILDING</samp>，則表示您尚未登入它。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+d92ee43d-2af        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">nonroot</var>:latest   ""                  41 seconds ago      Running 29 seconds ago               <var class="keyword varname">my_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">在容器執行之後，登入容器。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> /bin/bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">檢視磁區裝載路徑的許可權。</span> <pre class="codeblock"><code>ls -al <span class="ph filepath">/mnt/myvol/</span></code></pre>
+
+
+<pre class="pre screen"><code>root@instance-006ff76b:/# ls -al /mnt/myvol/                                                                                                                                                             
+total 12
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 .
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 ..
+drwx------ 2 myguest myguest 4096 Jul 13 19:03 mydata</code></pre>
+
+
+<p>此輸出顯示 root 具有磁區裝載路徑 <var class="keyword varname">mnt/myvol/</var> 的讀取、寫入及執行權，但非 root <var class="keyword varname">myguest</var> 使用者則具有 <var class="keyword varname">mnt/myvol/mydata</var> 資料夾的讀取及寫入權。因為這些更新過的許可權，所以非 root 使用者現在可以將資料寫入至持續性磁區。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90117e1109"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e1492" lang="zh-tw" id="container_volume_different_dc"><h2 class="topictitle2" id="d90117e1492">將磁區資料移轉到不同的資料中心</h2>
+<div class="body taskbody"><p class="shortdesc">如果您計劃將現行 <span class="keyword">Bluemix</span> 空間移到新的資料中心，請確定已備份您的磁區，以便能在新的資料中心還原並使用資料。</p>
+<div class="section context"><div class="p"><div class="note attention"><span class="attentiontitle">小心：</span> 當您使用 <samp class="ph codeph"><span class="ph">bx ic</span> reprovision</samp>
+指令將空間移到新的資料中心時，您在這個空間中的所有容器、公用 IP 位址和磁區，都將永久移除且不會移轉到新的資料中心。為了確保資料不會在移到新的資料中心之後遺失，您必須備份所有的磁區，並在您的空間於新的資料中心重新佈建之後還原資料。</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">列出您要重新佈建的 <span class="keyword">Bluemix</span> 空間中存在的所有磁區。</span> <pre class="codeblock"><code><span class="ph">bx ic</span>磁區</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">備份您要在新的資料中心中使用的每個磁區。請選擇下列選項。</span> <ul class="ul choices"><li class="li choice">使用 <a href="container_volumes_ov.html#container_volumes_backup" title="容器磁區在持續性儲存空間上管理，但沒有備份。如果需要磁區資料的備份，您可以使用 bx ic cp 來建立手動備份。"><span class="ph">bx ic</span> cp command</a>
+將磁區備份到您的本端機器。</li>
+<li class="li choice">從 <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM Backup and Restore 映像檔</a>建立備份容器，以在 <span class="keyword">IBM Object
+Storage for Bluemix</span> 實例儲存資料。</li>
+</ul>
+<div class="note attention"><span class="attentiontitle">小心：</span> 如果不備份磁區便將空間重新佈建到新的資料中心，資料會遺失且無法回復。</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要磁區來儲存容器的資料，則可以移除磁區。">移除空間中的所有磁區</a>。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_filestorage_managing" title="組織管理員可以移除現有的檔案共用，以及檢視檔案共用上裝載的磁區。">移除空間中的所有檔案共用</a>。</span></li>
+<li class="step stepexpand"><span class="cmd">將您的空間重新佈建到新的資料中心。請將 <var class="keyword varname">&lt;data_center&gt;</var> 取代為您要建立新空間的<a href="container_cli_reference_cfic.html#container_cli_reference_cfic__reprovision">資料中心</a>。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> reprovision <var class="keyword varname">&lt;data_center&gt;</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="使用 bx ic volume-fs-create 指令建立檔案共用。">在新空間建立檔案共用</a>。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_cli" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從指令行建立容器的磁區。">建立磁區</a>，您可以用來還原已備份的資料。</span></li>
+<li class="step stepexpand"><span class="cmd">將資料還原至新磁區。視您用來備份磁區的方式而定，選擇下列選項。</span> <ul class="ul choices"><li class="li choice">使用 <a href="container_volumes_ov.html#container_volumes_backup" title="容器磁區在持續性儲存空間上管理，但沒有備份。如果需要磁區資料的備份，您可以使用 bx ic cp 來建立手動備份。"><span class="ph">bx ic</span> cp
+指令</a>從您的本端機器還原資料。</li>
+<li class="li choice">從 <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM Backup and Restore 映像檔</a>建立還原容器，以從 <span class="keyword">IBM Object
+Storage for Bluemix</span> 實例還原資料。</li>
+</ul>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90117e1492"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e1665" lang="zh-tw" id="container_volumes_remove"><h2 class="topictitle2" id="d90117e1665">使用指令行介面 (CLI) 移除磁區</h2>
+<div class="body taskbody"><p class="shortdesc">如果您不再需要磁區來儲存容器的資料，則可以移除磁區。</p>
+<div class="section prereq"><ul><li><div class="note important"><span class="importanttitle">重要：</span> 移除磁區會永久地移除磁區上儲存的任何持續性資料或檔案。不會自動備份磁區，因此，請先<a href="container_volumes_ov.html#container_volumes_backup" title="容器磁區在持續性儲存空間上管理，但沒有備份。如果需要磁區資料的備份，您可以使用 bx ic cp 來建立手動備份。">備份磁區</a>，再將其移除。</div>
+</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">識別磁區名稱。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">檢查磁區，以檢閱在其上裝載磁區的容器。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-inspect <var class="keyword varname">example_volume</var></code></pre>
+
+
+<p>輸出包含一個名為 <span class="ph uicontrol">mounted_on_containers</span> 的區段，其中列出在其上裝載磁區的容器。</p>
+
+
+<pre class="codeblock"><code>    "mounted_on_containers": [
+        "<var class="keyword varname">example_container</var>"
+    ],</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">如果磁區裝載至容器，請先移除任何機密資料，然後再刪除磁區。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand">選擇性的： <span class="cmd">檢查您的容器，以尋找裝載磁區的裝載路徑。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">example_container</var></code></pre>
+您可以在
+CLI 回應的<span class="ph uicontrol">磁區</span>區段找到裝載路徑。<pre class="pre screen"><code>"Volumes": {
+        "/mount_path": "/vol/0e65c452-62413-46f2-8b22-ff06ab74ac21/<var class="keyword varname">example_volume</var>"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">登入容器。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> exec -it <var class="keyword varname">example_container</var> bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">導覽至您的裝載路徑。</span> <pre class="codeblock"><code>cd /<var class="keyword varname">mount_path</var></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">從磁區移除所有機密資料。</span> <pre class="codeblock"><code>rm -rf *</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">驗證已移除所有資料。</span> <pre class="codeblock"><code>ls</code></pre>
+如果沒有顯示任何目錄或檔案，則已從磁區裝載路徑中順利移除資料。</li>
+<li class="li substep substepexpand"><span class="cmd">針對裝載至磁區且在其磁區裝載路徑中包含機密資料的所有容器重複步驟 a-e。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">停止裝載至您的磁區的所有容器，然後再移除磁區。*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">example_container</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_volumes_remove__d44784e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_remove__d44784e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">如果不再需要此容器，請將它移除。*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> rm <var class="keyword varname">example_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">停止所有已裝載磁區的容器後，移除磁區。</span> <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove</samp> 參數</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必要）磁區名稱。</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">驗證已移除磁區。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90117e1665"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90117e1909" lang="zh-tw" id="container_fileshares_adding_ui"><h2 class="topictitle2" id="d90117e1909">使用 <span class="keyword">Bluemix</span> GUI 新增磁區的檔案共用</h2>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc"><span class="ph">檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 <span class="keyword">Bluemix</span> 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。</span></span>
+</div>
+<div class="section prereq"><div class="p"><div class="steps note"><span class="notetitle">註：</span> 如果您已達到您的配額上限，則可以開立 <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> 支援問題單</a>來要求新增額外配額。</div>
+</div>
+</div><div class="section context"><p>因為 <span class="keyword">Bluemix</span> 中的容器無法存取本端主機，所以會在佈建的 NFS 檔案共用上裝載磁區。檔案共用上的磁區與主機上的目錄類似。每個空間的檔案共用及磁區都是唯一的，因此必須在同一空間中建立容器，才能存取磁區上的持續資料。如需設定組織及空間的相關資訊，請參閱<a href="../admin/orgs_spaces.html">管理 Bluemix 公用</a>。第一次在組織中建立磁區時，會自動佈建 20 GB 及 4 IOPS 的檔案共用來管理磁區。為了符合資料的效能需求，組織管理員可以建立從 20 GB 到 12 TB 的新<a href="http://knowledgelayer.softlayer.com/learning/introduction-endurance-storage" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">檔案共用大小</a>，且每 GB 的 IOPS 為 0.25、2 或 4。</p>
+
+<figure class="fignone" id="container_fileshares_adding_ui__fig_ac1_lzt_q5"><figcaption>圖 3. 組織中的檔案共用及磁區結構。</figcaption><object id="container_fileshares_adding_ui__d27630e49" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="檔案共用包含磁區，而磁區包含檔案。"></object></figure>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph">從帳戶詳細資料的「管理組織」中，選取組織。</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">在「配額」區段中，檢視容器的詳細資料。</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">建立檔案共用。即會在表格尾端建立一列。</span></span></li>
+<li class="step stepexpand"><span class="cmd">選取現有的空間，以便在其中建立檔案共用。</span></li>
+<li class="step stepexpand"><span class="cmd">輸入檔案共用的名稱。</span> <span class="ph">名稱可以包含大寫字母、小寫字母、數字、底線 (_) 及連字號 (-)。</span></li>
+<li class="step stepexpand"><span class="cmd">判定檔案共用需要的容量。</span> 檔案共用大小和每 GB 的 IOPS（每秒輸入/輸出作業數）相乘，而產生 IOPS 總計。此表格說明檔案共用大小與 IOPS 之間的關係。
+<div class="tablenoborder"><table summary="" id="container_fileshares_adding_ui__file_share_ex" class="defaultstyle"><caption><span class="tablecap">表 2. 檔案共用大小及每 GB 的 IOPS 的範例</span></caption><thead><tr><th id="d90117e2043" class="thleft"> 檔案共用大小</th>
+<th id="d90117e2045" class="thleft">每 GB 的 IOPS</th>
+<th id="d90117e2047" class="thleft">IOPS 總計</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d90117e2043 ">20 GB</td>
+<td headers="d90117e2045 ">4</td>
+<td headers="d90117e2047 ">80</td>
+</tr>
+<tr><td headers="d90117e2043 ">100 GB</td>
+<td headers="d90117e2045 ">4</td>
+<td headers="d90117e2047 ">400</td>
+</tr>
+<tr><td headers="d90117e2043 ">1,000 GB</td>
+<td headers="d90117e2045 ">4</td>
+<td headers="d90117e2047 ">4,000</td>
+</tr>
+<tr><td headers="d90117e2043 ">4,000 GB</td>
+<td headers="d90117e2045 ">4</td>
+<td headers="d90117e2047 ">16,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+應用程式的工作負載越高，所需要的 IOPS 總數就越大，因此在選擇檔案共用配置時，請考慮會寫入磁區的應用程式。<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">對於<span class="ph uicontrol">大小</span>，選取以 GB 為單位的值。</span></li>
+<li class="li substep"><span class="cmd">對於 <span class="ph uicontrol">IOPS</span>，選取以每 GB 的 IOPS 為單位的值。</span> 根據<span class="ph uicontrol">大小</span>及 <span class="ph uicontrol">IOPS</span> 的輸入內容，會為您計算每月價格。在繼續之前，您可以調整<span class="ph uicontrol">大小</span>及 <span class="ph uicontrol">IOPS</span> 的值，以變更每月價格計算。 </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下<span class="ph uicontrol">儲存</span>。</span></li>
+</ol>
+<div class="section result"><p><span class="ph" id="container_fileshares_adding_ui__fs_results">可能需要數分鐘才能完成檔案共用的建立。
+在檔案共用完成建置之後，狀態圖示即會顯示勾號。現在，您在組織的指定空間中，便有了可用的檔案共用。您可以建立更多的檔案共用來管理更多磁區，或者，也可以在一個檔案共用上管理多個磁區。每個磁區會共用其管理所在之檔案共用的資源，因此，在一個檔案共用上管理多個磁區可能會降低效能。</span></p>
+</div><div class="section postreq">接下來，如果您是組織管理員，則可以檢視組織的檔案共用計費。<div class="p"><ol><li>按一下使用者虛擬人像。</li>
+<li>按一下<span class="ph uicontrol">帳戶</span>。</li>
+<li>按一下 <span class="ph uicontrol">+</span> 按鈕，以展開組織。</li>
+<li>選取<span class="ph uicontrol">用量儀表板</span>，並檢閱用量及計費詳細資料。</li>
+</ol>
+<span class="ph">如需相關資訊，請移至<span class="ph"><a href="../admin/account.html">管理您的帳戶</a></span>。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90117e1909"></aside><article class="topic task nested2" role="article" aria-labelledby="d90117e2147" lang="zh-tw" id="container_fileshares_adding_cli"><h3 class="topictitle3" id="d90117e2147">使用指令行介面 (CLI) 新增檔案共用</h3>
+<div class="body taskbody"><div class="abstract"><p></p>
+
+
+<div class="shortdesc">使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> 指令建立檔案共用。</div>
+</div>
+<div class="section prereq"></div><ol class="steps"><li class="step stepexpand">選擇性的： <span class="cmd">執行下列指令，以列出有效的檔案共用大小。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">執行下列指令，以建立檔案共用。</span> 若要在建立檔案共用之前檢視檔案共用的計算成本，請參閱<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">使用 Bluemix GUI 新增磁區的檔案共用</a> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></code></pre>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> 參數</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">（必要）檔案共用 IOPS。有效值為每 GB 0.25、2 或 4 IOPS。</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（必要）檔案共用名稱。<span class="ph">名稱可以包含大寫字母、小寫字母、數字、底線 (_) 及連字號 (-)。</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">（必要）檔案共用系統大小（以 GB 為單位）。請使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp> 來列出所有有效的大小</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">執行下列指令，驗證已正確建立檔案共用。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+<div class="section result"><span class="ph">可能需要數分鐘才能完成檔案共用的建立。
+在檔案共用完成建置之後，狀態圖示即會顯示勾號。現在，您在組織的指定空間中，便有了可用的檔案共用。您可以建立更多的檔案共用來管理更多磁區，或者，也可以在一個檔案共用上管理多個磁區。每個磁區會共用其管理所在之檔案共用的資源，因此，在一個檔案共用上管理多個磁區可能會降低效能。</span></div><div class="section postreq">接下來，如果您是組織管理員，則可以檢視組織的檔案共用計費。<div class="p"><ol><li>按一下使用者虛擬人像。</li>
+<li>按一下<span class="ph uicontrol">帳戶</span>。</li>
+<li>按一下 <span class="ph uicontrol">+</span> 按鈕，以展開組織。</li>
+<li>選取<span class="ph uicontrol">用量儀表板</span>，並檢閱用量及計費詳細資料。</li>
+</ol>
+<span class="ph">如需相關資訊，請移至<span class="ph"><a href="../admin/account.html">管理您的帳戶</a></span>。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90117e2147"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d90117e2326" lang="zh-tw" id="container_filestorage_managing"><h3 class="topictitle3" id="d90117e2326"> 移除檔案共用</h3>
+<div class="body taskbody"><p class="shortdesc">組織管理員可以移除現有的檔案共用，以及檢視檔案共用上裝載的磁區。</p>
+<div class="section context">組織管理員可以檢閱檔案共用，方法為使用 <span class="keyword">Bluemix</span> GUI 及 CLI，來查看其中裝載的磁區，以及移除檔案共用。組織管理員可以選擇移除目前不在開發或正式作業中使用的檔案共用。<div class="steps note"><span class="notetitle">註：</span> 由於帳單處理週期，而無法在月底刪除檔案共用。如果您在月底刪除檔案共用時收到錯誤訊息，請等到下個月的第一天再刪除檔案共用。</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d90117e2391" id="task_ets_khp_y5"><h4 class="topictitle4" id="d90117e2391">使用 <span class="keyword">Bluemix</span> GUI</h4>
+<div class="body taskbody"><ol class="steps"><li class="step"><span class="cmd"><span class="ph">從帳戶詳細資料的「管理組織」中，選取組織。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph">在「配額」區段中，檢視容器的詳細資料。</span></span></li>
+</ol>
+<div class="section result">在「檔案儲存空間」表格中，您可以找到<span class="ph uicontrol">動作</span>直欄及<span class="ph uicontrol">名稱</span>直欄。<ul><li>按一下檔案共用的名稱，以檢視連接至其中的磁區。</li>
+<li>按一下<span class="ph uicontrol">刪除</span>來刪除檔案共用。您必須先移除任何連接的磁區，才能刪除檔案共用。在刪除檔案共用之後，即會從您的帳戶永久地移除檔案共用。若要移除某個磁區，請參閱<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要磁區來儲存容器的資料，則可以移除磁區。">使用指令行介面 (CLI) 移除磁區</a>。</li>
+</ul>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d90117e2430" id="task_uvm_chp_y5"><h4 class="topictitle4" id="d90117e2430">使用指令行</h4>
+<div class="body taskbody"><div class="section result">若要使用 CLI 來移除檔案共用，請發出下列指令。<div class="p"><ol><li>識別檔案共用名稱。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+<li>檢查檔案共用來判定其上是否存在任何磁區。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></code></pre>
+</li>
+<li>必要的話，請移除現有的磁區。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></code></pre>
+</li>
+<li>移除現有的檔案共用。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></code></pre>
+</li>
+<li>列出現有的檔案共用，以確認檔案共用已移除。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article></article></article></article></div></main></body></html>

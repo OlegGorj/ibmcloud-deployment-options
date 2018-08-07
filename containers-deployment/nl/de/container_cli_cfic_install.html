@@ -1,0 +1,394 @@
+<!DOCTYPE html><html lang="de-de">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Installieren Sie das IBM Bluemix Container Service-Plug-in (bx ic), um die Befehle der nativen Docker-CLI für die Verwaltung Ihrer Container auszuführen.">
+<meta name="keywords" content="Container, CLI (Befehlszeilenschnittstelle), Plug-in, Cloud Foundry, cf, bx ic, Installieren, IBM Containers, Anmelden, Upgrade, Deinstallieren, Docker Compose">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "de-de",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service-Plug-in (bx ic) zur Verwendung der nativen Docker-CLI mit einzelnen und skalierbaren Containern einrichten</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d12936e6" id="container_cli_cfic_install"><h1 class="topictitle1" id="d12936e6"><span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) zur Verwendung der nativen Docker-CLI
+mit einzelnen und skalierbaren Containern einrichten</h1>
+<div class="abstract"><div class="shortdesc">Installieren Sie das <span class="keyword">IBM®
+Bluemix Container Service</span>-Plug-in
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>), um die Befehle der nativen Docker-CLI für die Verwaltung Ihrer Container auszuführen. </div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Achtung:</span> <span class="ph">Kostenlose Testversionen für <span class="ph">einzelne und skalierbare Container</span> sind nicht verfügbar. <a href="cs_ov.html" title="IBM Bluemix Container Service kombiniert Docker und Kubernetes, um leistungsstarke Tools, ein intuitives Benutzererlebnis sowie integrierte Sicherheit und Isolation zu bieten und um die Bereitstellung, den Betrieb, die Skalierung und die Überwachung von containerisierten Apps über einen Cluster unabhängiger Berechnungshosts anhand der Kubernetes-APIs zu automatisieren.">Lesen Sie die Informationen
+zum Cluster-Management und zur Migration auf Kubernetes in <span class="keyword">IBM
+Bluemix Container Service</span> unter
+<span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Diese Seite enthält folgende Abschnitte: <div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#install_plugin">IBM Bluemix Container Service-Plug-in (bx ic) installieren</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">Beim IBM Bluemix Container Service-CLI-Plug-in (bx ic) anmelden</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_upgrade" title="Es kann sinnvoll sein, das Plug-in regelmäßig zu aktualisieren, um neue Funktionen verwenden zu können.">Upgrade für IBM Bluemix Container Service-Plug-in (bx ic) durchführen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_uninstall" title="Wenn Sie das IBM Bluemix Container Service-Plug-in nicht mehr benötigen, können Sie es mit dem Befehl bx deinstallieren.">IBM Bluemix Container Service-Plug-in (bx ic) deinstallieren</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_install" title="Mehrere einzelne Container können Sie gleichzeitig starten oder stoppen, wenn Sie die Befehlszeilenschnittstelle (CLI) von Docker Compose installieren und verwenden.">Docker Compose mit Abhängigkeiten installieren</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="Möglicherweise müssen Sie ein Upgrade für die Version Ihres Docker Compose-Pakets durchführen, um die neuesten Features verwenden zu können.">Upgrade für Docker Compose durchführen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_uninstall" title="Wenn Sie das Docker Compose-Softwarepaket nicht mehr benötigen, können Sie es mit dem folgenden Befehl deinstallieren.">Docker Compose deinstallieren</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d12936e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d12936e201" id="install_plugin"><h2 class="topictitle2" id="d12936e201">IBM Bluemix Container Service-Plug-in (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) installieren</h2>
+<div class="body taskbody"><div class="section context" id="install_plugin__context_e5s_szz_nz"><p>Zum Ausführen von Befehlen muss Ihr Betriebssystem die folgenden Anforderungen erfüllen. Diese Task enthält
+Informationen zur Installation dieser Anforderungen. Ältere Versionen dieser
+Tools werden für die Verwendung mit dem <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) nicht unterstützt. </p>
+
+<div class="p"><ul id="install_plugin__ul_f5s_szz_nz"><li><span class="ph">Docker Version 1.8 bis <span class="ph" id="install_plugin__d1131e260">1.12</span></span></li>
+<li><span class="ph">Cloud Foundry-CLI Version <span class="ph" id="install_plugin__d1131e304">6.14.0</span> - 6.22.0</span><div class="steps note"><span class="notetitle">Anmerkung:</span> macOS Sierra-Benutzer müssen Cloud Foundry CLI Version 6.22.0 oder eine höhere Version
+installieren. </div>
+</li>
+<li><span class="keyword">Bluemix</span>-CLI </li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in </li>
+</ul>
+</div>
+</div><p class="li stepsection">Gehen Sie wie folgt vor, um die Befehlszeilenschnittstellen (CLIs) zu installieren: </p><ol class="steps" id="install_plugin__steps_g5s_szz_nz"><li class="step stepexpand" id="install_plugin__docker_install"><span class="cmd">Installieren Sie Docker <span class="ph">1.12</span>. </span> Bei Windows- und OS X-Betriebssystemen wird Docker zusammen mit Docker Toolbox installiert,
+die Docker Machine, Docker Engine und Kitematic umfasst. Bei Linux-Betriebssystemen variieren die Installationsmechanismen
+in Abhängigkeit von der verwendeten Linux-Distribution. Informationen zur Installation oder, falls Docker
+bereits installiert ist, zum Upgrade auf Docker <span class="ph">1.12</span> enthalten
+die folgenden Links.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn Sie Docker bereits auf Ihrem Computer installiert haben und für Ihre aktuelle Version kein Upgrade
+durchführen möchten, können Sie diesen Schritt überspringen und mit der Installation der Cloud Foundry-CLI fortfahren. </div>
+
+<ul id="install_plugin__ul_h5s_szz_nz"><li>OS X<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.pkg" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">https://github.com/docker/toolbox/releases/download/v<span class="ph">1.12</span>/DockerToolbox-<span class="ph">1.12</span>.pkg</a></p>
+</li>
+<li>Windows<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.exe" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">https://github.com/docker/toolbox/releases/download/v<span class="ph">1.12</span>/DockerToolbox-<span class="ph">1.12</span>.exe</a></p>
+</li>
+<li>Linux<p>Anweisungen zur Installation von Docker Version
+<span class="ph">1.12</span> auf der betreffenden
+Linux-Distribution finden Sie in der
+<a href="https://docs.docker.com/engine/installation/" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Docker-Installationsdokumentation</a>.</p>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Starten Sie Docker.</span> <ul class="ul choices" id="install_plugin__choices_i5s_szz_nz"><li class="li choice" id="install_plugin__start_qst">Doppelklicken Sie bei Verwendung von OS X oder Windows auf das Symbol <span class="ph uicontrol">Docker Quickstart Terminal</span>. Der Docker-Dämon wird gestartet und die Umgebungsvariablen werden für Sie festgelegt. </li>
+<li class="li choice">Überprüfen Sie bei Verwendung von Linux mit einem Befehlszeilendienstprogramm, ob der Docker-Dämon aktiv ist. Konfigurieren Sie außerdem den Docker-Dämon für den automatischen Neustart. Weitere Informationen finden Sie in der <a href="https://docs.docker.com/installation/" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Docker-Dokumentation für unterstützte Betriebssysteme</a>. </li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass Ihre Docker-Installation ordnungsgemäß eingerichtet ist. Führen Sie hierzu in Ihrem Terminal den Befehl <samp class="ph codeph">docker run hello-world</samp> aus. </span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ Das Image <samp class="ph codeph">hello-world</samp>, von dem aus die Ausführung eines Containers erfolgt, wird von Docker lokal gesucht. Wenn Sie diesen Befehl zum ersten Mal ausführen, wird daher die folgende Nachricht angezeigt.
+
+<pre class="codeblock"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+Das Image wird aus Docker Hub extrahiert, einem öffentlichen Repository für Images; nach Ausführung des Befehls wird eine Ausgabe angezeigt, die der folgenden ähnelt:
+<pre class="codeblock"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ Wenn der Befehl nicht ordnungsgemäß abgeschlossen wird, führen Sie <samp class="ph codeph">docker version</samp> aus, um zu prüfen, ob Docker ordnungsgemäß installiert wurde. </li>
+<li class="step stepexpand" id="install_plugin__install_cf"><span class="cmd">Installieren Sie die Cloud Foundry-Befehlszeilenschnittstelle (CLI) für <span class="ph">Cloud Foundry-CLI Version <span class="ph" id="install_plugin__d1131e304-d1122e278a1310">6.14.0</span> - 6.22.0</span> aus dem <a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">GitHub-Repository</a>. </span> Sie müssen die Cloud Foundry-CLI an der Standardposition für Ihr Betriebssystem installieren,
+da ansonsten die Umgebungsvariable PATH nicht mit Ihrem Installationsverzeichnis übereinstimmt. <div class="steps note"><span class="notetitle">Anmerkung:</span> macOS Sierra-Benutzer müssen Cloud Foundry CLI Version 6.22.0 oder eine höhere Version
+installieren. </div>
+
+
+<div class="p">Führen Sie den folgenden Befehl aus, um zu überprüfen, ob die Cloud Foundry-Befehlszeilenschnittstelle ordnungsgemäß installiert wurde, oder welche Version installiert ist (wenn die Cloud Foundry-CLI bereits installiert war):
+<pre class="codeblock"><code>cf -v </code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="install_plugin__install_bx"><span class="cmd">Installieren Sie die <a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)"><span class="keyword">Bluemix</span>-CLI</a>.</span></li>
+<li class="step stepexpand" id="install_plugin__bx_login"><span class="cmd">Melden Sie sich an der <span class="keyword">Bluemix</span>-CLI an. </span> <pre class="codeblock"><code><span class="ph">bx</span> login -a https://api.ng.bluemix.net</code></pre>
+</li>
+<li class="step stepexpand" id="install_plugin__install"><span class="cmd" id="install_plugin__install_bx_ic">Installieren Sie das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in. </span> <pre class="codeblock" id="install_plugin__bx_cs_install"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">Überprüfen Sie durch Ausführen des folgenden Befehls, ob das Plug-in ordnungsgemäß installiert wurde: <pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>Das Plug-in wird in den Ergebnissen unter dem Namen 'IBM-Containers' angezeigt. </p>
+</li>
+</ol>
+<div class="section result" id="install_plugin__result_j5s_szz_nz"><p>Sie können sich jetzt anmelden und die Container verwalten. </p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d12936e417" lang="de-de" id="container_cli_login"><h2 class="topictitle2" id="d12936e417">Beim <span class="keyword">IBM
+Bluemix Container Service</span>-CLI-Plug-in anmelden(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) </h2>
+<div class="body taskbody"><p class="shortdesc">Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden. </p>
+<div class="section prereq"><div class="p">Führen Sie zunächst die folgenden Tasks aus, bevor Sie mit den eigentlichen Schritten beginnen. <ul><li><a href="container_cli_cfic_install.html#install_plugin">Installieren Sie das
+<span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in (<span class="ph"><samp class="ph codeph">bx ic</samp></span>).</a></li>
+<li>Entscheiden Sie, welche <span class="keyword">Bluemix</span>-Organisation und welchen Bereich Sie zum Anmelden bei Cloud Foundry verwenden wollen. Weitere Informationen zu Organisationen und Bereichen finden Sie unter <span class="ph"><a href="../admin/orgs_spaces.html">Organisationen und Bereiche</a></span>.</li>
+<li>Weitere Informationen zu den Optionen, die Sie für den Cloud Foundry-Befehl
+<samp class="ph codeph">login</samp> angeben können, finden Sie unter
+<a href="https://docs.cloudfoundry.org/devguide/installcf/whats-new-v6.html#login" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Login command</a>
+in der Cloud Foundry-Dokumentation.</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Öffnen Sie ein Befehlszeilendienstprogramm. </span> <ul class="ul choices"><li class="li choice">Doppelklicken Sie bei Verwendung von OS X oder Windows auf das Symbol <span class="ph uicontrol">Docker Quickstart Terminal</span>. Der Docker-Dämon wird gestartet und die Umgebungsvariablen werden für Sie festgelegt. </li>
+<li class="li choice">Öffnen Sie bei Verwendung von Linux ein beliebiges Befehlszeilendienstprogramm. </li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Melden Sie sich über die Cloud Foundry-Befehlszeilenschnittstelle bei
+<span class="keyword">Bluemix</span> an. </span> Um eine bestimmte Region anzugeben, geben Sie die Option <samp class="ph codeph">-a</samp> mit dem API-Endpunkt für die Region an. Wenn Sie die Befehlszeilenschnittstelle (CLI) zum ersten Mal verwenden und die Option nicht angeben, werden Sie dazu aufgefordert, einen API-Endpunkt einzugeben. Nachdem Sie den API-Endpunkt angegeben haben, müssen Sie diesen bei nachfolgenden Anmeldungen nicht mehr eingeben.  <div class="p"><pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+</div>
+ <div class="p">Um sich bei einer bestimmten Region anzumelden, geben Sie den API-Endpunkt für die betreffende Region an, wenn Sie sich bei der
+Cloud Foundry-CLI anmelden.<ul><li>Vereinigte Staaten (Süden)<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>Großbritannien<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+
+<span class="ph">Der Parameter
+<span class="keyword option">--sso</span> für Single Sign-on ist erforderlich, wenn Sie sich mit einer
+eingebundenen ID anmelden. Rufen Sie bei Verwendung dieser Option
+<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>
+auf, um einen nur für eine einzige Anmeldung gültigen Kenncode
+abzurufen. Führen Sie die folgenden
+untergeordneten Schritte aus, wenn Sie die Option
+<span class="keyword option">--sso</span> nicht angeben: </span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Geben Sie für <span class="ph uicontrol">Email</span> Ihre
+IBM ID für
+<span class="keyword">Bluemix</span> an. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie für <span class="ph uicontrol">Kennwort </span> das Kennwort für die
+IBM ID an. </span> Daraufhin werden die
+Bluemix-Organisationen und -Bereiche abgerufen. </li>
+<li class="li substep"><span class="cmd">Geben Sie die Nummer für eine Ihrer <span class="keyword">Bluemix</span>-Organisationen ein. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie die Nummer für einen Ihrer bestehenden <span class="keyword">Bluemix</span>-Bereiche an. </span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_cli_login__namespace"><span class="cmd"><span class="ph">Legen Sie einen <dfn class="term">Namensbereich</dfn> für Ihre Organisation fest.</span></span> Bei einem Namensbereich handelt es sich um einen eindeutigen Namen, der Ihre
+private
+<span class="keyword">Bluemix</span>-Registry
+für Images kennzeichnet.
+Wenn Sie einen Container erstellen, müssen Sie die Imageposition durch Einschließen des Namensbereichs in den Imagenamen angeben.
+<div class="p"><div class="steps note" id="container_cli_login__namespace_warning"><span class="notetitle">Anmerkung:</span> Wenn Sie einen Namensbereich erstellt haben, können Sie ihn nicht mehr ändern,
+nur löschen. Wenn Benutzer in Ihrer <span class="keyword">Bluemix</span>-Organisation
+bereits Container bereitgestellt haben und einen <dfn class="term">Namensbereich</dfn> eingestellt haben, wird eine Nachricht angezeigt,
+die den Namensbereich für Ihre Organisation angibt. In diesem Fall können Sie den Vorgang mit dem nächsten Schritt fortsetzen. </div>
+</div>
+
+
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;mein_namensbereich&gt;</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">Tipp:</span> Bei
+Namensbereichen sind die folgenden Regeln zu beachten:
+<ul id="container_cli_login__d9143e142"><li>Der Name darf nur Kleinbuchstaben, Ziffern und Unterstreichungszeichen (_) enthalten.</li>
+<li>Der Name kann 4 bis 30 Zeichen umfassen. Wenn Sie Container über die Befehlszeile
+verwalten möchten, sollten Sie dem Namensbereich einen kurzen Namen zuordnen, der
+schnell eingegeben werden kann.</li>
+<li>Der Name muss in <span class="keyword">Bluemix</span> eindeutig (einmalig) sein. </li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_cli_login__login"><span class="cmd">Initialisieren Sie <span class="keyword">IBM
+Bluemix Container Service</span>. </span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Entscheiden Sie, ob
+Sie <span class="ph"><samp class="ph codeph">bx ic</samp></span>-Befehle oder
+native Docker-Befehle ausführen möchten. </span> Sie können eine dieser Optionen bei jeder Anmeldung beim Plug-in verwenden; alternativ können Sie
+den Befehl <samp class="ph codeph">shellinit</samp> verwenden, um immer Option 2 auszuwählen.  <div class="p"><ul><li id="container_cli_login__option1_li"><span class="ph uicontrol">Option 1</span> (Standardoption)<p>Eine einfache Shell für <span class="keyword">IBM
+Bluemix Container Service</span>-Wrapper Docker. Der lokale Docker-Dämon ist von <span class="keyword">IBM
+Bluemix Container Service</span> nicht betroffen. <span class="ph"><samp class="ph codeph">bx ic</samp></span>-Befehle werden verwendet, um Container in Ihrem <span class="keyword">Bluemix</span>-Bereich zu verwalten und <samp class="ph codeph">docker</samp>-Befehle werden verwendet, um Container lokal zu verwalten. <samp class="ph codeph">docker</samp>-Befehle sind jedoch immer für die lokale Imageentwicklung erforderlich. </p>
+<p>Mit Option 1 erstellt der Befehl <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> beispielsweise einen Container in Ihrem <span class="keyword">Bluemix</span>-Bereich und <samp class="ph codeph">docker run</samp> erstellt einen lokalen Container. Möglicherweise bevorzugen Sie diese Option, wenn Sie sowohl bei Docker als auch bei <span class="keyword">IBM
+Bluemix Container Service</span> neu sind oder wenn Sie Container lieber lokal testen möchten. </p>
+</li>
+<li id="container_cli_login__option2_li"><span class="ph uicontrol">Option 2</span><p>Leiten Sie Ihren lokalen Docker-Dämon für die aktuelle CLI-Sitzung auf <span class="keyword">IBM
+Bluemix Container Service</span> um, sodass die <samp class="ph codeph">docker</samp>-Befehle anstelle der <span class="ph"><samp class="ph codeph">bx ic</samp></span>-Befehle verwendet werden können, wenn sie für die Verwaltung von Containern in Ihrem <span class="keyword">Bluemix</span>-Bereich zur Verfügung stehen. </p>
+<p>Mit der Option 2 können Sie zum Beispiel entweder den Befehl
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> oder
+den Befehl <samp class="ph codeph">docker run</samp> verwenden, um einen Container in Ihrem
+Bereich zu
+erstellen. Möglicherweise bevorzugen Sie diese Option, wenn Sie ein erfahrener Docker-Benutzer sind, der mit <samp class="ph codeph">docker</samp>-Befehlen vertraut ist, oder wenn Sie automatische Scripts adaptieren, um mit <span class="keyword">IBM
+Bluemix Container Service</span> zu arbeiten.</p>
+<p> In einigen Ausnahmefällen ist weiterhin die Verwendung der <span class="ph"><samp class="ph codeph">bx ic</samp></span>-Befehle erforderlich, um spezifische Tasks für <span class="keyword">IBM
+Bluemix Container Service</span> auszuführen.
+Um zum Beispiel einen Namensbereich zu definieren, müssen Sie den Befehl
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp> verwenden.
+Der Befehl <samp class="ph codeph">docker namespace-set</samp> ist kein gültiger Befehl.
+Eine Liste der <samp class="ph codeph">docker</samp>-Befehle, die von dieser Konfiguration unterstützt werden,
+finden Sie unter <a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="Das IBM Bluemix Container Service-Plug-in (bx ic) unterstützt die Verwendung mancher docker-Befehle anstelle von bx ic-Befehlen. Konfigurieren Sie die Umgebungsvariable bei der Anmeldung am Plug-in so, dass die Docker-CLI-Befehle verwendet werden können. Anschließend können Sie docker-Befehle anstelle von bx ic-Befehlen ausführen, wo immer dies möglich ist. Führen Sie beispielsweise anstelle von bx ic images zum Anzeigen der Images in der privaten Bluemix-Registry den Befehl docker images aus.">Unterstützte Docker-Befehle für das IBM Bluemix Container Service-Plug-in (bx ic)</a>.</p>
+<div class="p">Um diese Option zu konfigurieren, kopieren Sie die Umgebungsvariablen, die während der Anmeldung im Terminal bereitgestellt werden, und fügen Sie ein. <ul><li><samp class="ph codeph">DOCKER_HOST</samp>: Stellt für den Docker-Host <span class="keyword">IBM
+Bluemix Container Service</span> ein. </li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp>: Stellt die Position der Authentifizierungsschlüssel für das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in für Cloud Foundry ein. </li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp>: Verwendet TLS und überprüft den fernen Server.</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">Tipp:</span> Wenn Sie die Tasks in der <span class="keyword">IBM
+Bluemix Container Service</span>-Dokumentation
+ausführen, können Sie <samp class="ph codeph">docker</samp>-Befehle in allen durch einen Stern (*) markierten Schritten ausführen. </div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d12936e417"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d12936e950" lang="de-de" id="container_cli_cfic_upgrade"><h2 class="topictitle2" id="d12936e950">Upgrade für
+<span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) durchführen</h2>
+<div class="body taskbody"><p class="shortdesc">Es kann sinnvoll sein, das Plug-in regelmäßig zu aktualisieren, um neue Funktionen verwenden zu können. </p>
+<div class="section context"><div class="tablenoborder"><table summary="Aktuelle Version des IBM Bluemix Container Service-Plug-ins" id="container_cli_cfic_upgrade__version_history" class="defaultstyle"><caption><span class="tablecap">Tabelle 1. Aktuelle Version des <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-ins</span></caption><thead><tr><th id="d12936e1076" class="thleft thbot">Freigabedatum</th>
+<th id="d12936e1078" class="thleft thbot">Version</th>
+<th id="d12936e1080" class="thleft thbot">Aktualisierungen</th>
+</tr>
+</thead>
+<tbody><tr id="container_cli_cfic_upgrade__current"><td headers="d12936e1076 ">16. November 2016</td>
+<td headers="d12936e1078 ">0.8.964</td>
+<td headers="d12936e1080 "><ul><li>Unterstützung für die Verwaltung der Statusprüfung für Containergruppen über den Befehl <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>
+mithilfe der Optionen <samp class="ph codeph">--http_monitor_enabled</samp>, <samp class="ph codeph">--http_monitor_path</samp> und
+<samp class="ph codeph">--http_monitor_rs_list</samp></li>
+<li>Unterstützung für die Option <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+group-create --session_affinity</samp></li>
+<li>Fehlerkorrekturen</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">Gehen Sie wie folgt vor, um das Plug-in zu aktualisieren. </p><ol class="steps"><li class="step stepexpand"><span class="cmd">Installieren Sie die Aktualisierung aus dem Plug-in-Repository, das Sie konfiguriert haben,
+als Sie das Plug-in ganz zu Anfang installiert haben. </span> <pre class="codeblock"><code><span class="ph">bx</span> plugin update IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Überprüfen Sie die Plug-in-Installation, indem Sie den folgenden Befehl ausführen und die Liste der installierten Plug-ins überprüfen. </span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>Das Plug-in wird in den Ergebnissen unter dem Namen 'IBM-Containers' angezeigt. </p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d12936e950"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d12936e1144" lang="de-de" id="container_cli_cfic_uninstall"><h2 class="topictitle2" id="d12936e1144"><span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) deinstallieren</h2>
+<div class="body taskbody"><p class="shortdesc">Wenn Sie das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in
+nicht mehr benötigen, können Sie es mit dem Befehl <span class="ph">bx</span> deinstallieren. </p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">Anmerkung:</span> Führen Sie den folgenden Befehl aus, um das
+<span class="keyword">IBM
+Bluemix Container Service</span> Cloud Foundry-Plug-in zu deinstallieren.
+<pre class="codeblock"><code>cf uninstall-plugin IBM-Containers</code></pre>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Führen Sie den folgenden Befehl aus, um das
+<span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in für die
+<span class="keyword">Bluemix</span>-CLI zu deinstallieren. </span> <pre class="codeblock"><code><span class="ph">bx</span> plugin uninstall IBM-Containers</code></pre>
+</li>
+<li class="step stepexpand" id="container_cli_cfic_uninstall__verify"><span class="cmd">Stellen Sie sicher, dass das Plug-in auch tatsächlich deinstalliert wurde, indem Sie den folgenden Befehl ausführen und die Liste der installierten Plug-ins überprüfen. </span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>Das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in
+wird in den Ergebnissen nicht angezeigt. </p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d12936e1144"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d12936e1302" lang="de-de" id="container_cli_compose_install"><h2 class="topictitle2" id="d12936e1302">Docker Compose mit Abhängigkeiten installieren</h2>
+<div class="body taskbody"><p class="shortdesc">Mehrere einzelne Container können Sie gleichzeitig starten oder stoppen,
+wenn
+Sie die Befehlszeilenschnittstelle (CLI) von Docker Compose installieren und verwenden. </p>
+<div class="section context">Zur Ausführung von Docker Compose-Befehlen mit
+<span class="keyword">IBM
+Bluemix Container Service</span> muss die
+folgende Software installiert sein. <ul><li>Docker Version <span class="ph">1.10.0</span></li>
+<li>Cloud Foundry-CLI Version <span class="ph">6.14.0 - 6.22.0</span></li>
+<li>Bluemix CLI</li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in </li>
+<li>Docker Compose Version <span class="ph">1.6.0</span>
+oder höher</li>
+</ul>
+Diese Task enthält Informationen zur Installation dieser Anforderungen. Ältere Versionen dieser
+Tools werden für die Verwendung mit dem <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in (<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) nicht unterstützt. </div><ol class="steps"><li class="step stepexpand"><span class="cmd">Als Erstes müssen Sie <a href="container_cli_cfic_install.html#install_plugin">Docker, die Cloud Foundry-CLI, die Bluemix CLI und das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in installieren. </a></span> <div class="steps note"><span class="notetitle">Anmerkung:</span> Bei einem Mac- oder Windows-Betriebssystem wird Docker Compose im Rahmen der Installation von Docker Toolbox automatisch mit Docker Engine, Docker Machine und Kitematic installiert. In diesem Fall können Sie
+den nächsten Schritt überspringen und mit der Überprüfung der Docker Compose-Version fortfahren.</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Bei Verwendung von Linux installieren Sie die aktuelle Version von Docker Compose. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Installieren Sie <samp class="ph codeph">pip</samp>.</span>  Der Paketmanager <samp class="ph codeph">pip</samp> enthält alle Tools für die Installation, das Upgrade und
+das Entfernen von Softwarepaketen auf Ihrem Computer, die in Python geschrieben wurden. Verwenden Sie den folgenden Befehl, um <samp class="ph codeph">pip</samp> zu installieren, oder laden Sie
+das Softwarepaket direkt über die <a href="https://pypi.python.org/pypi/pip" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Python Package Index</a>-Website auf Ihren Computer herunter.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn Sie <samp class="ph codeph">pip</samp> bereits auf Ihrem Computer installiert haben, können Sie mit der Installation
+der neuesten Version von Docker Compose fortfahren.</div>
+
+<pre class="codeblock"><code>easy_install pip</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Installieren Sie Docker Compose.</span> <pre class="codeblock"><code>pip install docker-compose==<span class="ph">1.6.2</span></code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Überprüfen Sie die Docker Compose-Version, die auf Ihrem Computer installiert ist.</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Als Erstes müssen Sie sich <a href="container_cli_cfic_install.html#container_cli_login__option2_li">an der <span class="keyword">IBM
+Bluemix Container Service</span>-CLI anmelden. </a></span>  Legen Sie die Umgebungsvariablen für <span class="ph uicontrol">Option 2</span> fest, wenn Sie sich zur Ausführung nativer Docker-Befehle am Plug-in anmelden. </li>
+<li class="li substep substepexpand"><span class="cmd">Überprüfen Sie die Version des Docker Compose-Pakets.</span> <pre class="codeblock"><code>docker-compose version</code></pre>
+Wenn <samp class="ph codeph">docker-compose version 1.6.0</samp> oder
+höher angezeigt wird, können Sie mit der Erstellung einer eigenen
+Multi-Container-App beginnen. Ansonsten müssen Sie ein <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="Möglicherweise müssen Sie ein Upgrade für die Version Ihres Docker Compose-Pakets durchführen, um die neuesten Features verwenden zu können.">Upgrade
+für die Docker Compose-Version durchführen</a>.
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn bei der Ausführung von Docker Compose-Befehlen Probleme auftreten, überprüfen
+Sie anhand der Abschnitte
+<a href="container_troubleshoot.html#ts_compose_commands_failed">Fehler 'No module
+named queue'</a> und
+<a href="container_troubleshoot.html#ts_compose_insecure_connection">Warnung wegen nicht
+sicherer HTTPS-Verbindungen </a>, ob die Systemeinstellungen geändert oder
+zusätzliche
+Softwarepakete installiert werden müssen. </div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<article class="topic task nested2" role="article" aria-labelledby="d12936e1504" lang="de-de" id="container_cli_compose_upgrade"><h3 class="topictitle3" id="d12936e1504">Upgrade für Docker Compose durchführen</h3>
+<div class="body taskbody"><p class="shortdesc">Möglicherweise müssen Sie ein Upgrade für die Version Ihres Docker Compose-Pakets durchführen, um die
+neuesten Features verwenden zu können.</p>
+<div class="section context"><p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Führen Sie ein Upgrade für Docker Compose durch. </span> <pre class="codeblock"><code>pip install docker-compose --upgrade</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Überprüfen Sie die Version des Docker Compose-Pakets.</span> <pre class="codeblock"><code>docker-compose version</code></pre>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d12936e1571" lang="de-de" id="container_cli_compose_uninstall"><h3 class="topictitle3" id="d12936e1571">Docker Compose deinstallieren</h3>
+<div class="body taskbody"><p class="shortdesc">Wenn Sie das Docker Compose-Softwarepaket nicht mehr benötigen, können Sie es mit dem folgenden Befehl
+deinstallieren.</p>
+<div class="section context"><p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Deinstallieren Sie Docker Compose. </span> <pre class="codeblock"><code>pip uninstall docker-compose</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Überprüfen Sie, ob das Docker Compose-Paket deinstalliert wurde.</span> Wenn Docker Compose erfolgreich deinstalliert wurde, wird das Programm in der Ausgabe der
+Befehlszeilenschnittstelle nicht aufgelistet, wenn Sie den folgenden Befehl ausführen.
+<pre class="codeblock"><code>pip freeze</code></pre>
+</li>
+</ol>
+</div>
+</article></article></article></div></main></body></html>

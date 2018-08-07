@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="pt-br">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2015, 2016">
+
+<meta name="description" content="Antes de implementar uma imagem, é possível revisar seu relatório do Vulnerability Advisor, que detalha quaisquer pacotes vulneráveis, configurações não seguras do contêiner ou do aplicativo e se a imagem é compatível com políticas organizacionais.">
+<meta name="keywords" content="Vulnerability Advisor, vulnerabilidades, segurança do contêiner, segurança da imagem">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "pt-br",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Revisando um relatório de imagem do Vulnerability Advisor</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d351e2"><h1 class="topictitle1" id="d351e2">Revisando um relatório de imagem do VA</h1>
+<div class="body taskbody"><p class="shortdesc">Antes de implementar uma imagem, é possível revisar seu relatório do Vulnerability Advisor, que
+detalha quaisquer pacotes vulneráveis, configurações não seguras do contêiner ou do aplicativo e se a imagem
+é compatível com políticas organizacionais.</p>
+<div class="section context"><p>As imagens de contêiner são fornecidas pela IBMou podem ser incluídas
+por sua organização. Talvez seja necessário configurar uma imagem antes de ser possível implementá-la para que ela atenda
+aos requisitos configurados pela política de sua organização. Somente o
+gerenciador de organização pode mudar a política para permitir que uma imagem vulnerável seja implementada. Para obter as etapas para
+visualizar e mudar a política da organização, consulte <a href="va_managing_policy.html" title="Se você for o gerenciador de uma organização do Bluemix, será possível configurar uma política que avise os usuários ou bloqueie a implementação de contêineres de imagens com problemas específicos de segurança e configuração.">Revisando as políticas organizacionais</a>.</p>
+
+<p>Revise os problemas potenciais de segurança e configuração da imagem concluindo as etapas a seguir:</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Efetue login no <span class="keyword">Bluemix</span>. </span> O <span class="ph">Vulnerability Advisor</span> somente estará disponível na
+interface com o usuário quando você efetuar login.</li>
+<li class="step stepexpand"><span class="cmd">Na seção <span class="ph uicontrol">Avaliação de Vulnerabilidade</span>, revise o status de
+sua avaliação de vulnerabilidade.</span> O status é exibido como uma das condições a seguir:
+<ul><li><span class="keyword wintitle">Seguro para implementação</span> - Nenhum problema de segurança foi localizado.</li>
+<li><span class="keyword wintitle">Implementar com cuidado</span> - Foram localizados problemas de segurança ou de configuração
+que devem ser tratados e sua política organizacional permite a implementação de imagens vulneráveis. Se implementar esta imagem, você
+receberá um aviso.</li>
+<li><span class="keyword wintitle">Implementação bloqueada</span> - Foram localizados problemas de segurança ou de configuração e devem
+ser tratados antes que a imagem possa ser implementada porque sua política organizacional não permite
+a implementação de imagens vulneráveis.</li>
+<li><span class="keyword wintitle">Incompleto</span> - A varredura não está completa. A varredura ainda pode estar em execução ou o sistema operacional da imagem pode não ser compatível. Aguarde e tente a varredura novamente. Se a varredura ainda não tiver sido concluída, envie a imagem por push novamente para iniciar uma nova varredura. As
+imagens com varreduras incompletas não são bloqueadas para implementação.</li>
+</ul>
+
+<p>Revise o relatório detalhado que forma a avaliação de segurança do Vulnerability
+Advisor:</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Selecione a imagem e na seção
+<span class="ph uicontrol">Avaliação de Vulnerabilidade</span>, clique em <span class="ph uicontrol">Visualizar relatório</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Revise as seções para ver os problemas potenciais de segurança e de configuração de cada pacote
+na imagem:</span> <div class="p"><ul id="va_reviewing__report"><li><span class="ph uicontrol">Políticas organizacionais</span><p>Lista se a imagem adere à
+política que foi configurada pelo gerenciador de organização.</p>
+</li>
+<li><span class="ph uicontrol">Análise de risco</span><p>Se a imagem tiver uma ou mais
+vulnerabilidades, esta seção exibirá a classificação de risco conforme calculado pelo Vulnerability Advisor. O
+risco é calculado usando a calculadora <a href="https://www.first.org/cvss" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">CVSS</a> e a tecnologia
+<a href="https://exchange.xforce.ibmcloud.com/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)"><span class="keyword">IBM® X-Force Exchange</span></a>.</p>
+</li>
+<li><span class="ph uicontrol">Pacotes vulneráveis</span><p>Lista pacotes com problemas de vulnerabilidade
+conhecidos, que são atualizados diariamente por meio de avisos de segurança publicados para os tipos de imagem do Docker
+listados em <a href="va_index.html" title="O Vulnerability Advisor verifica o status de segurança de imagens de contêineres antes da implementação e também verifica o status de contêineres em execução.">Gerenciando segurança de contêineres e imagens com o Vulnerability Advisor</a>. Geralmente, para que um pacote vulnerável passe pela varredura, é necessário uma
+versão mais recente do pacote que inclua uma correção para a vulnerabilidade. O mesmo pacote pode listar várias
+vulnerabilidades e, nesse caso, um upgrade de pacote único pode corrigir vários problemas. Clique
+no código de aviso de segurança para revisar mais informações sobre o pacote e as etapas
+para atualizar o pacote.</p>
+</li>
+<li><span class="ph uicontrol">Configurações do contêiner</span><p>Lista sugestões que
+você pode tomar para aumentar a segurança da imagem. A coluna <span class="keyword wintitle">Ação
+corretiva</span> descreve como melhorar a segurança.</p>
+</li>
+<li><span class="ph uicontrol">Configurações do aplicativo</span><p>Lista configurações do aplicativo para a
+imagem que não é segura. A coluna <span class="keyword wintitle">Ação
+corretiva</span> descreve como melhorar a segurança.</p>
+</li>
+<li><span class="ph uicontrol">Instâncias do contêiner</span><p>Lista contêineres que usam essa imagem
+que já está em execução em sua organização.</p>
+</li>
+</ul>
+</div>
+
+
+<p>São fornecidas ações corretivas ou sugestões para cada item listado.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Corrija os problemas descritos no relatório de
+<span class="ph uicontrol">Avaliação de Vulnerabilidade</span> e reconstrua a imagem.</span> Alguns problemas no Dockerfile podem ser resolvidos usando o código que é
+fornecido em <a href="va_report.html" title="Depois de visualizar o relatório de vulnerabilidade, aprenda como corrigir as vulnerabilidades relatadas.">Resolvendo vulnerabilidades em contêineres ou imagens</a>. </li>
+</ol>
+<div class="section result"></div><div class="section postreq">Depois que você implementar sua imagem, o Vulnerability Advisor continuará a varredura em busca de problemas
+de segurança e de configuração no contêiner. É possível resolver os problemas localizados seguindo as etapas
+descritas em <a href="va_reviewing_container.html" title="Em seu painel, é possível ver o status de um contêiner para determinar se sua segurança está em conformidade com a política de sua organização. Também é possível revisar o relatório de vulnerabilidade de um contêiner, que detalha quaisquer pacotes vulneráveis e configurações não seguras do contêiner ou aplicativo.">Revisando vulnerabilidades do contêiner</a>.</div></div>
+<aside role="complementary" aria-labelledby="d351e2"></aside></article></main></body></html>

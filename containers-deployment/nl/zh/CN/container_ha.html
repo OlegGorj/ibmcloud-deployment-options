@@ -1,0 +1,709 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="具有高可用性的容器意味着具有较少的应用程序停机时间。容器设置分发得越广泛，用户使用应用程序遭遇停机时间的可能性就越低。 您可以使用 IBM Bluemix Container Service 内置功能，获取更高的可用性，以增加对抗潜在故障状况（如主机故障、网络故障或应用程序软件故障）的弹性。">
+<meta name="keywords" content="容器组, 容器, IBM Containers, 高可用性, 仪表板, GUI, CLI, bx ic, group-create, 自动扩展, 扩展, 负载均衡, 路径, 共享, 更新, 区域, IP 地址, 专用, 负载均衡器, 除去, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>使用 IBM Bluemix Container Service 将高可用性进程作为容器组运行</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d49585e6" id="container_ha"><h1 class="topictitle1" id="d49585e6">将高可用性进程作为容器组运行</h1>
+<div class="abstract"><div class="shortdesc">具有高可用性的容器意味着具有较少的应用程序停机时间。容器设置分发得越广泛，用户使用应用程序遭遇停机时间的可能性就越低。
+您可以使用 <span class="keyword">IBM®
+Bluemix® Container Service</span> 内置功能，获取更高的可用性，以增加对抗潜在故障状况（如主机故障、网络故障或应用程序软件故障）的弹性。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> <span class="ph"><span class="ph">单个和可扩展容器</span> 的免费试用版不可用。
+<a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">了解有关集群管理和在 <span class="keyword">Bluemix</span> Public 上迁移至 <span class="keyword">IBM
+Bluemix Container Service</span> 中的 Kubernetes 的信息。</a></span></div>
+</div>
+
+
+<div class="p">在此页面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • 按可用性<a href="container_ha.html#ha_groups">设置容器组的选项</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 通过 <a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">GUI</a> 或 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 作为容器组运行长期服务<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 自动<a href="container_ha.html#container_group_ui_as" title="不推荐使用“容器自动扩展”功能。您可以使用 IBM Bluemix Container Service 来替代此功能。有关详细信息，请参阅自动扩展引退。">扩展组</a>（不推荐）<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_migrate" title="如果您必须将容器组移至同一组织的其他空间中，那么您可以使用相同的路径，创建第二个容器组。 然后，您可以除去第一个组而不会造成应用程序发生任何停机时间。">移动组</a>到其他空间<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 使用 <a href="container_ha.html#container_group_update_ui" title="要更新容器组中正在运行的应用程序，您必须更新映像，然后基于该映像来部署新容器组。在更新过程中，无需停止正在运行的旧容器组。您可以创建新的容器组，将现有路径信息映射到该容器组，然后取消映射过时容器组的路径。新应用程序的部署不会造成任何的停机时间。">GUI</a> 或 <a href="container_ha.html#container_group_update_cli" title="要更新容器组中正在运行的应用程序，您必须更新映像，然后基于该映像来部署新容器组。在更新过程中，无需停止正在运行的旧容器组。您可以创建新的容器组，将现有路径信息映射到该容器组，然后取消映射过时容器组的路径。新应用程序的部署不会造成任何的停机时间。">CLI</a> 更新容器组中运行的应用程序<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_ha_space" title="您可以在相同的 Bluemix 空间中，从相同的映像，创建两个容器组，并将相同的路径映射到这两个组。 进行此设置后，如果容器组或组的负载均衡器当机，流量会路由到其他容器组。">在相同空间</a>、<a href="container_ha_org.html">不同空间</a>或<a href="container_ha.html#container_ha_regions" title="如果您使用提供全局负载均衡的域名系统 (DNS) 配置应用程序的域名，那么您可以从在路径中使用相同主机名的不同 Bluemix 区域中的相同映像，创建两个容器组。 使用此设置，您可以允许基于用户所在的区域，进行负载均衡。 如果一个区域中的容器组或硬件甚至整个数据中心当机，那么流量会路由到另一个区域中所部署的容器组。">不同区域</a>中运行高可用性组<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 连接到<a href="container_ha.html#container_group_private_ip" title="确定容器组的负载均衡器 IP 地址，以便在不将组向公用网络公开的情况下访问该组。">专用组</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_remove" title="要最充分地利用配额，请不时除去未使用的容器组。">除去</a>组</div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d49585e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d49585e196" id="ha_groups"><h2 class="topictitle2" id="d49585e196">按可用性设置容器组的选项</h2>
+<div class="body taskbody"><div class="section context" id="ha_groups__context_nwq_pf1_4z"><p>复查以下潜在的容器组设置，其按递增的可用性程度排序：</p>
+
+<div class="image"><img id="ha_groups__image_owq_pf1_4z" src="images/container_ha_roadmap.png" alt="高可用性路线图"></div>
+<ol id="ha_groups__ol_pwq_pf1_4z"><li>具有自动恢复、n+1 个实例模式功能的一个容器组</li>
+<li>具有自动恢复、n+2 个实例模式和反亲缘关系功能的一个容器组</li>
+<li>具有自动恢复、n+2 个实例模式和反亲缘关系功能，且在相同空间运行并共享相同路径的两个容器组</li>
+<li>具有自动恢复、n+2 个实例模式和反亲缘关系功能，且在不同空间运行并共享相同路径的两个容器组</li>
+<li>具有自动恢复、n+2 个实例模式和反亲缘关系功能，且在不同 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域运行并共享相同路径的两个容器组</li>
+<li>具有自动恢复、n+2 个实例模式和反亲缘关系功能，且在不同区域运行并共享相同路径的两个容器组</li>
+</ol>
+
+<div class="p">了解有关可以如何使用这些方法来提高应用程序可用性的更多信息：<dl><dt class="dlterm">将应用程序部署在容器组中，而不部署在单独的容器中</dt>
+<dd><span class="ph">容器组包含两个或多个运行相同映像的容器。
+如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。</span>可以通过 <a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。"><span class="keyword">Bluemix</span> GUI</a> 或 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 来创建容器组。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">在容器组中启用自动恢复</dt>
+<dd><span class="ph">针对容器组启用了自动恢复并且该组已运行了 10 分钟时，该组的负载均衡器会开始通过 HTTP 请求定期检查组中每个容器实例的运行状况。如果容器实例在 100 秒内未响应，即会将该实例标记为“不活动”。自动恢复会从组中除去不活动的容器实例并重新创建这些实例。自动恢复会尝试恢复组中的容器实例 3 次。在第三次尝试后，自动恢复在 60 分钟内不会再恢复组中的任何容器实例。60 分钟后，自动恢复进程将再次启动。</span>可以通过 <a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。"><span class="keyword">Bluemix</span> GUI</a> 或 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 利用自动恢复来创建容器组。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">包含足够多的实例用于应用程序的工作负载，在此基础上再额外增加两个实例</dt>
+<dd><span class="ph">要使容器组具有高可用性且对故障的处理更富弹性，请考虑除最低要求的实例数外，额外包含更多实例，以用于处理预期的工作负载。额外的实例可在其他实例崩溃时处理工作负载。要确保自动恢复发生故障的实例，而不影响工作负载，请包含一个额外实例。要避免两个实例同时发生故障，请包含两个额外实例。此设置是 <var class="keyword varname">N+2</var> 模式，其中 <var class="keyword varname">N</var> 是处理请求的实例数，<var class="keyword varname">+2</var> 是额外两个实例。</span>可以指定在通过 <a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。"><span class="keyword">Bluemix</span> GUI</a> 或 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 创建容器组时要包含的实例数。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">跨计算节点散布容器实例</dt>
+<dd>创建容器组时，组中的每个实例都可部署到相同物理计算节点。这种容器实例存在于相同计算节点上的设置称为亲缘关系或主机托管。通过 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 创建容器组时，可以使用反亲缘关系选项 (<samp class="ph codeph">--anti</samp>) 跨不同物理计算节点散布容器实例，以提高应用程序的可用性。<div class="p"><div class="steps note"><span class="notetitle">注：</span> 要在 CLI 中使用 <samp class="ph codeph">--anti</samp> 选项，必须已安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) V0.8.934 或更高版本。</div>
+</div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">创建使用相同路径的多个容器组</dt>
+<dd>您可以基于相同 <span class="keyword">Bluemix</span> 空间中的相同映像创建两个使用相同路径的容器组。
+如果因无法连接一个容器组中的实例而发生错误，用户流量会自动路由到第二个容器组。
+有关在容器组之间共享路径的更多信息，请参阅<a href="container_ha.html#container_ha_space" title="您可以在相同的 Bluemix 空间中，从相同的映像，创建两个容器组，并将相同的路径映射到这两个组。 进行此设置后，如果容器组或组的负载均衡器当机，流量会路由到其他容器组。">在相同空间运行具有高可用性的容器组</a>。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">在 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域之间散布容器组</dt>
+<dd><span class="ph"><span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域是运行 <span class="keyword">IBM
+Bluemix Container Service</span> 的区域内的某个位置。在 <span class="keyword">Bluemix</span> 空间中第一次使用 <span class="keyword">IBM
+Bluemix Container Service</span> 时，会在该区域的缺省 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域中创建容器。</span>
+<div class="tablenoborder"><table summary="IBM Bluemix Container Service 可用性区域" id="ha_groups__table_qwq_pf1_4z" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域</span></caption><thead><tr><th id="d49585e622" class="thleft">区域</th>
+<th id="d49585e624" class="thleft">数据中心位置</th>
+<th id="d49585e626" class="thleft"><span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域名称</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49585e622 ">美国南部</td>
+<td headers="d49585e624 ">达拉斯 1</td>
+<td headers="d49585e626 ">dal09-01</td>
+</tr>
+<tr><td headers="d49585e622 ">美国南部</td>
+<td headers="d49585e624 ">达拉斯 2</td>
+<td headers="d49585e626 ">dal09-02</td>
+</tr>
+<tr><td headers="d49585e622 ">美国南部</td>
+<td headers="d49585e624 ">达拉斯 3</td>
+<td headers="d49585e626 ">dal10-03</td>
+</tr>
+<tr><td headers="d49585e622 ">英国</td>
+<td headers="d49585e624 ">伦敦</td>
+<td headers="d49585e626 ">lon02-01</td>
+</tr>
+<tr><td headers="d49585e622 ">英国</td>
+<td headers="d49585e624 ">阿姆斯特丹</td>
+<td headers="d49585e626 ">ams03-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>要将空间迁移到其他 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域，请参阅<a href="container_ha_org.html">container_ha_org.html</a>。</p>
+<div class="p"><div class="note important"><span class="importanttitle">要点：</span> 使用不同 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域配置空间后，可使用以下命令来创建容器组。</div>
+<span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域 1：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+<div class="p"><span class="keyword">IBM
+Bluemix Container Service</span> 可用性区域 2：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+</dd>
+<dt class="dlterm">跨区域散布容器组</dt>
+<dd>跨 <span class="keyword">Bluemix</span> 区域散布容器组时，可以允许基于用户所在的区域进行负载均衡。如果一个区域中的容器组或硬件甚至整个数据中心当机，那么流量会路由到另一个区域中所部署的容器组。
+<p>要在多个区域中部署容器组，请参阅<a href="container_ha.html#container_ha_regions" title="如果您使用提供全局负载均衡的域名系统 (DNS) 配置应用程序的域名，那么您可以从在路径中使用相同主机名的不同 Bluemix 区域中的相同映像，创建两个容器组。 使用此设置，您可以允许基于用户所在的区域，进行负载均衡。 如果一个区域中的容器组或硬件甚至整个数据中心当机，那么流量会路由到另一个区域中所部署的容器组。">在不同的 Bluemix 区域运行具有高可用性的容器组</a>。</p>
+<div class="p"><div class="note important"><span class="importanttitle">要点：</span> 配置定制域后，可使用以下命令来创建容器组。</div>
+
+区域 1：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d mydomain.net --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.ng.bluemix.net/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+<div class="p">区域 2：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d eu-gb.mydomain.net --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.eu-gb.bluemix.net/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+</dd>
+</dl>
+</div>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d49585e818" lang="zh-cn" id="container_group_ui"><h2 class="topictitle2" id="d49585e818">通过 <span class="keyword">Bluemix</span> GUI 作为容器组运行长期服务</h2>
+<div class="body taskbody"><p class="shortdesc">通过 <span class="keyword">Bluemix</span> GUI 创建和部署可扩展的组容器。<span class="ph">容器组包含两个或多个运行相同映像的容器。
+如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。</span></p>
+<div class="section prereq"><div class="p">开始之前，请考虑以下先决条件。<ul><li>您必须具有对 <span class="keyword">Bluemix</span> 空间的“开发者”角色才能在该空间中创建容器。有关每一个角色许可权以及如何编辑角色的更多信息，请参阅<span class="ph"><a href="../iam/users_roles.html">用户和角色</a></span>。</li>
+<li>在 <span class="keyword">Bluemix</span> GUI 中，基于 IBM 提供的公共映像或基于您组织的专用 <span class="keyword">Bluemix</span> 注册表中的现有映像创建容器。有关向“<span class="keyword wintitle">目录</span>”添加映像的更多信息，请参阅<a href="container_images_adding_ov.html#container_images_adding_ov" title="容器映像是所创建的每一个容器的基础。映像通过 Dockerfile 进行创建，此文件包含用于构建映像的指令以及构建工件（例如，应用程序、应用程序配置及其依赖项）。将容器映像看成是可执行文件（.exe 或 .bin）。当您运行可执行应用程序文件时，即会创建应用程序的实例。 当您运行容器时，将从映像创建容器实例。">向组织的专用 Bluemix 映像注册表添加 Docker 映像</a>。</li>
+<li>如果您确定要将 <span class="keyword">Bluemix</span> 服务绑定到容器，请将该 <span class="keyword">Bluemix</span> 服务添加到空间中。有关更多信息，请参阅<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一个服务列表，它会代表开发者来管理这些服务。要添加 Bluemix 服务以供容器使用，必须请求此服务的实例，然后将此服务绑定到容器。">通过 Bluemix GUI 绑定服务</a>。</li>
+<li>（可选）如果您确定想要一个共享磁盘，以便能够从容器组内对文件进行访问，请先创建一个卷，然后再创建容器组。有关更多信息，请参阅<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用命令行 (CLI) 创建卷</a>。</li>
+</ul>
+</div>
+</div><div class="section context"></div><p class="li stepsection">要创建和部署容器组，请执行以下操作：</p><ol class="steps"><li class="step stepexpand" data-hd-audience="yellow"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">在目录中，选择<span class="ph uicontrol">容器</span>，然后选择映像。</span></span> 这将显示 IBM 提供的映像以及存储在专用 <span class="keyword">Bluemix</span> 注册表中的映像。</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">如果已经为您的组织设置了名称空间，那么系统不会提示您创建名称空间，您可以继续执行下一步。</span> 如果还没有为您的组织指定名称空间，那么系统会提示您为映像注册表设置名称空间。 名称空间是用于在 <span class="keyword">Bluemix</span> 中标识专用注册表的唯一名称。为组织分配名称空间是一次性的，名称空间一旦创建即不能进行更改。如果要在多个 <span class="keyword">Bluemix</span> 区域中使用 <span class="keyword">IBM
+Bluemix Container Service</span>，您必须为每个区域设置一个名称空间。<div class="note tip" id="container_group_ui__d30992e140"><span class="tiptitle">提示：</span> 请遵循名称空间的以下规则：<ul id="container_group_ui__d30992e142"><li>名称只能包含小写字母、数字或下划线 (_)。</li>
+<li>名称可以为 4 到 30 个字符。如果计划从命令行管理容器，那么您可能倾向于使用能够快速输入的简短名称空间。</li>
+<li>其名称在 <span class="keyword">Bluemix</span> 中必须是唯一的。</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">选择您组织中的某个 <span class="keyword">Bluemix</span> 空间。</span></li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__group_not_single"><span class="cmd">接下来，开始定义您的容器组。</span> 缺省情况下，窗口打开时会显示<span class="ph uicontrol">单个</span>选项卡，因此请选择<span class="ph uicontrol">可扩展</span>选项卡以创建容器组。</li>
+<li class="step stepexpand" data-hd-audience="yellow">可选： <span class="cmd">在映像名称下，选择要使用的映像的标记或版本。</span></li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__enter_name"><span class="cmd">在<span class="ph uicontrol">容器组名</span>字段中，输入容器的名称。</span> <div class="note tip"><span class="tiptitle">提示：</span> 容器名称必须以字母开头，并且可以包含大写字母、小写字母、数字、句点 (.)、下划线 (_) 或连字符 (-)。</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__enter_instances"><span class="cmd">在<span class="ph uicontrol">实例数</span>字段中，指定组中的实例数。</span> 缺省值为 <span class="ph uicontrol">2</span>。每个实例的大小都相同，并且必须使用相同的映像。
+<span class="ph">应用程序所需的容器组实例数取决于期望的工作负载和应用程序可以处理请求的时间。
+例如，多任务或网络连接会影响应用程序所需的实例数。</span>
+
+<p><span class="ph">要确定所需实例的数目，可在运行应用程序的 Bluemix 中部署单个容器，并在此容器上执行负载测试。例如，如果应用程序每秒可处理 100 个请求，但是您期望每秒平均工作负载为 300 个请求，那么容器组的所需实例数目为 3。</span></p>
+
+<p><span class="ph">要使容器组具有高可用性且对故障的处理更富弹性，请考虑除最低要求的实例数外，额外包含更多实例，以用于处理预期的工作负载。额外的实例可在其他实例崩溃时处理工作负载。要确保自动恢复发生故障的实例，而不影响工作负载，请包含一个额外实例。要避免两个实例同时发生故障，请包含两个额外实例。此设置是 <var class="keyword varname">N+2</var> 模式，其中 <var class="keyword varname">N</var> 是处理请求的实例数，<var class="keyword varname">+2</var> 是额外两个实例。</span>如果在部署组后，您发现自己需要更多实例，那么可以添加更多实例，而不必重新创建组。</p>
+
+<div class="note important"><span class="importanttitle">要点：</span> 容器组应该至少包含 2 个容器实例。
+如果组中仅包含 1 个实例，且该实例变得不可用，那么用户可能会遭遇应用程序停机时间。</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">在<span class="ph uicontrol">大小</span>字段中，选择容器大小。</span> 缺省大小为 <span class="ph uicontrol" data-hd-audience="yellow">Micro（256 MB 内存，16 GB 存储器）</span>。所选择的大小会影响运行时容器在计算主机上所获取的内存和磁盘空间量，且在创建容器之后无法更改。
+其他可用大小为
+<ul data-hd-audience="yellow" id="container_group_ui__d30992e186"><li>Pico（64 MB 内存，4 GB 磁盘空间）</li>
+<li>Nano（128 MB 内存，8 GB 磁盘空间）</li>
+<li>Tiny（512 MB 内存，32 GB 磁盘空间）</li>
+<li>Small（1 GB 内存，64 GB 磁盘空间）</li>
+<li>Medium（2 GB 内存，128 GB 磁盘空间）</li>
+<li>Large（4 GB 内存，256 GB 磁盘空间）</li>
+<li>X-Large（8 GB 内存，512 GB 磁盘空间）</li>
+<li>2X-Large（16 GB 内存，1 TB 磁盘空间）</li>
+</ul>
+
+</li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__route"><span class="cmd">选择完整的公共 URL。</span> 此 URL 还称为路径。通过使用容器组的主机和域，而不使用单个容器实例的 IP 地址，您将为应用程序提供负载均衡。您的容器组在构建时可能不会在公共 URL 上立即可用，因为网络连接可能需要最多 5 分钟时间才能完成解析。<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">主机</span>字段中，指定主机名，例如，<span class="ph filepath"><var class="keyword varname">mycontainerhost</var></span>。</span> 不要在主机名中包含下划线 (_)。</li>
+<li class="li substep substepexpand"><span class="cmd">针对系统<span class="ph uicontrol">域</span>，选择 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。</span> 系统域已提供 SSL 证书，所以可以使用 HTTPS 来访问容器组，而无需任何额外配置。您还可以选择为组织创建的定制域。要创建定制域，必须在公共 DNS 服务器上注册定制域，在 <span class="keyword">Bluemix</span> 中配置定制域，然后将定制域映射到公共 DNS 服务器上的 <span class="keyword">Bluemix</span> 系统域。
+定制域映射到 <span class="keyword">Bluemix</span> 系统域后，对定制域的请求会路由到 <span class="keyword">Bluemix</span> 中的应用程序。创建定制域时，不要在域名中包含下划线 (_)。有关定制域的更多信息，请参阅<a href="../manageapps/updapps.html#domain">创建和使用定制域</a>。为了保护定制域安全，请<a href="../manageapps/secapps.html#ssl_certificate">上传 SSL 证书</a>，以便可以使用 HTTPS 访问容器组。 <p>路径域和主机组合在一起构成了完整的公共路径 URL（例如 <samp class="ph codeph">http://<var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>），并且该 URL 在 <span class="keyword">Bluemix</span> 中必须唯一。</p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">在 <span class="ph uicontrol">HTTP 端口</span>字段中，指定要发布的公共端口。</span> 可以输入端口，也可以从下拉列表中选择端口。输入端口时，可以选择 UDP 或 TCP，以指示要使用的 IP 协议。如果未指定协议，那么端口会自动公开用于 TCP 流量。下拉列表已使用构建映像时在映像的 Dockerfile 中指定的端口进行预填充。对于容器组，不能包含多个端口。<span class="ph">绑定路径时，组中的容器必须在组的公开端口上侦听 HTTP 流量。非 HTTP 端口不能向公用网络公开。HTTPS 流量到达公开的端口时，(Go)Router 会完成 HTTPS 终止。随后，专用虚拟网络上 (Go)Router 和容器之间的连接将使用 HTTP 协议。</span> <div class="p" id="container_group_ui__d30992e232">如果在 Dockerfile 中为要使用的映像指定了端口，请包含该端口。<div class="note tip"><span class="tiptitle">提示：</span> <ul id="container_group_ui__d30992e235"><li>对于 IBM 认证的 Liberty Server 映像或此映像的修改版本，请输入端口 <kbd class="ph userinput">9080</kbd>。</li>
+<li>对于 IBM 认证的 Node.js 映像或此映像的修改版本，请输入任意端口，例如端口 <kbd class="ph userinput">8000</kbd>。</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_group_ui__auto-recovery">可选： <span class="cmd">启用自动恢复。选择<span class="ph uicontrol">启用自动恢复</span>。</span> 自动恢复会除去不可用的容器实例，并将其替换为新的容器实例。 <p><span class="ph">针对容器组启用了自动恢复并且该组已运行了 10 分钟时，该组的负载均衡器会开始通过 HTTP 请求定期检查组中每个容器实例的运行状况。如果容器实例在 100 秒内未响应，即会将该实例标记为“不活动”。自动恢复会从组中除去不活动的容器实例并重新创建这些实例。自动恢复会尝试恢复组中的容器实例 3 次。在第三次尝试后，自动恢复在 60 分钟内不会再恢复组中的任何容器实例。60 分钟后，自动恢复进程将再次启动。</span></p>
+</li>
+<li class="step stepexpand" id="container_group_ui__volume">可选： <span class="cmd">定义数据或文件存储器。将现有卷与容器或容器组相关联。</span> 卷是一种共享磁盘，允许从容器内对文件进行访问。容器中的路径指示卷在容器的文件系统中的安装位置。<div class="note restriction"><span class="restrictiontitle">限制：</span> 只能使用命令行在 <span class="keyword">Bluemix</span> 空间中删除卷。</div>
+<ol type="a" class="ol substeps" id="container_group_ui__d30992e270"><li class="li substep"><span class="cmd">单击<span class="ph uicontrol">分配现有卷</span>。</span></li>
+<li class="li substep"><span class="cmd">从下拉列表中选择卷。</span></li>
+<li class="li substep"><span class="cmd">在下一个字段中，指定容器上用于映射该卷的路径。</span> 例如，<span class="ph filepath">/var/lib/my_volume</span></li>
+<li class="li substep"><span class="cmd">要指定某个卷为只读，请选择<span class="ph uicontrol">只读</span>。</span> 缺省情况下，卷为读/写。</li>
+<li class="li substep"><span class="cmd">要添加多个卷，请单击<span class="ph uicontrol">分配现有卷</span>图标，并重复这些步骤。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_group_ui__env_var">可选： <span class="cmd">定义环境变量。</span> <ol type="a" class="ol substeps" id="container_group_ui__d30992e304"><li class="li substep substepexpand"><span class="cmd">单击<span class="ph uicontrol">添加新环境变量</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">输入环境变量的名称。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在下一个字段中，指定环境变量的值。</span></li>
+<li class="li substep substepexpand"><span class="cmd">要添加多个环境变量，请单击<span class="ph uicontrol">添加新环境变量</span>，并重复这些步骤。</span> <div class="tablenoborder"><table summary="" id="container_group_ui__d30992e324" class="defaultstyle"><caption><span class="tablecap">表 2. 建议的环境变量</span></caption><thead><tr><th id="d49585e1300" class="thleft">环境变量</th>
+<th id="d49585e1302" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49585e1300 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d49585e1302 ">某些 <span class="keyword">Bluemix</span> 服务不支持直接绑定到容器。在这种情况下，需要创建 Cloud Foundry 应用程序并将其与 <span class="keyword">Bluemix</span> 服务绑定。然后，使用 <samp class="ph codeph">CCS_BIND_APP</samp> 将该应用程序绑定到容器。该 Cloud Foundry 应用程序起到桥梁的作用，允许 <span class="keyword">Bluemix</span> 将桥接应用程序的 VCAP_SERVICES 信息注入到正在运行的容器实例中。</td>
+</tr>
+<tr><td headers="d49585e1300 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">注：</span>  服务不支持使用 <samp class="ph codeph">CCS_BIND_SRV=</samp> 环境变量时，请改用 <samp class="ph codeph">CCS_BIND_APP=</samp>。</div>
+</td>
+<td headers="d49585e1302 ">要在不使用桥接应用程序的情况下将 <span class="keyword">Bluemix</span> 服务直接绑定到容器，请使用 <samp class="ph codeph">CCS_BIND_SRV</samp>。通过此绑定，<span class="keyword">Bluemix</span> 可以将 VCAP_SERVICES 信息注入到正在运行的容器实例中。要列出多个 <span class="keyword">Bluemix</span> 服务，请将这些服务包含在同一环境变量中。</td>
+</tr>
+<tr><td headers="d49585e1300 "><div class="lines">（不推荐）<samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d49585e1302 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">此环境变量已不推荐使用：</span> 请改用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">exec</samp> 或 <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp> 来对容器进行外部访问。有关更多信息，请参阅<a href="container_security.html#container_cli_login_exec" title="如果必须登录到正在运行的容器，可以使用 bx ic exec。">使用 exec 登录到容器</a>。</div>
+<span class="ph">要在创建容器时向其添加 SSH 密钥，可以使用 <samp class="ph codeph">CCS_API_KEY</samp>。</span></td>
+</tr>
+<tr><td headers="d49585e1300 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d49585e1302 "><span class="ph" id="container_group_ui__d31073e1442">要添加要在容器中监视的日志文件，请包含 <samp class="ph codeph">LOG_LOCATIONS</samp> 环境变量以及日志文件的路径。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_group_ui__service">可选： <span class="cmd">定义应用程序的其他服务。将 <span class="keyword">Bluemix</span> 空间中的 <span class="keyword">Bluemix</span> 服务绑定到容器。在<span class="ph uicontrol">服务绑定</span>部分中，选择 <span class="keyword">Bluemix</span> 服务实例并单击<span class="ph uicontrol">添加</span>，以将服务绑定到容器。</span> 如果还没有向空间添加任何 <span class="keyword">Bluemix</span> 服务，那么菜单中不会显示任何服务。</li>
+<li class="step stepexpand" id="container_group_ui__create"><span class="cmd">部署容器并等待其完成。单击<span class="ph uicontrol">创建</span>。</span> 创建容器后（可能会花费一些时间），还将在 <span class="keyword">Bluemix</span> 中启动该容器。请查看<span class="ph uicontrol">容器运行状况</span>部分以了解容器的状态。创建完成后，状态为<span class="ph uicontrol">正在运行</span>。</li>
+</ol>
+<div class="section result"><p id="container_group_ui__wait"><span class="ph" id="container_group_ui__buildroute">如果您要从容器连接到外部应用程序，那么可能需要在运行容器进程后等待 5 分钟的时间，才能连接到指定的路径。然后，可以通过在浏览器中打开 <span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> 来验证该应用程序是否正在容器组中运行。</span></p>
+</div><div class="section postreq"><div class="p" id="container_group_ui__ha_setup">容器设置分发得越广泛，用户使用应用程序遭遇停机时间的可能性就越低。
+创建容器组之后，在相同的空间、相同组织的不同空间或不同的区域中，使用相同的映像再创建一个，以更加广泛地分发您的应用程序。
+有关更多信息，请参阅以下主题。<ul><li><a href="container_ha.html#container_ha" title="具有高可用性的容器意味着具有较少的应用程序停机时间。容器设置分发得越广泛，用户使用应用程序遭遇停机时间的可能性就越低。 您可以使用 IBM Bluemix Container Service 内置功能，获取更高的可用性，以增加对抗潜在故障状况（如主机故障、网络故障或应用程序软件故障）的弹性。">将高可用性进程作为容器组运行</a></li>
+<li><a href="container_ha_org.html">container_ha_org.html</a></li>
+<li><a href="container_ha.html#container_ha_regions" title="如果您使用提供全局负载均衡的域名系统 (DNS) 配置应用程序的域名，那么您可以从在路径中使用相同主机名的不同 Bluemix 区域中的相同映像，创建两个容器组。 使用此设置，您可以允许基于用户所在的区域，进行负载均衡。 如果一个区域中的容器组或硬件甚至整个数据中心当机，那么流量会路由到另一个区域中所部署的容器组。">在不同的 Bluemix 区域运行具有高可用性的容器组</a></li>
+</ul>
+</div>
+
+<p>要增加或减少在容器组中运行的容器实例数，请在 <span class="keyword">Bluemix</span> GUI 中打开容器组。要增加实例数，请单击 <span class="ph uicontrol">+</span> 按钮，要减少实例数，请单击 <span class="ph uicontrol">-</span> 按钮。
+然后，单击<span class="ph uicontrol">保存</span>。</p>
+</div></div>
+<aside role="complementary" aria-labelledby="d49585e818"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e1536" lang="zh-cn" id="container_group_cli"><h2 class="topictitle2" id="d49585e1536">使用命令行界面 (CLI) 作为容器组运行长期服务</h2>
+<div class="body taskbody"><p class="shortdesc">通过 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 创建和部署可扩展的组容器。<span class="ph">容器组包含两个或多个运行相同映像的容器。
+如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。</span></p>
+<div class="section prereq"><div class="p" id="container_group_cli__prereq">开始之前，请考虑以下步骤。<ul><li>您必须具有对 <span class="keyword">Bluemix</span> 空间的“开发者”角色才能在该空间中创建容器。有关每一个角色许可权以及如何编辑角色的更多信息，请参阅<span class="ph"><a href="../iam/users_roles.html">用户和角色</a></span>。</li>
+<li>通过运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> 命令，确定要在容器中使用组织专用映像注册表中的哪个现有映像。要将映像添加到注册表，请参阅<a href="container_images_adding_ov.html#container_images_adding_ov" title="容器映像是所创建的每一个容器的基础。映像通过 Dockerfile 进行创建，此文件包含用于构建映像的指令以及构建工件（例如，应用程序、应用程序配置及其依赖项）。将容器映像看成是可执行文件（.exe 或 .bin）。当您运行可执行应用程序文件时，即会创建应用程序的实例。 当您运行容器时，将从映像创建容器实例。">向组织的专用 Bluemix 映像注册表添加 Docker 映像</a>。</li>
+<li>如果您确定要将 <span class="keyword">Bluemix</span> 服务绑定到容器，请将该 <span class="keyword">Bluemix</span> 服务添加到空间中。有关更多信息，请参阅<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一个服务列表，它会代表开发者来管理这些服务。要添加 Bluemix 服务以供容器使用，必须请求此服务的实例，然后将此服务绑定到容器。">通过 Bluemix GUI 绑定服务</a>。</li>
+<li>如果您确定需要一个共享磁盘，以便能够从多个容器对文件进行访问，请在创建容器前先创建卷。有关更多信息，请参阅<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用命令行 (CLI) 创建卷</a>。</li>
+</ul>
+</div>
+</div><div class="section context"></div><p class="li stepsection">创建可扩展容器组。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">通过运行以下某个 <samp class="ph codeph">group-create</samp> 命令，使用组织的专用映像注册表中的现有映像来创建容器组。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --anti --auto --desired <var class="keyword varname">&lt;instances&gt;</var> -e "LOG_LOCATIONS=<var class="keyword varname">&lt;file_path&gt;</var>" -m <var class="keyword varname">&lt;size&gt;</var> --name <var class="keyword varname">&lt;name&gt;</var> -p <var class="keyword varname">&lt;public_port&gt;</var> -n <var class="keyword varname">&lt;hostname&gt;</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --volume <var class="keyword varname">&lt;volume_name&gt;:&lt;mount_path&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;namespace&gt;</var>/<var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+示例<p>以下示例会通过 <span class="ph uicontrol">ibmliberty</span> 映像创建名为 <var class="keyword varname">my_group</var> 的容器组，其具有 3 个实例。针对组启用反亲缘关系和自动恢复功能，以确保应用程序具有较高的可用性。
+为了从因特网访问组，已公开公共端口 9080 并将 <span class="ph filepath">myhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> 路径映射到组。卷 <var class="keyword varname">myvol</var> 已安装到组，以持久存储容器数据，且已添加标准 Ubuntu 日志文件作为定制日志文件位置。在创建组之后，可以在 Kibana 中查看来自定制日志文件位置的日志。</p>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --anti --auto --desired 3 -e <span class="q">“LOG_LOCATIONS=/var/log/dpkg.log”</span> -m 64 --name my_group -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --volume myvol:/var/tmp registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+
+创建容器组后，还会启动该容器组。显示容器组的标识时，说明该容器组已部署。</li>
+<li class="step stepexpand">可选： <span class="cmd">列出正在运行的容器组。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span> </code></pre>
+
+
+<p><span class="ph" id="container_group_cli__d29439e204">如果您要从容器连接到外部应用程序，那么可能需要在运行容器进程后等待 5 分钟的时间，才能连接到指定的路径。然后，可以通过在浏览器中打开 <span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> 来验证该应用程序是否正在容器组中运行。</span></p>
+</li>
+</ol>
+<div class="section postreq"><div class="p">容器设置分发得越广泛，用户使用应用程序遭遇停机时间的可能性就越低。
+创建容器组之后，在相同的空间、相同组织的不同空间或不同的区域中，使用相同的映像再创建一个，以更加广泛地分发您的应用程序。
+有关更多信息，请参阅以下主题。<ul><li><a href="container_ha.html#container_ha" title="具有高可用性的容器意味着具有较少的应用程序停机时间。容器设置分发得越广泛，用户使用应用程序遭遇停机时间的可能性就越低。 您可以使用 IBM Bluemix Container Service 内置功能，获取更高的可用性，以增加对抗潜在故障状况（如主机故障、网络故障或应用程序软件故障）的弹性。">将高可用性进程作为容器组运行</a></li>
+<li><a href="container_ha_org.html">container_ha_org.html</a></li>
+<li><a href="container_ha.html#container_ha_regions" title="如果您使用提供全局负载均衡的域名系统 (DNS) 配置应用程序的域名，那么您可以从在路径中使用相同主机名的不同 Bluemix 区域中的相同映像，创建两个容器组。 使用此设置，您可以允许基于用户所在的区域，进行负载均衡。 如果一个区域中的容器组或硬件甚至整个数据中心当机，那么流量会路由到另一个区域中所部署的容器组。">在不同的 Bluemix 区域运行具有高可用性的容器组</a></li>
+</ul>
+</div>
+
+<p>创建容器组之后，您可以增加或减少在容器组中运行的实例数，并进一步添加环境变量。
+有关进一步信息，请复查 <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__group_update"><samp class="ph codeph"><span class="ph">bx ic</span>group-update</samp></a> 命令。</p>
+</div></div>
+<aside role="complementary" aria-labelledby="d49585e1536"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e1822" lang="zh-cn" id="container_group_ui_as"><h2 class="topictitle2" id="d49585e1822">自动扩展容器组（不推荐）</h2>
+<div class="body taskbody"><p class="shortdesc">不推荐使用“容器自动扩展”功能。您可以使用 <span class="keyword">IBM
+Bluemix Container Service</span> 来替代此功能。<span class="ph">有关详细信息，请参阅<a href="https://www.ibm.com/blogs/bluemix/2017/03/retirement-ibm-container-autoscaling-beta-capability" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">自动扩展引退</a>。</span></p>
+<div class="section context">是否需要有关扩展 Cloud Foundry 应用程序的信息？请了解 <a href="https://www.ng.bluemix.net/docs/services/Auto-Scaling/index.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">IBM Auto-Scaling for Bluemix</span></a>。</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d49585e1905" id="migrating_autoscaling"><h3 class="topictitle3" id="d49585e1905">迁移到 Kubernetes 自动扩展</h3>
+<div class="body taskbody"><p class="li stepsection"><p>使用 <a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">Kubernetes</a>，可以启用 <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Horizontal Pod Autoscaling</a> 来基于 CPU 扩展应用程序。</p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">安装必需的 <a href="cs_cli_install.html" title="可以使用 IBM Bluemix Container Service CLI 或 API 来创建和管理 Kubernetes 集群。">CLI</a>。</span></li>
+<li class="step stepexpand"><span class="cmd">通过执行<a href="container_index.html#clusters" title="Kubernetes 是一种编排工具，用于将应用程序容器安排到计算机器的集群中。使用 Kubernetes，开发者可以通过利用容器的强大功能和灵活性，快速开发出高可用性应用程序。">在 Bluemix 中开始使用 Kubernetes 集群</a>中的步骤来创建集群。确保将集群设置为复制当前容器组，包括日志记录、监视、漏洞顾问程序和其他任何落实的定制。</span></li>
+<li class="step stepexpand"><span class="cmd">针对您的集群<a href="cs_cli_configure.html" title="您可以使用 Kubernetes CLI 随附的命令，在 Bluemix 中管理集群。创建集群后，使用环境变量，将本地 CLI 的上下文设置到该集群。 然后，您可以运行 Kubernetes kubectl 命令，以在 Bluemix 中使用集群。">设置上下文</a>。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_apps_cli.html" title="创建集群后，可以使用 Kubernetes CLI 将应用程序部署到该集群。">通过 CLI</a> 将现有应用程序部署到集群。</span> 部署应用程序时，必须请求 CPU。
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__table_px1_qsx_yy" class="defaultstyle"><thead><tr><th colspan="2" id="d49585e1988" class="thleft"><span class="ph"><img src="images/idea.png" alt="此图标指示这个任务步骤有要了解的更多信息。"></span> 了解此命令的组成部分</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d49585e1988 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d49585e1988 ">要部署的应用程序。</td>
+</tr>
+<tr><td style="width: 50%" headers="d49585e1988 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d49585e1988 ">容器的必需 CPU，以千分之一核心数为单位指定。例如，<samp class="ph codeph">--requests=200m</samp>。</td>
+</tr>
+<tr><td style="width: 50%" headers="d49585e1988 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d49585e1988 ">为 true 时，创建外部服务。</td>
+</tr>
+<tr><td style="width: 50%" headers="d49585e1988 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d49585e1988 ">应用程序对外部可用的端口。</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">注：</span> 对于更复杂的部署，可能需要创建<a href="cs_apps_cli.html" title="创建集群后，可以使用 Kubernetes CLI 将应用程序部署到该集群。">部署脚本</a>。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">创建 Horizontal Pod Autoscaler，然后定义策略。</span>  有关使用 <samp class="ph codeph">kubetcl autoscale</samp> 命令的更多信息，请参阅 <a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Kubernetes 文档</a>。
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__table_pgd_btx_yy" class="defaultstyle"><thead><tr><th colspan="2" id="d49585e2048" class="thleft"><span class="ph"><img src="images/idea.png" alt="此图标指示这个任务步骤有要了解的更多信息。"></span> 了解此命令的组成部分</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d49585e2048 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d49585e2048 ">Horizontal Pod Autoscaler 保持的平均 CPU 使用率，以百分比为单位指定。</td>
+</tr>
+<tr><td style="width: 50%" headers="d49585e2048 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d49585e2048 ">用于保持指定 CPU 使用率百分比的最小部署 Pod 数。</td>
+</tr>
+<tr><td style="width: 50%" headers="d49585e2048 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d49585e2048 ">用于保持指定 CPU 使用率百分比的最大部署 Pod 数。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">验证应用程序是否在正常运行。</span> <ul><li>检查服务仪表板以确保应用程序在运行。</li>
+<li>检查应用程序以确保已实施关键更改。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_ha.html#container_group_remove" title="要最充分地利用配额，请不时除去未使用的容器组。">撤销供应和除去</a>容器的原始实例。</span></li>
+</ol>
+</div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d49585e2088" lang="zh-cn" id="container_group_migrate"><h2 class="topictitle2" id="d49585e2088">将容器组移至其他 <span class="keyword">Bluemix</span> 空间</h2>
+<div class="body taskbody"><p class="shortdesc">如果您必须将容器组移至同一组织的其他空间中，那么您可以使用相同的路径，创建第二个容器组。
+然后，您可以除去第一个组而不会造成应用程序发生任何停机时间。</p>
+<div class="section context"> 将现有路径映射到新容器组时，系统会将容器实例的引用添加到空间的负载均衡器中。因此，负载均衡器会在路由入局流量时考虑这个新容器组。如果删除容器组，负载均衡器会自动除去相关的容器实例引用。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">登录到 Cloud Foundry CLI。根据提示，输入您的 <span class="keyword">Bluemix</span> 用户名和密码。</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+
+<p><span class="ph">当您使用联合标识登录时，需要单点登录参数 <span class="keyword option">--sso</span>。如果使用此选项，请打开 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>，以获取一次性密码。如果您未包括 <span class="keyword option">--sso</span> 选项，请完成以下子步骤。</span></p>
+<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">对于<span class="ph uicontrol">电子邮件</span>，请输入您用于 <span class="keyword">Bluemix</span> 的 IBM 标识。</span></li>
+<li class="li substep"><span class="cmd">对于<span class="ph uicontrol">密码</span>，请输入 IBM 标识的密码。</span> 此时将检索您的 Bluemix 组织和空间。</li>
+<li class="li substep"><span class="cmd">输入代表您某个 <span class="keyword">Bluemix</span> 组织的数字。</span></li>
+<li class="li substep"><span class="cmd">输入代表其中一个现有 <span class="keyword">Bluemix</span> 空间的数字。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">初始化 <span class="keyword">IBM
+Bluemix Container Service</span>。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">创建容器组，然后将路径映射到该容器组。</span> 以下命令会基于 <span class="ph uicontrol">ibmliberty</span> 映像创建名为 <var class="keyword varname">my_group_1</var> 的容器组。该容器组可通过公共路径 <span class="ph filepath">myhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> 进行访问。<div class="steps note"><span class="notetitle">注：</span> 在此示例中，主机名 <var class="keyword varname">myhost</var> 需要在 <span class="keyword">Bluemix</span> 的所有组织中唯一。因此，您需要为 <var class="keyword varname">myhost</var> 选择新名称才能继续。</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">my_group_1</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">验证容器组是否已创建。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">切换组织空间。将 <var class="keyword varname">SPACE</var> 替换为要将容器组移至的目标空间的名称。</span> <pre class="codeblock"><code>cf target -s <var class="keyword varname">SPACE</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">重新初始化 <span class="keyword">IBM
+Bluemix Container Service</span> 以指向新空间。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">在新空间中创建另一个容器组，然后将现有路径映射到该容器组。</span> 以下命令会基于 <span class="ph uicontrol">ibmliberty</span> 映像创建名为 <var class="keyword varname">my_group_2</var> 的容器组。该容器组会映射到与您所创建的第一个容器组相同的公共路径。<div class="steps note"><span class="notetitle">注：</span> 在一个组织空间中，容器组的名称必须唯一。在组织的其他空间中创建新容器组时，可以复用该名称。</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">my_group_2</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">验证容器组是否已创建。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+现在，已在新空间中创建新容器组，并且已将现有路径映射到该容器组。接下来，您可以除去第一个容器组。</li>
+<li class="step stepexpand"><span class="cmd">切换到您在其中创建第一个容器组的组织空间。将 <var class="keyword varname">SPACE</var> 替换为该空间的名称。</span> <pre class="codeblock"><code>cf target -s <var class="keyword varname">SPACE</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">重新初始化 <span class="keyword">IBM
+Bluemix Container Service</span> 以指向所选空间。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">取消映射容器组的路径。将 <var class="keyword varname">myhost</var> 替换为所选主机的名称。</span> 取消映射容器组的路径后，会从负载均衡器中删除所有容器引用，并且在路由入局流量时，不会再考虑这些引用。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> <var class="keyword varname">my_group_1</var>  </code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">除去容器组。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove <var class="keyword varname">my_group_1</var></code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">验证是否已除去该容器组。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49585e2088"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e2434" lang="zh-cn" id="container_group_update_ui"><h2 class="topictitle2" id="d49585e2434">使用 <span class="keyword">Bluemix</span> GUI 更新在容器组中运行的应用程序</h2>
+<div class="body taskbody"><p class="shortdesc">要更新容器组中正在运行的应用程序，您必须更新映像，然后基于该映像来部署新容器组。在更新过程中，无需停止正在运行的旧容器组。您可以创建新的容器组，将现有路径信息映射到该容器组，然后取消映射过时容器组的路径。新应用程序的部署不会造成任何的停机时间。</p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_group_update_ui__update_options_ui" class="defaultstyle"><caption><span class="tablecap">表 3. 用于更新应用程序的可选工具</span></caption><thead><tr><th id="d49585e2508" class="thleft">更新工具</th>
+<th id="d49585e2510" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49585e2508 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d49585e2510 ">使用所提供的 <span class="keyword">Bluemix</span> 服务 <span class="keyword">Delivery Pipeline</span>，对 <span class="keyword">Bluemix</span> 自动执行应用程序构建和容器部署。有关更多信息，请参阅<a href="container_integrations.html#container_group_pipeline_ov" title="使用 Delivery Pipeline 自动构建和部署容器组。">使用 Delivery Pipeline 创建容器组</a>。</td>
+</tr>
+<tr><td headers="d49585e2508 ">通过 <span class="keyword">Bluemix</span> GUI 使用 <span class="keyword">Active Deploy</span></td>
+<td headers="d49585e2510 ">协调新容器的部署，以替换过时的容器。使用 Active Deploy，会保留过时容器组，这样一来，如果您发现问题，可进行回滚。
+有关更多信息，请参阅<a href="../services/ActiveDeploy/updatingapps.html#updatingappsgui" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">使用 Active Deploy 服务更新应用程序或容器组 (GUI)</a>。</td>
+</tr>
+<tr><td headers="d49585e2508 ">UrbanCode Deploy</td>
+<td headers="d49585e2510 ">使用 UrbanCode Deploy 对 <span class="keyword">Bluemix</span> 自动执行应用程序构建和容器部署。有关购买 UrbanCode Deploy 的更多信息，请参阅 <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">IBM UrbanCode Deploy</a>。</td>
+</tr>
+<tr><td headers="d49585e2508 ">使用 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 和 <span class="keyword">Bluemix</span> GUI 的组合自行更新应用程序</td>
+<td headers="d49585e2510 ">完成此任务中的步骤以自行更新应用程序。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">要使用 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 和 <span class="keyword">Bluemix</span> GUI 自行更新应用程序：</p><ol class="steps"><li class="step stepexpand"><span class="cmd">切换到保存 Dockerfile 和应用程序代码的目录。</span></li>
+<li class="step stepexpand"><span class="cmd">本地更新应用程序。</span></li>
+<li class="step stepexpand"><span class="cmd">选择直接在 <span class="keyword">Bluemix</span> 中构建映像，或者先在本地构建并测试映像，然后再将其推送到 <span class="keyword">Bluemix</span>。</span> <ul><li>要直接在 <span class="keyword">Bluemix</span> 中构建映像，请运行以下命令。*<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+示例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_group_update_ui__d32452e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_group_update_ui__d32452e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li>要先在本地构建映像，然后再将其推送到 <span class="keyword">Bluemix</span>，请执行以下步骤。<div class="p"><ol type="a"><li>如果要使用 <span class="keyword">IBM
+Bluemix Container Service</span> 的插件，请重新登录。对于选项 2，请不要设置环境变量，这样 <samp class="ph codeph">docker</samp> 命令将发送到本地计算机上的 Docker 引擎。<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>基于 Dockerfile 在本地构建映像。<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>使用以下命令从映像运行容器，以测试新应用程序是否在本地运行；其中 <var class="keyword varname">Port</var> 是 HTTP 流量的端口。<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>如果应用程序运行正常，CLI 输出中将显示容器标识。要查看容器的日志，请运行 <samp class="ph codeph">docker logs <var class="keyword varname">&lt;container_name_or_id&gt;</var></samp>。</p>
+</li>
+<li id="container_group_update_ui__d32435e259">使用专用 <span class="keyword">Bluemix</span> 注册表和新名称标记本地映像。<span class="ph">在映像名称中仅使用小写字母数字字符或下划线 (_)。其他符号（如连字符 (-) 或斜杠 (/)）可能会使映像无法推送到映像注册表。</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>示例</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>使用以下命令将映像推送到专用 <span class="keyword">Bluemix</span> 注册表。<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">要点：</span> <span class="ph">将映像推送到专用 <span class="keyword">Bluemix</span> 注册表时，报告的映像大小小于本地 Docker 引擎中相同映像的大小。大小之间存在差异并不表示推送映像时发生问题。映像的压缩大小在 <span class="keyword">IBM
+Bluemix Container Service</span> 中进行报告。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">验证映像是否已推送到 <span class="keyword">Bluemix</span> 注册表。*</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">查看映像漏洞。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在 <span class="keyword">Bluemix</span> GUI 中，转至目录，并选择<span class="ph uicontrol">容器</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">单击已添加的映像。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">漏洞评估</span>部分中，查看漏洞评估的状态。</span> 状态显示为以下某种情况：
+<ul><li><span class="keyword wintitle">可以安全地部署</span> - 未发现重大漏洞。</li>
+<li><span class="keyword wintitle">小心部署</span> - 发现已解决的重大漏洞。</li>
+<li><span class="keyword wintitle">部署已阻止</span> - 发现重大漏洞，必须在部署映像之前解决这些漏洞。</li>
+<li><span class="keyword wintitle">未完成</span> - 扫描未完成。扫描可能仍在运行或者映像的操作系统不兼容。等待然后再次尝试扫描。如果扫描仍未完成，请重新推送映像以启动新的扫描。不会阻止部署未完成扫描的映像。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">记下映射到正在运行的容器组的路径信息。</span> <ol type="a"><li>在 <span class="keyword">Bluemix</span> GUI 中，选择容器组。</li>
+<li>记下路径。主机和域组合在一起构成了完整的公共路径 URL，例如 <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">创建另一个可扩展容器组，并包含该路径。</span> <ol type="a"><li><span class="ph" data-hd-otherprops="registry_check">在目录中，选择<span class="ph uicontrol">容器</span>，然后选择映像。</span></li>
+<li>接下来，开始定义您的容器组。缺省情况下，窗口打开时会显示<span class="ph uicontrol">单个</span>选项卡。所以，请选择<span class="ph uicontrol">可扩展</span>选项卡以创建容器组。定义容器组时，请在<kbd class="ph userinput">主机</kbd>和<kbd class="ph userinput">域</kbd>字段中输入您在上一步中检索到的主机名和域。<p>有关如何创建容器组的更多信息，请查看<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">通过 Bluemix GUI 作为容器组运行长期服务</a>主题。</p>
+</li>
+<li>单击<span class="ph uicontrol">创建</span>，以基于更新的映像部署容器组。部署过程中，还会启动该容器组。<p><span class="ph" id="container_group_update_ui__d32581e608">如果您要从容器连接到外部应用程序，那么可能需要在运行容器进程后等待 5 分钟的时间，才能连接到指定的路径。然后，可以通过在浏览器中打开 <span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> 来验证该应用程序是否正在容器组中运行。</span></p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">取消映射过时容器组的路径。</span> <ol type="a"><li>在 <span class="keyword">Bluemix</span> GUI 中，选择过时容器组。</li>
+<li>在<span class="ph uicontrol">组详细信息</span>部分中，编辑路径。</li>
+<li>更改主机名。如果您有多个域名，还可以为容器组选择新域名。</li>
+<li>单击<span class="ph uicontrol">保存</span>以保存更改。<div class="steps note"><span class="notetitle">注：</span> 取消映射路径可能需要多达 5 分钟才能完成。</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">删除过时容器组。</span> <ol type="a"><li>在 <span class="keyword">Bluemix</span> GUI 中，选择过时容器组。</li>
+<li>从<span class="ph uicontrol">更多操作...</span> 菜单中，单击<span class="ph uicontrol">删除</span>以除去容器组。</li>
+</ol>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49585e2434"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e3039" lang="zh-cn" id="container_group_update_cli"><h2 class="topictitle2" id="d49585e3039">使用命令行更新在容器组中运行的应用程序</h2>
+<div class="body taskbody"><p class="shortdesc">要更新容器组中正在运行的应用程序，您必须更新映像，然后基于该映像来部署新容器组。在更新过程中，无需停止正在运行的旧容器组。您可以创建新的容器组，将现有路径信息映射到该容器组，然后取消映射过时容器组的路径。新应用程序的部署不会造成任何的停机时间。</p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_group_update_cli__updating_group_cli_table" class="defaultstyle"><caption><span class="tablecap">表 4. 用于更新应用程序的可选工具</span></caption><thead><tr><th id="d49585e3099" class="thleft">更新工具</th>
+<th id="d49585e3101" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49585e3099 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d49585e3101 ">使用所提供的 <span class="keyword">Bluemix</span> 服务 <span class="keyword">Delivery Pipeline</span>，对 <span class="keyword">Bluemix</span> 自动执行应用程序构建和容器部署。有关更多信息，请参阅<a href="container_integrations.html#container_group_pipeline_ov" title="使用 Delivery Pipeline 自动构建和部署容器组。">使用 Delivery Pipeline 创建容器组</a>。</td>
+</tr>
+<tr><td headers="d49585e3099 ">CLI 的 <span class="keyword">Active Deploy</span></td>
+<td headers="d49585e3101 ">协调新容器组的部署，以替换过时的容器组。使用 Active Deploy，会保留过时容器组，这样一来，如果您发现问题，可进行回滚。
+有关更多信息，请参阅<a href="../services/ActiveDeploy/updatingapps.html#updatingappscli" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">使用 Active Deploy 服务更新应用程序或容器组 (CLI)</a>。</td>
+</tr>
+<tr><td headers="d49585e3099 ">UrbanCode Deploy</td>
+<td headers="d49585e3101 ">使用 UrbanCode Deploy 对 <span class="keyword">Bluemix</span> 自动执行应用程序构建和容器部署。有关购买 UrbanCode Deploy 的更多信息，请参阅 <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">IBM UrbanCode Deploy</a>。</td>
+</tr>
+<tr><td headers="d49585e3099 ">使用 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 自行更新应用程序</td>
+<td headers="d49585e3101 ">完成此任务中的步骤以自行更新应用程序。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">要使用 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 自行更新应用程序：</p><ol class="steps"><li class="step stepexpand"><span class="cmd">本地更新应用程序。</span></li>
+<li class="step stepexpand"><span class="cmd">选择直接在 <span class="keyword">Bluemix</span> 中构建映像，或者先在本地构建并测试映像，然后再将其推送到 <span class="keyword">Bluemix</span>。</span> <ul><li>要直接在 <span class="keyword">Bluemix</span> 中构建映像，请运行以下命令。*<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+示例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_group_update_cli__d31883e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_group_update_cli__d31883e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li>要先在本地构建映像，然后再将其推送到 <span class="keyword">Bluemix</span>，请执行以下步骤。<div class="p"><ol type="a"><li>如果要使用 <span class="keyword">IBM
+Bluemix Container Service</span> 的插件，请重新登录。对于选项 2，请不要设置环境变量，这样 <samp class="ph codeph">docker</samp> 命令将发送到本地计算机上的 Docker 引擎。<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>基于 Dockerfile 在本地构建映像。<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>使用以下命令从映像运行容器，以测试新应用程序是否在本地运行；其中 <var class="keyword varname">Port</var> 是 HTTP 流量的端口。<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>如果应用程序运行正常，CLI 输出中将显示容器标识。要查看容器的日志，请运行 <samp class="ph codeph">docker logs <var class="keyword varname">&lt;container_name_or_id&gt;</var></samp>。</p>
+</li>
+<li id="container_group_update_cli__d31866e259">使用专用 <span class="keyword">Bluemix</span> 注册表和新名称标记本地映像。<span class="ph">在映像名称中仅使用小写字母数字字符或下划线 (_)。其他符号（如连字符 (-) 或斜杠 (/)）可能会使映像无法推送到映像注册表。</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>示例</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>使用以下命令将映像推送到专用 <span class="keyword">Bluemix</span> 注册表。<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">示例<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">要点：</span> <span class="ph">将映像推送到专用 <span class="keyword">Bluemix</span> 注册表时，报告的映像大小小于本地 Docker 引擎中相同映像的大小。大小之间存在差异并不表示推送映像时发生问题。映像的压缩大小在 <span class="keyword">IBM
+Bluemix Container Service</span> 中进行报告。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">记下映射到正在运行的容器组的路径信息。</span> <ol type="a"><li>运行以下命令来获取容器组的名称或标识。<div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</div>
+</li>
+<li>使用该组标识或名称运行以下命令来检索路径。<div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP </span></code></pre>
+</div>
+ 路径位于“<samp class="ph codeph">Routes</samp>”部分中。主机和域组合在一起构成了完整的公共路径 URL，例如 <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">创建另一个可扩展容器组，并包含该路径。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create [--anti] [--auto] [-d DOMAIN] [--desired DESIRED] [-e ENV] [--env-file
+ENVFILE]<span class="ph"> [--http_monitor_enabled] [--http_monitor_path] [--http_monitor_rc_list] [--ip
+IP_ADDRESS]</span> [-m MEMORY] [--max MAX] [--min MIN] [-n HOST] --name NAME [-p PORT] [--session-affinity] [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD] </span></code></pre>
+包含主机名和域，以将新容器组映射到该路径。<p>有关创建容器组的更多信息，请参阅<a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">使用命令行界面 (CLI) 作为容器组运行长期服务</a>。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">取消映射旧容器组的路径。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap [-d DOMAIN] [-n HOST] GROUP </span></code></pre>
+ <div class="steps note"><span class="notetitle">注：</span> 取消映射路径可能需要多达 5 分钟才能完成。</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">删除旧容器组。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">列出所有容器组，以验证是否已除去该容器组。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49585e3039"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e3538" lang="zh-cn" id="container_ha_space"><h2 class="topictitle2" id="d49585e3538">在相同空间运行具有高可用性的容器组</h2>
+<div class="body taskbody"><p class="shortdesc">您可以在相同的 <span class="keyword">Bluemix</span> 空间中，从相同的映像，创建两个容器组，并将相同的路径映射到这两个组。
+进行此设置后，如果容器组或组的负载均衡器当机，流量会路由到其他容器组。</p>
+<div class="section prereq">
+<p><object data="images/container_ha_space.svg"><img src="images/container_ha_space.jpg" alt="在相同空间创建具有高可用性的容器组"></object></p>
+
+<p><span class="ph" id="container_ha_space__create_intro">开始之前，如果您需要有关创建容器组的详细信息，请查看有关通过使用 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 或 <a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。"><span class="keyword">Bluemix</span> GUI</a> 创建容器组的信息。</span></p>
+</div><p class="li stepsection">要在相同的 <span class="keyword">Bluemix</span> 空间创建具有高可用性的容器组：</p><ol class="steps"><li class="step stepexpand"><span class="cmd">创建满足以下需求的容器组。</span> <ul><li id="container_ha_space__at_least_2">容器组中的实例数必须支持应用程序上的预期工作负载。
+<span class="ph">要确定所需实例的数目，可在运行应用程序的 Bluemix 中部署单个容器，并在此容器上执行负载测试。例如，如果应用程序每秒可处理 100 个请求，但是您期望每秒平均工作负载为 300 个请求，那么容器组的所需实例数目为 3。</span>
+<span class="ph">要使容器组具有高可用性且对故障的处理更富弹性，请考虑除最低要求的实例数外，额外包含更多实例，以用于处理预期的工作负载。额外的实例可在其他实例崩溃时处理工作负载。要确保自动恢复发生故障的实例，而不影响工作负载，请包含一个额外实例。要避免两个实例同时发生故障，请包含两个额外实例。此设置是 <var class="keyword varname">N+2</var> 模式，其中 <var class="keyword varname">N</var> 是处理请求的实例数，<var class="keyword varname">+2</var> 是额外两个实例。</span></li>
+<li id="container_ha_space__ha_autorecovery">启用容器组的自动恢复功能，以确保崩溃的容器会自动恢复。</li>
+<li id="container_ha_space__ha_antiaffinity">启用反亲缘关系。<span class="ph">启用反亲缘关系时，容器实例会跨不同的物理计算节点分布，这可降低容器因硬件故障而崩溃的可能性。</span>反亲缘关系需要使用 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 并在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 命令中包含 <samp class="ph codeph">--anti</samp> 选项。要在 CLI 中使用 <samp class="ph codeph">--anti</samp> 选项，必须已安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) V0.8.934 或更高版本。<span class="ph">您可能无法对较大的组大小使用此选项，因为每一个 <span class="keyword">Bluemix</span> 区域和组织可用于部署的计算节点集有限制。
+如果部署不成功，请减少组中容器实例的数目，或者除去 <samp class="ph codeph">--anti</samp> 选项。</span></li>
+<li>您可以在卷上存储文件，并将该卷安装到容器，或者更好的作法是将数据存储在外部数据存储库中，如 Cloudant® 数据库。
+请不要在本地容器文件系统中包含持久性文件。卷必须在创建容器组之前创建。</li>
+<li id="container_ha_space__single">请不要创建单个容器取代容器组。单个容器通常用于短期过程，且不像容器组那样具有内置高可用性功能。</li>
+</ul>
+包含以上建议的示例 CLI 命令。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --min 3 --max 5 --desired 3 --auto --anti --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory</var>/<var class="keyword varname">path</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">在与第一个容器组相同的空间中创建满足以下需求的第二个组。</span> <ul><li>容器组必须具有不同的名称，但是使用与之前所创建的容器组相同的主机名。</li>
+<li id="container_ha_space__at_least_2_abbrev">要支持应用程序的预期工作负载，请使用所描述的 <var class="keyword varname">N+2</var> 模式来确定容器组的实例数。</li>
+<li>启用容器组的自动恢复功能，以确保崩溃的容器会自动恢复。</li>
+<li id="container_ha_space__ha_antiaffinity_abbrev">启用反亲缘关系，以跨不同物理计算节点散布容器实例。</li>
+<li>容器组必须映射到与您在上一步中所创建的第一个容器组相同的路径。</li>
+<li>请不要在容器中包含持久性文件。您可以将安装到第一个容器的相同的卷安装到此容器，或者您可以使用相同的 Cloudant 数据库。</li>
+</ul>
+</li>
+</ol>
+<div class="section postreq">要更加广泛地分发应用程序，请参阅<a href="container_ha_org.html">container_ha_org.html</a>。</div></div>
+<aside role="complementary" aria-labelledby="d49585e3538"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e3777" id="container_ha_regions"><h2 class="topictitle2" id="d49585e3777">在不同的 <span class="keyword">Bluemix</span> 区域运行具有高可用性的容器组</h2>
+<div class="body taskbody"><p class="shortdesc">如果您使用提供全局负载均衡的域名系统 (DNS) 配置应用程序的域名，那么您可以从在路径中使用相同主机名的不同 <span class="keyword">Bluemix</span> 区域中的相同映像，创建两个容器组。
+使用此设置，您可以允许基于用户所在的区域，进行负载均衡。
+如果一个区域中的容器组或硬件甚至整个数据中心当机，那么流量会路由到另一个区域中所部署的容器组。</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">要点：</span> 您必须具有定制域。您无法使用 <span class="ph filepath">mybluemix.net</span>。</div>
+
+<p><object data="images/container_ha_region.svg"><img src="images/container_ha_region.jpg" alt="在多个区域创建具有高可用性的容器组"></object></p>
+
+<p><span class="ph">开始之前，如果您需要有关创建容器组的详细信息，请查看有关通过使用 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 或 <a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。"><span class="keyword">Bluemix</span> GUI</a> 创建容器组的信息。</span></p>
+</div><p class="li stepsection">要在不同的 <span class="keyword">Bluemix</span> 区域创建具有高可用性的容器组：</p><ol class="steps"><li class="step stepexpand"><span class="cmd">使用能够进行全局 DNS 负载均衡的任何已认证的域注册器，注册您的定制域。</span></li>
+<li class="step stepexpand"><span class="cmd">在 <span class="keyword">Bluemix</span> 中，在您要使用的所有区域中，重复以下步骤。</span> <div class="note remember"><span class="remembertitle">切记：</span> 如果存在任何限制，使得您无法在特定国家或地区中托管数据，请不要选择该国家或地区中的区域。</div>
+<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph">在帐户详细信息的“管理组织”中，选择组织。</span></span></li>
+<li class="li substep"><span class="cmd">在<span class="ph uicontrol">域</span>部分中，单击<span class="ph uicontrol">添加域</span>，然后输入定制域的名称。</span></li>
+<li class="li substep"><span class="cmd">要同时允许 HTTPS 和 HTTP 流量而非仅 HTTP 流量，请将 SSL 证书上传至 <span class="keyword">Bluemix</span>。</span> 有关更多信息，请参阅<a href="../manageapps/secapps.html">保护应用程序安全</a>。</li>
+<li class="li substep"><span class="cmd">单击<span class="ph uicontrol">保存</span>。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">创建满足以下需求的容器组。</span> <ul><li>容器组中的实例数必须支持应用程序上的预期工作负载。
+<span class="ph">要确定所需实例的数目，可在运行应用程序的 Bluemix 中部署单个容器，并在此容器上执行负载测试。例如，如果应用程序每秒可处理 100 个请求，但是您期望每秒平均工作负载为 300 个请求，那么容器组的所需实例数目为 3。</span>
+<span class="ph">要使容器组具有高可用性且对故障的处理更富弹性，请考虑除最低要求的实例数外，额外包含更多实例，以用于处理预期的工作负载。额外的实例可在其他实例崩溃时处理工作负载。要确保自动恢复发生故障的实例，而不影响工作负载，请包含一个额外实例。要避免两个实例同时发生故障，请包含两个额外实例。此设置是 <var class="keyword varname">N+2</var> 模式，其中 <var class="keyword varname">N</var> 是处理请求的实例数，<var class="keyword varname">+2</var> 是额外两个实例。</span></li>
+<li>启用容器组的自动恢复功能，以确保崩溃的容器会自动恢复。</li>
+<li>启用反亲缘关系。<span class="ph">启用反亲缘关系时，容器实例会跨不同的物理计算节点分布，这可降低容器因硬件故障而崩溃的可能性。</span>反亲缘关系需要使用 <a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">CLI</a> 并在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 命令中包含 <samp class="ph codeph">--anti</samp> 选项。要在 CLI 中使用 <samp class="ph codeph">--anti</samp> 选项，必须已安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) V0.8.934 或更高版本。<span class="ph">您可能无法对较大的组大小使用此选项，因为每一个 <span class="keyword">Bluemix</span> 区域和组织可用于部署的计算节点集有限制。
+如果部署不成功，请减少组中容器实例的数目，或者除去 <samp class="ph codeph">--anti</samp> 选项。</span></li>
+<li>请不要在容器中包含持久性文件。您可以在跨区域复制的 Cloudant 数据库中存储文件。您可以使用 IBM
+jStart® 团队创建的<a href="https://github.com/ibmjstart/bluemix-cloudant-replicator" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">命令行实用程序</a>，自动配置数据库复制。</li>
+<li>请不要创建单个容器取代容器组。单个容器通常用于短期过程，且不像容器组那样具有内置高可用性功能。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">在不同的区域创建第二个组。</span> 针对任何其他区域重复上述操作。 <ul><li>要支持应用程序的预期工作负载，请使用所描述的 <var class="keyword varname">N+2</var> 模式来确定容器组的实例数。</li>
+<li>启用容器组的自动恢复功能，以确保崩溃的容器会自动恢复。</li>
+<li>启用反亲缘关系，以跨不同物理计算节点散布容器实例。</li>
+<li>容器组必须映射到与您在上一步中所创建的第一个容器组相同的路径。</li>
+<li>请不要在容器中包含持久性文件。您可以将文件存储在 Cloudant 数据库的其他实例中。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">配置 DNS 以解析 <span class="keyword">Bluemix</span> 的路径。</span>  <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">记下 DNS 注册器分配给您的名称服务器。您必须在您的 DNS 注册器中，将这些服务器添加为 NS 记录。</span></li>
+<li class="li substep"><span class="cmd">在 DNS 注册器中，通过提供名称服务器来委派域。</span></li>
+<li class="li substep"><span class="cmd">为节点配置负载均衡和故障转移。</span></li>
+</ol>
+</li>
+</ol>
+<div class="section postreq">有关设置具有高可用性 CF 应用程序的详细示例，请参阅<a href="http://www.ibm.com/developerworks/cloud/library/cl-multi-region-bluemix-apps-with-cloudant-and-dyn-trs/index.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">使用 IBM
+Cloudant 和 Dyn 配置和运行多区域 <span class="keyword">Bluemix</span> 应用程序</a>。描述如何使用 Dyn 的章节也适用于容器组。</div></div>
+<aside role="complementary" aria-labelledby="d49585e3777"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e4086" lang="zh-cn" id="container_group_private_ip"><h2 class="topictitle2" id="d49585e4086">连接到专用容器组</h2>
+<div class="body taskbody"><p class="shortdesc">确定容器组的负载均衡器 IP 地址，以便在不将组向公用网络公开的情况下访问该组。</p>
+<div class="section context">每个容器组都会通过内置<a href="container_planning.html#group_loadbalancing" title="容器组提供内置负载均衡，可将入局流量平均地（循环）路由到组中的各容器实例。 在创建了容器组或向现有组添加了实例后，不管是您自己添加的实例，还是在自动恢复期间重新创建的实例，都会启用负载均衡。">负载均衡器</a>进行部署，该负载均衡器用于均衡对组中各个容器的请求。容器组经常会使用映射到该组的 URL 向公用网络公开。对于组不是公共组的情况，容器组可以通过自动分配给负载均衡器的专用 IP 地址进行访问。此专用 IP 地址还允许通过 TCP 以及 HTTPS 进行通信的应用程序访问容器组。为了确定负载均衡器的专用 IP 地址，请完成以下步骤。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">列出正在空间中运行的容器组。</span> 记下容器组的公开端口，在本例中为 <var class="keyword varname">9080</var>。如果容器组没有公开端口，那么您必须创建新容器组并公开端口。仅在公开的端口上才可访问容器组负载均衡器。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+
+
+<pre class="pre screen"><code>Group ID                               Name                      Status            Created                         Updated   Port   
+cb628ddd-a1e7-4944-9a42-02abc80ea6ee   container_group_example   CREATE_COMPLETE   2016-09-26 15:43:00 -0400 EDT             9080   </code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">检查容器组。</span>  将 <var class="keyword varname">container_group_example</var> 替换为容器组的名称。查看 <span class="ph uicontrol">Loadbalancer</span> 部分中的 <span class="ph uicontrol">private_ip_address</span> 字段。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">container_group_example</var></code></pre>
+
+
+<pre class="pre screen"><code>    "Loadbalancer": {
+        "intermediate_ip_address": "192.0.2.1", 
+        "private_ip_address": "198.51.100.27"
+    }, </code></pre>
+
+
+<div class="note important"><span class="importanttitle">要点：</span> <span class="ph uicontrol">intermediate_ip_address</span> 由 GoRouter 用于在容器组向公众公开时，安全地将流量从公用网络路由到容器组。
+请勿使用负载均衡器的 <span class="ph uicontrol">intermediate_ip_address</span> 来访问专用网络上的容器组，因为这需要额外的路由表查找，可能会增加网络等待时间。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">确定负载均衡器专用 IP 地址。</span> 同一空间中的应用程序可以使用此专用 IP 地址与容器组进行专用通信。必须包含以下格式的公开端口才可访问负载均衡器：<samp class="ph codeph">198.51.100.27:9080</samp>。</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49585e4086"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49585e4208" lang="zh-cn" id="container_group_remove"><h2 class="topictitle2" id="d49585e4208">除去容器组</h2>
+<div class="body taskbody"><p class="shortdesc">要最充分地利用配额，请不时除去未使用的容器组。</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">要点：</span>  除去容器组之前，或使用 <samp class="ph codeph">cf delete-route</samp> 命令删除路径之前，请运行以下某个命令从容器组中除去路径。
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">host</var> -d <var class="keyword varname">domain</var> <var class="keyword varname">group_name_or_ID</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">通过使用以下某种方法来除去容器组。</span> <ul class="ul choices"><li class="li choice">在 <span class="keyword">Bluemix</span> GUI 中，选择容器组，然后从<span class="ph uicontrol">更多操作...</span> 菜单中单击<span class="ph uicontrol">删除</span>。</li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">通过运行以下命令并确认容器组是不是未显示在列表中，以此验证是否已除去该容器组。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49585e4208"></aside></article></article></div></main></body></html>

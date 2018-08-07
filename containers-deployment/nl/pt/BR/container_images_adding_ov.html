@@ -1,0 +1,364 @@
+<!DOCTYPE html><html lang="pt-br">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="Uma imagem de contêiner é a base para cada contêiner criado. Uma imagem é criada a partir de um Dockerfile, que é um arquivo que contém instruções para construir a imagem e construir artefatos, como um app, a configuração do app e suas dependências. Pense em uma imagem de contêiner como um arquivo executável (.exe ou .bin). Assim que você executa o arquivo de app executável, você cria uma instância de seu app. Ao executar um contêiner, você cria uma instância de contêiner da imagem.">
+<meta name="keywords" content="imagens, contêineres, IBM Containers, Docker Hub, registro particular, push, pull, criando, remover">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "pt-br",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Incluindo imagens do Docker em seu registro privado para usar no IBM Bluemix Container Service</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="title" id="container_images_adding_ov"><h1 class="topictitle1" id="title">Incluindo imagens do Docker no registro de imagens privadas do <span class="keyword">Bluemix</span> de sua organização</h1>
+<div class="abstract"><div class="shortdesc"><span class="ph" id="shortdesc"><span class="ph" data-hd-otherprops="registry_check">Uma imagem de contêiner é a base para cada
+contêiner criado. Uma imagem é criada a partir de um Dockerfile, que é um arquivo que contém
+instruções para construir a imagem e construir artefatos, como um app, a configuração do app e
+suas dependências. Pense em uma imagem de contêiner como um arquivo executável (<span class="ph filepath">.exe</span> ou
+<span class="ph filepath">.bin</span>). Assim que
+você executa o arquivo de app executável, você cria uma instância de seu app. Ao executar um contêiner, você
+cria uma instância de contêiner da imagem. </span></span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Atenção:</span> <span class="ph">Avaliações grátis para o <span class="ph">contêineres únicos e escaláveis</span>
+não estão disponíveis. <a href="cs_ov.html" title="O IBM Bluemix Container Service combina o Docker e o Kubernetes para entregar ferramentas poderosas, uma experiência intuitiva do usuário e a segurança e o isolamento integrados para automatizar a implementação, operação, ajuste de escala e monitoramento de apps conteinerizados por um cluster de hosts de cálculo independente usando as APIs do Kubernetes.">Saiba mais sobre gerenciamento de
+cluster e migração para o Kubernetes no <span class="keyword">IBM®
+Bluemix Container Service</span> no <span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Nesta página:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#about_images">Sobre imagens</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_copying" title="É possível copiar uma imagem para o registro privado do Bluemix de sua organização a partir de uma das localizações a seguir.">Copiando imagens</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_pulling" title="É possível puxar uma imagem do Docker Hub ou de seu registro privado, modificá-la localmente e enviá-la por push para o registro privado do Bluemix de sua organização.">Enviando imagens locais por push</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_building" title="Crie um Dockerfile para construir uma imagem. Um Dockerfile é um arquivo que inclui especificações para construir uma imagem do Docker, que é a base para um contêiner. Depois de criar o Dockerfile, será possível construir a imagem localmente ou diretamente no registro privado do Bluemix usando a interface da linha de comandos. Em seguida, a imagem ficará disponível por meio da visualização Catálogo no Bluemix.">Criando imagens</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_remove" title="É possível remover imagens não usadas para manter seu registro de imagens privadas do Bluemix organizado. Esteja ciente de que as imagens públicas da IBM não podem ser removidas de seu registro privado do Bluemix.">Removendo imagens</a></div>
+</div>
+</div>
+<article class="topic task nested1" role="article" aria-labelledby="d56824e155" id="about_images"><h2 class="topictitle2" id="d56824e155">Sobre imagens</h2>
+<div class="body taskbody"><div class="section context" id="about_images__context_kw3_f21_4z"><p><span class="ph">É possível usar as imagens certificadas pela IBM que são fornecidas pelo
+<span class="keyword">IBM
+Bluemix Container Service</span>, como as imagens do IBM Liberty e do IBM Node ou é
+possível criar sua própria imagem. </span> A maioria dos usuários inclui imagens a partir do Docker Hub ou customiza
+imagens existentes e, em seguida, as executa. Você deve executar uma
+combinação de ambas. </p>
+
+<div class="note important"><span class="importanttitle">Importante:</span> Cada imagem pode ter um tamanho máximo de 10 GB
+para ser executada como contêineres únicos ou grupos de contêineres escaláveis no <span class="keyword">IBM
+Bluemix Container Service</span>. </div>
+
+<p>Considere os requisitos de segurança de sua organização antes de construir um contêiner
+a partir de uma imagem.
+O <span class="keyword">IBM
+Bluemix Container Service</span> fornece
+o <a href="https://console.bluemix.net/docs/containers/va/va_index.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Vulnerability Advisor</a> para avaliar potenciais
+vulnerabilidades de segurança em uma imagem, que serão, então,
+listadas em um relatório para você revisar e resolver.</p>
+
+<dl><dt class="dlterm">Imagens públicas da IBM</dt>
+<dd>Comece com uma das <a href="container_images.html#images" title="É possível criar contêineres a partir de imagens IBM. As imagens podem ser implementadas como um contêiner único ou como grupos de contêineres escaláveis.">imagens públicas
+da IBM</a> que são fornecidas pelo
+<span class="keyword">IBM
+Bluemix Container Service</span>, como as
+imagens do IBM Liberty e IBM Node, para testar os recursos do
+<span class="keyword">IBM
+Bluemix Container Service</span>. Em
+seguida, é possível usar uma dessas imagens como imagem pai para modificar o Dockerfile e
+construir sua própria imagem com seu próprio código de app.</dd>
+<dt class="dlterm">Imagens do Hub</dt>
+<dd><a href="container_images_adding_ov.html#container_images_copying" title="É possível copiar uma imagem para o registro privado do Bluemix de sua organização a partir de uma das localizações a seguir.">Copie imagens diretamente do Docker
+Hub</a> para seu registro privado do <span class="keyword">Bluemix</span>
+ou <a href="container_images_adding_ov.html#container_images_pulling" title="É possível puxar uma imagem do Docker Hub ou de seu registro privado, modificá-la localmente e enviá-la por push para o registro privado do Bluemix de sua organização.">puxe uma imagem do Docker
+Hub</a>, modifique-a localmente e, em seguida, construa-a diretamente em seu registro. </dd>
+<dt class="dlterm">Crie sua própria imagem</dt>
+<dd>Se você tiver imagens de contêiner que já usa no ambiente local do Docker, será possível
+<a href="container_images_adding_ov.html#container_images_pulling" title="É possível puxar uma imagem do Docker Hub ou de seu registro privado, modificá-la localmente e enviá-la por push para o registro privado do Bluemix de sua organização.">enviá-las por push para seu registro privado do <span class="keyword">Bluemix</span></a> para utilizá-las no <span class="keyword">IBM
+Bluemix Container Service</span>. Também é possível criar seu próprio
+Dockerfile, construir, testá-lo localmente e, em seguida, enviá-lo por push para seu registro de imagens privadas. </dd>
+</dl>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56824e285" lang="pt-br" id="container_images_copying"><h2 class="topictitle2" id="d56824e285">Copiando imagens para o registro privado do <span class="keyword">Bluemix</span> a partir da linha de comandos</h2>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc">É possível copiar uma imagem para o registro privado do <span class="keyword">Bluemix</span> de sua organização a partir de uma das localizações
+a seguir.</div>
+
+
+<ul><li>Docker Hub: para copiar uma imagem do Docker Hub, ela deve ser marcada
+como <span class="ph uicontrol">pública</span>. É possível copiar uma imagem a partir de um registro de imagem pessoalmente hospedado contanto que
+esteja publicamente acessível e não requeira autenticação. <p>Para mudar uma imagem privada para
+pública, efetue login no <a href="http://hub.docker.com" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Docker
+Hub</a>, clique em <span class="ph menucascade"><span class="ph uicontrol">Repositórios</span> &gt; <span class="ph uicontrol"><var class="keyword varname">&lt;your_image&gt;</var></span> &gt; <span class="ph uicontrol">Configurações</span> &gt; <span class="ph uicontrol">Tornar pública</span></span>. </p>
+</li>
+<li>Seu registro privado do <span class="keyword">Bluemix</span>: talvez
+você queira usar uma cópia das imagens públicas fornecidas pela IBM ou uma imagem que tenha incluído no registro para criar uma nova imagem com um
+nome diferente. </li>
+</ul>
+</div>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Copie uma imagem do Docker Hub ou de seu registro privado do <span class="keyword">Bluemix</span>. </span> É possível incluir a imagem copiada em seu registro privado diretamente, sem fazer download dela para seu
+computador primeiro, executando o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+cpi</samp>.
+<div class="p"><div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+</div>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">&lt;source_image&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> </code></pre>
+
+
+<p>Exemplo para copiar uma imagem do Docker Hub</p>
+
+
+<ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_sinatra</var>:<var class="keyword varname">new</var></code></pre>
+</li>
+</ul>
+
+
+<div class="p">Exemplo para copiar uma imagem existente de seu registro privado do <span class="keyword">Bluemix</span><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;my_image&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">new</var></code></pre>
+</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se a imagem existe em seu registro executando o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp>.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> *<span class="ph">*Nesse comando, será possível substituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> por <samp class="ph codeph">docker</samp>
+ao <a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">efetuar login no <span class="keyword">IBM
+Bluemix Container Service</span></a> e configurar suas variáveis de
+ambiente para usar comandos nativos do Docker.</span></div>
+</li>
+</ol>
+<div class="section postreq"><p id="container_images_copying__result">A nova imagem está disponível no registro privado do <span class="keyword">Bluemix</span>. A imagem é varrida
+automaticamente por problemas de segurança pelo Vulnerability Advisor. É possível revisar os resultados
+da varredura de vulnerabilidade localizando a imagem em seu <span class="keyword wintitle">Catálogo</span> na
+seção Imagens do Contêiner. Corrija as vulnerabilidades que forem identificadas pela varredura e envie a imagem por push novamente
+seguindo a documentação do <a href="va/va_index.html" title="O Vulnerability Advisor verifica o status de segurança de imagens de contêineres antes da implementação e também verifica o status de contêineres em execução.">Vulnerability Advisor</a>. Em seguida, é possível selecionar a imagem e criar um contêiner a partir da GUI do <span class="keyword">Bluemix</span> ou da linha de comandos. Se a imagem não for exibida no <span class="keyword wintitle">Catálogo</span>,
+verifique se você está com login efetuado no <span class="keyword">Bluemix</span>.</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56824e556" lang="pt-br" id="container_images_pulling"><h2 class="topictitle2" id="d56824e556">Enviando imagens locais por push para seu registro privado do <span class="keyword">Bluemix</span> a partir da linha de comandos</h2>
+<div class="body taskbody"><p class="shortdesc">É possível puxar uma imagem do Docker Hub ou de seu registro privado, modificá-la localmente e
+enviá-la por push para o registro privado do <span class="keyword">Bluemix</span> de sua organização.</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">Nota:</span> Se você tiver efetuado login no plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>
+e tiver configurado as variáveis de ambiente para usar comandos nativos do Docker com relação ao <span class="keyword">IBM
+Bluemix Container Service</span>, abra uma nova sessão do utilitário de linha de comandos
+e efetue login no <span class="keyword">IBM
+Bluemix Container Service</span> novamente sem
+configurar as variáveis de ambiente para executar comandos <samp class="ph codeph">docker</samp> com relação ao mecanismo do Docker
+no computador local. Conclua essa tarefa por meio da segunda sessão do utilitário de linha de comandos na qual as
+variáveis de ambiente para comandos nativos do Docker não estão configuradas. </div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Se você não tiver a imagem em seu computador localmente, faça download da imagem no computador executando
+o comando <samp class="ph codeph">pull</samp>.</span> <div class="p"><pre class="codeblock"><code>docker pull <var class="keyword varname">source_image</var>:<var class="keyword varname">tag</var></code></pre>
+</div>
+
+
+<p>Exemplo para enviar uma imagem por pull a partir do Docker Hub:</p>
+
+
+<div class="p"><pre class="codeblock"><code>docker pull <var class="keyword varname">training/sinatra</var>:<var class="keyword varname">latest</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Identifique a imagem local com seu registro privado do <span class="keyword">Bluemix</span>, um novo nome e um valor de tag. </span> Identificar a imagem com as informações de registro e o nome indica ao Docker onde enviá-la por push em uma
+etapa posterior. A tag é usada para identificar instâncias de imagem mais facilmente, por exemplo, incluindo uma
+tag de versão. <span class="ph" id="container_images_pulling__image_name_info">Use caracteres alfanuméricos minúsculos ou
+sublinhados (_) somente no nome da imagem. Outros símbolos, como hifens (-) ou barras
+(/), podem impedir que a imagem seja publicada no registro de imagem.</span>
+<div class="p"><div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+</div>
+
+<div class="steps note"><span class="notetitle">Nota:</span> Se você mudou a imagem do Dockerfile localmente, certifique-se de que a imagem tenha um tamanho máximo
+de 10 GB antes de identificar e enviar por push a imagem para o registro do
+<span class="keyword">Bluemix</span>.</div>
+
+<pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+
+<p>Exemplo:</p>
+
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">new_sinatra</var>:version1</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Envie por push a imagem para seu registro privado do <span class="keyword">Bluemix</span>, usando o comando
+a seguir.</span> <div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">image_name</var></code></pre>
+</div>
+
+
+<p>Exemplo:</p>
+
+
+<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">myimage</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se a imagem existe em seu registro de imagem executando o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp>.</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>A nova imagem está disponível no registro privado do <span class="keyword">Bluemix</span>. A imagem é varrida
+automaticamente por problemas de segurança pelo Vulnerability Advisor. É possível revisar os resultados
+da varredura de vulnerabilidade localizando a imagem em seu <span class="keyword wintitle">Catálogo</span> na
+seção Imagens do Contêiner. Corrija as vulnerabilidades que forem identificadas pela varredura e envie a imagem por push novamente
+seguindo a documentação do <a href="va/va_index.html" title="O Vulnerability Advisor verifica o status de segurança de imagens de contêineres antes da implementação e também verifica o status de contêineres em execução.">Vulnerability Advisor</a>. Em seguida, é possível selecionar a imagem e criar um contêiner a partir da GUI do <span class="keyword">Bluemix</span> ou da linha de comandos. Se a imagem não for exibida no <span class="keyword wintitle">Catálogo</span>,
+verifique se você está com login efetuado no <span class="keyword">Bluemix</span>.</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56824e828" lang="pt-br" id="container_images_building"><h2 class="topictitle2" id="d56824e828">Criando suas próprias imagens com a interface da linha de comandos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">Crie um Dockerfile para construir uma imagem. Um
+Dockerfile é um arquivo que inclui especificações para construir uma imagem do Docker, que é a base
+para um contêiner. Depois de criar o
+Dockerfile, será possível construir a imagem localmente ou diretamente no registro privado do <span class="keyword">Bluemix</span> usando a interface
+da linha de comandos. Em seguida, a imagem ficará disponível por meio da visualização <span class="keyword wintitle">Catálogo</span>
+no <span class="keyword">Bluemix</span>.</p>
+<div class="section context"><ul><li>Para saber mais sobre Dockerfiles, consulte a <a href="https://docs.docker.com/engine/reference/builder/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Referência do Dockerfile</a>.</li>
+<li>É possível copiar um dos Dockerfiles de imagens confiáveis da IBM com
+o qual iniciar. Consulte o <a href="../images/docker_image_ibmliberty/ibmliberty_starter.html">IBM Liberty Profile</a>, o <a href="../images/ibmnode_strong_pm/ibmnode-strong-pm_starter.html">IBM Node with Strongloop</a> e <a href="../images/docker_image_ibmnode/ibmnode_starter.html">IBM Node</a> para os Dockerfiles de amostra.</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Crie um diretório local no qual seja possível armazenar o Dockerfile e o código de app relacionado. Navegue
+para o diretório. </span></li>
+<li class="step stepexpand"><span class="cmd">Crie um Dockerfile. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Crie um Dockerfile em seu diretório local. </span> <pre class="codeblock"><code>touch Dockerfile</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Abra o Dockerfile usando um editor de texto. Inclua as instruções a seguir no
+Dockerfile.</span> <div class="note tip"><span class="tiptitle">Dica:</span> <samp class="ph codeph">FROM</samp> é necessário, mas outras instruções são opcionais.</div>
+ <pre class="codeblock"><code>FROM <var class="keyword varname">Image_Name</var>
+LABEL <var class="keyword varname">Key</var>="<var class="keyword varname">Value</var>"
+EXPOSE <var class="keyword varname">Porta</var>
+ CMD ["......"]</code></pre>
+ <p>Exemplo</p>
+
+
+<pre class="codeblock"><code>FROM registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty
+LABEL <var class="keyword varname">description</var>="This is my test Dockerfile"
+EXPOSE <var class="keyword varname">9080</var></code></pre>
+
+
+<p>Este exemplo usa o IBM Liberty como uma imagem base, inclui um
+rótulo nos metadados da imagem e expõe a porta 9080. Para obter comandos adicionais do Dockerfile, consulte a
+<a href="https://docs.docker.com/engine/reference/builder/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Referência do
+Dockerfile</a>. </p>
+
+
+<div class="note important"><span class="importanttitle">Importante:</span> Se você criar seu próprio Dockerfile, certifique-se de que a
+imagem tenha um tamanho máximo de 10 GB para estar em execução no
+<span class="keyword">IBM
+Bluemix Container Service</span>.</div>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> Quando o contêiner inicia, o <span class="keyword">IBM
+Bluemix Container Service</span>
+configura a rede de contêiner privada e designa um endereço IP privado ao contêiner. Se seu
+app requerer uma conexão de rede ativa no momento em que o app for iniciado, inclua um <a href="container_planning.html#network_delay" title="Quando um contêiner é iniciado, o IBM Bluemix Container Service configura a rede de contêiner privada, expõe as portas do contêiner e designa um endereço IP privado ao contêiner. Esse processo pode levar alguns segundos. Se seu app requerer uma conexão de rede ativa no momento em que ele é iniciado, a rede privada do contêiner poderá não estar configurada ainda, o que pode travar o app. Para assegurar-se de que a rede do IBM Bluemix Container Service esteja concluída antes do início do app, considere implementar uma das soluções a seguir para manipular atrasos de rede.">comando sleep no Dockerfile ou
+ajuste o código do app para executar ping de um endereço IP até que ele esteja disponível</a> para assegurar que a rede do <span class="keyword">IBM
+Bluemix Container Service</span> seja concluída antes do início
+do app. </div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_images_building__build_push"><span class="cmd">Escolha construir a imagem diretamente no <span class="keyword">Bluemix</span> ou construir e testar a imagem localmente
+antes de enviá-la por push para o <span class="keyword">Bluemix</span>. </span> <ul><li>Para construir a imagem diretamente no <span class="keyword">Bluemix</span>, execute o comando a seguir.*<div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+Exemplo<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_images_building__d34479e179">*Nesse comando, será possível substituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> por <samp class="ph codeph">docker</samp>
+ao <a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">efetuar login no <span class="keyword">IBM
+Bluemix Container Service</span></a> e configurar suas variáveis de
+ambiente para usar comandos nativos do Docker.</span><span class="ph" id="container_images_building__d34479e191">Será possível usar comandos nativos do
+Docker em todas as etapas marcadas com um asterisco (*) neste tópico. </span></div>
+</li>
+<li>Para construir a imagem localmente e, seguida, enviá-la por push para o <span class="keyword">Bluemix</span>, siga estas etapas.<div class="p"><ol type="a"><li>Se você estiver usando o plug-in para o <span class="keyword">IBM
+Bluemix Container Service</span>, efetue login novamente. Não configure as
+variáveis de ambiente para a opção 2 para que os comandos <samp class="ph codeph">docker</samp> sejam enviados para o
+mecanismo do Docker na máquina local.<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Construa a imagem localmente por meio do Dockerfile.<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>Execute um contêiner a partir da imagem para testar se seu novo app é executado localmente usando o comando
+a seguir, em que <var class="keyword varname">Port</var> é a porta para o tráfego HTTP.<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>Se
+o app estiver sendo executado corretamente, o ID do contêiner será exibido na saída da CLI. Para revisar os logs
+do contêiner, execute <samp class="ph codeph">docker logs
+<var class="keyword varname">&lt;container_name_or_id&gt;</var>.</samp></p>
+</li>
+<li id="container_images_building__tag">Identifique a imagem local com seu registro privado do <span class="keyword">Bluemix</span> e um novo nome. <span class="ph">Use caracteres alfanuméricos minúsculos ou
+sublinhados (_) somente no nome da imagem. Outros símbolos, como hifens (-) ou barras
+(/), podem impedir que a imagem seja publicada no registro de imagem.</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>Exemplo</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>Envie por push a imagem para seu registro privado do <span class="keyword">Bluemix</span>, usando o comando
+a seguir.<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">Importante:</span> <span class="ph">Ao enviar por push uma imagem para seu registro privado do <span class="keyword">Bluemix</span>, o tamanho relatado para a
+imagem é menor do que o tamanho da mesma imagem em seu mecanismo local do Docker. A diferença entre
+os tamanhos não indica que ocorreu um problema quando a imagem foi enviada por push. O tamanho compactado da
+imagem é relatado no <span class="keyword">IBM
+Bluemix Container Service</span>.</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand" id="container_images_building__verify_image"><span class="cmd">Verifique se a imagem foi enviada por push para seu registro do <span class="keyword">Bluemix</span>.*</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="container_images_building__va">Opcional: <span class="cmd">Revise as vulnerabilidades da imagem. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Na GUI do <span class="keyword">Bluemix</span>, acesse o
+catálogo e selecione <span class="ph uicontrol">Contêineres</span>. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Clique na imagem que você incluiu. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Na seção <span class="ph uicontrol">Avaliação de Vulnerabilidade</span>, revise o status de
+sua avaliação de vulnerabilidade.</span> O status é exibido como uma das condições a seguir:
+<ul><li><span class="keyword wintitle">Seguro para implementação</span> - Nenhuma vulnerabilidade significativa
+foi localizada.</li>
+<li><span class="keyword wintitle">Implementar com cuidado</span> - Vulnerabilidades significativas foram localizadas para serem
+tratadas.</li>
+<li><span class="keyword wintitle">Implementação bloqueada</span> - Vulnerabilidades significativas foram localizadas e devem ser
+tratadas para que a imagem possa ser implementada.</li>
+<li><span class="keyword wintitle">Incompleto</span> - A varredura não está completa. A varredura ainda pode estar em execução ou o sistema operacional da imagem pode não ser compatível. Aguarde e tente a varredura novamente. Se a varredura ainda não tiver sido concluída, envie a imagem por push novamente para iniciar uma nova varredura. As
+imagens com varreduras incompletas não são bloqueadas para implementação.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56824e1343" lang="pt-br" id="container_images_remove"><h2 class="topictitle2" id="d56824e1343">Removendo imagens com a interface da linha de comandos (CLI) do seu registro de
+imagens privado do <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc">É possível remover imagens não usadas para manter seu registro de imagens privadas do <span class="keyword">Bluemix</span> organizado. Esteja ciente
+de que as imagens públicas da IBM não podem ser removidas de seu registro privado do <span class="keyword">Bluemix</span>. </p>
+<div class="section prereq">Antes de iniciar, remova quaisquer contêineres que estejam usando a imagem. </div><ol class="steps"><li class="step stepexpand"><span class="cmd">Para remover uma imagem, execute o comando a seguir.* </span> <div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+Exemplo
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_images_remove__d35558e179">*Nesse comando, será possível substituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> por <samp class="ph codeph">docker</samp>
+ao <a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">efetuar login no <span class="keyword">IBM
+Bluemix Container Service</span></a> e configurar suas variáveis de
+ambiente para usar comandos nativos do Docker.</span><span class="ph" id="container_images_remove__d35558e191">Será possível usar comandos nativos do
+Docker em todas as etapas marcadas com um asterisco (*) neste tópico. </span></div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Verifique se a imagem foi removida executando o comando a seguir e confirmando se a
+imagem não aparece na lista.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+</ol>
+</div>
+</article></article></div></main></body></html>

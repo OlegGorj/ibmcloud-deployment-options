@@ -1,0 +1,805 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="如果您在使用 IBM Bluemix Container Service 時發生問題或有疑問，可以搜尋資訊或透過討論區提問來取得協助。您也可以開立支援問題單。">
+<meta name="keywords" content="疑難排解, 支援, IBM Containers, 容器, 除錯, 失敗, cli, 配額, 映像檔, Delivery Pipeline, Liberty, 單一容器, 容器群組, 自動回復, 群組實例失敗, 群組實例損毀, 刪除, network_degraded, docker compose, 資料儲存空間, 磁區">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>單一及可擴充容器 疑難排解</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d84326e6" id="container_troubleshoot"><h1 class="topictitle1" id="d84326e6"><span class="ph">單一及可擴充容器</span> 疑難排解</h1>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc"> 如果您在使用 <span class="keyword">IBM®
+Bluemix® Container Service</span> 時發生問題或有疑問，可以搜尋資訊或透過討論區提問來取得協助。您也可以開立支援問題單。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">小心：</span> 不提供<span class="ph"><span class="ph">單一及可擴充容器</span>的免費試用。<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">瞭解在「<span class="keyword">Bluemix</span> 公用」上，如何在 <span class="keyword">IBM
+Bluemix Container Service</span> 中進行叢集管理並移轉至 Kubernetes。</a></span></div>
+</div>
+
+
+<div class="p">在此頁面中：
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_debug_containers" title="請檢閱您既有的選項以進行容器除錯，並找出失敗的主要原因。">除錯容器以及檢閱日誌</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_cli">CLI 設定疑難排解</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_orgs">配額疑難排解</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_images">映像檔疑難排解</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_containers">容器疑難排解</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_compose">Docker Compose 疑難排解</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_volumes">資料儲存空間疑難排解</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_known_issues" title="瞭解 IBM Containers 中發生的已知問題。">已知的問題</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_getting_help" title="從哪裡開始進行容器疑難排解？">取得 IBM Bluemix Container Service 的協助及支援</a></div>
+</div>
+</div>
+</div>
+<article class="topic task nested1" role="article" aria-labelledby="d84326e153" lang="zh-tw" id="ts_debug_containers"><h2 class="topictitle2" id="d84326e153">除錯容器以及檢閱日誌</h2>
+<div class="body taskbody"><p class="shortdesc">請檢閱您既有的選項以進行容器除錯，並找出失敗的主要原因。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">列出容器，並檢閱現行狀態。</span> <ul><li><span class="keyword option">單一容器</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="keyword option">容器群組</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">參閱<a href="container_cli_reference_cfic.html#container_cli_reference_cfic_states" title="您可以執行 bx ic inspect 指令並找到狀態欄位，以檢視現行容器狀態。容器狀態可以提供容器實例可用性以及可能發生的問題的其他相關資訊。">每一種狀態的意義</a>，並檢閱防止容器失敗的提示。</span></li>
+<li class="step stepexpand"><span class="cmd">如果您的容器失敗或損毀，請檢查容器以找出失敗的主要原因。</span> 您可以在回應的<span class="ph uicontrol">失敗</span>區段中找到錯誤訊息。
+<ul><li><span class="keyword option">單一容器</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li><span class="keyword option">容器群組</span><ol type="a"><li>檢查容器群組。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">GROUP</var></code></pre>
+</li>
+<li>如需進一步資訊，請列出容器群組的實例，並檢查每一個實例。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">GROUP</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">GROUP_INSTANCE</var></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">如果應用程式已結束但發生失敗，請擷取應用程式的日誌。</span> <div class="steps note"><span class="notetitle">註：</span> 只有在應用程式將日誌寫入標準 STDOUT 及 STDERR 輸出串流時，才能使用此指令。寫入這些標準輸出串流，則即使是容器關閉或損毀的情況下也允許您檢視容器日誌。</div>
+
+
+<ul><li><span class="keyword option">單一容器</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li><span class="keyword option">容器群組</span><ol type="a"><li>列出容器群組的容器實例。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">GROUP</var></code></pre>
+</li>
+<li>擷取每一個實例的日誌。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs <var class="keyword varname">GROUP_INSTANCE</var></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">如果您需要存取不再可用之容器的日誌（例如，已使用自動回復重建之容器群組的實例），請使用 Kibana 來檢視日誌。</span> <p><samp class="ph codeph"><span class="ph filepath">https://logmet.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/</span></samp></p>
+
+
+<p>在 Kibana 中，日誌最多可使用 7 天。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">如果日誌已儲存至容器內的檔案，則您必須登入容器才能進行檢閱。</span> <div class="note important"><span class="importanttitle">重要：</span> 您只能登入執行中的容器。如果您的容器損毀，而且無法重新啟動，則可能無法存取容器的日誌。請考慮將應用程式變更成寫入標準 STDOUT 及 STDERR 輸出串流，以在無法再存取容器時仍然可以存取日誌檔。</div>
+
+
+<ol type="a"><li>如果您的容器未執行，請啟動容器。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> start <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li>登入執行中容器。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">CONTAINER</var> bash</code></pre>
+</li>
+<li>導覽至日誌檔，並檢閱日誌。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">如果日誌已儲存至磁區，而且無法再啟動容器，則請建立新的容器來存取磁區。</span> <ol type="a"><li>建立新的容器，並將新的容器裝載至儲存日誌檔的磁區。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name logcontainer -m 64 --volume <var class="keyword varname">MOUNT_PATH_TO_VOLUME</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li>登入執行中容器。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it logcontainer bash</code></pre>
+</li>
+<li>導覽至磁區裝載路徑，並檢閱日誌檔。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">如果您需要進一步支援容器除錯，請開立 <a href="../support/index.html#contacting-support" rel="external" target="_blank" title="（在新分頁或視窗中開啟）"><span class="keyword">Bluemix</span> 支援問題單</a>。</span></li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d84326e153"></aside></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e418" lang="zh-tw" id="ts_ov_cli"><h2 class="topictitle2" id="d84326e418">CLI 設定疑難排解</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e418"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e479" lang="zh-tw" id="ts_cf_ic_rpc"><h3 class="topictitle3" id="d84326e479">init 期間發生方法錯誤 <samp class="ph codeph">(rpc)</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">嘗試執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp> 時，您得到下列其中一則訊息。<ul><li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rpc: can't find method
+CliRpcCmd.IsLoggedIn</samp></li>
+<li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rpc: can't find method
+CliRpcCmd.IsMinCliVersion</samp></li>
+</ul>
+</div><div class="section tsCauses">已安裝的 Cloud Foundry 版本比 <span class="keyword">IBM
+Bluemix Container Service</span> 支援的版本還要舊。</div><div class="section tsResolve"><ol><li>執行 <samp class="ph codeph">cf -v</samp>，以查看已安裝的 Cloud Foundry CLI 版本。</li>
+<li>如果已安裝的版本早於 <span class="ph">6.14.0</span>，請<a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">更新 Cloud
+Foundry CLI</a>。</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e583" lang="zh-tw" id="ts_cf_ic_registry_error"><h3 class="topictitle3" id="d84326e583"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp> 期間收到登錄鑑別錯誤</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp> 時，您看到下列其中一則鑑別錯誤訊息。<div class="p"><ul><li><pre class="codeblock"><code>Could not authenticate with IBM Containers registry at registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>
+****exit status 1
+****time="2015-07-31T08:58:32-04:00" level=fatal msg="Post http:///var/run/docker.sock/v1.18/auth: dial 
+unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?"</code></pre>
+</li>
+<li><pre class="codeblock"><code>** Retrieving client certificates from IBM Containers
+Authentication failure. Check your username and password
+Invalid token format. Please generate new token.</code></pre>
+</li>
+</ul>
+</div>
+</div><div class="section tsCauses">未符合其中一個 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 必要條件，或無法使用 <span class="keyword">IBM
+Bluemix Container Service</span>。</div><div class="section tsResolve"><ol><li>驗證 Docker 常駐程式在執行中。如果未在執行中，請予以啟動，並重新執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp>。</li>
+<li>執行 <samp class="ph codeph">bx login</samp>，驗證您已登入 Cloud Foundry CLI。然後，執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp>，重新登入外掛程式。</li>
+<li>驗證 <span class="keyword">IBM
+Bluemix Container Service</span> 的可用性。
+<a href="https://developer.ibm.com/bluemix/support/#status" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">檢查 <span class="keyword">Bluemix</span> 狀態頁面，以取得相關資訊。</a></li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e715" lang="zh-tw" id="ts_sudo"><h3 class="topictitle3" id="d84326e715"><span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令需要 Sudo</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"> 當您執行 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令時，需要搭配使用 <samp class="ph codeph">sudo</samp> 字首與您的所有指令。</div><div class="section tsCauses">依預設，<span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令必須以 root 鑑別執行，因此，可能需要字首 <samp class="ph codeph">sudo</samp>，視作業系統而定。</div><div class="section tsResolve">若要在沒有 <samp class="ph codeph">sudo</samp> 的情況下執行 <samp class="ph codeph">docker</samp> 及 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令，請執行下列指令，然後，如果您是在 Linux 上，則必須先登出再重新登入。
+<pre class="codeblock"><code>sudo usermod -a -G docker <var class="keyword varname">&lt;CURRENT_USER&gt;</var></code></pre>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e807" lang="zh-tw" id="ts_ov_orgs"><h2 class="topictitle2" id="d84326e807">配額疑難排解</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e807"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e868" lang="zh-tw" id="ts_quota_space"><h3 class="topictitle3" id="d84326e868">由於組織配額不足，無法建立容器</h3>
+<div class="body tsBody"><div class="section tsSymptoms">建立容器時，您收到一則訊息，指出在您的空間中沒有足夠的配額。<pre class="pre msgblock"><code>BXNUI0110E: 無法配置 IBM Containers 資源。組織配額不足，無法配置給新空間。不得超出組織 '<var class="keyword varname">organization</var>' 的浮動 IP。請使用 IBM
+    <span class="keyword">Bluemix</span>「管理組織」，來調整配額配置。</code></pre>
+</div><div class="section tsCauses">嘗試在未配置足夠配額的空間中建立容器時，可能會顯示此訊息。依預設，每個空間都需要將 2 個 IP 位址及 2 GB 的記憶體配置給該空間，以便使用容器服務。</div><div class="section tsResolve"><div class="p">若要將記憶體及 IP 配額分散到多個空間，請執行下列動作：<ol><li><span class="ph">從帳戶詳細資料的「管理組織」中，選取組織。</span></li>
+<li><span class="ph">在「配額」區段中，檢視容器的詳細資料。</span></li>
+<li>按一下<span class="ph uicontrol">編輯</span>，然後跨組織中的空間配置記憶體及 IP 位址。</li>
+<li>在組織的任何空間中建立儲存器。</li>
+</ol>
+</div>
+
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e951" lang="zh-tw" id="ts_trial_upgrade"><h3 class="topictitle3" id="d84326e951">雖然您有付費帳戶，但是無法編輯配額</h3>
+<div class="body tsBody"><div class="section tsSymptoms">您無法修改容器配額。</div><div class="section tsCauses">可能是組織管理員與計費資訊之間有不一致的情形。</div><div class="section tsResolve"><div class="p">登入的使用者必須是組織的管理員。若要驗證擁有者，請完成下列步驟。<ol><li><span class="ph">從帳戶詳細資料的「管理組織」中，選取組織。</span></li>
+<li>在使用者清單中，驗證組織的管理員與您登入時所使用的 ID 相同。</li>
+<li>登出帳戶，然後再重新登入。</li>
+</ol>
+如果您完成下列步驟，但仍然無法編輯容器配額，請與「IBM 支援中心」聯絡。</div>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e1017" lang="zh-tw" id="ts_ov_images"><h2 class="topictitle2" id="d84326e1017">映像檔疑難排解</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e1017"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1078" lang="zh-tw" id="ts_firewall_images"><h3 class="topictitle3" id="d84326e1078">內部 Proxy 會封鎖推送映像檔的要求</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">若要在特定 <span class="keyword">Bluemix</span> 地區內建立容器，您必須推送映像檔，以建立該地區內登錄的容器。當您嘗試將映像檔推送至該登錄時，連線會失敗，並顯示下列其中一則錯誤訊息。
+<pre class="pre screen"><code>Connection refused</code></pre>
+<pre class="pre screen"><code>Connection timed out</code></pre>
+</div><div class="section tsCauses">您的防火牆設定阻止電腦與 <span class="keyword">Bluemix</span> 登錄的通訊。通常，基於安全考量，會配置內部 Proxy 設定，僅容許允許的通訊。</div><div class="section tsResolve">在您的防火牆中，針對地區特定 IP 位址，開啟電腦與登錄的通訊：<ul id="ts_firewall_images__ul_on4_rfj_wz"><li>美國南部：<pre class="codeblock"><code>169.55.39.122
+169.55.39.124
+169.55.39.126
+169.55.211.14
+169.46.9.2
+169.46.9.3
+169.46.9.20
+169.46.9.21</code></pre>
+</li>
+<li>英國：<pre class="codeblock"><code>159.8.188.168
+159.8.188.169
+159.8.188.174
+159.8.188.179
+169.50.153.69
+169.50.153.76
+169.50.153.81
+169.50.153.85</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1143" lang="zh-tw" id="ts_liberty_image"><h3 class="topictitle3" id="d84326e1143">IBM
+WebSphere Application Server Liberty 映像檔問題</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">在 <span class="keyword">IBM
+Bluemix Container Service</span> 中使用其中一個 IBM WebSphere® Application Server Liberty 映像檔時發生問題。</div><div class="section tsCauses"><p>可能未正確地設定映像檔。</p>
+</div><div class="section tsResolve"><p>如果您有此 <span class="ph filepath">Dockerfile</span> 映像檔特有的相關問題，請使用 <a href="https://github.com/WASdev/ci.docker/issues" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">GitHub 問題追蹤系統</a>。如需與 IBM WebSphere Application Server Liberty 相關的一般問題，請前往 <a href="https://developer.ibm.com/wasdev/help/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">WASdev 社群</a>以取得協助。</p>
+
+<p>如需 <span class="keyword">IBM
+Bluemix Container Service</span> 中 IBM WebSphere Application Server Liberty 映像檔的相關資訊，請參閱 <a href="../images/docker_image_ibmliberty/ibmliberty_starter.html">IBM
+WebSphere Application Server Liberty 映像檔</a>。</p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1271" lang="zh-tw" id="ts_image_baduserid"><h3 class="topictitle3" id="d84326e1271">無法從專用 <span class="keyword">Bluemix</span> 映像檔登錄中取回映像檔</h3>
+<div class="body tsBody"><div class="section tsSymptoms">您從專用 <span class="keyword">Bluemix</span> 登錄的容器映像檔中建立了容器，但該容器停留在<span class="ph uicontrol">建置中</span>狀態。當您執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect</samp> 指令時，下列錯誤訊息會顯示在 CLI 回應的 <span class="ph uicontrol">Env</span> 區段中。<pre class="codeblock"><code>"Env": [
+            "metadata_exit_code=-1",
+            "logging_password=",
+            "space_id=0e65c436-9413-46e2-8b42-ff06aa74ac21",
+            "logstash_target=logmet.opvis.bluemix.net:9091",
+            "metadata_err_msg=Cannot pull image from registry: Pull failed with error message failed 
+             to register layer: ApplyLayer exit status 1 stdout:  stderr: Container ID 1234567890 
+             cannot be mapped to a host ID",
+            "metrics_target=logmet.opvis.bluemix.net:9095",
+            "metadata_running=1"</code></pre>
+</div><div class="section tsCauses">在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，於 Docker Engine 中啟用 <a href="https://docs.docker.com/engine/security/security/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Docker 使用者名稱空間特性</a>。最先引進使用者名稱空間特性的是 Docker 1.10 版，該特性能夠將容器中的 root 使用者對映至容器外的非 root 使用者。如此一來，使用者可以在容器內執行 root 動作的許可權，在容器外可能受限，因而無法存取、變更或移除主機上和其他容器中的檔案。<div class="steps note"><span class="notetitle">註：</span> Docker 使用者名稱空間與您在 <span class="keyword">Bluemix</span> 中設定的名稱空間不同，以識別<a href="container_planning.html#container_planning_namespace" title="若要儲存及管理 IBM Bluemix Container Service 的專用映像檔，每個組織都必須在 Bluemix 中設定自己的專用 Docker 映像檔登錄。專用登錄的這個名稱稱為名稱空間，在 Bluemix 內必須是唯一的。">專用映像檔登錄</a>。</div>
+<p>當您使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 指令從容器映像檔建立容器時，該映像檔會從您的專用 <span class="keyword">Bluemix</span> 映像檔登錄載入到 IBM Cloud Docker Engine。然後，Docker Engine 會開始建立個別的容器階層。視容器映像檔中指定的內容而定，本端機器中的應用程式檔案有可能已新增至容器。所有這些檔案是由本端機器上的使用者 ID (UID) 和群組 ID (GID) 所建立。UID 和 GID 指出使用者在本端機器上的許可權。當您想要新增這些檔案至容器時，個別 UID 及 GID 會對映至該容器內的 UID 及 GID。對映的 UID 和 GID 在容器內可能有不同於本端機器上的許可權。例如，本端機器的非 root UID 及 GID 對映至容器內的 root 使用者。如此一來，使用者在容器內可能表現的像一位 root 使用者，可存取、變更及移除容器檔案。當容器在隔離的環境中執行時，UID 及 GID 無法存取主機上的任何檔案，因為它在容器外被指派非 root 許可權。</p>
+<p>若要將本端機器的 UID 及 GID 對映至容器內的 UID 及 GID，則使用者名稱空間特性需要所有檔案都是以 0 與 65536 之間的 UID 及 GID 來建立。</p>
+<p>從這個範圍以外的 UID 或 GID 建立檔案時，以及這個檔案包含在其中一個容器映像檔層時，會發生所顯示的錯誤。當您從映像檔建立容器時，Docker Engine 會建置映像檔的每一層。找到具有範圍以外之 UID 或 GID 的檔案時，Docker Engine 會失敗，因為此 UID 或 GID 無法對映至容器內的有效 UID 或 GID。若檔案用於某個映像檔層，並在下一個映像檔層予以移除，則 Docker Engine 也會失敗。</p>
+</div><div class="section tsResolve"><dl><dt class="dlterm">在本端 Docker Engine 上啟用使用者名稱空間</dt>
+<dd>當您在本端建置容器映像檔時，務必在本端 Docker Engine 中啟用使用者名稱空間特性。如此一來，本端機器上所有不在有效使用者名稱空間範圍內的 UID 和 GID 都會自動對映至該範圍內的有效 ID。請先在本端測試容器映像檔，再將它推送至專用 <span class="keyword">Bluemix</span> 映像檔登錄並與 <span class="keyword">IBM
+Bluemix Container Service</span> 搭配使用。如需如何啟用使用者名稱空間特性的相關資訊，請參閱
+<a href="https://docs.docker.com/engine/reference/commandline/daemon/#starting-the-daemon-with-user-namespaces-enabled" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Starting the daemon with user namespaces enabled</a>。</dd>
+<dt class="dlterm">註銷受影響的映像檔層，並變更受影響檔案的所有權</dt>
+<dd>如果您找不到導致此問題的檔案，請嘗試註銷 Dockerfile 中的映像檔層，並將映像檔層逐一解除註解。請建置映像檔，並建立容器，以尋找受影響的映像檔層。<p>執行 <samp class="ph codeph">chown [-R] root:root
+<var class="keyword varname">&lt;file_or_folder&gt;</var></samp>，以變更本端機器上所儲存的受影響檔案的所有權，或將此指令新增至 Dockerfile 中的受影響映像檔層。</p>
+<p>範例 Dockerfile</p>
+<pre class="codeblock"><code>RUN curl -fsSL "https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz" \
+        | tar -xzC /tmp \
+  &amp;&amp; cd /tmp/git-${GIT_VERSION} \
+  &amp;&amp; ./configure \
+  &amp;&amp; make all \
+  &amp;&amp; make install \
+  &amp;&amp; chown -R root:root /tmp</code></pre>
+</dd>
+</dl>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1447" lang="zh-tw" id="ts_image_export"><h3 class="topictitle3" id="d84326e1447">無法從專用 <span class="keyword">Bluemix</span> 映像檔登錄中匯出映像檔</h3>
+<div class="body tsBody"><div class="section tsSymptoms">您已登入 <span class="keyword">IBM
+Bluemix Container Service</span>，並且想要使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp> 指令，來將映像檔從專用 <span class="keyword">Bluemix</span> 登錄取回到本端機器。指令失敗，指出不支援 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp>。</div><div class="section tsCauses">不支援使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp> 指令將映像檔從專用 <span class="keyword">Bluemix</span> 登錄取回到本端機器。</div><div class="section tsResolve">若要從專用 <span class="keyword">Bluemix</span> 登錄匯出映像檔，請遵循下列步驟。<ol><li><a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a>。如果您已登入，請確定環境變數未設為針對 <span class="keyword">IBM
+Bluemix Container Service</span> 使用原生 Docker 指令。</li>
+<li>列出映像檔。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+<li>將映像檔從專用 <span class="keyword">Bluemix</span> 登錄取回到本端機器。請使用前一個步驟所傳回之映像檔的名稱或 ID。
+<pre class="codeblock"><code>docker pull <var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+</li>
+<li>驗證已將映像檔取回到本端機器。<pre class="codeblock"><code>docker images</code></pre>
+</li>
+<li>將映像檔儲存至 <span class="ph filepath">.tar</span> 檔案。
+<pre class="codeblock"><code>docker export <var class="keyword varname">&lt;image_name_or_id&gt;</var> &gt; <var class="keyword varname">&lt;exported_image_name&gt;</var>.tar</code></pre>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1605" lang="zh-tw" id="ts_namespace_change"><h3 class="topictitle3" id="d84326e1605">無法變更組織的名稱空間</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">您找不到變更名稱空間的方法。</div><div class="section tsCauses">在建立組織的名稱空間之後，就無法變更此名稱空間。</div><div class="section tsResolve">您可以建立另一個組織，並將該新組織的名稱空間設為所需名稱。</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1663" lang="zh-tw" data-hd-audience="" id="ts_image_push_login"><h3 class="topictitle3" id="d84326e1663">執行 <samp class="ph codeph">docker push</samp> 期間系統提示您登入</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">如果您嘗試執行 <samp class="ph codeph">docker push</samp>，將映像檔新增至您的專用 <span class="keyword">Bluemix</span> 映像檔登錄，則系統會提示您輸入登入認證。在您輸入 Docker 或 <span class="keyword">Bluemix</span> 認證時，鑑別失敗。</div><div class="section tsCauses">鑑別可能由於下列原因而失敗。<ul><li>包含 Cloud Foundry 鑑別資訊的載送記號過期。</li>
+<li><span class="keyword">Bluemix</span> 授權服務無法使用。</li>
+</ul>
+</div><div class="section tsResolve"><div class="p"><ul><li>如果您是使用 <span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式：<ol><li>執行下列指令，登入 Cloud Foundry CLI，以重新整理您電腦上的載送記號。<pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+<span class="ph">當您使用聯合 ID 登入時，需要單一登入參數 <span class="keyword option">--sso</span>。如果使用此選項，請開啟 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a> 以取得一次性密碼。如果您未併入 <span class="keyword option">--sso</span> 選項，請完成下列子步驟。</span><ol type="a"><li>對於<span class="ph uicontrol">電子郵件</span>，輸入您用來登入 <span class="keyword">Bluemix</span> 的 IBM ID。</li>
+<li>對於<span class="ph uicontrol">密碼</span>，輸入您用來登入 <span class="keyword">Bluemix</span> 的 IBM ID 的密碼。輸入使用者名稱及密碼，即會擷取您的 Bluemix 組織及空間。</li>
+<li>輸入代表其中一個 <span class="keyword">Bluemix</span> 組織的號碼。</li>
+<li>輸入代表其中一個現有 <span class="keyword">Bluemix</span> 空間的號碼。</li>
+</ol>
+</li>
+<li>起始設定 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 以重建您的載送記號。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</div>
+
+<p>如果在重新登入之後仍然出現提示，表示 <span class="keyword">Bluemix</span> 授權服務無法使用。請稍後再試。</p>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e1836" lang="zh-tw" id="ts_ov_containers"><h2 class="topictitle2" id="d84326e1836">容器疑難排解</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e1836"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e1899" lang="zh-tw" id="ts_group_502"><h3 class="topictitle3" id="d84326e1899">存取應用程式時發生 <samp class="ph codeph">502 Bad Gateway</samp> 錯誤</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><div class="p">您已順利部署容器群組，但開啟應用程式的 URL 時顯示下列錯誤。<pre class="codeblock"><code>502 Bad Gateway: Registered endpoint failed to handle the request.</code></pre>
+</div>
+</div><div class="section tsCauses"><div class="p"><ol><li>可能仍在設定遞送中。</li>
+<li>容器可能未回應。</li>
+<li>雖然容器群組順利執行，但是遞送可能發生錯誤。</li>
+</ol>
+</div>
+</div><div class="section tsResolve"><ol><li>等待數分鐘的時間，讓遞送有足夠的時間完成。在執行容器程序之後可能要先等待 5 分鐘，容器群組才能連接至指定的路徑。</li>
+<li>如果您已等待 5 分鐘，並懷疑發生錯誤，請將 IP 位址連結至執行中的容器，然後對該 IP 位址及埠執行 curl 指令，以確認容器是否有回應。<ol type="a"><li>執行下列指令，以取得群組內其中一個容器實例的 ID。請記下容器 ID 及埠。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+<li>執行下列指令，以要求 IP 位址。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li>執行下列指令，以將 IP 位址連結至容器實例。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">IP_address</var> <var class="keyword varname">container_ID</var></code></pre>
+</li>
+<li>在瀏覽器中，輸入具有 IP 位址及埠的應用程式 URL。範例：<span class="ph filepath">http://<var class="keyword varname">IP_address</var>:<var class="keyword varname">port</var></span><p>如果您無法存取應用程式，表示容器群組發生問題，因此必須重建該群組。如果可以存取應用程式，則表示容器順利執行，但遞送發生錯誤。請聯絡「<span class="keyword">IBM
+Bluemix</span> 支援中心」。</p>
+</li>
+</ol>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e2019" lang="zh-tw" id="ts_firewall"><h3 class="topictitle3" id="d84326e2019">內部 Proxy 會封鎖對服務的要求</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">當您嘗試存取 <span class="keyword">IBM
+Bluemix Container Service</span> 時，連線會失敗，並顯示下列其中一則錯誤訊息。
+<pre class="pre screen"><code>Connection refused</code></pre>
+<pre class="pre screen"><code>Connection timed out</code></pre>
+</div><div class="section tsCauses">您的防火牆設定阻止電腦與 <span class="keyword">IBM
+Bluemix Container Service</span> 的通訊。通常，基於安全考量，會配置內部 Proxy 設定，僅容許允許的通訊。</div><div class="section tsResolve">在您的防火牆中，針對地區特定 IP 位址，開啟電腦與 <span class="keyword">IBM
+Bluemix Container Service</span> 的通訊：<ul id="ts_firewall__ul_fn5_p4l_wz"><li>美國南部：<pre class="codeblock"><code>169.46.9.7
+169.46.9.19
+169.46.9.24
+169.46.9.28
+169.55.211.15
+169.55.211.17
+169.55.211.21
+169.55.211.28</code></pre>
+</li>
+<li>倫敦：<pre class="codeblock"><code>159.8.188.181
+159.8.188.182
+159.8.188.184
+159.8.188.188
+169.50.153.66
+169.50.153.77
+169.50.153.91
+169.50.153.94</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e2100" lang="zh-tw" id="ts_group_auto_recreate_instance"><h3 class="topictitle3" id="d84326e2100"><span class="keyword">IBM
+Bluemix Container Service</span> 自動回復模式會在啟動期間反覆地重建容器群組實例</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">您已建立容器群組，並啟用自動回復。在啟動容器群組期間，會移除並反覆地重建未回應的群組實例。</div><div class="section tsCauses"><p>容器群組中的執行中應用程式需要太久的時間，才能開始接聽公開的埠。如果您已啟用容器群組的自動回復，則 <span class="keyword">IBM
+Bluemix Container Service</span> 會在建立群組之後，使用對所公開的 TCP 埠提出的 HTTP 要求來檢查每一個實例的性能。如果實例未在 3 分鐘內接聽公開埠，則會將實例標示為未回應，並予以移除、重建及重新啟動。除非達到已重建實例數目上限，否則此處理程序會重複執行。然後，停用自動回復。</p>
+</div><div class="section tsResolve"><p>若要在已啟用自動回復的容器群組中執行應用程式，請確定應用程式在 2 分鐘內啟動並接聽公開埠。視應用程式的類型而定，有不同的方法可確保快速啟動應用程式。</p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e2181" lang="zh-tw" id="ts_bridge_app"><h3 class="topictitle3" id="d84326e2181"><span class="keyword">Bluemix</span> 服務不會直接連結至容器</h3>
+<div class="body tsBody"><div class="section tsSymptoms">您的 <span class="keyword">Bluemix</span> 服務不會使用服務連結直接連結至容器。</div><div class="section tsCauses">部分 <span class="keyword">Bluemix</span> 服務不支援對容器進行直接服務連結，並導致建立容器期間發生失敗。對於這些服務，服務連結不會直接將環境變數 <samp class="ph codeph">VCAP_SERVICES</samp> 傳遞至容器。若要暫行解決此問題，您可以使用 CLI 建立 Cloud Foundry 應用程式，作為將 <samp class="ph codeph">VCAP_SERVICES</samp> 從服務傳送至容器時的橋接器。</div><div class="section tsResolve"><ol><li>選取要在其中部署容器的空間（例如 <samp class="ph codeph">dev</samp>）。</li>
+<li id="ts_bridge_app__create_cfapp">識別現有應用程式或建立 Cloud Foundry 應用程式，以連結 <span class="keyword">Bluemix</span> 服務。此應用程式是用於傳遞 <samp class="ph codeph">VCAP_SERVICES</samp> 資訊，因此稱為橋接應用程式。<div class="p">若要建立 Cloud Foundry 應用程式，請執行下列動作：<div class="note tip"><span class="tiptitle">提示：</span> 您透過完成這些步驟所建立的應用程式是儲存 <samp class="ph codeph">VCAP_SERVICES</samp> 服務的位置保留元。為了比執行中應用程式使用更少的成本，此應用程式不啟動或執行。不需要執行此應用程式，即可提供 <samp class="ph codeph">VCAP_SERVICES</samp> 給容器。</div>
+</div>
+<ol type="a"><li>在您的工作應用程式目錄中建立目錄及文字檔。範例：<span class="ph filepath"><var class="keyword varname">&lt;directory&gt;</var>/<var class="keyword varname">&lt;empty_file.txt&gt;</var></span>。此檔案將作為應用程式的原始檔，不過它不需要包含任何內容。<ul><li>Windows 範例：<span class="ph filepath">C:\Users\<var class="keyword varname">User</var>\<var class="keyword varname">containerbridge</var>\<var class="keyword varname">empty_file.txt</var></span></li>
+<li>Linux 範例：<span class="ph filepath">/<var class="keyword varname">user_home_directory</var>/<var class="keyword varname">containerbridge</var>/<var class="keyword varname">empty_file.txt</var></span></li>
+<li>OS X 範例：<span class="ph filepath">/Users/<var class="keyword varname">user_home_directory</var>/<var class="keyword varname">containerbridge</var>/<var class="keyword varname">empty_file.txt</var></span></li>
+</ul>
+</li>
+<li>執行下列指令來建立零執行時間的應用程式，無需任何成本。應用程式可以命名為任何名稱（不過 <var class="keyword varname">containerbridge</var> 是常見的名稱，因為應用程式是作為容器與服務的橋接器）。<p></p>
+<pre class="codeblock" id="ts_bridge_app__containerbridgecode"><code>cf push <var class="keyword varname">&lt;appname&gt;</var> -p <var class="keyword varname">&lt;directory&gt;</var> -i 1 -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -k 1M -m 64M --no-hostname --no-manifest --no-route --no-start</code></pre>
+範例：
+<pre class="codeblock"><code>cf push <var class="keyword varname">containerbridge</var> -p <var class="keyword varname">containerbridge</var> -i 1 -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -k 1M -m 64M --no-hostname --no-manifest --no-route --no-start</code></pre>
+</li>
+</ol>
+</li>
+<li>如果尚未新增您要連結的 <span class="keyword">Bluemix</span> 服務，請將服務新增至 <span class="keyword">Bluemix</span> 空間。<ol type="a"><li>若要取得可用 <span class="keyword">Bluemix</span> 服務的清單，請執行 <samp class="ph codeph">cf marketplace</samp> 指令。產生的清單包括 <span class="keyword">Bluemix</span> 服務名稱、其方案類型，以及服務為何的說明。</li>
+<li>執行 <samp class="ph codeph">create-service</samp> 指令，且包含來自 <samp class="ph codeph">cf marketplace</samp> 清單的服務名稱及方案。此外，也請包含您自己的服務實例名稱。<pre class="codeblock"><code>cf create-service <var class="keyword varname">&lt;service&gt;</var> <var class="keyword varname">&lt;plan&gt;</var> <var class="keyword varname">&lt;service_instance&gt;</var></code></pre>
+範例<pre class="codeblock"><code>cf create-service <var class="keyword varname">cleardb</var> <var class="keyword varname">spark</var> <var class="keyword varname">my-clear-db</var></code></pre>
+</li>
+</ol>
+</li>
+<li>執行 bind-service 指令，以將 <span class="keyword">Bluemix</span> 服務連結至應用程式。重複此動作以將其他 <span class="keyword">Bluemix</span> 服務連結至橋接應用程式。<pre class="codeblock"><code>cf bind-service <var class="keyword varname">&lt;appname&gt;</var> <var class="keyword varname">&lt;service_instance&gt;</var></code></pre>
+範例<pre class="codeblock"><code>cf bind-service <var class="keyword varname">containerbridge</var> <var class="keyword varname">my-clear-db</var></code></pre>
+</li>
+<li>如果系統提示您將應用程式重新編譯打包，請執行下列指令。<pre class="codeblock"><code>cf restage <var class="keyword varname">containerbridge</var></code></pre>
+</li>
+<li>執行下列指令，以檢閱透過 <var class="keyword varname">containerbridge</var> 應用程式傳遞之 <span class="keyword">Bluemix</span> 服務的資訊。<pre class="codeblock"><code>cf env <var class="keyword varname">&lt;appname&gt;</var> </code></pre>
+範例<pre class="codeblock"><code>cf env <var class="keyword varname">containerbridge</var> </code></pre>
+<p>結果包含使用 <samp class="ph codeph">VCAP_SERVICES</samp> 環境變數所注入的 <span class="keyword">Bluemix</span>
+服務參數。</p>
+<div class="p">例如：<pre class="codeblock"><code>{
+ "VCAP_SERVICES": {
+  "&lt;service_name&gt;": [
+   {
+    "credentials": {
+     "hostname": "&lt;hostname_id&gt;",
+     "jdbcUrl": "&lt;jdbc_URL&gt;",
+     "name": "&lt;encoded_name&gt;",
+     "password": "&lt;encoded_password&gt;",
+     "port": "&lt;port_number&gt;",
+     "uri": "&lt;service_URI&gt;",
+     "username": "&lt;encoded_username&gt;"
+    },
+    "label": "&lt;service_name&gt;",
+    "name": "&lt;service_instance&gt;",
+    "plan": "&lt;plan_name&gt;",
+    "tags": [
+     "&lt;tag1&gt;",
+     "&lt;tag2&gt;",
+     "&lt;tag3&gt;"
+    ]
+   } </code></pre>
+</div>
+</li>
+</ol>
+
+<div class="p">在 <span class="keyword">Bluemix</span> 服務與 <var class="keyword varname">containerbridge</var> 應用程式之間建立連結之後，請建立容器，並將 <var class="keyword varname">containerbridge</var> 應用程式與其連結。如需相關資訊，請參閱<a href="container_single_ui.html#container_single_cli" title="使用 run 指令來建立容器。容器必須內含映像檔。如果還沒有映像檔，您可以使用組織專用映像檔登錄中預設提供的其中一個預設 IBM 認證映像檔。">建立單一容器</a>或<a href="container_ha.html#container_group_cli" title="從 IBM Bluemix Container Service CLI 建立及部署可擴充群組容器。容器群組包含兩個以上執行相同映像檔的容器。對於執行具有需要可擴充性及可靠性之工作負載的長期服務，或是進行所需規模的測試，都可以使用容器群組。">建立容器群組</a>中環境變數的 <samp class="ph codeph">CCS_BIND_APP</samp> 旗標。<div class="note tip" id="ts_bridge_app__delete_bound_app"><span class="tiptitle">提示：</span> 在橋接應用程式連結至容器之後，請不要刪除橋接應用程式。如果您刪除連結的橋接應用程式，容器會當掉。如果您不再需要橋接應用程式，在刪除橋接應用程式之前，請刪除該容器和正在使用橋接應用程式的任何其他容器。</div>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e2524" lang="zh-tw" id="su_error"><h3 class="topictitle3" id="d84326e2524"><samp class="ph codeph">su</samp> 指令發生 <samp class="ph codeph">Cannot create child process</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><p>使用替代使用者 (<samp class="ph codeph">su</samp>) Linux 指令來編輯容器的使用者時，會收到訊息 <samp class="ph codeph">su: cannot create child process: Resource temporarily unavailable</samp>，即使 <samp class="ph codeph">su</samp> 指令已作用於本端 Docker 環境中。如果登入容器，或在容器內以 Script 的一部分執行 <samp class="ph codeph">su</samp> 指令，則可能會遇到此問題。</p>
+<p>範例：</p>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+<pre class="codeblock"><code>adduser <var class="keyword varname">user</var></code></pre>
+<pre class="codeblock"><code>su - <var class="keyword varname">user</var></code></pre>
+結果：<pre class="codeblock"><code>su: cannot create child process: Resource temporarily unavailable</code></pre>
+</div><div class="section tsCauses"><p>此問題通常發生在使用 Centos 7 映像檔所建置的容器中，但其他映像檔類型也可能會發生。</p>
+</div><div class="section tsResolve">編輯 Dockerfile 並重建映像檔，或登入執行中容器，即可解決問題。<div class="p">若要透過編輯 Dockerfile 來解決問題，請執行下列動作：<ol><li>在從中建立映像檔的本端目錄中，建立 <span class="ph filepath">etc</span> 資料夾（如果尚未存在）。<pre class="codeblock"><code>mkdir etc</code></pre>
+</li>
+<li>導覽至 <samp class="ph codeph">etc</samp> 目錄。<pre class="codeblock"><code>cd etc</code></pre>
+</li>
+<li>在 <span class="ph filepath">etc</span> 資料夾中，建立 <span class="ph filepath">pam.d</span> 目錄。<pre class="codeblock"><code>mkdir pam.d</code></pre>
+</li>
+<li>導覽至 <samp class="ph codeph">pam.d</samp> 目錄。<pre class="codeblock"><code>cd pam.d</code></pre>
+</li>
+<li>在 <span class="ph filepath">pam.d</span> 目錄中，建立名為 <span class="ph filepath">su</span> 的檔案，然後使用文字編輯器予以開啟。</li>
+<li>在 <span class="ph filepath">su</span> 檔案中，複製下列文字並將所有 <samp class="ph codeph">session</samp> 變數都設為 <samp class="ph codeph">optional</samp>，然後將變更儲存至檔案。
+<pre class="codeblock"><code>#%PAM-1.0
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth           sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth           required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         include         system-auth
+password        include         system-auth
+session         optional        system-auth
+session         optional        postlogin
+session         optional        pam_xauth.so</code></pre>
+</li>
+<li>在映像檔的 Dockerfile 中，包含下列資訊。<pre class="codeblock"><code>RUN sed -i 's/session.*include/session        optional/' /etc/pam.d/su</code></pre>
+</li>
+<li>重建映像檔。如需相關資訊，請參閱<a href="container_images_adding_ov.html#container_images_building" title="建立 Dockerfile 來建置映像檔。Dockerfile 是一種檔案，其包含用來建置 Docker 映像檔的規格，這是容器的基準。建立 Dockerfile 之後，您可以使用指令行介面，在本端建置映像檔或直接將映像檔建置在專用 Bluemix 登錄中。然後，便可以在 Bluemix 中，透過「型錄」視圖使用映像檔。">建置映像檔</a>。</li>
+<li>重建單一容器或容器群組。如需相關資訊，請參閱<a href="container_single_ui.html#container_single_cli" title="使用 run 指令來建立容器。容器必須內含映像檔。如果還沒有映像檔，您可以使用組織專用映像檔登錄中預設提供的其中一個預設 IBM 認證映像檔。">建立單一容器</a>或<a href="container_ha.html#container_group_cli" title="從 IBM Bluemix Container Service CLI 建立及部署可擴充群組容器。容器群組包含兩個以上執行相同映像檔的容器。對於執行具有需要可擴充性及可靠性之工作負載的長期服務，或是進行所需規模的測試，都可以使用容器群組。">建立容器群組</a>。</li>
+<li>若要驗證，請執行下列指令。<pre class="codeblock"><code><span class="ph">bx ic</span> logs <var class="keyword varname">container_name</var></code></pre>
+結果：<pre class="codeblock"><code>%Changing password for user <var class="keyword varname">user_name</var>.
+passwd: all authentication tokens updated successfully.</code></pre>
+</li>
+</ol>
+</div>
+<div class="p">若要透過登入執行中容器來解決問題，請執行下列動作：<ol><li>建立容器。</li>
+<li>登入容器。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li>導覽至 <samp class="ph codeph">etc</samp> 目錄。<pre class="codeblock"><code>cd etc</code></pre>
+</li>
+<li>導覽至 <samp class="ph codeph">pam.d</samp> 目錄。<pre class="codeblock"><code>cd pam.d</code></pre>
+</li>
+<li>使用 Linux <samp class="ph codeph">vi</samp> 指令，開啟視覺化編輯器。<pre class="codeblock"><code>vi su</code></pre>
+</li>
+<li>在 <span class="ph filepath">su</span> 檔案中，將所有階段作業變數變更為 <samp class="ph codeph">optional</samp>，並將變更儲存至檔案。如需使用 <samp class="ph codeph">vi</samp> 編輯器的相關資訊，請參閱<a href="https://www.washington.edu/computing/unix/vi.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">如何使用 vi 編輯器</a>。<pre class="codeblock"><code>#%PAM-1.0
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth           sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth           required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         include         system-auth
+password        include         system-auth
+session         optional        system-auth
+session         optional        postlogin
+session         optional        pam_xauth.so</code></pre>
+</li>
+<li>以使用者身分登入。<pre class="codeblock"><code>su - <var class="keyword varname">user</var></code></pre>
+</li>
+<li>執行 <samp class="ph codeph">id</samp> Linux 指令，以查看使用者的配置資訊。<pre class="codeblock"><code>id</code></pre>
+結果：<pre class="codeblock"><code>uid=1000(<var class="keyword varname">user</var>) gid=1000(<var class="keyword varname">user</var>) groups=1000(<var class="keyword varname">user</var>)</code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e2820" lang="zh-tw" id="ts_container_shutdown"><h3 class="topictitle3" id="d84326e2820">容器在建立之後停止並關閉</h3>
+<div class="body tsBody"><p class="shortdesc">您已建立容器，但它立即關閉。</p>
+<div class="section tsSymptoms">您已在本端執行容器，並且已成功執行容器，但在 <span class="keyword">Bluemix</span> 中執行容器時，看到下列其中一種狀況。<ul><li>從 <span class="keyword">Bluemix</span> 儀表板中，容器狀態從 <samp class="ph codeph">Running</samp> 變更為 <samp class="ph codeph">Stopped</samp>。</li>
+<li>從 CLI 中，當您執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect container</samp> 時，看到狀態為 <samp class="ph codeph">Shutdown</samp>。</li>
+</ul>
+您也已嘗試執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp>，但找不到任何容器問題。</div><div class="section tsCauses"><p>在 <span class="keyword">Bluemix</span> 中執行容器時，容器一律會以分離模式執行，與在本端執行容器時執行 <samp class="ph codeph">docker run -d</samp> 類似。因此，即使在本端啟動的容器也不會在 <span class="keyword">Bluemix</span> 中持續執行。</p>
+</div><div class="section tsResolve"><div class="p">您必須編輯 Dockerfile，以將容器設為長時間執行的應用程式。例如，如果您已新增指令，每十秒輸出一次 "hello world" 這個詞組，則該連續動作會將容器設為長時間執行的應用程式。<pre class="codeblock"><code>ENTRYPOINT ["/bin/sh"]
+CMD ["-c","while true; do echo hello world; sleep 10;done"]</code></pre>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e2930" lang="zh-tw" id="ts_incomplete_deletion"><h3 class="topictitle3" id="d84326e2930">在 <span class="keyword">Bluemix</span> GUI 中仍顯示已刪除的容器</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">從 <span class="keyword">Bluemix</span> GUI 中，您已刪除容器，但是容器仍顯示在 <span class="keyword">Bluemix</span> GUI 中並使用配額。</div><div class="section tsCauses"><p>從 <span class="keyword">Bluemix</span> GUI 中，無法完成刪除。</p>
+</div><div class="section tsResolve"><p>請從指令行刪除容器。</p>
+
+<div class="p">若為單一容器，請遵循下列步驟。<ol><li>執行下列其中一個指令行選項，以刪除容器：<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 1」，使用 bx ic 指令來管理容器。Docker 指令只用於本端容器開發。 （在新分頁或視窗中開啟）"><img src="images/option1.png" alt="BX IC 外掛程式配置選項 1"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式與 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令</span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+</li>
+<li><div class="p"><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 2」，透過配置環境變數儘可能使用 Docker 指令來管理容器。只有在沒有支援的 Docker 替代方案存在時，才會使用 bx ic 指令。 （在新分頁或視窗中開啟）"><img src="images/option2.png" alt="BX IC 外掛程式配置選項 2"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式與 <samp class="ph codeph">docker</samp> 指令</span>
+<pre class="codeblock"><code>docker rm [-f] CONTAINER</code></pre>
+</div>
+</li>
+</ul>
+</li>
+<li>驗證已移除容器，方法為執行下列其中一個指令來列出您空間中的所有容器：<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 1」，使用 bx ic 指令來管理容器。Docker 指令只用於本端容器開發。 （在新分頁或視窗中開啟）"><img src="images/option1.png" alt="BX IC 外掛程式配置選項 1"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式與 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 2」，透過配置環境變數儘可能使用 Docker 指令來管理容器。只有在沒有支援的 Docker 替代方案存在時，才會使用 bx ic 指令。 （在新分頁或視窗中開啟）"><img src="images/option2.png" alt="BX IC 外掛程式配置選項 2"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式與 <samp class="ph codeph">docker</samp> 指令</span>
+<pre class="codeblock"><code>docker ps -a</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+<div class="p">若為容器群組，請遵循下列步驟。<ol><li>執行下列指令，以刪除容器群組。<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 1」，使用 bx ic 指令來管理容器。Docker 指令只用於本端容器開發。 （在新分頁或視窗中開啟）"><img src="images/option1.png" alt="BX IC 外掛程式配置選項 1"></a>
+<a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 2」，透過配置環境變數儘可能使用 Docker 指令來管理容器。只有在沒有支援的 Docker 替代方案存在時，才會使用 bx ic 指令。 （在新分頁或視窗中開啟）"><img src="images/option2.png" alt="BX IC 外掛程式配置選項 2"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式</span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li>執行指令以列出您空間中的所有容器，來驗證已移除容器。<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 1」，使用 bx ic 指令來管理容器。Docker 指令只用於本端容器開發。 （在新分頁或視窗中開啟）"><img src="images/option1.png" alt="BX IC 外掛程式配置選項 1"></a>
+<a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="在 bx ic login 期間，您已選取「選項 2」，透過配置環境變數儘可能使用 Docker 指令來管理容器。只有在沒有支援的 Docker 替代方案存在時，才會使用 bx ic 指令。 （在新分頁或視窗中開啟）"><img src="images/option2.png" alt="BX IC 外掛程式配置選項 2"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式</span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+<p>如果您已執行指令，但容器仍顯示在 <span class="keyword">Bluemix</span> GUI 中，請稍候以確認是否會將它移除。</p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e3267" lang="zh-tw" id="ts_group_network_failure"><h3 class="topictitle3" id="d84326e3267">容器群組顯示 HAS_INACTIVE_INSTANCES 狀態</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">當您執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp> 時，容器群組會顯示 HAS_INACTIVE_INSTANCES 狀態。</div><div class="section tsCauses"><p>如果建立群組時無法配置網路，或是一個以上的實例性能檢查失敗，實例狀態會變更為
+<samp class="ph codeph">INACTIVE</samp>。如果群組中的任何實例都不在作用中，則群組狀態會變更為 HAS_INACTIVE_INSTANCES。</p>
+</div><div class="section tsResolve"><p>如果此問題發生在實例的性能檢查失敗時，則可以可解決問題而不需要任何動作。如果此問題發生在一開始建立群組時，您可以嘗試重建群組。如果重建之後再度發生問題，則將應用程式部署為群組時，可能無法配置應用程式的網路作業。請改為嘗試將應用程式部署為單一容器。</p>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e3341" lang="zh-tw" id="ts_ov_compose"><h2 class="topictitle2" id="d84326e3341">Docker Compose 疑難排解</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e3341"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e3403" lang="zh-tw" id="ts_compose_insecure_connection"><h3 class="topictitle3" id="d84326e3403">執行 Docker Compose 指令時顯示不安全的 HTTPS 連線警告</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">在 CLI 中執行 Docker Compose 指令時，就會顯示類似下列其中一個範例的警告。其他相關的錯誤訊息可在 <a href="https://urllib3.readthedocs.org/en/latest/security.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">urlib3
+開發文件</a>中找到。<div class="p"><pre class="pre msgblock"><code>/.../requests/packages/urllib3/util/ssl_.py:315: SNIMissingWarning: An HTTPS request 
+has been made, but the SNI (Subject Name Indication) extension to TLS is not available on this 
+platform. This may cause the server to present an incorrect TLS certificate, which can cause
+validation failures. For more information, see
+https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning. SNIMissingWarning</code></pre>
+
+<pre class="pre msgblock"><code>/.../requests/packages/urllib3/util/ssl_.py:120: InsecurePlatformWarning: A true 
+SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately 
+and may cause certain SSL connections to fail. For more information, see 
+https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning. InsecurePlatformWarning</code></pre>
+</div>
+</div><div class="section tsCauses">這是 Linux 作業系統的典型錯誤訊息，是由於遺漏 HTTPS 要求的驗證而造成。</div><div class="section tsResolve"><ul><li>選項 1：安裝 <samp class="ph codeph">ndg-httpsclient</samp>，以避免 SSL 相關錯誤訊息及警告。<pre class="codeblock"><code>pip install ndg-httpsclient==0.4.0</code></pre>
+</li>
+<li>選項 2：如果 <samp class="ph codeph">ndg-httpsclient</samp> 已安裝在您的電腦上，請將套件升級至最新版本。<pre class="codeblock"><code>pip install --upgrade ndg-httpsclient</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e3485" lang="zh-tw" id="ts_compose_commands_failed"><h3 class="topictitle3" id="d84326e3485">執行 Docker Compose 指令時顯示沒有模組指名佇列的錯誤</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">一旦在 CLI 中執行 Docker Compose 指令，就會顯示類似下列範例的錯誤訊息。<div class="p"><pre class="pre msgblock"><code>File "/usr/local/bin/docker-compose", line 9, in &lt;module&gt; 
+load_entry_point('docker-compose==1.6.2', 'console_scripts', 'docker-compose')() File 
+"/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 357, 
+in load_entry_point return get_distribution(dist).load_entry_point(group, name) File 
+"/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 2394, 
+in load_entry_point return ep.load() File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", 
+line 2108, in load entry = __import__(self.module_name, globals(),globals(), ['__name__']) 
+File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 26, in &lt;module&gt; from ..project import NoSuchService 
+File "/Library/Python/2.7/site-packages/compose/project.py", line 10, in &lt;module&gt; from . import parallel 
+File "/Library/Python/2.7/site-packages/compose/parallel.py", line 9, in &lt;module&gt; from six.moves.queue import Empty ImportError: 
+No module named queue</code></pre>
+</div>
+</div><div class="section tsCauses">Python 路徑指向錯誤目錄。找不到 Docker Compose Python 套件。</div><div class="section tsResolve">將 Python 路徑切換至正確目錄。
+<pre class="codeblock"><code>export PYTHONPATH=/Library/Python/2.7/site-packages/:$PYTHONPATH</code></pre>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e3549" lang="zh-tw" id="ts_ov_volumes"><h2 class="topictitle2" id="d84326e3549">資料儲存空間疑難排解</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e3549"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e3612" lang="zh-tw" id="ts_vol_owner"><h3 class="topictitle3" id="d84326e3612">變更容器中已裝載之磁區目錄的擁有者時發生許可權錯誤</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">嘗試對容器中裝載的磁區變更檔案或目錄的所有權時，收到許可權錯誤。</div><div class="section tsCauses"><span class="ph" id="ts_vol_owner__containers_namespace">若為 <span class="keyword">IBM
+Bluemix Container Service</span>，已對 Docker Engine 啟用<a href="https://docs.docker.com/engine/security/security/#kernel-namespaces" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">使用者名稱空間特性</a>。</span>容器內的有效 root 對映至運算主機上的非 root 使用者。裝載磁區的來源為網路檔案系統 (NFS)。因為 NFS 不知道使用者名稱空間，所以會對容器內裝載檔案及目錄上的作業執行所有非使用者檢查。</div><div class="section tsResolve"><p></p>
+<ol><li>在映像檔的 Dockerfile 中，新增下列這幾行，以可用的使用者 ID (UID) 建立使用者。例如，您可將使用者命名為 <var class="keyword varname">volumeeditor</var>。<pre class="codeblock"><code>RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">volumeeditor</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">volumeeditor</var></code></pre>
+</li>
+<li>建置映像檔並將它推送至您的專用 <span class="keyword">Bluemix</span> 映像檔登錄。</li>
+<li>使用裝載磁區路徑的映像檔建立容器。<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --volume <var class="keyword varname">volume_name</var>:<var class="keyword varname">/path/to/files</var> --name <var class="keyword varname">fixVolumePermissions</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image</var></code></pre>
+</li>
+<li>登入容器。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">container_name</var> bash</code></pre>
+</li>
+<li>為裝載路徑定義名為 <kbd class="ph userinput">MOUNTPATH</kbd> 的環境變數。<pre class="codeblock"><code>MOUNTPATH="<var class="keyword varname">/path/to/files</var>"</code></pre>
+</li>
+<li>新增使用者至群組 <samp class="ph codeph">root</samp>。<pre class="codeblock"><code>adduser <var class="keyword varname">volumeeditor</var> root</code></pre>
+</li>
+<li>設定許可權，讓所有群組成員都具有磁區裝載的讀取權及寫入權。
+<pre class="codeblock"><code>chmod 775 $MOUNTPATH</code></pre>
+</li>
+<li>在裝載路徑中建立資料夾，並設定讀取權及寫入權。在此範例中，資料夾名為 <var class="keyword varname">data</var>。<pre class="codeblock"><code>su -c "mkdir -p $MOUNTPATH/<var class="keyword varname">data</var>" <var class="keyword varname">volumeeditor</var></code></pre>
+<pre class="codeblock"><code>su -c "chmod 700 $MOUNTPATH/<var class="keyword varname">data</var>" <var class="keyword varname">volumeeditor</var></code></pre>
+</li>
+<li>驗證使用者 <var class="keyword varname">volumeeditor</var> 可以存取裝載路徑中的檔案及目錄。<pre class="codeblock"><code>sudo -u <var class="keyword varname">volumeeditor</var> ls -al $MOUNTPATH</code></pre>
+</li>
+<li>選用項目：將容器中的資料夾鏈結至磁區中的 <var class="keyword varname">data</var> 資料夾。此鏈結會建立 $MOUNTPATH/<var class="keyword varname">data</var> 的寫入權與容器中任何資料夾的關聯。<pre class="codeblock"><code>ln -sf $MOUNTPATH/<var class="keyword varname">data</var> <var class="keyword varname">/folder/in/container/</var></code></pre>
+</li>
+<li> 如果可以進行編輯而未發生許可權錯誤，請移除 <var class="keyword varname">volumeeditor</var> 群組的 root 使用者。<pre class="codeblock"><code>deluser <var class="keyword varname">volumeeditor</var> root</code></pre>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e3836" lang="zh-tw" id="ts_vol_group_overwrite"><h3 class="topictitle3" id="d84326e3836">容器群組實例的日誌在磁區中遭到改寫</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">當您建立容器群組時，已裝載磁區，並且將日誌從每一個容器群組實例輸出至該磁區。每一個容器群組實例都寫入相同的檔案，而這些檔案會遭到每個實例改寫。<div class="p">範例：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -m <var class="keyword varname">64</var> -v log_vol:/opt/ibm/logs -e LOG_LOCATIONS=/opt/ibm/logs/messages.log,/opt/ibm/logs/debug.log,/opt/ibm/logs/trace.log --name <var class="keyword varname">my_container_group</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty:latest</code></pre>
+</div>
+</div><div class="section tsCauses">每個容器實例都會將檔案寫至磁區，就彷彿它是唯一的寫入者。每一個實例在記憶體中都有本端快取。磁區中的檔案會反覆地被每一個容器實例的快取資料所取代。</div><div class="section tsResolve">請將日誌檔的名稱調整為包含 ID，讓每個實例的檔案不同。例如，在日誌檔名稱中包含 <samp class="ph codeph">$HOSTNAME</samp> 變數，這是由應用程式所產生且在建立容器群組時指定。<div class="p">範例：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -m <var class="keyword varname">64</var> -v log_vol:/opt/ibm/logs -e LOG_LOCATIONS=/opt/ibm/logs/messages.$HOSTNAME.log,/opt/ibm/logs/debug.$HOSTNAME.log,/opt/ibm/logs/trace.$HOSTNAME.log --name <var class="keyword varname">my_container_group</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty:latest</code></pre>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e3928" lang="zh-tw" id="ts_vol_performance"><h3 class="topictitle3" id="d84326e3928">與磁區之間來回傳送資料所花費的時間比預期更久</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">對磁區進行讀取或寫入所花費的時間比預期更久。</div><div class="section tsCauses">在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，磁區無法存取本端主機。因此，所有磁區都裝載在 NFS 檔案共用上。磁區的效能是由檔案共用的大小和 IOPS（每秒輸入/輸出作業數）以及應用程式的工作負載所控制。磁區管理所在的檔案共用可能不適合您磁區和容器的工作負載。此外，一個檔案共用上的多個磁區可能會競用該檔案共用的資源。<p>若要建立新的檔案共用，您必須具有組織管理員角色。如需詳細資訊，請參閱<a href="../iam/users_roles.html">使用者及角色</a>。</p>
+</div><div class="section tsResolve"><ol><li>確定磁區管理所在之檔案共用的 ID。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect <var class="keyword varname">my_volume</var></code></pre>
+<pre class="codeblock"><code>{
+    "fsId": "<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>", 
+    "hostPath": "<span class="ph filepath">/vol/fa277ff4-8a64-435b-9b75-0f11d59a3ae4/my_volume</span>", 
+    "otherSpaceVisibility": [], 
+    "spaceGuid": "fa277ff4-8a64-435b-9b75-0f11d59a3ae4", 
+    "volName": "<var class="keyword varname">my_volume</var>"
+}</code></pre>
+</li>
+<li>檢視您的檔案共用，以確定其大小和 IOPS。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</code></pre>
+<pre class="codeblock"><code>Name                                   Size   IOPS/GB   Created               State   
+<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>   20     4.00      2016-05-20 13:48:10   READY   </code></pre>
+</li>
+<li>檢視檔案共用可用的大小 (GB)。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume fs-flavor</code></pre>
+<pre class="codeblock"><code>[
+    20, 
+    40, 
+    80, 
+    100, 
+    250, 
+    500, 
+    1000, 
+    2000, 
+    4000, 
+    8000, 
+    12000
+]</code></pre>
+</li>
+<li>決定應用程式工作負載所需要的大小及 IOPS。有效的 IOPS 值為每 GB 0.25、2 或 4 IOPS。檔案共用大小和每 GB 的 IOPS 相乘，得出檔案共用的 IOPS 總計。此表格包含每 GB 4 IOPS 的不同檔案共用大小如何擴充的範例。<div class="tablenoborder"><table summary="" id="ts_vol_performance__table_zw1_2f3_kw" class="defaultstyle"><caption><span class="tablecap">表 1. 檔案共用大小及每 GB 的 IOPS 的範例</span></caption><thead><tr><th id="d84326e4048" class="thleft"> 檔案共用大小</th>
+<th id="d84326e4050" class="thleft">每 GB 的 IOPS</th>
+<th id="d84326e4052" class="thleft">IOPS 總計</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d84326e4048 ">20 GB</td>
+<td headers="d84326e4050 ">4</td>
+<td headers="d84326e4052 ">80</td>
+</tr>
+<tr><td headers="d84326e4048 ">100 GB</td>
+<td headers="d84326e4050 ">4</td>
+<td headers="d84326e4052 ">400</td>
+</tr>
+<tr><td headers="d84326e4048 ">1,000 GB</td>
+<td headers="d84326e4050 ">4</td>
+<td headers="d84326e4052 ">4,000</td>
+</tr>
+<tr><td headers="d84326e4048 ">4,000 GB</td>
+<td headers="d84326e4050 ">4</td>
+<td headers="d84326e4052 ">16,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li>建立新的檔案共用。第一個數字是大小 (GB)。第二個數字是檔案共用 IOPS。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create <var class="keyword varname">my_new_fs</var> <var class="keyword varname">1000</var> <var class="keyword varname">4</var></code></pre>
+</li>
+<li>驗證新的檔案共用，並等待狀態顯示為備妥。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</code></pre>
+</li>
+<li>在新的檔案共用上建立您的磁區。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create <var class="keyword varname">my_new_volume</var> <var class="keyword varname">my_new_fs</var></code></pre>
+</li>
+<li>從映像檔執行容器或容器群組，並裝載新的磁區。</li>
+<li>備份來自 <var class="keyword varname">my_volume</var> 的資料，並將該資料複製到 <var class="keyword varname">my_new_volume</var>。如需相關資訊，請參閱<a href="container_volumes_ov.html#container_volumes_backup" title="容器磁區在持續性儲存空間上管理，但沒有備份。如果需要磁區資料的備份，您可以使用 bx ic cp 來建立手動備份。">備份及還原資料</a>。</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84326e4139" lang="zh-tw" id="ts_vol_mount_option"><h3 class="topictitle3" id="d84326e4139">從 CLI 建立含有磁區的容器時發生剖析錯誤</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">當您從 CLI 建立單一容器或容器群組時，收到失敗訊息。<div class="p">範例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name my_container -n my_host -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -m 2048 --min 1 --max 2 --desired 1 -p 9080 --auto -v my_volume:/my/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</div>
+<div class="p">結果
+<pre class="codeblock"><code>docker: Error parsing reference: "my_volume:/my/path" is not a valid repository/tag.</code></pre>
+</div>
+</div><div class="section tsCauses">Cloud Foundry 6.17 版以及更新版本的 CLI 使用 <span class="keyword option">-v</span> 參數作為別的用途。</div><div class="section tsResolve">請在您的指令中，將 <span class="keyword option">-v</span> 選項變更為 <span class="keyword option">--volume</span> 選項。<div class="p">範例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name my_container -n my_host -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -m 2048 --min 1 --max 2 --desired 1 -p 9080 --auto --volume my_volume:/my/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e4235" lang="zh-tw" id="ts_known_issues"><h2 class="topictitle2" id="d84326e4235">已知的問題</h2>
+<div class="body conbody"><p class="shortdesc">瞭解 IBM Containers 中發生的已知問題。</p>
+</div>
+<aside role="complementary" aria-labelledby="d84326e4235"></aside><article class="topic concept nested2" role="article" aria-labelledby="d84326e4287" id="ki_docker"><h3 class="topictitle3" id="d84326e4287">Docker 及 <span class="keyword">IBM
+Bluemix Container Service</span></h3>
+<div class="body conbody"><dl><dt class="dlterm">在 <span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 中，不支援某些 Docker 指令</dt>
+<dd><p>在 <samp class="ph codeph">(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</samp> 中，只支援特定的 Docker 指令。您可在 <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_native-docker">docker 指令參考資料</a>中檢視受支援指令的完整清單。例如，<samp class="ph codeph">tag</samp> 無法在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp> 中使用，但 <samp class="ph codeph">docker tag</samp> 可在本端使用，然後更新的映像檔可以推送至 <span class="keyword">Bluemix</span> 登錄。</p>
+</dd>
+<dt class="dlterm">Docker 與 Windows 之間常見的問題</dt>
+<dd><p>在 Windows 電腦上安裝及配置 Docker 時存在一些常見的問題。如需這些常見問題的相關資訊，請檢閱<a href="https://developer.ibm.com/bluemix/2015/04/16/installing-docker-windows-fixes-common-problems/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">部落格：Installing Docker for Windows: Fixes for common problems</a> 及 <a href="http://stackoverflow.com/questions/tagged/boot2docker" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Stack
+Overflow posts tagged with boot2docker</a>。</p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84326e4355" id="ki_images"><h3 class="topictitle3" id="d84326e4355">映像檔</h3>
+<div class="body conbody"><dl><dt class="dlterm">推送及取回大型映像檔失敗</dt>
+<dd><p>當您執行 Docker 指令，從組織的專用 <span class="keyword">Bluemix</span> 登錄推送或取回大型映像檔時，要求失敗。若要判斷映像檔是否有問題，首先請驗證映像檔可推送至 Docker Hub。如果映像檔沒有問題，可能的話，請減少映像檔的大小。</p>
+</dd>
+<dt class="dlterm"><a name="ki_images__image_size"><!-- --></a><span class="keyword">Bluemix</span> 中的映像檔大小不符合其在本端的大小</dt>
+<dd><p><span class="ph" id="ki_images__image_size_ph">當您將映像檔推送至專用 <span class="keyword">Bluemix</span> 登錄時，針對映像檔報告的大小小於本端 Docker Engine 中相同映像檔的大小。大小之間的差異並不表示在推送映像檔時發生問題。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中報告壓縮的映像檔大小。</span></p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84326e4392" id="ki_logmet"><h3 class="topictitle3" id="d84326e4392">監視及記載</h3>
+<div class="body conbody"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp> 輸出中的額外字元</dt>
+<dd>執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp> 時，會在每一行的開頭顯示額外字元（例如 <samp class="ph codeph">&amp;</samp>）。NGINX 剖析送入的 Docker 日誌時會發生此問題。</dd>
+<dt class="dlterm">無法使用表示式指定日誌檔新增作業</dt>
+<dd><p>您無法使用過濾器或萬用字元表示式，指定將收集的日誌檔。例如，您無法指定 <samp class="ph codeph">/var/log/*.log</samp>。而是，個別列出每一個日誌檔。</p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84326e4425" id="ki_containers"><h3 class="topictitle3" id="d84326e4425">單一容器及容器群組</h3>
+<div class="body conbody"><dl><dt class="dlterm">在您建立容器之後連線失敗</dt>
+<dd><p>由於 <span class="keyword">IBM
+Bluemix Container Service</span> 的 Docker 網路架構的限制，出埠網路存取可能無法在初次啟動容器時運作。如果您的容器試圖進行出埠網路連線，以在網路無法使用時傳回錯誤碼或擲出異常狀況，則容器會結束，並顯示「已損毀」狀態。</p>
+
+<p>若要容許起始設定網路以及讓容器部署繼續進行，您必須先有 sleep 陳述式，才能啟動任何需要出埠連線功能的處理程序。請建立自訂 Dockerfile，以在基本 Dockerfile 中包裝任何現有伺服器啟動指令。如需範例，請參閱<a href="https://github.com/IBM-Bluemix/lets-chat-bluemix/tree/master/lets-chat" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">讓我們來聊一聊 Bluemix 範例應用程式</a>。</p>
+</dd>
+<dt class="dlterm">入埠連線功能不會立即作用</dt>
+<dd><p>對於容器群組及單一容器（包括路徑及外部應用程式），入埠連線功能不會立即作用。等待連線功能變成可用，最多可能需要 5 分鐘。</p>
+</dd>
+<dt class="dlterm"><samp class="ph codeph">docker run -m</samp> 及 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m</samp> 中使用的不同預設度量單位</dt>
+<dd>未使用 <samp class="ph codeph">docker run -m</samp> 指定度量單位時，會使用位元組作為預設度量單位。未使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m</samp> 指定度量單位時，會使用 MB 作為預設度量單位。</dd>
+<dt class="dlterm">使用者資料限制防止建立容器</dt>
+<dd>如果有太多服務連結至一個容器，則無法建立此容器。每一個服務都會將資料注入容器，並計入 64KB 的限制。當您建立超出此限制的容器時，會收到訊息：<samp class="ph systemoutput">資源 CREATE 失敗... 使用者資料太大</samp>。如果您看到此訊息，請從容器中移除服務。</dd>
+<dt class="dlterm"><a name="ki_containers__port25"><!-- --></a>在容器中無法公開埠 25</dt>
+<dd>埠 25 已遭到封鎖，不提供 SoftLayer（這是 <span class="keyword">IBM
+Bluemix Container Service</span> 架構的一部分）使用。此問題會影響容器中部分 SMTP 服務的使用。如需此埠封鎖原因的相關資訊，請參閱 SoftLayer 文件中的 <a href="http://knowledgelayer.softlayer.com/content/outbound-email-port-25" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Outbound Email on Port 25</a> 一文。</dd>
+<dt class="dlterm"><a name="ki_containers__containerbuildingprocess"><!-- --></a>容器的建置或網路連線過程未完成</dt>
+<dd><div class="p">如果容器處於建置中或網路連線狀態太久，您可能需要移除容器，然後從同一映像檔建立新容器。您可以使用下列 CLI <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令：<ol><li><span class="ph">擷取正在空間中執行之容器的清單。依預設，只會顯示執行中的容器。</span> 如需相關資訊，請檢閱 <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__ps">CLI <span class="ph">bx ic</span> ps 參考資料</a>。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="ph">移除一個以上的容器。</span> 如需相關資訊，請檢閱 <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__rm">CLI <span class="ph">bx ic</span> rm 參考資料</a>。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm -f <var class="keyword varname">container_ID</var></code></pre>
+</li>
+<li><span class="ph">在容器雲端服務中，從映像檔名稱啟動新的容器。</span> 如需相關資訊，請檢閱 <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__run">CLI <span class="ph">bx ic</span> run 參考資料</a>。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</code></pre>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="dlterm">容器群組的自動回復不會立即發生</dt>
+<dd><p>新系統的容器群組自動回復可能需要 15 分鐘以上才能上線。等待自動回復變成可用，可能需要 15 分鐘以上。</p>
+</dd>
+<dt class="dlterm"><samp class="ph codeph">cf delete-orphaned-routes</samp> 指令會從容器群組刪除路徑</dt>
+<dd><p>Cloud Foundry 辨識對映至容器群組之路徑的方式，與辨識連結至應用程式之路徑的不同。使用容器群組時，請不要執行 <samp class="ph codeph">cf
+delete-orphaned-routes</samp> 指令。</p>
+</dd>
+</dl>
+</div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84326e4577" lang="zh-tw" id="ts_getting_help"><h2 class="topictitle2" id="d84326e4577">取得 <span class="keyword">IBM
+Bluemix Container Service</span> 的協助及支援</h2>
+<div class="body conbody"><p class="shortdesc">從哪裡開始進行容器疑難排解？</p>
+<div class="p"><ul><li>若要查看 <span class="keyword">Bluemix</span> 是否可用，請<a href="https://developer.ibm.com/bluemix/support/#status" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">檢查 <span class="keyword">Bluemix</span> 狀態頁面</a>。</li>
+<li>檢閱討論區，以查看其他使用者是否發生過相同的問題。使用討論區詢問問題時，請標記您的問題，讓 <span class="keyword">Bluemix</span> 開發團隊可以看到它。<ul><li>如果您在使用 <span class="keyword">IBM
+Bluemix Container Service</span> 開發或部署應用程式時有技術方面的問題，請將問題張貼到 <a href="http://stackoverflow.com/search?q=bluemix+containers" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Stack Overflow</a>，並使用 <samp class="ph codeph">ibm-bluemix</samp> 及 <samp class="ph codeph">containers</samp> 來標記問題。</li>
+<li>若為服務及開始使用指示的相關問題，請使用 <a href="https://developer.ibm.com/answers/topics/containers/?smartspace=bluemix" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">IBM developerWorks dW Answers</a> 討論區。請包含 <samp class="ph codeph">bluemix</samp> 及 <samp class="ph codeph">containers</samp> 標籤。</li>
+</ul>
+如需使用討論區的詳細資料，請參閱<a href="../support/index.html#getting-help" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">取得協助</a>。</li>
+<li>聯絡「IBM 支援中心」。如需開立 IBM 支援問題單或是支援層次與問題單嚴重性的相關資訊，請參閱<a href="../support/index.html#contacting-support" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">與支援中心聯絡</a>。</li>
+</ul>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d84326e4577"></aside></article></article></div></main></body></html>

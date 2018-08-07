@@ -1,0 +1,298 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="安装 IBM Bluemix Container Service 插件 (bx ic)，以运行本机 Docker CLI 命令来管理容器。">
+<meta name="keywords" content="容器, CLI, 插件, Cloud Foundry, cf, bx ic, 安装, IBM Containers, 登录, 升级, 卸载, docker compose">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>设置 IBM Bluemix Container Service 插件 (bx ic) 以对单个和可扩展容器使用本机 Docker CLI</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d12952e6" id="container_cli_cfic_install"><h1 class="topictitle1" id="d12952e6">设置 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 以对<span class="ph">单个和可扩展容器</span>使用本机 Docker CLI</h1>
+<div class="abstract"><div class="shortdesc">安装 <span class="keyword">IBM®
+Bluemix® Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)，以运行本机 Docker CLI 命令来管理容器。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> <span class="ph"><span class="ph">单个和可扩展容器</span> 的免费试用版不可用。
+<a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">了解有关集群管理和在 <span class="keyword">Bluemix</span> Public 上迁移至 <span class="keyword">IBM
+Bluemix Container Service</span> 中的 Kubernetes 的信息。</a></span></div>
+</div>
+
+
+<div class="p">在此页面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#install_plugin">安装 IBM Bluemix Container Service 插件 (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 IBM Bluemix Container Service CLI 插件 (bx ic) </a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_upgrade" title="您可能想要定期更新插件以使用新功能。">升级 IBM Bluemix Container Service 插件 (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_uninstall" title="如果不再需要 IBM Bluemix Container Service 插件，可以使用 bx 命令将其卸载。">卸载 IBM Bluemix Container Service 插件 (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_install" title="要同时启动和停止一些单个容器，可以安装 Docker Compose CLI。">安装 Docker Compose 及其依赖项</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="您可能需要升级 Docker Compose 包的版本，才能使用最新功能。">升级 Docker Compose</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_uninstall" title="如果不再需要 Docker Compose 软件包，可以使用以下命令将其卸载。">卸载 Docker Compose</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d12952e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d12952e208" id="install_plugin"><h2 class="topictitle2" id="d12952e208">安装 IBM Bluemix Container Service 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><div class="section context" id="install_plugin__context_e5s_szz_nz"><p>要运行命令，您的操作系统必须满足以下需求。此任务包含用于安装这些所需工具的信息。这些工具的较低版本无法与 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 配合使用。</p>
+
+<div class="p"><ul id="install_plugin__ul_f5s_szz_nz"><li><span class="ph">Docker V1.8 到 <span class="ph" id="install_plugin__d1147e257">V1.12</span></span></li>
+<li><span class="ph">Cloud Foundry CLI V<span class="ph" id="install_plugin__d1147e301">6.14.0</span> - 6.22.0</span><div class="steps note"><span class="notetitle">注：</span> MacOS Sierra 用户必须安装 Cloud Foundry CLI V6.22.0 或更新版本。</div>
+</li>
+<li><span class="keyword">Bluemix</span> CLI </li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span> 插件</li>
+</ul>
+</div>
+</div><p class="li stepsection">要安装 CLI，请执行以下操作：</p><ol class="steps" id="install_plugin__steps_g5s_szz_nz"><li class="step stepexpand" id="install_plugin__docker_install"><span class="cmd">安装 Docker <span class="ph">V1.12</span>。</span> 对于 Windows 和 OS X 操作系统，Docker 会随 Docker Toolbox 一起安装，其中包含 Docker Machine、Docker Engine 和 Kitematic。对于 Linux 操作系统，安装机制根据使用的 Linux 分发版的类型不同而变化。请参阅以下链接以安装 Docker <span class="ph">V1.12</span>；或者如果已安装 Docker，请升级到该版本。<div class="steps note"><span class="notetitle">注：</span> 如果已在计算机上安装 Docker，但并不想升级当前版本，那么可以跳过此步骤，继续安装 Cloud Foundry CLI。</div>
+
+<ul id="install_plugin__ul_h5s_szz_nz"><li>OS X<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.pkg" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://github.com/docker/toolbox/releases/download/v<span class="ph">V1.12</span>/DockerToolbox-<span class="ph">V1.12</span>.pkg</a></p>
+</li>
+<li>Windows<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.exe" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://github.com/docker/toolbox/releases/download/v<span class="ph">V1.12</span>/DockerToolbox-<span class="ph">V1.12</span>.exe</a></p>
+</li>
+<li>Linux<p>请参阅 <a href="https://docs.docker.com/engine/installation/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Docker 安装文档</a>以查找有关如何在使用的 Linux 分发版上安装 Docker V<span class="ph">V1.12</span>。</p>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">启动 Docker。</span> <ul class="ul choices" id="install_plugin__choices_i5s_szz_nz"><li class="li choice" id="install_plugin__start_qst">对于 OS X 和 Windows，双击 <span class="ph uicontrol">Docker 快速启动终端</span>图标。此时将启动 Docker 守护程序，并为您设置环境变量。</li>
+<li class="li choice">对于 Linux，在命令行实用程序中，验证 Docker 守护程序是否在运行。此外，将 Docker 守护程序设置为自动重新启动。有关更多信息，请参阅适用于您的操作系统的 <a href="https://docs.docker.com/installation/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Docker 文档</a>。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">通过在终端运行 <samp class="ph codeph">docker run
+hello-word</samp>，验证 Docker 安装已正确设置。</span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ Docker 会在本地查找 <samp class="ph codeph">hello-world</samp> 映像，以从中运行容器，因此如果这是您首次运行该命令，那么将会收到以下消息。
+<pre class="codeblock"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+映像是从公共映像存储库 Docker Hub 中拉取的，该命令完成后，输出将类似于以下内容：
+<pre class="codeblock"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ 如果命令未正确完成，请运行 <samp class="ph codeph">docker version</samp>，以查看是否正确安装 Docker。</li>
+<li class="step stepexpand" id="install_plugin__install_cf"><span class="cmd">从 <a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">GitHub 存储库</a>安装 Cloud Foundry CLI V<span class="ph">Cloud Foundry CLI V<span class="ph" id="install_plugin__d1147e301-d1138e288a1310">6.14.0</span> - 6.22.0</span>。</span> 必须将 Cloud Foundry CLI 安装在操作系统的缺省位置，否则 PATH 环境变量会与安装目录不匹配。 <div class="steps note"><span class="notetitle">注：</span> MacOS Sierra 用户必须安装 Cloud Foundry CLI V6.22.0 或更新版本。</div>
+
+
+<div class="p">要验证 Cloud Foundry CLI 是否已正确安装，或者要检查所安装的 Cloud Foundry CLI 是哪个版本，请运行以下命令：<pre class="codeblock"><code>cf -v </code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="install_plugin__install_bx"><span class="cmd">安装 <a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">Bluemix</span> CLI</a>。</span></li>
+<li class="step stepexpand" id="install_plugin__bx_login"><span class="cmd">登录到 <span class="keyword">Bluemix</span> CLI。</span> <pre class="codeblock"><code><span class="ph">bx</span> login -a https://api.ng.bluemix.net</code></pre>
+</li>
+<li class="step stepexpand" id="install_plugin__install"><span class="cmd" id="install_plugin__install_bx_ic">安装 <span class="keyword">IBM
+Bluemix Container Service</span> 插件。</span> <pre class="codeblock" id="install_plugin__bx_cs_install"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">要验证是否已正确安装该插件，请运行以下命令：<pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>该插件会在结果中显示为 IBM-Containers。</p>
+</li>
+</ol>
+<div class="section result" id="install_plugin__result_j5s_szz_nz"><p>您可随时登录并开始管理容器。</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d12952e424" lang="zh-cn" id="container_cli_login"><h2 class="topictitle2" id="d12952e424">登录到 <span class="keyword">IBM
+Bluemix Container Service</span> CLI 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">安装 CLI 后，需要登录才能使用。</p>
+<div class="section prereq"><div class="p">开始之前，请完成以下任务。<ul><li><a href="container_cli_cfic_install.html#install_plugin">安装 <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 插件。</a></li>
+<li>决定在登录到 Cloud Foundry 时要使用的 <span class="keyword">Bluemix</span> 组织和空间。
+有关组织和空间的更多信息，请参阅<span class="ph"><a href="../admin/orgs_spaces.html">组织和空间</a></span>。</li>
+<li>有关可在 Cloud Foundry <samp class="ph codeph">login</samp> 命令中指定哪些选项的更多信息，请参阅 Cloud Foundry 文档中的 <a href="https://docs.cloudfoundry.org/devguide/installcf/whats-new-v6.html#login" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Login 命令</a>。</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">打开命令行实用程序。</span> <ul class="ul choices"><li class="li choice">对于 OS X 和 Windows，双击 <span class="ph uicontrol">Docker 快速启动终端</span>图标。此时将启动 Docker 守护程序，并为您设置环境变量。</li>
+<li class="li choice">对于 Linux，打开任何命令行实用程序。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">通过 Cloud Foundry CLI 登录到 <span class="keyword">Bluemix</span>。</span> 要指定特定区域，请使用 <samp class="ph codeph">-a</samp> 选项来指定该区域的 API 端点。第一次使用 CLI 时，如果未指定该选项，那么系统会提示您输入 API 端点。指定 API 端点后，在后续登录时就无需输入 API 端点。 <div class="p"><pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+</div>
+ <div class="p">要登录到特定区域，请在登录到 Cloud Foundry CLI 时包括该区域的 API 端点。<ul><li>美国南部<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>英国<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+
+<span class="ph">当您使用联合标识登录时，需要单点登录参数 <span class="keyword option">--sso</span>。如果使用此选项，请打开 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>，以获取一次性密码。如果您未包括 <span class="keyword option">--sso</span> 选项，请完成以下子步骤。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">对于<span class="ph uicontrol">电子邮件</span>，请输入您用于 <span class="keyword">Bluemix</span> 的 IBM 标识。</span></li>
+<li class="li substep"><span class="cmd">对于<span class="ph uicontrol">密码</span>，请输入 IBM 标识的密码。</span> 此时将检索您的 Bluemix 组织和空间。</li>
+<li class="li substep"><span class="cmd">输入代表您某个 <span class="keyword">Bluemix</span> 组织的数字。</span></li>
+<li class="li substep"><span class="cmd">输入代表其中一个现有 <span class="keyword">Bluemix</span> 空间的数字。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_cli_login__namespace"><span class="cmd"><span class="ph">设置组织的<dfn class="term">名称空间</dfn>。</span></span> 名称空间是用于识别专用 <span class="keyword">Bluemix</span> 映像注册表的唯一名称。创建容器时，必须通过包含具有映像名称的名称空间来指定映像的位置。<div class="p"><div class="steps note" id="container_cli_login__namespace_warning"><span class="notetitle">注：</span> 创建名称空间时，在创建后即不能进行更改，只能删除。
+如果您 <span class="keyword">Bluemix</span> 组织中的用户已经部署容器并设置<dfn class="term">名称空间</dfn>，那么会显示消息，其中显示您组织的名称空间。
+在此情况下，您可以继续执行下一步。</div>
+</div>
+
+
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">提示：</span> 请遵循名称空间的以下规则：<ul id="container_cli_login__d9179e142"><li>名称只能包含小写字母、数字或下划线 (_)。</li>
+<li>名称可以为 4 到 30 个字符。如果计划从命令行管理容器，那么您可能倾向于使用能够快速输入的简短名称空间。</li>
+<li>其名称在 <span class="keyword">Bluemix</span> 中必须是唯一的。</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_cli_login__login"><span class="cmd">初始化 <span class="keyword">IBM
+Bluemix Container Service</span>。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">决定您是要运行 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 还是本机 Docker 命令。</span> 您可以在每次登录到插件时选择以下某个选项，也可以使用 <samp class="ph codeph">shellinit</samp> 命令以始终选择“选项 2”。 <div class="p"><ul><li id="container_cli_login__option1_li"><span class="ph uicontrol">选项 1</span>（缺省）<p><span class="keyword">IBM
+Bluemix Container Service</span> 包装程序 Docker 的简单 shell。本地 Docker 守护程序不受 <span class="keyword">IBM
+Bluemix Container Service</span> 的影响。<span class="ph"><samp class="ph codeph">bx ic</samp></span> 命令用于在 <span class="keyword">Bluemix</span> 空间中管理容器，而 <samp class="ph codeph">docker</samp> 命令用于在本地管理容器。但是，本地映像开发始终需要 <samp class="ph codeph">docker</samp> 命令。</p>
+<p>例如，使用“选项 1”，<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 命令会在 <span class="keyword">Bluemix</span> 空间创建容器，而 <samp class="ph codeph">docker run</samp> 会在本地创建容器。如果您对 Docker 和 <span class="keyword">IBM
+Bluemix Container Service</span> 来说是新手，或者您想要在本地测试容器，那么您可能更愿意使用此选项。</p>
+</li>
+<li id="container_cli_login__option2_li"><span class="ph uicontrol">选项 2</span><p>将当前 CLI 会话的本地 Docker 守护程序重定向到 <span class="keyword">IBM
+Bluemix Container Service</span>，以便在 <samp class="ph codeph">docker</samp> 命令可用于在 <span class="keyword">Bluemix</span> 空间中管理容器时，替换 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 命令。</p>
+<p>例如，使用“选项 2”，<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 或 <samp class="ph codeph">docker run</samp> 命令可用于在您的空间中创建容器。如果您是经验丰富的 Docker 用户，熟悉 <samp class="ph codeph">docker</samp> 命令，或者您编写自动化脚本来使用 <span class="keyword">IBM
+Bluemix Container Service</span>，那么您可能更愿意使用此选项。</p>
+<p>某些例外情况仍需要使用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 命令来执行特定于 <span class="keyword">IBM
+Bluemix Container Service</span> 的任务。例如，要设置名称空间，您必须使用命令 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp>。<samp class="ph codeph">docker namespace-set</samp> 不是有效的命令。要获取此配置支持的 <samp class="ph codeph">docker</samp> 命令列表，请参阅<a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="使用 IBM Bluemix Container Service 插件 (bx ic) 时，支持使用某些 docker 命令来替代 bx ic 命令。登录到该插件后，请配置环境变量以使用 Docker CLI 命令。然后，可以运行 docker 命令，而尽可能不使用 bx ic 命令。例如，不使用 bx ic images 来查看专用 Bluemix 注册表中的映像，而改为运行 docker images。">IBM Bluemix Container Service 插件 (bx ic) 支持的 Docker 命令</a>。</p>
+<div class="p">要配置此选项，请复制并粘贴登录期间终端中提供的环境变量。
+<ul><li><samp class="ph codeph">DOCKER_HOST</samp> 用于将 Docker 主机设置为 <span class="keyword">IBM
+Bluemix Container Service</span>。</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp> 用于设置 <span class="keyword">IBM
+Bluemix Container Service</span> Cloud Foundry 插件的认证密钥位置。</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp> 使用 TLS 并验证远程服务器。</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">提示：</span> 完成 <span class="keyword">IBM
+Bluemix Container Service</span> 文档中的任务后，就可以在标记有星号 (*) 的所有步骤中运行 <samp class="ph codeph">docker</samp> 命令。</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d12952e424"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d12952e955" lang="zh-cn" id="container_cli_cfic_upgrade"><h2 class="topictitle2" id="d12952e955">升级 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">您可能想要定期更新插件以使用新功能。</p>
+<div class="section context"><div class="tablenoborder"><table summary="IBM Bluemix Container Service 插件的当前版本" id="container_cli_cfic_upgrade__version_history" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="keyword">IBM
+Bluemix Container Service</span> 插件的当前版本</span></caption><thead><tr><th id="d12952e1079" class="thleft thbot">发布日期</th>
+<th id="d12952e1081" class="thleft thbot">版本</th>
+<th id="d12952e1083" class="thleft thbot">更新</th>
+</tr>
+</thead>
+<tbody><tr id="container_cli_cfic_upgrade__current"><td headers="d12952e1079 ">2016 年 11 月 16 日</td>
+<td headers="d12952e1081 ">0.8.964</td>
+<td headers="d12952e1083 "><ul><li>添加了通过 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 命令，使用 <samp class="ph codeph">--http_monitor_enabled</samp>、<samp class="ph codeph">--http_monitor_path</samp> 和 <samp class="ph codeph">--http_monitor_rs_list</samp> 选项管理容器组的运行状况检查的支持</li>
+<li>添加了对 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --session_affinity</samp> 选项的支持</li>
+<li>缺陷修订</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">要更新插件，请执行以下步骤。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">通过首次安装插件时配置的插件存储库来安装更新。</span> <pre class="codeblock"><code><span class="ph">bx</span> plugin update IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">通过运行以下命令并检查已安装的插件的列表来验证插件安装。</span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>该插件会在结果中显示为 IBM-Containers。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d12952e955"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d12952e1149" lang="zh-cn" id="container_cli_cfic_uninstall"><h2 class="topictitle2" id="d12952e1149">卸载 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">如果不再需要 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，可以使用 <span class="ph">bx</span> 命令将其卸载。</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">注：</span> 要卸载 <span class="keyword">IBM
+Bluemix Container Service</span> Cloud
+Foundry 插件，请运行以下命令。<pre class="codeblock"><code>cf uninstall-plugin IBM-Containers</code></pre>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">要为 <span class="keyword">Bluemix</span> CLI 卸载 <span class="keyword">IBM
+Bluemix Container Service</span> 插件，请运行以下命令。</span> <pre class="codeblock"><code><span class="ph">bx</span> plugin uninstall IBM-Containers</code></pre>
+</li>
+<li class="step stepexpand" id="container_cli_cfic_uninstall__verify"><span class="cmd">通过运行以下命令并检查已安装的插件的列表，验证该插件是否已卸载。</span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p><span class="keyword">IBM
+Bluemix Container Service</span> 插件未显示在结果中。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d12952e1149"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d12952e1309" lang="zh-cn" id="container_cli_compose_install"><h2 class="topictitle2" id="d12952e1309">安装 Docker Compose 及其依赖项</h2>
+<div class="body taskbody"><p class="shortdesc">要同时启动和停止一些单个容器，可以安装 Docker Compose CLI。</p>
+<div class="section context">要通过 <span class="keyword">IBM
+Bluemix Container Service</span> 来运行 Docker Compose 命令，您必须安装以下软件。<ul><li>Docker V<span class="ph">1.10.0</span></li>
+<li>Cloud Foundry CLI V<span class="ph">6.14.0 - 6.22.0</span></li>
+<li>Bluemix CLI</li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span> 插件</li>
+<li>Docker Compose V<span class="ph">1.6.0</span> 或更高版本</li>
+</ul>
+此任务包含用于安装这些所需工具的信息。这些工具的较低版本无法与 <span class="keyword">IBM
+Bluemix Container Service</span> 插件 (<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) 配合使用。</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><a href="container_cli_cfic_install.html#install_plugin">安装 Docker、Cloud Foundry CLI、Bluemix CLI 和 <span class="keyword">IBM
+Bluemix Container Service</span> 插件</a>。</span> <div class="steps note"><span class="notetitle">注：</span> 如果使用的是 Mac 或 Windows 操作系统，Docker Compose 将作为 Docker Toolbox 安装的一部分，随 Docker Engine、Docker Machine 和 Kitematic 一起安装。您可跳过下一步，继续验证 Docker Compose 版本。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">如果使用的是 Linux，请安装最新版本的 Docker Compose。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">安装 <samp class="ph codeph">pip</samp>。</span>  <samp class="ph codeph">pip</samp> 是软件包管理器，其中包含用于安装、升级和除去计算机上用 Python 编写的软件包的所有工具。您可使用以下命令来安装 <samp class="ph codeph">pip</samp>，也可直接从 <a href="https://pypi.python.org/pypi/pip" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">Python Package Index</a> 将软件包下载到计算机。<div class="steps note"><span class="notetitle">注：</span> 如果已在计算机上安装 <samp class="ph codeph">pip</samp>，那么可以继续安装最新版本的 Docker Compose。</div>
+
+<pre class="codeblock"><code>easy_install pip</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">安装 Docker Compose</span> <pre class="codeblock"><code>pip install docker-compose==<span class="ph">1.6.2</span></code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">验证计算机上安装的 Docker Compose 版本。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><a href="container_cli_cfic_install.html#container_cli_login__option2_li">登录到 <span class="keyword">IBM
+Bluemix Container Service</span> CLI</a>。</span>  登录到该插件来运行本机 Docker 命令时，请设置<span class="ph uicontrol">选项 2</span> 的环境变量。</li>
+<li class="li substep substepexpand"><span class="cmd">验证 Docker Compose 包的版本。</span> <pre class="codeblock"><code>docker-compose version</code></pre>
+如果显示 <samp class="ph codeph">docker-compose version 1.6.0</samp> 或更高版本，那么可以开始创建自己的多容器应用程序。否则，请<a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="您可能需要升级 Docker Compose 包的版本，才能使用最新功能。">升级 Docker Compose 版本</a>。<div class="steps note"><span class="notetitle">注：</span> 如果执行 Docker Compose 命令时遇到问题，请复查<a href="container_troubleshoot.html#ts_compose_commands_failed">没有名为 queue 的模块</a>和<a href="container_troubleshoot.html#ts_compose_insecure_connection">不安全 HTTPS 连接警告</a>主题，以检查是否需要更改系统设置或安装其他软件包。</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<article class="topic task nested2" role="article" aria-labelledby="d12952e1511" lang="zh-cn" id="container_cli_compose_upgrade"><h3 class="topictitle3" id="d12952e1511">升级 Docker Compose</h3>
+<div class="body taskbody"><p class="shortdesc">您可能需要升级 Docker Compose 包的版本，才能使用最新功能。</p>
+<div class="section context"><p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">升级 Docker Compose。</span> <pre class="codeblock"><code>pip install docker-compose --upgrade</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">验证 Docker Compose 包的版本。</span> <pre class="codeblock"><code>docker-compose version</code></pre>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d12952e1578" lang="zh-cn" id="container_cli_compose_uninstall"><h3 class="topictitle3" id="d12952e1578">卸载 Docker Compose</h3>
+<div class="body taskbody"><p class="shortdesc">如果不再需要 Docker Compose 软件包，可以使用以下命令将其卸载。</p>
+<div class="section context"><p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">卸载 Docker Compose。</span> <pre class="codeblock"><code>pip uninstall docker-compose</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">验证 Docker Compose 软件包是否已卸载。</span> 如果 Docker Compose 已成功卸载，那么运行以下命令后，CLI 输出中不会列出 Docker Compose。<pre class="codeblock"><code>pip freeze</code></pre>
+</li>
+</ol>
+</div>
+</article></article></article></div></main></body></html>

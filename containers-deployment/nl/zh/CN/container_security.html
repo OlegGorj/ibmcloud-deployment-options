@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service 提供了一个可信、安全的云平台，可优化 Linux 和 Docker 安全性功能。当您使用 IBM Bluemix Container Service 构建和运行容器时，您的应用程序会得益于容器和网络隔离、限制对主机数据和资源的访问，以及保护容器部署。">
+<meta name="keywords" content="安全性, IBM Containers, 容器, 虚拟专用网, VPN, 数据中心, 内部部署, 服务">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>单个和可扩展容器的安全性</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d74541e6" id="container_security"><h1 class="topictitle1" id="d74541e6"><span class="ph">单个和可扩展容器</span>的安全性</h1>
+<div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix® Container Service</span> 提供了一个可信、安全的云平台，可优化 Linux 和 Docker 安全性功能。当您使用 <span class="keyword">IBM
+Bluemix Container Service</span> 构建和运行容器时，您的应用程序会得益于容器和网络隔离、限制对主机数据和资源的访问，以及保护容器部署。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> <span class="ph"><span class="ph">单个和可扩展容器</span> 的免费试用版不可用。
+<a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">了解有关集群管理和在 <span class="keyword">Bluemix</span> Public 上迁移至 <span class="keyword">IBM
+Bluemix Container Service</span> 中的 Kubernetes 的信息。</a></span></div>
+</div>
+
+
+<div class="p">在此页面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_security.html#builtin">内置安全设置</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_security.html#container_security_host" title="IBM Bluemix Container Service 可优化 Linux 内核和 Docker 安全功能来确保容器隔离，并限制对计算主机资源的访问。">计算主机安全设置</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_security.html#container_security_network" title="查看集成的 IBM Bluemix Container Service 功能的列表，这些功能可确保同一专用网络中的容器之间、不同 Bluemix 空间中的容器之间以及您的 Bluemix 空间和远程网络之间进行安全通信。">专用容器网络安全设置</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_security.html#container_cli_login_exec" title="如果必须登录到正在运行的容器，可以使用 bx ic exec。">使用 <samp class="ph codeph">exec</samp> 登录容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_security.html#container_vpn" title="通过使用 IBM® 虚拟专用网 (VPN) 服务，将 Bluemix 内专用容器网络中的单个容器和容器组，安全地连接到公司的数据中心。 IBM VPN 会基于业界标准因特网协议安全性 (IPsec) 协议组，通过因特网，提供安全的端到端通信信道。 IPsec 协议通过对 VPN 端点之间交换的包进行加密，提供网络级别同级认证、数据完整性和数据机密性。 要在 Bluemix 中的容器和公司数据中心之间设置安全连接，您必须在内部部署数据中心内安装 IPsec VPN 网关或 SoftLayer 服务器。使用 IBM VPN 服务，每个空间可以配置一个 VPN 网关，且最多可定义 16 个不同目标的连接。">通过 VPN 将 <span class="keyword">Bluemix</span> 中的容器与公司数据中心连接</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d74541e6">
+<ul class="ullinks">
+<li class="ulchildlink"><span class="ulchildlinktext"><a href="Chunk590564666.dita">映像安全性</a></span><br>
+</li>
+</ul>
+</aside><article class="topic concept nested1" role="article" aria-labelledby="d74541e188" id="builtin"><h2 class="topictitle2" id="d74541e188">内置安全设置</h2>
+<div class="body conbody"><p><a href="../api/content/containers/images/container_security.png" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><img id="builtin__image_tdd_lyz_nz" src="images/container_security.png" width="500" alt="IBMContainers 安全性"></a></p>
+<div class="tablenoborder"><table summary="" id="builtin__table_y15_trz_zw" class="defaultstyle"><caption><span class="tablecap">表 1. 内置 <span class="keyword">IBM
+Bluemix Container Service</span> 安全性设置</span></caption><thead><tr><th id="d74541e210" class="thleft">级别</th>
+<th id="d74541e212" class="thleft">描述</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d74541e210 ">计算主机</td>
+<td headers="d74541e212 ">所有容器均作为独立且隔离的进程在计算主机上运行，并具有对资源的受限访问权。无需额外进行配置，内置安全设置即可帮助保护 Linux 内核和 Docker 守护程序，避免其受到拒绝服务 (DOS) 攻击。<p>有关更多信息，请参阅<a href="container_security.html#container_security_host" title="IBM Bluemix Container Service 可优化 Linux 内核和 Docker 安全功能来确保容器隔离，并限制对计算主机资源的访问。">计算主机安全性</a>。</p>
+</td>
+</tr>
+<tr><td headers="d74541e210 ">专用容器网络</td>
+<td headers="d74541e212 ">每个容器都在隔离且安全的专用网络中运行，在此网络中，将监视入站和出站网络流量，以检测恶意活动并采取相应的补救措施。可以设置不具有公用网络访问权的应用程序，或者选择性将服务向公用网络公开。<p>要安全地将容器连接到公司数据中心或连接到其他 <span class="keyword">Bluemix</span> 空间，<a href="container_security.html#container_security_network" title="查看集成的 IBM Bluemix Container Service 功能的列表，这些功能可确保同一专用网络中的容器之间、不同 Bluemix 空间中的容器之间以及您的 Bluemix 空间和远程网络之间进行安全通信。">可以使用 IBM VPN 服务来设置虚拟专用网</a>。</p>
+</td>
+</tr>
+<tr><td headers="d74541e210 ">Docker 映像</td>
+<td headers="d74541e212 ">每一个组织都分配有一个安全的 Docker V2 专用映像注册表，映像会存储在该注册表中，并供组织中的所有用户共享。<p>第一次登录到 <span class="keyword">IBM
+Bluemix Container Service</span> 时，每一个组织都需要设置名称空间。名称空间用于使用以下格式来创建唯一 URL，以标识组织的专用注册表：<span class="ph filepath">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var></span>。</p>
+<p>要向专用注册表添加映像，您可以创建自己的映像、添加现有本地映像或者直接从 Docker Hub 复制映像。</p>
+<p>为确保安全的容器部署，漏洞顾问程序会扫描每个映像。
+漏洞顾问程序扫描以查看潜在的漏洞、提出建议，并提供解决漏洞的指示。</p>
+有关更多信息，请参阅<a href="va/va_index.html" title="漏洞顾问程序会在部署之前检查容器映像的安全性状态，同时检查运行中容器的状态。">使用漏洞顾问程序管理容器和映像安全性</a>。</td>
+</tr>
+<tr><td headers="d74541e210 ">Docker 容器</td>
+<td headers="d74541e212 ">漏洞顾问程序会检查组织中运行的容器状态，以确保容器继续保持安全且符合组织策略。
+漏洞顾问程序扫描以查看潜在的漏洞、提出建议，并提供解决漏洞的指示。
+<p>有关更多信息，请参阅<a href="va/va_index.html" title="漏洞顾问程序会在部署之前检查容器映像的安全性状态，同时检查运行中容器的状态。">使用漏洞顾问程序管理容器和映像安全性</a>。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</article><article class="topic concept nested1" role="article" aria-labelledby="d74541e315" lang="zh-cn" id="container_security_host"><h2 class="topictitle2" id="d74541e315"><span class="keyword">IBM
+Bluemix Container Service</span> 计算主机上的安全设置</h2>
+<div class="body conbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> 可优化 Linux 内核和 Docker 安全功能来确保容器隔离，并限制对计算主机资源的访问。</p>
+<dl><dt class="dlterm">全面管理和保护 Docker 守护程序</dt>
+<dd>在 IBM 计算主机上运行的 Docker 守护程序未设置直接用户访问权，并且只能由 IBM 进行配置。所有 Docker 守护程序套接字都通过 TLS 证书进行保护。</dd>
+<dt class="dlterm">启用了 Docker 用户名称空间</dt>
+<dd>在计算主机上的 Docker Engine 中启用了 <a href="https://docs.docker.com/engine/security/security/">Docker 用户名称空间</a>功能。用户名称空间功能使容器内部运行的进程与在同一计算主机上运行的其他所有进程和容器相隔离。容器内部的有效 root 用户将映射到计算主机上的非 root 用户。即便 root 用户设法摆脱容器的束缚，该用户也没有任何许可权来操作文件、进程或在计算主机上运行的其他容器。</dd>
+<dt class="dlterm">不允许特权容器</dt>
+<dd>在 <samp class="ph codeph">run</samp> 命令中不支持 <samp class="ph codeph">--privileged</samp> 选项。
+容器无权访问计算主机上的设备和硬盘。</dd>
+<dt class="dlterm">管理内存、CPU 和磁盘空间的控制组 (cgroups)</dt>
+<dd>在同一计算主机上运行的容器共享内存、CPU 和磁盘空间。为了阻止容器耗用所有可用资源或避免容器使应用程序或主机系统崩溃，限制了可以分配给容器的内存、CPU 和磁盘空间最大量。<p>运行时对容器可用的内存、CPU 和磁盘空间量由容器创建期间选择的容器大小来确定。此限制将确保计算主机上的每个容器获得其对可用主机资源的公平份额。如果容器运行不正常，资源上限也能确保计算主机上的其他容器表现出一致的性能和行为。</p>
+</dd>
+<dt class="dlterm">计算主机内核优化</dt>
+<dd>计算主机内核会限制特定用户或组可在计算主机上运行的线程和进程总数。此优化将确保主机不会超负荷运行，且可在达到用户的最大值之前不会耗尽进程槽。</dd>
+<dt class="dlterm">持续监视计算主机</dt>
+<dd>每个计算主机都由 IBM 持续监视，以控制派生炸弹和其他进程级别的拒绝服务 (DOS) 攻击，并采取相应的补救措施。</dd>
+<dt class="dlterm">为 Docker 容器启用了 AppArmor 概要文件</dt>
+<dd>每个计算主机都会应用特定于 IBM 的 <a href="http://wiki.apparmor.net/index.php/Documentation" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">AppArmor</a> 概要文件，以保护环境并限制计算主机上容器的功能。AppArmor 是一种 Linux 内核安全模块，用于控制对文件夹、文件、网络域的访问权，以及创建和更改数据的许可权。</dd>
+<dt class="dlterm">禁用了计算主机上的本地卷安装</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> 不支持将本地卷或本地/主机目录安装到容器。将改为使用组织范围的卷在容器重新启动之间持久存储数据，并使数据可供多个容器使用。卷是在隔离的文件共享上进行托管的，这些文件共享用于安全存储应用程序数据，并管理对文件的访问权和许可权。<p>必须创建组织范围的卷后，才能将其安装到容器。您可以通过 <a href="container_volumes_ov.html#container_volumes_ui" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以通过 Bluemix GUI 创建容器的卷。"><span class="keyword">Bluemix</span>GUI</a> 或 <a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">CLI</a> 来创建卷。</p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested1" role="article" aria-labelledby="d74541e445" lang="zh-cn" id="container_security_network"><h2 class="topictitle2" id="d74541e445"><span class="keyword">IBM
+Bluemix Container Service</span> 专用容器网络上的安全设置</h2>
+<div class="body conbody"><p class="shortdesc">查看集成的 <span class="keyword">IBM
+Bluemix Container Service</span> 功能的列表，这些功能可确保同一专用网络中的容器之间、不同 <span class="keyword">Bluemix</span> 空间中的容器之间以及您的 <span class="keyword">Bluemix</span> 空间和远程网络之间进行安全通信。</p>
+<dl><dt class="dlterm">每个空间的专用 L2 隔离容器网络</dt>
+<dd><span class="ph">容器专用网络可为一个空间中运行的单个容器和容器组创建隔离且安全的环境。
+连接到相同专用网络的容器可以使用专用 IP 地址，向专用网络中的其他容器发送数据和从中接收数据。只有在绑定了一个公共端口以及一个公共 IP 地址（对于单独的容器）或一个公共路径（对于容器组）之后，容器才公共可用。</span><p>在 <span class="keyword">Bluemix</span> 中，每一个空间都提供了一个应用了缺省 <span class="keyword">IBM
+Bluemix Container Service</span> 网络设置的容器专用网络。创建容器时，它们会自动连接到该空间的缺省专用网络，并为其分配专用 IP 地址。</p>
+</dd>
+<dt class="dlterm">使容器保持为专用或通过网络安全组选择性公开面向公用网络的服务</dt>
+<dd>每个容器都由特定于 IBM 的网络安全组进行保护，这些网络安全组控制入站网络流量，并充当专用网络网关级别的软件防火墙。将根据网络安全组规则检查通过专用网络网关发送的数据的合规性，然后根据检查结果来决定这些数据是可以传递到接收方容器还是被阻止。<p>创建容器并且未将其向公用网络公开时，会使用缺省的专用网络安全组设置该容器。此安全组允许容器之间使用专用 IP 地址进行专用网络通信。缺省情况下，所有容器端口都会自动在专用网络上公开。不必将容器端口映射到主机端口。</p>
+<p>要使应用程序可供公用网络使用，您必须公开公共端口，并将公共 IP 地址绑定到单个容器，或将公共路径绑定到容器组。<span class="ph" id="container_security_network__public_nsg">在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 命令中使用 <samp class="ph codeph">-p</samp> 选项公开公共端口时，可为容器创建公用网络安全组，该组只允许在公开的端口上发送和接收公共数据。其他所有公共端口都将关闭，且无法用于从因特网访问应用程序。</span></p>
+</dd>
+<dt class="dlterm">持续监视公司网络</dt>
+<dd>IBM 将监视 <span class="keyword">IBM
+Bluemix Container Service</span> 中的所有网络流量，以检测恶意活动，并采取相应的补救措施。</dd>
+<dt class="dlterm">全面支持 Docker <samp class="ph codeph">exec</samp>、<samp class="ph codeph">attach</samp> 和 <samp class="ph codeph">logs</samp> 命令</dt>
+<dd>您可以通过利用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp>、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach</samp> 或 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp> 命令，在运行时登录到容器或查看其详细输出。使用这些命令，可以避免运行不安全的 SSH 守护程序在运行时访问和监视容器。<p>有关如何使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp> 安全地登录到容器的更多信息，请参阅<a href="container_security.html#container_cli_login_exec" title="如果必须登录到正在运行的容器，可以使用 bx ic exec。">使用 exec 登录到容器</a>。</p>
+</dd>
+<dt class="dlterm">通过 VPN 确保对其他空间中和任何远程网络中服务的专用网络访问安全</dt>
+<dd>专用容器网络中的容器可以使用 IBM® Virtual Private Network 服务安全地连接到公司数据中心。<p data-hd-audience="yellow">有关更多信息，请参阅<a href="container_security.html#container_vpn" title="通过使用 IBM® 虚拟专用网 (VPN) 服务，将 Bluemix 内专用容器网络中的单个容器和容器组，安全地连接到公司的数据中心。 IBM VPN 会基于业界标准因特网协议安全性 (IPsec) 协议组，通过因特网，提供安全的端到端通信信道。 IPsec 协议通过对 VPN 端点之间交换的包进行加密，提供网络级别同级认证、数据完整性和数据机密性。 要在 Bluemix 中的容器和公司数据中心之间设置安全连接，您必须在内部部署数据中心内安装 IPsec VPN 网关或 SoftLayer 服务器。使用 IBM VPN 服务，每个空间可以配置一个 VPN 网关，且最多可定义 16 个不同目标的连接。">设置容器与公司数据中心之间的 VPN 连接</a></p>
+</dd>
+</dl>
+</div>
+<article class="topic concept nested2" role="article" aria-labelledby="d74541e639" lang="zh-cn" id="container_cli_login_exec"><h3 class="topictitle3" id="d74541e639">使用 <samp class="ph codeph">exec</samp> 登录到容器</h3>
+<div class="body conbody"><p class="shortdesc">如果必须登录到正在运行的容器，可以使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp>。</p>
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp> 命令的常见用途包括打开 Bash 窗口并查看分配给容器的卷的文件。<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp> 命令仅对处于“正在运行”状态的容器运行。要使容器保持启动并一直运行，必须使用长时间运行的命令启动该容器。如果容器已暂停或停止，那么必须使用长时间运行的命令将其重新启动，才能登录到该容器。</p>
+<section role="region" aria-labelledby="d74541e705"><h4 class="sectiontitle" id="d74541e705">命令和参数</h4>
+<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec [-d] [-it ] [-u USER] CONTAINER CMD </span></code></pre>
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span></div>
+</section><section role="region" aria-labelledby="d74541e738"><h4 class="sectiontitle" id="d74541e738">示例</h4>
+<div class="p"><span class="ph">此示例命令将在容器 <var class="keyword varname">my_container</var> 中运行交互式 bash 终端。</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</div>
+
+<div class="p"><span class="ph">此示例命令将在容器 <var class="keyword varname">my_container</var> 中运行 date 命令。</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec <var class="keyword varname">my_container</var> date</code></pre>
+</div>
+</section></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d74541e771" id="container_vpn"><h3 class="topictitle3" id="d74541e771">通过设置虚拟专用网将容器连接到公司数据中心</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="vpn_def">通过使用 IBM® 虚拟专用网 (VPN) 服务，将 <span class="keyword">Bluemix</span> 内专用容器网络中的单个容器和容器组，安全地连接到公司的数据中心。
+<span class="keyword">IBM
+VPN</span> 会基于业界标准因特网协议安全性 (IPsec) 协议组，通过因特网，提供安全的端到端通信信道。
+IPsec 协议通过对 VPN 端点之间交换的包进行加密，提供网络级别同级认证、数据完整性和数据机密性。
+要在 <span class="keyword">Bluemix</span> 中的容器和公司数据中心之间设置安全连接，您必须在内部部署数据中心内安装 IPsec VPN 网关或 SoftLayer 服务器。使用 <span class="keyword">IBM
+VPN</span> 服务，每个空间可以配置一个 VPN 网关，且最多可定义 16 个不同目标的连接。</span></p>
+<div class="section context"><p>要将容器连接到公司数据中心，请遵循以下步骤。</p>
+</div><ol class="steps" id="container_vpn__vpn_steps"><li class="step stepexpand"><span class="cmd">在要连接到公司数据中心的空间中，至少创建一个<a href="container_single_ui.html#container_single_ui" title="开发应用程序或服务时，或者用于无需高可用性的短期进程时，请使用单个容器来运行简单测试。要使用自己的网络前端，可以为容器分配公共 IP 地址。">单个容器</a>或<a href="container_ha.html#container_group_ui" title="通过 Bluemix GUI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">容器组</a>。</span></li>
+<li class="step stepexpand"><span class="cmd">执行<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一个服务列表，它会代表开发者来管理这些服务。要添加 Bluemix 服务以供容器使用，必须请求此服务的实例，然后将此服务绑定到容器。">绑定服务</a>主题的步骤 1-5，在空间中创建 <span class="keyword">IBM
+VPN</span> 服务的实例。</span> <div class="steps note"><span class="notetitle">注：</span> <span class="keyword">IBM
+VPN</span> 服务实例必须在您创建要连接到公司数据中心的容器的相同空间中创建。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">遵循 <a href="../services/vpn/index.html" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">IBM
+VPN</span>入门</a>主题中的指示信息，配置 VPN 网关并设置公司数据中心的连接。</span></li>
+</ol>
+</div>
+</article></article></article></div></main></body></html>

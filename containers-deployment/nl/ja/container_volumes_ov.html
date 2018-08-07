@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="組織の Bluemix スペース内で、データを保持または複数のコンテナー間で共有するために、ストレージ・ボリュームが使用されます。">
+<meta name="keywords" content="IBM Containers, コンテナー, 永続ストレージ, ボリューム, 作成, CLI, ファイルの追加, マウント, exec, docker cp, データのバックアップ, 書き込み, 削除, ファイル共有, ストレージ, ダッシュボード, GUI, 追加, cli, fs">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service での単一コンテナーとスケーラブル・コンテナーの永続データの保管</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d90228e6" id="container_volumes_ov"><h1 class="topictitle1" id="d90228e6"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>のボリュームへの永続データの保管</h1>
+<div class="abstract"><div class="shortdesc">組織の <span class="keyword">Bluemix®</span> スペース内で、データを保持または複数のコンテナー間で共有するために、ストレージ・ボリュームが使用されます。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <span class="ph"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix</span> Public の <span class="keyword">IBM®
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></span></div>
+</div>
+
+
+<div class="p">このページでは、次について説明します。
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#about_volumes">ボリュームについて</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_ui" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。 Bluemix GUI から、コンテナーのボリュームを作成できます。">GUI</a> または <a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">CLI</a> でのボリュームの作成<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • ボリュームへの<a href="container_volumes_ov.html#container_volumes_mount" title="ボリュームを作成した後、ボリュームをコンテナーにマウントし、ボリュームをマウントしたコンテナーで利用できるファイルを追加することができます。">ファイルの追加</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • ボリュームの<a href="container_volumes_ov.html#container_volumes_backup" title="コンテナー・ボリュームは永続ストレージでホストされますが、バックアップはありません。ボリューム・データのバックアップが必要な場合、bx ic cp を使用して、手動バックアップを作成できます。">バックアップとリストア</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • ボリュームへの<a href="container_volumes_ov.html#container_volumes_write" title="非 root ユーザーには、ボリューム・マウント・パスに対する書き込み権限がありません。 書き込み権限を付与するには、イメージの Dockerfile を編集して、適切な権限を設定したディレクトリーをマウント・パス上に作成する必要があります。">非 root ユーザー・アクセス</a>の追加<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 他のデータ・センターへの<a href="container_volumes_ov.html#container_volume_different_dc" title="現行の Bluemix スペースを新しいデータ・センターへ移動する場合は、新しいデータ・センターでデータをリストアして使用できるように、現行のボリュームをバックアップしてください。">データ・マイグレーション</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_remove" title="コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。">ボリュームの削除</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">ファイル共有の追加と削除</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d90228e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d90228e150" id="about_volumes"><h2 class="topictitle2" id="d90228e150">ボリュームについて</h2>
+<div class="body taskbody"><div class="section context" id="about_volumes__context_kjv_lg1_4z"><figure class="fignone" id="about_volumes__file_share"><figcaption>図 1. 組織におけるファイル共有およびボリュームの構造</figcaption><object id="about_volumes__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="ファイル共有にはボリュームが含まれ、ボリュームにはファイルが含まれています。"></object></figure>
+
+<p><span class="ph" id="about_volumes__volume_intro">コンテナーは一時的なものであり、その中でアプリケーション・データを永続的に保持することはできません。
+ただし、ボリュームを使用して、コンテナーを再始動してもデータを保持したり、スペース内のコンテナー間でデータを共有したり、コンテナーが使用できないときにアプリケーション・データにアクセスすることは可能です。コンテナーを削除しても、ストレージ・ボリュームは削除されません。ストレージ・ボリュームのライフサイクルはコンテナーのライフサイクルとは無関係です。<span class="keyword">Bluemix</span> 内の Docker コンテナーはローカル・ホストにアクセスできないため、ボリュームはプロビジョンされている<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">ファイル共有</a>上にマウントされます。</span></p>
+
+<p>永続的ストレージ・ライフサイクルでのタスクは以下のとおりです。</p>
+</div><ol class="steps" id="about_volumes__steps_ljv_lg1_4z"><li class="step">オプション: <span class="cmd"><a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">GUI</a> または <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">CLI</a> を使用して、ボリュームをホストするカスタム・ファイル共有を作成します。</span> ファイル共有を作成するには、組織マネージャーの役割が必要です。
+組織マネージャーではない場合、ボリュームの作成に進みます。
+Bluemix 組織ごとに、デフォルトで 20 GB のファイル共有が提供されます。</li>
+<li class="step"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_ui" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。 Bluemix GUI から、コンテナーのボリュームを作成できます。">GUI</a> または <a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">CLI</a> を使用して、ボリュームを作成します。</span></li>
+<li class="step"><span class="cmd"><a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html#ibmbackup_restore_starter">ibm-backup-restore イメージ</a>を使用して、ボリュームの自動バックアップを作成します。</span></li>
+<li class="step"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_remove" title="コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。">ボリューム</a>を削除します。</span></li>
+<li class="step"><span class="cmd"><a href="container_volumes_ov.html#container_filestorage_managing" title="組織の管理者は、既存のファイル共有を削除したり、どのボリュームがファイル共有にマウントされているかを確認したりすることができます。">ファイル共有</a>を削除します。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d90228e256" lang="ja-jp" id="container_volumes_ui"><h2 class="topictitle2" id="d90228e256"><span class="keyword">Bluemix</span> GUI でのボリュームの作成</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。</span> <span class="keyword">Bluemix</span> GUI から、コンテナーのボリュームを作成できます。</p>
+<div class="section prereq"></div><div class="section context"><figure class="fignone" id="container_volumes_ui__file_share"><figcaption>図 2. 組織におけるファイル共有およびボリュームの構造</figcaption><object id="container_volumes_ui__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="ファイル共有にはボリュームが含まれ、ボリュームにはファイルが含まれています。"></object></figure>
+
+<p><span class="ph" id="container_volumes_ui__volume_intro">単一コンテナーは、設計上、存続時間が短期です。
+しかし、ボリュームを使用することにより、コンテナーを再始動してもデータが永続するようにしたり、スペース内のコンテナー間でデータを共有したり、グループ内の複数のコンテナー・インスタンス間でデータを共有したりできます。
+Docker 内にボリュームをマウントすると、そのボリュームはローカル・ファイル・システムにマウントされます。
+<span class="keyword">IBM
+Bluemix Container Service</span> では、計算ホストへのアクセスが制限されるので、ホスト・ディレクトリーをコンテナーにマウントすることができません。
+代わりに、組織規模のボリュームを使用して、コンテナーを再始動してもデータを保持します。ボリュームは、分離された<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">ファイル共有</a>上でホストされます。そこでは、安全にアプリ・データが保管され、ファイルに対するアクセスや権限が管理されます。ボリュームは、コンテナーまたはイメージに対する更新の影響を受けません。コンテナーを削除しても、ストレージ・ボリュームは削除されません。</span></p>
+</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">カタログから、<span class="ph uicontrol">「コンテナー」</span>を選択し、イメージを選択します。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「詳細オプション」</span>を選択し、ボリューム作成フィールドを展開します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「ボリュームの作成」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「ボリューム名」</span>フィールドに、名前を入力します。</span> ボリュームはスペースごとに固有であるため、スペース内でボリューム名を再利用することはできません。
+ボリューム名に使用できるのは、大文字、小文字、数字、下線 (_)、およびハイフン (-) です。</li>
+<li class="step"><span class="cmd">ファイル共有が存在する場合、<span class="ph uicontrol">「ファイル共有」</span>ドロップダウン・メニューから既存のファイル共有を選択します。</span> ファイル共有が存在しない場合、20 GB のデフォルトのファイル共有が自動的に作成されます。組織の管理者は、特定のストレージ・サイズおよび IOPS を指定してファイル共有を割り振ることができます。詳しくは、<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">ボリュームのファイル共有の追加</a>を参照してください。 ボリュームのサイズに制限はありません。
+ボリュームは、ホストのファイル共有のサイズに応じて拡大縮小できます。</li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「作成」</span>をクリックします。 </span> ボリュームを作成するには数分かかる場合があります。 </li>
+</ol>
+<div class="section result">スペースの中でボリュームを使用できるようになり、<a href="container_single_ui.html#gui__volume">単一コンテナー</a>または<a href="container_ha.html#container_group_ui__volume">コンテナー・グループ</a>にマウントできます。これは、<span class="ph uicontrol">「詳細オプション」</span>の<span class="ph uicontrol">「既存ボリュームの割り当て」</span>のドロップダウン・メニューから選択することによって行います。
+ボリュームを選択した後は、ボリュームをコンテナー内部にマウントしたときのファイル・パス (<span class="ph filepath">/var/lib/my_volume</span> など) を割り当てます。コンテナーのバックアップが必要な場合は、<a href="container_volumes_ov.html#container_volumes_remove" title="コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。">データのバックアップおよびリストア</a>を参照してください。</div></div>
+<aside role="complementary" aria-labelledby="d90228e256"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e425" lang="ja-jp" id="container_volumes_cli"><h2 class="topictitle2" id="d90228e425">コマンド・ライン (CLI) でのボリュームの作成</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。</span>コマンド・ラインから、コンテナーのボリュームを作成できます。</p>
+<div class="section prereq"></div><div class="section context"><p><span class="ph">単一コンテナーは、設計上、存続時間が短期です。
+しかし、ボリュームを使用することにより、コンテナーを再始動してもデータが永続するようにしたり、スペース内のコンテナー間でデータを共有したり、グループ内の複数のコンテナー・インスタンス間でデータを共有したりできます。
+Docker 内にボリュームをマウントすると、そのボリュームはローカル・ファイル・システムにマウントされます。
+<span class="keyword">IBM
+Bluemix Container Service</span> では、計算ホストへのアクセスが制限されるので、ホスト・ディレクトリーをコンテナーにマウントすることができません。
+代わりに、組織規模のボリュームを使用して、コンテナーを再始動してもデータを保持します。ボリュームは、分離された<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">ファイル共有</a>上でホストされます。そこでは、安全にアプリ・データが保管され、ファイルに対するアクセスや権限が管理されます。ボリュームは、コンテナーまたはイメージに対する更新の影響を受けません。コンテナーを削除しても、ストレージ・ボリュームは削除されません。</span></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">以下のコマンドを実行して、ボリュームを作成します。</span> ボリュームは、ホストのファイル共有のサイズに応じて拡大縮小できます。
+ファイル共有の指定はオプションです。<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</samp> を実行して、既存のファイル共有を表示することができます。 ファイル共有が存在しない場合、20 GB のデフォルトのファイル共有が自動的に作成されます。組織の管理者は、特定のストレージ・サイズおよび IOPS を指定してファイル共有を割り振ることができます。詳しくは、<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">ボリュームのファイル共有の追加</a>を参照してください。 <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create</samp> のパラメーター</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(オプション) ファイル共有名。使用可能なファイル共有または指定されたファイル共有がない場合、ボリュームはそのスペースのデフォルトのファイル共有に作成されます。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(必須) ボリューム名。<span class="ph" id="container_volumes_cli__d44277e4819">名前に使用できるのは、大文字、小文字、数字、下線 (_)、およびハイフン (-) です。</span></dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行して、ボリュームが正しく作成されたことを確認します。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>次に、<a href="container_single_ui.html#container_single_cli" title="run コマンドを使用して、コンテナーを作成します。コンテナーには、イメージを含める必要があります。イメージがまだない場合には、デフォルトで組織のプライベート・ イメージ・レジストリーで使用可能な IBM 認定のデフォルト・イメージのいずれかを使用できます。">単一のコンテナー</a>または<a href="container_ha.html#container_group_cli" title="スケーラブル・コンテナー・グループを IBM Bluemix Container Service CLI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">コンテナー・グループ</a>にボリュームを割り当てます。ボリュームは、<samp class="ph codeph">--volume</samp> オプションを <samp class="ph codeph">run</samp> コマンドおよび <samp class="ph codeph">group-create</samp> コマンドでそれぞれ使用して、割り当てられます。<span class="ph">コンテナーのバックアップが必要な場合は、<a href="container_volumes_ov.html#container_volumes_remove" title="コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。">データのバックアップおよびリストア</a>を参照してください。</span></p>
+</div></div>
+<aside role="complementary" aria-labelledby="d90228e425"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e621" lang="ja-jp" id="container_volumes_mount"><h2 class="topictitle2" id="d90228e621">コマンド・ライン・インターフェース (CLI) を使用したボリュームへのファイルの追加</h2>
+<div class="body taskbody"><p class="shortdesc">ボリュームを作成した後、ボリュームをコンテナーにマウントし、ボリュームをマウントしたコンテナーで利用できるファイルを追加することができます。</p>
+<div class="section prereq">始めに、<a href="container_volumes_ov.html#container_volumes_ui" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。 Bluemix GUI から、コンテナーのボリュームを作成できます。"><span class="keyword">Bluemix</span> GUI を使用</a>して、または<a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">CLI を使用</a>して、ボリュームを作成します。</div><div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">ボリュームをマウントしたコンテナーを作成します。*</span> <samp class="ph codeph"><var class="keyword varname">my_volume</var></samp> をボリュームの名前に、<samp class="ph codeph"><var class="keyword varname">container_path</var></samp> をボリュームのマウント・パスに、<samp class="ph codeph"><var class="keyword varname">my_container</var></samp> をコンテナーの名前に、registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var> をイメージに、それぞれ置き換えてください。 <pre class="codeblock"><code><span class="ph">bx ic</span> run --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">container_path</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+
+<div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_volumes_mount__d44440e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_volumes_mount__d44440e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd"><samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> コマンドを使用して、ローカル・ディレクトリーからボリュームにファイルをコピーします。*</span> <p>この例では、コンテナー内部の <var class="keyword varname">/src/usr/tmp</var> パスにマウントされたボリュームに <var class="keyword varname">config.txt</var> ファイルをコピーしています。ファイルは実際にコピーするファイルまたはディレクトリーに置き換え、コンテナー・パスは実際のボリュームを指すように変更してください。このコマンドでは、ソースのファイルまたはパスが先で、宛先パスが 2 番目です。
+コンテナーとの間でコピーする場合は、<span class="ph">コンテナーの名前、区切り文字「:」、そしてコピー先のファイルまたはフォルダーへのパスを含める必要があります。パスは、コンテナーのルート・ディレクトリーからの相対パスにする必要があります。</span><a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp"><span class="ph">bx ic</span> cp</a> の資料で詳細を確認してください。</p>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath"><var class="keyword varname">./config.txt</var></span> <var class="keyword varname">my_container</var>:<span class="ph filepath"><var class="keyword varname">/src/usr/tmp</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><samp class="ph codeph"><span class="ph">bx ic</span> exec</samp> コマンドを使用して実行中のコンテナーにログインし、ボリュームにファイルがコピーされたことを確認します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームをマウントしたディレクトリーに移動し、ファイルをリストします。</span> 出力にファイルがリストされます。
+このボリュームのマウント先コンテナーには、このファイルへのアクセス権があります。
+<pre class="codeblock"><code># cd <var class="keyword varname">container_path</var>
+# ls
+config.txt  </code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90228e621"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e853" lang="ja-jp" id="container_volumes_backup"><h2 class="topictitle2" id="d90228e853">コマンド・ライン・インターフェース (CLI) を使用したデータのバックアップとリストア</h2>
+<div class="body taskbody"><p class="shortdesc">コンテナー・ボリュームは永続ストレージでホストされますが、バックアップはありません。ボリューム・データのバックアップが必要な場合、<samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> を使用して、手動バックアップを作成できます。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">バックアップする実行中または停止状態のコンテナー上のボリューム・マウント・パスを確認します。*</span>  <div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">my_container</var></code></pre>
+</div>
+
+
+<p>出力には、この例に似たセクションと、ボリューム名とコンテナーのマウント・ポイントが含まれます。この例の場合、マウント・ポイントはフォルダー <span class="ph filepath">/mnt/data</span> です。</p>
+
+
+<pre class="codeblock"><code>        "Mounts": [
+            {
+                "Destination": "<span class="ph filepath">/mnt/data</span>",
+                "Driver": "",
+                "Mode": "rw",
+                "Name": "",
+                "RW": true,
+                "Source": "/vol/<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>/<var class="keyword varname">example_container_id</var>"
+            }</code></pre>
+
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_volumes_backup__d44056e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_volumes_backup__d44056e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">ボリュームへの書き込みを実行しているすべての実行中のコンテナーを停止します。*</span> それらのコンテナーを停止することで、書き込み中のデータがコピーされないようにします。
+<div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">my_container</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">単一コンテナーのファイルをローカル・コンピューターにコピーします。*</span> コンテナー・グループのボリュームをバックアップする場合、すべてのインスタンスはボリューム上の同じマウント・ポイントを共有するため、グループの 1 つのインスタンス上でこのコマンドを実行するだけで十分です。
+<p>これで、ボリューム・データのローカル・バックアップができました。</p>
+
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">my_container</var>:<var class="keyword varname">/mnt/data</var> <var class="keyword varname">my_local_folder</var></code></pre>
+
+<div class="tablenoborder"><table summary="" id="container_volumes_backup__table_wrq_nbl_nw" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="ph">bx ic</span> cp コマンドの要素</span></caption><thead><tr><th colspan="2" id="d90228e1007" class="thleft">このコマンドについて</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d90228e1007 "><samp class="ph codeph">cp</samp></td>
+<td style="width: 50%" headers="d90228e1007 "><a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp">コピー・コマンド</a>。</td>
+</tr>
+<tr><td style="width: 50%" headers="d90228e1007 "><var class="keyword varname">my_container</var>:<var class="keyword varname">/mnt/data</var></td>
+<td style="width: 50%" headers="d90228e1007 ">ソース・パスが先です。
+この場合、コンテナーのデータをローカル宛先にコピーするため、コンテナー・ファイル・パスがソースです。
+コンテナー名、コロン、およびコンテナー内でのファイル・パスを含める必要があります。
+この例では、前のステップでボリューム・マウント・ポイントを選択したため、含まれているファイルをすべてコピーできます。</td>
+</tr>
+<tr><td style="width: 50%" headers="d90228e1007 "><var class="keyword varname">my_local_folder</var></td>
+<td style="width: 50%" headers="d90228e1007 ">宛先パスが 2 番目です。
+ローカル・パスは、絶対パスでも相対パスでもかまいません。
+この例の場合、コンテナー・データを相対パス <var class="keyword varname">my_local_folder</var> にコピーします。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">データをローカル・フォルダーから新規ボリュームにコピーします。*</span> このコマンドによって、データが新しいコンテナーまたはボリュームにリストアされます。
+データを新規ボリュームに転送する理由の 1 つは、古いファイル共有よりもストレージが大きい、または IOPS が高いファイル共有を新規作成し、その上にボリュームをマウントするためです。
+新しいファイル共有の作成方法については、<a href="container_volumes_ov.html#container_fileshares_adding_cli" title="bx ic volume-fs-create コマンドを使用して、ファイル共有を作成します。">コマンド・ライン・インターフェース (CLI) を使用したファイル共有の追加</a>を参照してください。
+新しいボリュームの作成方法については、<a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">コマンド・ライン (CLI) でのボリュームの作成</a>を参照してください。
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">my_local_folder</var> <var class="keyword varname">my_new_container</var>:<var class="keyword varname">/mnt/data</var> </code></pre>
+</li>
+</ol>
+<div class="section result">データがローカル・フォルダーにコピーされ、手動バックアップを取得できました。
+また、データが新しいコンテナー上のボリュームにコピーされました。</div></div>
+<aside role="complementary" aria-labelledby="d90228e853"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e1079" lang="ja-jp" id="container_volumes_write"><h2 class="topictitle2" id="d90228e1079">コマンド・ライン・インターフェース (CLI) を使用した非 root ユーザーのボリューム・アクセス権限の追加</h2>
+<div class="body taskbody"><p class="shortdesc">非 root ユーザーには、ボリューム・マウント・パスに対する書き込み権限がありません。
+書き込み権限を付与するには、イメージの Dockerfile を編集して、適切な権限を設定したディレクトリーをマウント・パス上に作成する必要があります。</p>
+<div class="section context"><p><span class="keyword">IBM
+Bluemix Container Service</span> では、Docker Engine 用に ユーザー名前空間機能が使用可能に設定されています。ユーザー名前空間には、コンテナーの root ユーザーが他のコンテナーや計算ホストにアクセスできないように分離する効果があります。
+ただし、ボリュームは、コンテナーの計算ホストの外部の NFS ファイル共有上にあります。
+ボリュームはコンテナー内の root ユーザーを認識するようにセットアップされますが、ボリュームはコンテナーの外部にあるため、ユーザー名前空間を認識しません。</p>
+<p>一部のアプリケーションでは、コンテナー内のユーザーだけが root ユーザーになります。しかし、多くのアプリケーションでは、コンテナー・マウント・パスに書き込む非 root ユーザーを指定します。ボリュームに対する書き込み権限を必要とする非 root ユーザーを指定するアプリケーションを設計する場合は、Dockerfile とエントリー・ポイント・スクリプトに、次の処理を追加する必要があります。</p>
+<ul><li>非 root ユーザーを作成する。</li>
+<li>そのユーザーを一時的に root グループに追加する。</li>
+<li>ボリューム・マウント・パスにディレクトリーを作成して、適切なユーザー権限を設定する。</li>
+</ul>
+<p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">ローカル・ディレクトリーに Dockerfile を作成します。</span> この Dockerfile 例では、<var class="keyword varname">myguest</var> という非 root ユーザーを作成します。 <pre class="codeblock"><code>FROM registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode:latest
+
+# Create group and user with GID &amp; UID <var class="keyword varname">1010</var>.
+# In this case your are creating a group and user named <var class="keyword varname">myguest</var>. 
+# The GUID and UID <var class="keyword varname">1010</var> is unlikely to create a conflict with any existing user GUIDs or UIDs in the image.
+# The GUID and UID must be between 0 and 65536. Otherwise, container creation fails.
+RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">myguest</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">myguest</var>
+
+ENV MY_USER=myguest
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
+
+EXPOSE 22
+ENTRYPOINT ["/sbin/entrypoint.sh"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Dockerfile と同じローカル・フォルダーに、エントリー・ポイント・スクリプトを作成します。</span>  このエントリー・ポイント・スクリプト例では、ボリューム・マウント・パスとして <span class="ph filepath"><var class="keyword varname">/mnt/myvol</var></span> を指定します。
+<pre class="codeblock"><code>#!/bin/bash
+set -e
+
+# This is the mount point for the shared volume.
+# Use this mount point with the <span class="ph"><samp class="ph codeph">bx ic</samp></span> run command.
+# By default the mount point is owned by the root user.
+MOUNTPATH="/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span>"
+MY_USER=${MY_USER:-"myguest"}
+
+# This function creates a subdirectory that is owned by 
+# the non-root user under the shared volume mount path.
+create_data_dir() {
+  #Add the non-root user to primary group of root user.
+  usermod -aG root $MY_USER
+
+  # Provide read-write-execute permission to the group for the shared volume mount path.
+  chmod 775 $MOUNTPATH
+
+  # Create a directory under the shared path owned by non-root user <var class="keyword varname">myguest</var>.
+  su -c "mkdir -p ${MOUNTPATH}/mydata" -l $MY_USER
+  su -c "chmod 700 ${MOUNTPATH}/mydata" -l $MY_USER
+  ls -al ${MOUNTPATH}
+
+  # For security, remove the non-root user from root user group.
+  deluser $MY_USER root
+
+  # Change the shared volume mount path back to its original read-write-execute permission.
+  chmod 755 $MOUNTPATH
+  echo "Created Data directory..."
+}
+
+create_data_dir
+
+# This command creates a long-running process for the purpose of this example.
+tail -F /dev/null</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix</span> にログインします。</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+<span class="ph">フェデレーテッド ID を使用してログインする場合は、シングル・サインオン・パラメーター <span class="keyword option">--sso</span> が必要です。このオプションを使用する場合は、<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a> を開いて、ワンタイム・パスコードを取得します。
+<span class="keyword option">--sso</span> オプションを含めない場合は、以下のサブステップを実行します。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「E メール」</span>に、<span class="keyword">Bluemix</span> の IBM ID を入力します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「パスワード」</span>に、IBM ID のパスワードを入力します。</span> Bluemix の組織とスペースが取得されました。</li>
+<li class="li substep"><span class="cmd"><span class="keyword">Bluemix</span> 組織の 1 つを表す数値を入力します。</span></li>
+<li class="li substep"><span class="cmd">既存の <span class="keyword">Bluemix</span> スペースの 1 つを表す数値を入力します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span> CLI を初期化します。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Bluemix レジストリーにイメージを追加します。*</span> <var class="keyword varname">&lt;my_namespace&gt;</var> を、プライベート・イメージ・レジストリーの名前空間に必ず置き換えてください。名前空間を調べる必要がある場合は、<samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行します。 <pre class="codeblock"><code><span class="ph">bx ic</span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/&lt;my_namespace&gt;/nonroot .</code></pre>
+
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_volumes_write__d45192e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_volumes_write__d45192e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームを
+作成します。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-create <var class="keyword varname">my_volume</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームをマウントし、<var class="keyword varname">nonroot</var> イメージからコンテナーを実行します。*</span>  ボリューム・マウント・パス <samp class="ph codeph">/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span></samp> は、Dockerfile で指定されたマウント・パスと一致します。
+<pre class="codeblock"><code><span class="ph">bx ic</span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">my_volume</var>:/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span> registry.ng.bluemix.net/&lt;my_namespace&gt;/nonroot</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><var class="keyword varname">my_container</var> が実行中であることを確認します。*</span> コンテナーの状況が <samp class="ph codeph">BUILDING</samp> である場合は、まだそこにログインできません。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                         COMMAND             CREATED             STATUS                    PORTS      NAMES
+d92ee43d-2af        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">nonroot</var>:latest   ""                  41 seconds ago      Running 29 seconds ago               <var class="keyword varname">my_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーが実行されたら、コンテナーにログインします。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> /bin/bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリューム・マウント・パスの許可を表示します。</span> <pre class="codeblock"><code>ls -al <span class="ph filepath">/mnt/myvol/</span></code></pre>
+
+
+<pre class="pre screen"><code>root@instance-006ff76b:/# ls -al /mnt/myvol/                                                                                                                                                             
+total 12
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 .
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 ..
+drwx------ 2 myguest myguest 4096 Jul 13 19:03 mydata</code></pre>
+
+
+<p>この出力が示すように、root にはボリューム・マウント・パス <var class="keyword varname">mnt/myvol/</var> に対する読み取り/書き込み/実行権限があり、非 root の <var class="keyword varname">myguest</var> ユーザーには、<var class="keyword varname">mnt/myvol/mydata</var> フォルダーに対する読み取り/書き込み権限があります。このように権限が更新されたことにより、非 root ユーザーは永続ボリュームにデータを書き込めるようになりました。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90228e1079"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e1452" lang="ja-jp" id="container_volume_different_dc"><h2 class="topictitle2" id="d90228e1452">ボリューム・データの他のデータ・センターへのマイグレーション</h2>
+<div class="body taskbody"><p class="shortdesc">現行の <span class="keyword">Bluemix</span> スペースを新しいデータ・センターへ移動する場合は、新しいデータ・センターでデータをリストアして使用できるように、現行のボリュームをバックアップしてください。</p>
+<div class="section context"><div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <samp class="ph codeph"><span class="ph">bx ic</span> reprovision</samp> コマンドを使用してスペースを新しいデータ・センターへ移動すると、このスペースにあるすべてのコンテナー、パブリック IP アドレス、ボリュームは完全に削除され、新しいデータ・センターにマイグレーションされません。新しいデータ・センターへの移動後にデータが失われないようにするには、すべてのボリュームをバックアップし、新しいデータ・センターでスペースが再プロビジョンされたあとにデータをリストアする必要があります。</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">再プロビジョンする <span class="keyword">Bluemix</span> スペースにあるすべてのボリュームをリストします。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volumes</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">新しいデータ・センターで使用する各ボリュームをバックアップします。次のいずれかのオプションを選択します。</span> <ul class="ul choices"><li class="li choice">ローカル・マシンにボリュームをバックアップするには、<a href="container_volumes_ov.html#container_volumes_backup" title="コンテナー・ボリュームは永続ストレージでホストされますが、バックアップはありません。ボリューム・データのバックアップが必要な場合、bx ic cp を使用して、手動バックアップを作成できます。"><span class="ph">bx ic</span> cp コマンド</a>を使用します。</li>
+<li class="li choice"><span class="keyword">IBM Object
+Storage for Bluemix</span> インスタンスにデータを保存するには、<a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM バックアップとリストア・イメージ</a>からバックアップ・コンテナーを作成します。</li>
+</ul>
+<div class="note attention"><span class="attentiontitle">重要:</span> ボリュームをバックアップせずに新しいデータ・センターにスペースを再プロビジョンすると、データが失われてリカバリーできません。</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_remove" title="コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。">スペース内のすべてのボリュームを削除</a>します。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_filestorage_managing" title="組織の管理者は、既存のファイル共有を削除したり、どのボリュームがファイル共有にマウントされているかを確認したりすることができます。">スペース内のすべてのファイル共有を削除</a>します。</span></li>
+<li class="step stepexpand"><span class="cmd">新しいデータ・センターにスペースを再プロビジョンします。<var class="keyword varname">&lt;data_center&gt;</var> を、新しいスペースを作成する <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__reprovision">データ・センター</a>に置き換えます。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> reprovision <var class="keyword varname">&lt;data_center&gt;</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="bx ic volume-fs-create コマンドを使用して、ファイル共有を作成します。">新しいスペースにファイル共有を作成</a>します。</span></li>
+<li class="step stepexpand"><span class="cmd">バックアップしたデータのリストアに使用できる<a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">ボリュームを作成</a>します。</span></li>
+<li class="step stepexpand"><span class="cmd">新しいボリュームにデータをリストアします。ボリュームのバックアップに使用した方法によって、以下のオプションのいずれかを選択します。</span> <ul class="ul choices"><li class="li choice">ローカル・マシンのデータをリストアする場合は、<a href="container_volumes_ov.html#container_volumes_backup" title="コンテナー・ボリュームは永続ストレージでホストされますが、バックアップはありません。ボリューム・データのバックアップが必要な場合、bx ic cp を使用して、手動バックアップを作成できます。"><span class="ph">bx ic</span> cp コマンド</a>を使用します。</li>
+<li class="li choice"><span class="keyword">IBM Object
+Storage for Bluemix</span> インスタンスのデータをリストアする場合は、<a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM バックアップとリストア・イメージ</a>からリストア・コンテナーを作成します。</li>
+</ul>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90228e1452"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e1622" lang="ja-jp" id="container_volumes_remove"><h2 class="topictitle2" id="d90228e1622">コマンド・ライン・インターフェース (CLI) を使用したボリュームの削除</h2>
+<div class="body taskbody"><p class="shortdesc">コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。</p>
+<div class="section prereq"><ul><li><div class="note important"><span class="importanttitle">重要:</span> ボリュームを削除すると、そのボリューム上に保管されているすべての永続データやファイルが完全に削除されます。ボリュームは自動的にバックアップされないので、まず<a href="container_volumes_ov.html#container_volumes_backup" title="コンテナー・ボリュームは永続ストレージでホストされますが、バックアップはありません。ボリューム・データのバックアップが必要な場合、bx ic cp を使用して、手動バックアップを作成できます。">ボリュームをバックアップ</a>してから削除してください。</div>
+</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">ボリューム名の識別</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームを検査して、そのボリュームがマウントされているコンテナーを確認します。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-inspect <var class="keyword varname">example_volume</var></code></pre>
+
+
+<p>出力には <span class="ph uicontrol">mounted_on_containers</span> という名前のセクションがあり、ボリュームがマウントされているコンテナーがリストされています。</p>
+
+
+<pre class="codeblock"><code>    "mounted_on_containers": [
+        "<var class="keyword varname">example_container</var>"
+    ],</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームがコンテナーにマウントされている場合は、ボリュームを削除する前に機密データを除去します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand">オプション: <span class="cmd">コンテナーを検査して、ボリュームがマウントされているマウント・パスを探します。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">example_container</var></code></pre>
+マウント・パスは、CLI 応答の <span class="ph uicontrol">Volumes</span> セクションにあります。
+
+<pre class="pre screen"><code>"Volumes": {
+        "/mount_path": "/vol/0e65c452-62413-46f2-8b22-ff06ab74ac21/<var class="keyword varname">example_volume</var>"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">コンテナーにログインします。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> exec -it <var class="keyword varname">example_container</var> bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">マウント・パスに移動します。</span> <pre class="codeblock"><code>cd /<var class="keyword varname">mount_path</var></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">ボリュームからすべての機密データを削除します。</span> <pre class="codeblock"><code>rm -rf *</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">すべてのデータが削除されたことを確認します。</span> <pre class="codeblock"><code>ls</code></pre>
+ディレクトリーまたはファイルが表示されない場合は、ボリューム・マウント・パスからデータが正常に削除されています。</li>
+<li class="li substep substepexpand"><span class="cmd">ボリュームにマウントされていてボリューム・マウント・パスに機密データが含まれているすべてのコンテナーに対して、ステップ a から e を繰り返します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームを削除する前に、ボリュームにマウントされているすべてのコンテナーを停止します。*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">example_container</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_volumes_remove__d44802e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_volumes_remove__d44802e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーが必要なくなった場合は削除します。*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> rm <var class="keyword varname">example_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">ボリュームがマウントされているコンテナーがすべて停止したら、ボリュームを削除します。</span> <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove</samp> のパラメーター</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(必須) ボリューム名。</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">ボリュームが削除されたことを確認します。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90228e1622"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90228e1865" lang="ja-jp" id="container_fileshares_adding_ui"><h2 class="topictitle2" id="d90228e1865"><span class="keyword">Bluemix</span> GUI を使用したボリュームのファイル共有の追加</h2>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc"><span class="ph">ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、<span class="keyword">Bluemix</span> スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。
+ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。</span></span>
+</div>
+<div class="section prereq"><div class="p"><div class="steps note"><span class="notetitle">注:</span> 既に最大の割り当て量に達している場合には、<a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> サポート・チケット</a>を開いて割り当て量の追加を要求できます。</div>
+</div>
+</div><div class="section context"><p><span class="keyword">Bluemix</span> 内のコンテナーはローカル・ホストにアクセスできないため、ボリュームはプロビジョンされている NFS ファイル共有上にマウントされます。ファイル共有上のボリュームは、ホスト・コンピューター上のディレクトリーに似ています。ファイル共有とボリュームは、いずれもスペースごとに固有です。そのため、コンテナーがボリューム上の永続データにアクセスするには、そのコンテナーを同じスペースに作成する必要があります。
+組織とスペースのセットアップについて詳しくは、<a href="../admin/orgs_spaces.html">Bluemix パブリックの管理</a>を参照してください。
+組織内に初めてボリュームを作成する際に、20 GB で 4 IOPS のファイル共有がボリュームをホストするために自動的にプロビジョンされます。
+データのパフォーマンスのニーズを満たすために、組織の管理者は、サイズが 20 GB から 12 TB で、1 GB あたりの IOPS が 0.25、2、または 4 の、新規<a href="http://knowledgelayer.softlayer.com/learning/introduction-endurance-storage" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">ファイル共有</a>を作成できます。</p>
+
+<figure class="fignone" id="container_fileshares_adding_ui__fig_ac1_lzt_q5"><figcaption>図 3. 組織におけるファイル共有およびボリュームの構造</figcaption><object id="container_fileshares_adding_ui__d27637e47" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="ファイル共有にはボリュームが含まれ、ボリュームにはファイルが含まれています。"></object></figure>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph">「組織の管理」でアカウントの詳細から組織を選択します。</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">割り当て量セクションに、コンテナーの詳細が表示されます。</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">ファイル共有を作成します。行がテーブルの末尾に作成されます。</span></span></li>
+<li class="step stepexpand"><span class="cmd">ファイル共有の作成場所となる既存のスペースを選択します。</span></li>
+<li class="step stepexpand"><span class="cmd">ファイル共有の名前を入力します。</span> <span class="ph">名前に使用できるのは、大文字、小文字、数字、下線 (_)、およびハイフン (-) です。</span></li>
+<li class="step stepexpand"><span class="cmd">ファイル共有の必要な容量を判別します。</span> ファイル共有サイズと 1 GB あたりの IOPS (1 秒あたりの入出力操作) を乗算すると、合計 IOPS が得られます。
+次の表は、ファイル共有サイズと IOPS との関係について説明しています。
+<div class="tablenoborder"><table summary="" id="container_fileshares_adding_ui__file_share_ex" class="defaultstyle"><caption><span class="tablecap">表 2. ファイル共有サイズと 1 GB あたりの IOPS の例</span></caption><thead><tr><th id="d90228e1996" class="thleft"> ファイル共有サイズ</th>
+<th id="d90228e1998" class="thleft">GB ごとの IOPS</th>
+<th id="d90228e2000" class="thleft">合計 IOPS</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d90228e1996 ">20 GB</td>
+<td headers="d90228e1998 ">4</td>
+<td headers="d90228e2000 ">80</td>
+</tr>
+<tr><td headers="d90228e1996 ">100 GB</td>
+<td headers="d90228e1998 ">4</td>
+<td headers="d90228e2000 ">400</td>
+</tr>
+<tr><td headers="d90228e1996 ">1,000 GB</td>
+<td headers="d90228e1998 ">4</td>
+<td headers="d90228e2000 ">4,000</td>
+</tr>
+<tr><td headers="d90228e1996 ">4,000 GB</td>
+<td headers="d90228e1998 ">4</td>
+<td headers="d90228e2000 ">16,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+アプリのワークロードが高くなるほど、必要な合計 IOPS は大きくなるため、ファイル共有の構成を選択するときには、ボリュームに書き込むようなアプリにすること考慮してください。<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「サイズ」</span>で、G バイト単位の値を選択します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「IOPS」</span>で、IOPS/GB 単位の値を選択します。</span> <span class="ph uicontrol">「サイズ」</span>および<span class="ph uicontrol">「IOPS」</span>の入力データに基づいて、月々の請求額が計算されます。続行する前に、<span class="ph uicontrol">「サイズ」</span>および<span class="ph uicontrol">「IOPS」</span>の値を調整して、月額の計算を変更することもできます。 </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+</ol>
+<div class="section result"><p><span class="ph" id="container_fileshares_adding_ui__fs_results"> ファイル共有の作成が完了するまでには、数分かかることがあります。
+ファイル共有のビルドが完了すると、状況アイコンがチェック・マークになります。これで、組織内の指定されたスペースに使用可能なファイル共有ができました。ファイル共有を追加で作成して、ホストするボリューム数を増やすことも、1 つのファイル共有で複数のボリュームをホストすることもできます。
+すべてのボリュームでホストのファイル共有のリソースを共有するため、1 つのファイル共有で複数のボリュームをホストすると、パフォーマンスが低下する可能性があります。</span></p>
+</div><div class="section postreq">次に、組織の管理者は、その組織のファイル共有に関する請求内容を確認できます。<div class="p"><ol><li>ユーザー・アバターをクリックします。</li>
+<li><span class="ph uicontrol">「アカウント」</span> をクリックします。</li>
+<li><span class="ph uicontrol">「+」</span>ボタンをクリックして、組織を展開します。</li>
+<li><span class="ph uicontrol">「使用状況ダッシュボード」</span>を選択し、使用状況と請求の詳細を確認します。</li>
+</ol>
+<span class="ph">詳細については、<span class="ph"><a href="../admin/account.html">アカウントの管理</a></span>を参照してください。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90228e1865"></aside><article class="topic task nested2" role="article" aria-labelledby="d90228e2093" lang="ja-jp" id="container_fileshares_adding_cli"><h3 class="topictitle3" id="d90228e2093">コマンド・ライン・インターフェース (CLI) を使用したファイル共有の追加</h3>
+<div class="body taskbody"><div class="abstract"><p></p>
+
+
+<div class="shortdesc"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> コマンドを使用して、ファイル共有を作成します。</div>
+</div>
+<div class="section prereq"></div><ol class="steps"><li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行して、有効なファイル共有のサイズをリストします。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+volume-fs-flavors</span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">以下のコマンドを実行して、ファイル共有を作成します。</span> ファイル共有を作成する前にそのファイル共有の算定コストを表示するには、<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">Bluemix GUI を使用したボリュームのファイル共有の追加</a>を参照してください。 <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></code></pre>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> のパラメーター</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">(必須) ファイル共有 IOPS。有効な値は、GB 当たり 0.25、2、または 4 IOPS です。</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(必須) ファイル共有名。<span class="ph">名前に使用できるのは、大文字、小文字、数字、下線 (_)、およびハイフン (-) です。</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">(必須) GB 単位のファイル共有システム・サイズ。<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp> を使用すると、すべての有効なサイズをリストできます。</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行して、ファイル共有が正しく作成されたことを確認します。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+<div class="section result"><span class="ph"> ファイル共有の作成が完了するまでには、数分かかることがあります。
+ファイル共有のビルドが完了すると、状況アイコンがチェック・マークになります。これで、組織内の指定されたスペースに使用可能なファイル共有ができました。ファイル共有を追加で作成して、ホストするボリューム数を増やすことも、1 つのファイル共有で複数のボリュームをホストすることもできます。
+すべてのボリュームでホストのファイル共有のリソースを共有するため、1 つのファイル共有で複数のボリュームをホストすると、パフォーマンスが低下する可能性があります。</span></div><div class="section postreq">次に、組織の管理者は、その組織のファイル共有に関する請求内容を確認できます。<div class="p"><ol><li>ユーザー・アバターをクリックします。</li>
+<li><span class="ph uicontrol">「アカウント」</span> をクリックします。</li>
+<li><span class="ph uicontrol">「+」</span>ボタンをクリックして、組織を展開します。</li>
+<li><span class="ph uicontrol">「使用状況ダッシュボード」</span>を選択し、使用状況と請求の詳細を確認します。</li>
+</ol>
+<span class="ph">詳細については、<span class="ph"><a href="../admin/account.html">アカウントの管理</a></span>を参照してください。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90228e2093"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d90228e2268" lang="ja-jp" id="container_filestorage_managing"><h3 class="topictitle3" id="d90228e2268"> ファイル共有の削除</h3>
+<div class="body taskbody"><p class="shortdesc">組織の管理者は、既存のファイル共有を削除したり、どのボリュームがファイル共有にマウントされているかを確認したりすることができます。</p>
+<div class="section context">組織の管理者は、<span class="keyword">Bluemix</span> GUI と CLI の両方を使用して、ファイル共有を確認し、どのボリュームがそこにマウントされているかを把握したり、ファイル共有を削除したりすることができます。組織の管理者は、開発でも実動でも現在使用されていないファイル共有を削除することを選択できます。<div class="steps note"><span class="notetitle">注:</span> 請求書処理サイクルのために、月末にはファイル共有を削除できません。
+月末にファイル共有を削除しようとしてエラー・メッセージを受け取った場合は、次の月の初日まで待ってからファイル共有を削除してください。</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d90228e2332" id="task_ets_khp_y5"><h4 class="topictitle4" id="d90228e2332"><span class="keyword">Bluemix</span> GUI の使用</h4>
+<div class="body taskbody"><ol class="steps"><li class="step"><span class="cmd"><span class="ph">「組織の管理」でアカウントの詳細から組織を選択します。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph">割り当て量セクションに、コンテナーの詳細が表示されます。</span></span></li>
+</ol>
+<div class="section result">「ファイル・ストレージ」表に、<span class="ph uicontrol">「アクション」</span>欄と<span class="ph uicontrol">「名前」</span>欄が表示されます。<ul><li>ファイル共有の名前をクリックし、それに接続されたボリュームを表示します。</li>
+<li><span class="ph uicontrol">「削除」</span>をクリックして、ファイル共有を削除します。ファイル共有を削除するには、まずそれに接続されたボリュームを削除する必要があります。ファイル共有が削除されると、それはアカウントから完全に削除されます。ボリュームを削除するには、<a href="container_volumes_ov.html#container_volumes_remove" title="コンテナーのデータを保管するボリュームが必要なくなった場合は、そのボリュームを削除できます。">コマンド・ライン・インターフェース (CLI) を使用したボリュームの削除</a>を参照してください。</li>
+</ul>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d90228e2369" id="task_uvm_chp_y5"><h4 class="topictitle4" id="d90228e2369">コマンド・ラインの使用</h4>
+<div class="body taskbody"><div class="section result">CLI を使用してファイル共有を削除するには、以下のコマンドを実行します。<div class="p"><ol><li>ファイル共有名を識別します。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+<li>ファイル共有を検査して、そのファイル共有にボリュームが存在するかどうかを判別します。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></code></pre>
+</li>
+<li>必要に応じて、既存のボリュームを削除します。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></code></pre>
+</li>
+<li>既存のファイル共有を削除します。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></code></pre>
+</li>
+<li>既存のファイル共有をリストし、当該ファイル共有が削除されたことを確認します。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article></article></article></article></div></main></body></html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html><html lang="es-es">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Un volumen de almacenamiento se utiliza para persistir o compartir datos entre contenedores en un espacio de Bluemix de una organización.">
+<meta name="keywords" content="IBM Containers, contenedores, almacén persistente, volumen, crear, CLI, añadir archivos, montar, exec, docker cp, copia de seguridad de los datos, grabación, eliminar, comparticiones de archivos, almacenamiento, panel de control, GUI, añadir, fs">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "es-es",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Almacenamiento de datos permanentes en IBM Bluemix Container Service para contenedores únicos y escalables</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d90279e6" id="container_volumes_ov"><h1 class="topictitle1" id="d90279e6">Almacenamiento de datos permanentes en un volumen para <span class="ph">contenedores únicos y escalables</span></h1>
+<div class="abstract"><div class="shortdesc">Un volumen de almacenamiento se utiliza para persistir o compartir datos entre contenedores en un espacio de
+<span class="keyword">Bluemix</span> de una organización.</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Atención:</span> <span class="ph">No hay disponibles pruebas gratuitas para los <span class="ph">contenedores únicos y escalables</span>.
+<a href="cs_ov.html" title="IBM Bluemix Container Service combina Docker y Kubernetes para ofrecer herramientas potentes, una interfaz intuitiva para el usuario y funciones integradas de seguridad e identificación para automatizar el despliegue, operación, escalado y supervisión de apps contenerizadas sobre un clúster de hosts de cálculo independientes mediante el uso de las API de Kubernetes.">Obtenga más información acerca de la gestión de clústeres y migre a Kubernetes en <span class="keyword">IBM®
+Bluemix Container Service</span> en <span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">En esta página:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#about_volumes">Acerca de los volúmenes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Creación de volúmenes con la <a href="container_volumes_ov.html#container_volumes_ui" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la interfaz gráfica de usuario (GUI) de Bluemix.">GUI</a> o la <a href="container_volumes_ov.html#container_volumes_cli" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la línea de mandatos.">CLI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_mount" title="Después de crear un volumen, puede montar el volumen en un contenedor y añadir archivos a los que puede acceder cualquier contenedor en el que está montado el volumen.">Adición de archivos</a> a volúmenes<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_backup" title="Los volúmenes de contenedor están alojados en almacén persistente pero no tienen copias de seguridad. Si requiere una copia de seguridad de los datos de volumen, puede utilizar bx ic cp para crear una copia de seguridad manual.">Copia de seguridad y restauración</a> de volúmenes<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Adición de <a href="container_volumes_ov.html#container_volumes_write" title="Los usuarios no root no tiene permiso de escritura en la vía de acceso de montaje de volumen. Para otorgar permiso de escritura, debe editar el Dockerfile de la imagen para crear un directorio en la vía de acceso de montaje con el permiso correcto.">acceso de usuario no root</a> a volúmenes<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volume_different_dc" title="Si tiene intención de transferir el espacio de Bluemix actual a un nuevo centro de datos, asegúrese de hacer copia de seguridad de los volúmenes para poder restaurar y utilizar los datos en el nuevo centro de datos.">Migración de datos</a> a otro centro de datos<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_remove" title="Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.">Eliminación de volúmenes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">Adición y eliminación de comparticiones de archivos</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d90279e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d90279e151" id="about_volumes"><h2 class="topictitle2" id="d90279e151">Acerca de los volúmenes</h2>
+<div class="body taskbody"><div class="section context" id="about_volumes__context_kjv_lg1_4z"><figure class="fignone" id="about_volumes__file_share"><figcaption>Figura 1. Compartición de archivos y estructura de volúmenes en una organización.</figcaption><object id="about_volumes__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="Las comparticiones de archivos contiene volúmenes, que contienen archivos."></object></figure>
+
+<p><span class="ph" id="about_volumes__volume_intro">Un contenedor es efímero y los datos no se pueden persistir en el mismo.
+Sin embargo, puede utilizar un volumen para persistir datos entre reinicios del contenedor, para compartir datos entre contenedores en un espacio y para tener acceso a los datos de aplicación cuando el contenido no está disponible. Si suprime un contenedor, el volumen de almacenamiento no se suprimirá. El ciclo de vida de un volumen de almacenamiento es independiente del ciclo de vida de un contenedor. Dado que los contenedores de Docker de <span class="keyword">Bluemix</span> no tienen acceso al host local, los volúmenes se montan en los <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">recursos compartidos de archivos</a> facilitados.</span></p>
+
+<p>A continuación se muestran las tareas del ciclo de vida del almacén persistente:</p>
+</div><ol class="steps" id="about_volumes__steps_ljv_lg1_4z"><li class="step">Opcional: <span class="cmd">Cree una compartición de archivos personalizada que aloje sus volúmenes utilizando la <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">GUI</a> o la <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">CLI</a>.</span> Debe tener un rol de gestor de la organización para crear una compartición de archivos. Si no es usted un
+gestor de la organización, siga creando un volumen. Se proporciona una compartición de archivos predeterminada de 20 GB para cada
+organización de Bluemix.</li>
+<li class="step"><span class="cmd">Cree un volumen utilizando la <a href="container_volumes_ov.html#container_volumes_ui" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la interfaz gráfica de usuario (GUI) de Bluemix.">GUI</a> o la <a href="container_volumes_ov.html#container_volumes_cli" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la línea de mandatos.">CLI</a>.</span></li>
+<li class="step"><span class="cmd">Cree una copia de seguridad automática del volumen mediante la <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html#ibmbackup_restore_starter">imagen de ibm-backup-restore</a>.</span></li>
+<li class="step"><span class="cmd">Suprima un <a href="container_volumes_ov.html#container_volumes_remove" title="Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.">volumen</a>.</span></li>
+<li class="step"><span class="cmd">Suprima una <a href="container_volumes_ov.html#container_filestorage_managing" title="Un gestor de organización puede eliminar comparticiones de archivos existentes y ver qué volúmenes se montan en una compartición de archivos.">compartición de archivos</a>.</span></li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d90279e262" lang="es-es" id="container_volumes_ui"><h2 class="topictitle2" id="d90279e262">Creación de volúmenes con la GUI de <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse.</span> Puede crear un volumen para el contenedor desde la interfaz gráfica de usuario (GUI) de <span class="keyword">Bluemix</span>.</p>
+<div class="section prereq"></div><div class="section context"><figure class="fignone" id="container_volumes_ui__file_share"><figcaption>Figura 2. Compartición de archivos y estructura de volúmenes en una organización.</figcaption><object id="container_volumes_ui__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="Las comparticiones de archivos contiene volúmenes, que contienen archivos."></object></figure>
+
+<p><span class="ph" id="container_volumes_ui__volume_intro">Un único contenedor es, por diseño, efímero. Sin embargo, puede utilizar un volumen para persistir datos entre reinicios de contenedor, para compartir datos entre contenedores en un espacio, y para compartir datos entre instancias de contenedor en un grupo. Cuando monte un volumen en Docker, este se montará en el sistema de archivos local. En <span class="keyword">IBM
+Bluemix Container Service</span>, el acceso al
+host de cálculo está restringido, por lo que no puede montar directorios de host en un contenedor. En su lugar,
+los volúmenes de ámbito de la organización
+se utilizan para la persistencia de datos entre los reinicios del contenedor. Los volúmenes se alojan en <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">comparticiones de archivos</a> aisladas que
+almacenan de forma segura datos de apps y gestionan el acceso y el permiso a los archivos. Un volumen no se ve afectado por ninguna actualización que realice en un contenedor o una imagen. Si suprime un contenedor, el volumen de almacenamiento no se suprimirá. </span></p>
+</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">Desde el catálogo, seleccione
+<span class="ph uicontrol">Contenedores</span> y elija una imagen.</span></span></li>
+<li class="step"><span class="cmd">Seleccione <span class="ph uicontrol">Opciones avanzadas</span> para expandir los campos de creación de volúmenes.</span></li>
+<li class="step"><span class="cmd">Pulse <span class="ph uicontrol">Crear un volumen</span>.</span></li>
+<li class="step"><span class="cmd">En el campo <span class="ph uicontrol">Nombre de volumen</span>, escriba un nombre.</span> Los volúmenes son exclusivos por espacio, de modo que los nombres de volúmenes no se pueden volver a utilizar dentro de un espacio. El nombre de volumen puede contener letras en mayúscula, en minúscula, números, signos de subrayado (_) y guiones (-).</li>
+<li class="step"><span class="cmd">Si existe una compartición de archivos, seleccione una compartición de archivos existente en el menú desplegable <span class="ph uicontrol">Compartición de archivos</span>.</span> Si no existe ninguna compartición de archivos, de forma automática se crea un archivo predeterminado de 20 GB. El gestor de organización puede asignar comparticiones de archivos con tamaño de almacenamiento específico e IOPS. Consulte <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">Adición de comparticiones de archivos para volúmenes</a> para obtener más información. No existe ningún límite de tamaño para un volumen. Los volúmenes pueden escalar hasta el tamaño de la compartición de archivos en los que se alojan.</li>
+<li class="step"><span class="cmd">Pulse <span class="ph uicontrol">Crear</span>.</span> Se puede tardar varios minutos en crear el volumen.</li>
+</ol>
+<div class="section result">El volumen está disponible en el espacio y se puede montar en su <a href="container_single_ui.html#gui__volume">contenedor único</a> o <a href="container_ha.html#container_group_ui__volume">grupo de contenedores</a> seleccionándolo desde el menú desplegable en <span class="ph uicontrol">Asignar un
+volumen existente</span> en <span class="ph uicontrol">Opciones avanzadas</span>. Una vez que selecciona el volumen, asigne la vía de acceso del archivo en el que está montado el volumen dentro del contenedor, como por ejemplo
+<span class="ph filepath">/var/lib/my_volume</span>. Si necesita una copia de seguridad del contenedor, consulte <a href="container_volumes_ov.html#container_volumes_remove" title="Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.">copia de seguridad y restauración de datos</a>.</div></div>
+<aside role="complementary" aria-labelledby="d90279e262"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e435" lang="es-es" id="container_volumes_cli"><h2 class="topictitle2" id="d90279e435">Creación de volúmenes con la línea de mandatos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse.</span> Puede crear un volumen para el contenedor desde la línea de mandatos.</p>
+<div class="section prereq"></div><div class="section context"><p><span class="ph">Un único contenedor es, por diseño, efímero. Sin embargo, puede utilizar un volumen para persistir datos entre reinicios de contenedor, para compartir datos entre contenedores en un espacio, y para compartir datos entre instancias de contenedor en un grupo. Cuando monte un volumen en Docker, este se montará en el sistema de archivos local. En <span class="keyword">IBM
+Bluemix Container Service</span>, el acceso al
+host de cálculo está restringido, por lo que no puede montar directorios de host en un contenedor. En su lugar,
+los volúmenes de ámbito de la organización
+se utilizan para la persistencia de datos entre los reinicios del contenedor. Los volúmenes se alojan en <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">comparticiones de archivos</a> aisladas que
+almacenan de forma segura datos de apps y gestionan el acceso y el permiso a los archivos. Un volumen no se ve afectado por ninguna actualización que realice en un contenedor o una imagen. Si suprime un contenedor, el volumen de almacenamiento no se suprimirá. </span></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Cree un volumen con el mandato siguiente.</span> Los volúmenes pueden escalar hasta el tamaño de la compartición de archivos en los que se alojan. Especificar una compartición de archivo es opcional. Puede ver comparticiones de archivo existentes ejecutando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</samp>. Si no existe ninguna compartición de archivos, de forma automática se crea un archivo predeterminado de 20 GB. El gestor de organización puede asignar comparticiones de archivos con tamaño de almacenamiento específico e IOPS. Consulte <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">Adición de comparticiones de archivos para volúmenes</a> para obtener más información. <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create</samp>
+parameters </dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">NOMBRE_CA</var></dt>
+<dd class="pd">(Opcional) El nombre de la compartición de archivos. Si no hay ninguna compartición de archivos disponible o no hay ninguna indicada, el volumen se compilará en la compartición de archivos predeterminada del espacio.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Necesario) El nombre del volumen. <span class="ph" id="container_volumes_cli__d44286e4842">El nombre puede contener letras en mayúscula, en minúscula, números, signos de subrayado (_) y guiones (-).</span></dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Verifique que se haya creado correctamente el volumen ejecutando el siguiente mandato.</span> <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>A continuación, asigne el volumen al <a href="container_single_ui.html#container_single_cli" title="Crear un contenedor utilizando el mandato run. Un contenedor debe incluir una imagen. Si aún no tiene una, puede utilizar una de las imágenes predeterminadas certificadas por IBM disponibles de forma predeterminada en el registro de imágenes privado de la organización.">contenedor</a> o al <a href="container_ha.html#container_group_cli" title="Cree y despliegue un grupo de contenedores escalable desde la CLI de IBM Bluemix Container Service. Un grupo de contenedores incluye dos o más contenedores que se ejecutan en la misma imagen. Utilice grupos de contenedores para servicios a largo plazo en ejecución con cargas de trabajo que requieren escalabilidad y fiabilidad, o para realizar pruebas a la escala necesaria.">grupo de contenedores</a>. Los volúmenes se asignan utilizando la opción
+<samp class="ph codeph">--volume</samp> en el mandato <samp class="ph codeph">run</samp> y el mandato <samp class="ph codeph">group-create</samp>, respectivamente. <span class="ph"> Si necesita una copia de seguridad del contenedor, consulte <a href="container_volumes_ov.html#container_volumes_remove" title="Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.">copia de seguridad y restauración de datos</a>.</span></p>
+</div></div>
+<aside role="complementary" aria-labelledby="d90279e435"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e632" lang="es-es" id="container_volumes_mount"><h2 class="topictitle2" id="d90279e632">Adición de archivos a volúmenes con la interfaz de línea de mandatos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">Después de crear un volumen, puede montar el volumen en un contenedor y añadir archivos a los que puede acceder cualquier contenedor en el que está montado el volumen.</p>
+<div class="section prereq">Antes de empezar, cree un volumen <a href="container_volumes_ov.html#container_volumes_ui" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la interfaz gráfica de usuario (GUI) de Bluemix.">utilizando la interfaz gráfica de usuario de <span class="keyword">Bluemix</span></a> o  <a href="container_volumes_ov.html#container_volumes_cli" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la línea de mandatos.">utilizando la
+CLI</a>. </div><div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">Cree un contenedor con un volumen montado.*</span> Sustituya <samp class="ph codeph"><var class="keyword varname">my_volume</var></samp> por el nombre del volumen,
+<samp class="ph codeph"><var class="keyword varname">container_path</var></samp> por la vía de acceso de montaje del volumen,
+<samp class="ph codeph"><var class="keyword varname">my_container</var></samp> por el nombre del contenedor y
+registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var> por la imagen. <pre class="codeblock"><code><span class="ph">bx ic</span> run --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">container_path</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+
+<div class="note tip"><span class="tiptitle">Consejo:</span> <span class="ph">Ejecute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar el espacio de nombres y sustituya <var class="keyword varname">&lt;my_namespace&gt;</var> por la información del espacio de nombres. </span></div>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_volumes_mount__d44449e179">*En este mandato, puede sustituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> con <samp class="ph codeph">docker</samp>
+al <a href="container_cli_cfic_install.html#container_cli_login" title="Después de instalar la CLI, inicie sesión para empezar a utilizarla.">iniciar sesión en <span class="keyword">IBM
+Bluemix Container Service</span></a> y establecer las variables de entorno
+para utilizar mandatos Docker nativos.</span><span class="ph" id="container_volumes_mount__d44449e191">Puede utilizar mandatos Docker
+nativos en todos los pasos marcados con un asterisco (*) en este tema. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Copie archivos de un directorio local en el volumen utilizando el mandato <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp>.*</span> <p>En este ejemplo, copia un archivo <var class="keyword varname">config.txt</var> en el volumen en el que ha montado la vía de acceso <var class="keyword varname">/src/usr/tmp</var> dentro del contenedor. Sustituya el archivo por su propio archivo o directorio que está copiando y cambie la vía de acceso del contenedor de modo que apunte al volumen. En el mandato, la vía de acceso o el archivo de origen es primero y la vía de acceso de destino es segundo. Al copiar en o de un contenedor, <span class="ph">debe incluir el nombre del contenedor, el delimitador <span class="q">":"</span> y la vía de acceso en el archivo o la carpeta de destino. La vía de acceso debe ser relativa al directorio raíz del contenedor. </span>Consulte la documentación de <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp"><span class="ph">bx ic</span> cp</a> para obtener más información.</p>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath"><var class="keyword varname">./config.txt</var></span> <var class="keyword varname">my_container</var>:<span class="ph filepath"><var class="keyword varname">/src/usr/tmp</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Confirme que los archivos se hayan copiado en el volumen iniciando la sesión en el contenedor en ejecución con el mandato <samp class="ph codeph"><span class="ph">bx ic</span> exec</samp>.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Vaya al directorio en el que ha montado el volumen y liste los archivos.</span> El archivo se lista en la salida. Cualquier contenedor en el que está montado este volumen tiene acceso a este archivo.
+<pre class="codeblock"><code># cd <var class="keyword varname">container_path</var>
+# ls
+config.txt  </code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90279e632"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e873" lang="es-es" id="container_volumes_backup"><h2 class="topictitle2" id="d90279e873">Copia de seguridad y restauración de datos con la interfaz de línea de mandatos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">Los volúmenes de contenedor están alojados en almacén persistente pero no tienen copias de seguridad. Si requiere una copia de seguridad de los datos de volumen, puede utilizar <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> para crear una copia de seguridad manual.</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Identifique la vía de acceso de montaje del volumen en el contenedor en ejecución o detenido del que está realizando copia de seguridad.*</span>  <div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">mi_contenedor</var></code></pre>
+</div>
+
+
+<p>El resultado contiene una sección similar a este ejemplo con el nombre de volumen y el punto de montaje del contenedor. En este ejemplo, el punto de montaje es la carpeta <span class="ph filepath">/mnt/data</span>.</p>
+
+
+<pre class="codeblock"><code>        "Mounts": [
+            {
+                "Destination": "<span class="ph filepath">/mnt/data</span>",
+                "Driver": "",
+                "Mode": "rw",
+                "Name": "",
+                "RW": true,
+                "Source": "/vol/<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>/<var class="keyword varname">id_contenedor_ejemplo</var>"
+            }</code></pre>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_volumes_backup__d44065e179">*En este mandato, puede sustituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> con <samp class="ph codeph">docker</samp>
+al <a href="container_cli_cfic_install.html#container_cli_login" title="Después de instalar la CLI, inicie sesión para empezar a utilizarla.">iniciar sesión en <span class="keyword">IBM
+Bluemix Container Service</span></a> y establecer las variables de entorno
+para utilizar mandatos Docker nativos.</span><span class="ph" id="container_volumes_backup__d44065e191">Puede utilizar mandatos Docker
+nativos en todos los pasos marcados con un asterisco (*) en este tema. </span></div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Detenga todos los contenedores en ejecución que estén escribiendo en el volumen.*</span> Deteniendo los contenedores, evitará copiar los datos que se estén escribiendo. 
+<div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">my_container</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Copie los archivos del contenedor único en el sistema local.*</span> Cuando desee realizar la copia de seguridad de un volumen para un grupo de contenedores, es suficiente con ejecutar este mandato en una instancia del grupo ya que todas las instancias comparten el mismo punto de montaje para el volumen.
+<p>Ahora tiene una copia de seguridad local de los datos de volumen.</p>
+
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">mi_contenedor</var>:<var class="keyword varname">/mnt/data</var> <var class="keyword varname">mi_carpeta_local</var></code></pre>
+
+<div class="tablenoborder"><table summary="" id="container_volumes_backup__table_wrq_nbl_nw" class="defaultstyle"><caption><span class="tablecap">Tabla 1. Los elementos del mandato <span class="ph">bx ic</span> cp</span></caption><thead><tr><th colspan="2" id="d90279e1028" class="thleft">Descripción de este mandato</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d90279e1028 "><samp class="ph codeph">cp</samp></td>
+<td style="width: 50%" headers="d90279e1028 "><a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp">El mandato de copia</a>.</td>
+</tr>
+<tr><td style="width: 50%" headers="d90279e1028 "><var class="keyword varname">mi_contenedor</var>:<var class="keyword varname">/mnt/data</var></td>
+<td style="width: 50%" headers="d90279e1028 ">La vía de acceso de origen es primera. En este caso, está copiando los datos del contenedor en un destino local, de modo que la vía de acceso del archivo de contenedor es el origen. Debe incluir el nombre del contenedor, dos puntos y la vía de acceso del archivo desde dentro del contenedor. En este ejemplo, ha seleccionado el punto de montaje del volumen del paso anterior para que pueda copiar todos los archivos incluidos.</td>
+</tr>
+<tr><td style="width: 50%" headers="d90279e1028 "><var class="keyword varname">mi_carpeta_local</var></td>
+<td style="width: 50%" headers="d90279e1028 ">La vía de acceso de destino es segunda. La vía de acceso local puede ser absoluta o relativa. En este ejemplo, está copiando los datos de contenedor en la vía de acceso relativa <var class="keyword varname">mi_carpeta_local</var>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Copie los datos de la carpeta local en un nuevo volumen.*</span> Este mandato restaura los datos en un nuevo contenedor o nuevo volumen. Una razón para transferir datos a un nuevo volumen es que dicho volumen esté montado en una compartición de archivos recién creada que tiene más almacenamiento o un IOPS más alto que la compartición de archivos antigua. Consulte <a href="container_volumes_ov.html#container_fileshares_adding_cli" title="Cree una compartición de archivos utilizando el mandato bx ic volume-fs-create.">Adición de comparticiones de archivos con la interfaz de línea de mandatos (CLI)</a> para crear una nueva compartición de archivos y <a href="container_volumes_ov.html#container_volumes_cli" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la línea de mandatos.">Creación de volúmenes con la línea de mandatos (CLI)</a> para crear un nuevo volumen.
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">mi_carpeta_local</var> <var class="keyword varname">mi_nuevo_contenedor</var>:<var class="keyword varname">/mnt/data</var> </code></pre>
+</li>
+</ol>
+<div class="section result">Los datos ahora se han copiado en su carpeta local y tiene una copia de seguridad manual. Además, ha copiado los datos en un volumen de un nuevo contenedor.</div></div>
+<aside role="complementary" aria-labelledby="d90279e873"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e1101" lang="es-es" id="container_volumes_write"><h2 class="topictitle2" id="d90279e1101">Adición de acceso de usuario no root a volúmenes con la interfaz de línea de mandatos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">Los usuarios no root no tiene permiso de escritura en la vía de acceso de montaje de volumen. Para otorgar permiso de escritura, debe editar el Dockerfile de la imagen para crear un directorio en la vía de acceso de montaje con el permiso correcto.</p>
+<div class="section context"><p>Para <span class="keyword">IBM
+Bluemix Container Service</span>, la característica de espacio de nombres de usuario está habilitada para Docker Engine. Los espacios de nombres de usuario proporcionan aislamiento de modo que el usuario root del contenedor obtenga acceso a otros contenedores o al host de cálculo. Sin embargo, los volúmenes están en comparticiones de archivos
+NFS que son externas para los hosts de cálculo del contenedor. Los volúmenes están configurados para reconocer el usuario root en el contenedor, pero debido a que los volúmenes son externos con relación al contenedor, no reconocen los espacios de nombres de usuario.</p>
+<p>Para algunas aplicaciones, el único usuario dentro de un contenedor es el usuario root. Sin embargo, muchas aplicaciones especifican un usuario no root que escribe en la vía de acceso de montaje del contenedor. Si está diseñando una aplicación con un usuario no root que requiere permiso de escritura para el volumen, debe añadir los siguientes procesos al script de punto de entrada y al archivo Docker:</p>
+<ul><li>Cree un usuario no root.</li>
+<li>Añada temporalmente el usuario al grupo raíz.</li>
+<li>Cree un directorio en la vía de acceso de montaje con los permisos de usuario correctos.</li>
+</ul>
+<p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Cree un Dockerfile en un directorio local.</span> Este Dockerfile de ejemplo está creando un usuario no root denominado <var class="keyword varname">myguest</var>.  <pre class="codeblock"><code>FROM registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode:latest
+
+#Cree el grupo y usuario con GID y UID <var class="keyword varname">1010</var>.
+#En este caso está creando un grupo y usuario denominado <var class="keyword varname">myguest</var>. 
+#Es poco probable que el GUID y UID <var class="keyword varname">1010</var> entre en conflicto con cualquier GUID o UID de usuario existente en la imagen.
+#El GUID y el UID deben estar entre 0 y 65536. De lo contrario, no se puede crear el contenedor.
+RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">myguest</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">myguest</var>
+
+ENV MY_USER=myguest
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
+
+EXPOSE 22
+ENTRYPOINT ["/sbin/entrypoint.sh"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Cree el script de punto de entrada en la misma carpeta local que Dockerfile.</span>  Este script de punto de entrada de ejemplo especifica
+<span class="ph filepath"><var class="keyword varname">/mnt/myvol</var></span> como vía de acceso de montaje de volumen.
+<pre class="codeblock"><code>#!/bin/bash
+set -e
+
+#Este es el punto de montaje para el volumen compartido.
+# Utilice este punto de montaje con el mandato de ejecución de <span class="ph"><samp class="ph codeph">bx ic</samp></span>.
+#De forma predeterminada, el punto de montaje es propiedad del usuario root.
+MOUNTPATH="/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span>"
+MY_USER=${MY_USER:-"myguest"}
+
+#Esta función crea un subdirectorio que es propiedad del 
+#usuario no root bajo la vía de acceso de montaje de volumen compartido.
+create_data_dir() {
+  #Añadir el usuario no root al grupo primario de usuario root.
+  usermod -aG root $MY_USER
+
+  #Proporcione permiso de lectura-escritura-ejecución para el grupo para la vía de acceso de montaje compartido.
+  chmod 775 $MOUNTPATH
+
+  #Cree un directorio bajo la vía de acceso compartida propiedad del usuario no root <var class="keyword varname">myguest</var>.
+  su -c "mkdir -p ${MOUNTPATH}/mydata" -l $MY_USER
+  su -c "chmod 700 ${MOUNTPATH}/mydata" -l $MY_USER
+  ls -al ${MOUNTPATH}
+
+  #Por motivos de seguridad, elimine el usuario no root del grupo de usuarios root.
+  deluser $MY_USER root
+
+  #Cambie la vía de acceso de montaje de volumen compartido por su permiso de lectura-escritura-ejecución original.
+  chmod 755 $MOUNTPATH
+  echo "Created Data directory..."
+}
+
+create_data_dir
+
+#Este mandato crea un proceso de larga ejecución para la finalidad de este ejemplo.
+tail -F /dev/null</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Inicie una sesión en <span class="keyword">IBM
+Bluemix</span>.</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+<span class="ph">El parámetro de inicio de sesión único, <span class="keyword option">--sso</span>, se necesita cuando se inicia una sesión con un ID federado. Si se utiliza esta opción, abra <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a> para obtener una contraseña de uso único. Si no incluye la opción <span class="keyword option">--sso</span>, lleve a cabo estos subpasos.</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Para <span class="ph uicontrol">Correo electrónico</span>, especifique su ID de IBM para <span class="keyword">Bluemix</span>.</span></li>
+<li class="li substep"><span class="cmd">Para <span class="ph uicontrol">Contraseña</span>, especifique la contraseña para el ID de IBM.</span> Se recuperan sus organizaciones y espacios de Bluemix.</li>
+<li class="li substep"><span class="cmd">Escriba el número que represente una de sus organizaciones de <span class="keyword">Bluemix</span>. </span></li>
+<li class="li substep"><span class="cmd">Escriba el número que representa uno de los espacios de <span class="keyword">Bluemix</span> existentes. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Inicialice la CLI de <span class="keyword">IBM
+Bluemix Container Service</span>.</span> <pre class="codeblock"><code><span class="ph">bx ic</span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Añada la imagen al registro de Bluemix.*</span> Recuerde sustituir <var class="keyword varname">&lt;mi_espacio_nombres&gt;</var> por el espacio de nombres correspondiente al registro de imágenes privado. Ejecute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> si necesita encontrar el espacio de nombres. <pre class="codeblock"><code><span class="ph">bx ic</span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">nombre_dominio</var>/&lt;mi_espacio_nombres&gt;/nonroot .</code></pre>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_volumes_write__d45202e179">*En este mandato, puede sustituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> con <samp class="ph codeph">docker</samp>
+al <a href="container_cli_cfic_install.html#container_cli_login" title="Después de instalar la CLI, inicie sesión para empezar a utilizarla.">iniciar sesión en <span class="keyword">IBM
+Bluemix Container Service</span></a> y establecer las variables de entorno
+para utilizar mandatos Docker nativos.</span><span class="ph" id="container_volumes_write__d45202e191">Puede utilizar mandatos Docker
+nativos en todos los pasos marcados con un asterisco (*) en este tema. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Cree un volumen.</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-create <var class="keyword varname">my_volume</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Monte el volumen y ejecute el contenedor desde la imagen <var class="keyword varname">nonroot</var>.*</span>  La vía de acceso de montaje de volumen <samp class="ph codeph">/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span></samp> coincide con la vía de acceso de montaje que se especifica en Dockerfile.
+<pre class="codeblock"><code><span class="ph">bx ic</span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">my_volume</var>:/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span> registry.ng.bluemix.net/&lt;my_namespace&gt;/nonroot</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Confirme que <var class="keyword varname">my_container</var> está en ejecución.*</span> Si el contenedor tiene un estado <samp class="ph codeph">BUILDING</samp>, todavía no podrá iniciar la sesión en el mismo. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>ps</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+d92ee43d-2af        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">nonroot</var>:latest   ""                  41 seconds ago      Running 29 seconds ago               <var class="keyword varname">my_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Inicie la sesión en el contenedor después de que el contenedor esté en ejecución.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> /bin/bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Vea permisos de la vía de acceso de montaje de volumen.</span> <pre class="codeblock"><code>ls -al <span class="ph filepath">/mnt/myvol/</span></code></pre>
+
+
+<pre class="pre screen"><code>root@instance-006ff76b:/# ls -al /mnt/myvol/                                                                                                                                                             
+total 12
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 .
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 ..
+drwx------ 2 myguest myguest 4096 Jul 13 19:03 mydata</code></pre>
+
+
+<p>Esta salida muestra que el usuario root tiene permisos de lectura, escritura y ejecución en la vía de acceso de montaje <var class="keyword varname">mnt/myvol/</var>, pero el usuario no root <var class="keyword varname">myguest</var> tiene permiso para leer y escribir en la carpeta <var class="keyword varname">mnt/myvol/mydata</var>. Debido a estos permisos actualizados, el usuario no root ahora puede escribir datos en el volumen persistente.</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90279e1101"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e1483" lang="es-es" id="container_volume_different_dc"><h2 class="topictitle2" id="d90279e1483">Migración de datos de volumen a otro centro de datos</h2>
+<div class="body taskbody"><p class="shortdesc">Si tiene intención de transferir el espacio de <span class="keyword">Bluemix</span> actual a un nuevo centro de datos, asegúrese de hacer copia de seguridad de los volúmenes para poder restaurar y utilizar los datos en el nuevo centro de datos.  </p>
+<div class="section context"><div class="p"><div class="note attention"><span class="attentiontitle">Atención:</span> Si transfiere el espacio a un nuevo centro de datos mediante el mandato <samp class="ph codeph"><span class="ph">bx ic</span> reprovision</samp>, todos los contenedores, direcciones IP públicas y volúmenes que tenga en el espacio se eliminarán de forma permanente y no se migrarán al nuevo centro de datos. Para asegurarse de no perder datos después de transferir al nuevo centro de datos, debe hacer copia de seguridad de todos los volúmenes y restaurar los datos después de volver a suministrar el espacio en el nuevo centro de datos. </div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Cree una lista de todos los volúmenes existentes en el espacio de <span class="keyword">Bluemix</span> que desea volver a suministrar. </span> <pre class="codeblock"><code><span class="ph">bx ic</span>volumes</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Haga una copia de seguridad de cada volumen que desee utilizar en el nuevo centro de datos. Puede elegir entre las siguientes opciones.</span> <ul class="ul choices"><li class="li choice">Utilice el <a href="container_volumes_ov.html#container_volumes_backup" title="Los volúmenes de contenedor están alojados en almacén persistente pero no tienen copias de seguridad. Si requiere una copia de seguridad de los datos de volumen, puede utilizar bx ic cp para crear una copia de seguridad manual."><span class="ph">bx ic</span> mandato cp</a> para hacer una copia de seguridad del volumen en la máquina local. </li>
+<li class="li choice">Cree un contenedor de copia de seguridad a partir de la <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">imagen de copia de seguridad y restauración de IBM</a> para guardar los datos en una instancia de <span class="keyword">IBM Object
+Storage for Bluemix</span>.</li>
+</ul>
+<div class="note attention"><span class="attentiontitle">Atención:</span> Si no hace copia de seguridad del volumen y vuelve a suministrar el espacio en el nuevo centro de datos, los datos se pierden y no se pueden recuperar. </div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_remove" title="Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.">Elimine todos los volúmenes del espacio</a>.</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_filestorage_managing" title="Un gestor de organización puede eliminar comparticiones de archivos existentes y ver qué volúmenes se montan en una compartición de archivos.">Elimine todas las comparticiones de archivos del espacio</a>. </span></li>
+<li class="step stepexpand"><span class="cmd">Vuelva a suministrar el espacio en el nuevo centro de datos. Sustituya <var class="keyword varname">&lt;data_center&gt;</var> por el <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__reprovision">centro de datos</a> en el que desea crear el nuevo espacio. </span> <pre class="codeblock"><code><span class="ph">bx ic</span> reprovision <var class="keyword varname">&lt;data_center&gt;</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="Cree una compartición de archivos utilizando el mandato bx ic volume-fs-create.">Cree una compartición de archivos en el nuevo espacio</a>. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_cli" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la línea de mandatos.">Cree un volumen</a> que pueda utilizar para restaurar los datos copiados.</span></li>
+<li class="step stepexpand"><span class="cmd">Restaure los datos en el nuevo volumen. En función del método utilizado para hacer copia de seguridad del volumen, puede elegir entre las siguientes opciones. </span> <ul class="ul choices"><li class="li choice">Utilice el <a href="container_volumes_ov.html#container_volumes_backup" title="Los volúmenes de contenedor están alojados en almacén persistente pero no tienen copias de seguridad. Si requiere una copia de seguridad de los datos de volumen, puede utilizar bx ic cp para crear una copia de seguridad manual."><span class="ph">bx ic</span> mandato cp</a> para restaurar los datos de la máquina local.</li>
+<li class="li choice">Cree un contenedor de restauración a partir de la <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">imagen de copia de seguridad y restauración de IBM</a> para restaurar los datos de la instancia de <span class="keyword">IBM Object
+Storage for Bluemix</span>.</li>
+</ul>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90279e1483"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e1656" lang="es-es" id="container_volumes_remove"><h2 class="topictitle2" id="d90279e1656">Eliminación de volúmenes con la interfaz de línea de mandatos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.</p>
+<div class="section prereq"><ul><li><div class="note important"><span class="importanttitle">Importante:</span> Al eliminar un volumen de forma permanente se eliminan los datos o archivos persistentes almacenados en el volumen. Los volúmenes no se copian automáticamente, por lo que <a href="container_volumes_ov.html#container_volumes_backup" title="Los volúmenes de contenedor están alojados en almacén persistente pero no tienen copias de seguridad. Si requiere una copia de seguridad de los datos de volumen, puede utilizar bx ic cp para crear una copia de seguridad manual.">realice una copia de seguridad del volumen</a> antes de eliminarlo. </div>
+</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Identifique el nombre de volumen.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Examine el volumen para revisar en qué contenedores está montado el volumen.</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-inspect <var class="keyword varname">example_volume</var></code></pre>
+
+
+<p>La salida contiene una sección denominada <span class="ph uicontrol">mounted_on_containers</span> que
+lista contenedores en los que está montado el volumen.</p>
+
+
+<pre class="codeblock"><code>    "mounted_on_containers": [
+        "<var class="keyword varname">example_container</var>"
+    ],</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Si el volumen está montado en un contenedor, elimine los datos confidenciales antes de suprimir el volumen. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand">Opcional: <span class="cmd">Examine el contenedor para ver la vía de acceso en la que está montado el volumen.</span> <pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">example_container</var></code></pre>
+Encontrará la vía de acceso de montaje en la sección <span class="ph uicontrol">Volumes</span> de la respuesta de la CLI.
+
+<pre class="pre screen"><code>"Volumes": {
+        "/mount_path": "/vol/0e65c452-62413-46f2-8b22-ff06ab74ac21/<var class="keyword varname">example_volume</var>"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Inicie la sesión en el contenedor.</span> <pre class="codeblock"><code><span class="ph">bx ic</span> exec -it <var class="keyword varname">example_container</var> bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Vaya a la vía de acceso de montaje. </span> <pre class="codeblock"><code>cd /<var class="keyword varname">mount_path</var></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Elimine todos los datos confidenciales del volumen. </span> <pre class="codeblock"><code>rm -rf *</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Compruebe que todos los datos se han eliminado.</span> <pre class="codeblock"><code>ls</code></pre>
+Si no se muestra ningún directorio o archivo, significa que los datos se han eliminado correctamente de la vía de acceso de montaje del volumen. </li>
+<li class="li substep substepexpand"><span class="cmd">Repita los pasos a-e para todos los contenedores montados en el volumen que contengan datos confidenciales en su vía de acceso de montaje del volumen. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Detenga todos los contenedores montados en el volumen antes de eliminar el volumen.*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">example_container</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_volumes_remove__d44812e179">*En este mandato, puede sustituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> con <samp class="ph codeph">docker</samp>
+al <a href="container_cli_cfic_install.html#container_cli_login" title="Después de instalar la CLI, inicie sesión para empezar a utilizarla.">iniciar sesión en <span class="keyword">IBM
+Bluemix Container Service</span></a> y establecer las variables de entorno
+para utilizar mandatos Docker nativos.</span><span class="ph" id="container_volumes_remove__d44812e191">Puede utilizar mandatos Docker
+nativos en todos los pasos marcados con un asterisco (*) en este tema. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Si el contenedor ya no es necesario, elimínelo.*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> rm <var class="keyword varname">example_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Cuando se detengan todos los contenedores con el volumen montado, elimine el volumen.</span> <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove</samp>
+parameters </dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Necesario) El nombre del volumen.</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Verifique que el volumen se ha eliminado.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90279e1656"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90279e1899" lang="es-es" id="container_fileshares_adding_ui"><h2 class="topictitle2" id="d90279e1899">Adición de comparticiones de archivos para volúmenes con la interfaz gráfica de usuario de <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc"><span class="ph">Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de <span class="keyword">Bluemix</span> y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores
+y guardar los datos en este volumen.</span></span>
+</div>
+<div class="section prereq"><div class="p"><div class="steps note"><span class="notetitle">Nota:</span> Si ya ha llegado a los límites de cuota máximos, puede solicitar
+añadir una cuota adicional abriendo una incidencia de soporte de <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span></a>.</div>
+</div>
+</div><div class="section context"><p>Puesto que los contenedores de <span class="keyword">Bluemix</span> no tienen acceso al host local, los volúmenes se montan en las comparticiones de archivos NFS suministradas. Los
+volúmenes de una compartición de archivos son similares a los directorios de un sistema host. Tanto las comparticiones de archivos como los volúmenes son exclusivos por espacio, de modo que un contenedor debe crearse en el mismo espacio para acceder a los datos permanentes
+en el volumen. Para obtener más información sobre la configuración de organizaciones y espacios, consulte <a href="../admin/orgs_spaces.html">Gestión pública de Bluemix</a>. En la primera
+creación de un volumen en una organización, una compartición de archivos de 20 GB y 4 IOPS se suministra
+automáticamente para alojar el volumen. Para satisfacer las necesidades de rendimiento de datos, el gestor de la organización puede crear nuevos <a href="http://knowledgelayer.softlayer.com/learning/introduction-endurance-storage" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">tamaños de comparticiones de archivos</a> entre 20 GB y 12 TB y en IOPS por GB de 0,25, 2 ó
+4.</p>
+
+<figure class="fignone" id="container_fileshares_adding_ui__fig_ac1_lzt_q5"><figcaption>Figura 3. Compartición de archivos y estructura de volúmenes en una organización.</figcaption><object id="container_fileshares_adding_ui__d27645e47" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="Las comparticiones de archivos contiene volúmenes, que contienen archivos."></object></figure>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph">En los detalles de la cuenta, en Gestionar organizaciones, seleccione una organización.</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">En la sección de cuota, vea los detalles para los contenedores.</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">Cree una compartición de archivos. Se crea una fila al final de la tabla.</span></span></li>
+<li class="step stepexpand"><span class="cmd">Seleccione un espacio existente en el que crear la compartición de archivos.</span></li>
+<li class="step stepexpand"><span class="cmd">Escriba un nombre para la compartición de archivos.</span> <span class="ph">El nombre puede contener letras en mayúscula, en minúscula, números, signos de subrayado (_) y guiones (-).</span></li>
+<li class="step stepexpand"><span class="cmd">Determine la capacidad que necesita su compartición de archivos.</span> El tamaño de la compartición de archivos e IOPS por GB (operaciones de entrada/salida por segundo) se multiplican para crear la IOPS total. La tabla ilustra la relación entre el tamaño de la compartición de archivos e IOPS.
+<div class="tablenoborder"><table summary="" id="container_fileshares_adding_ui__file_share_ex" class="defaultstyle"><caption><span class="tablecap">Tabla 2. Ejemplos de tamaños de comparticiones de archivos e IOPS por GB</span></caption><thead><tr><th id="d90279e2030" class="thleft"> Tamaños de comparticiones de archivos</th>
+<th id="d90279e2032" class="thleft">IOPS por GB</th>
+<th id="d90279e2034" class="thleft">IOPS total</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d90279e2030 ">20 GB</td>
+<td headers="d90279e2032 ">4</td>
+<td headers="d90279e2034 ">80</td>
+</tr>
+<tr><td headers="d90279e2030 ">100 GB</td>
+<td headers="d90279e2032 ">4</td>
+<td headers="d90279e2034 ">400</td>
+</tr>
+<tr><td headers="d90279e2030 ">1.000 GB</td>
+<td headers="d90279e2032 ">4</td>
+<td headers="d90279e2034 ">4.000</td>
+</tr>
+<tr><td headers="d90279e2030 ">4.000 GB</td>
+<td headers="d90279e2032 ">4</td>
+<td headers="d90279e2034 ">16.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+Las apps con cargas de trabajo más altas requieren un IOPS total de mayor tamaño, de modo que debe tener en cuenta las apps que graban en los volúmenes cuando elija la configuración de la compartición de archivos.<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Para el <span class="ph uicontrol">Tamaño</span>, seleccione un valor en gigabytes.</span></li>
+<li class="li substep"><span class="cmd">Para <span class="ph uicontrol">IOPS</span>, seleccione un valor en IOPS por gigabyte.</span> Basándose en las entradas para <span class="ph uicontrol">Tamaño</span> e <span class="ph uicontrol">IOPS</span>, se calcula automáticamente un precio mensual. Antes de continuar, puede ajustar los valores para <span class="ph uicontrol">Tamaño</span> e <span class="ph uicontrol">IOPS</span> para cambiar el cálculo de precio mensual. </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Pulse <span class="ph uicontrol">Guardar</span>.</span></li>
+</ol>
+<div class="section result"><p><span class="ph" id="container_fileshares_adding_ui__fs_results"> La creación de la compartición de archivos puede tardar unos minutos en completarse. Después de que la compartición de archivos finalice su compilación, el icono de estado muestra una marca de verificación. Ahora tiene una compartición de archivos disponible en el espacio especificado en la organización. Puede crear más comparticiones de archivos para alojar más volúmenes o puede alojar varios volúmenes en una compartición de archivos. Cada volumen comparte los recursos de la compartición de archivos en la que se aloja de modo que si se alojan varios volúmenes en una compartición de archivos se puede reducir el rendimiento.</span></p>
+</div><div class="section postreq">A continuación, si es un gestor de la organización puede ver la facturación de la compartición de archivos de la organización.<div class="p"><ol><li>Pulse el avatar del usuario.</li>
+<li>Pulse <span class="ph uicontrol">Cuenta</span>.</li>
+<li>Expanda la organización pulsando el botón <span class="ph uicontrol">+</span>.</li>
+<li>Seleccione <span class="ph uicontrol">Panel de control de uso</span> y revise los detalles de uso y facturación. </li>
+</ol>
+<span class="ph">Para obtener más información, vaya a <span class="ph"><a href="../admin/account.html">Gestión de la cuenta</a></span>.</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90279e1899"></aside><article class="topic task nested2" role="article" aria-labelledby="d90279e2134" lang="es-es" id="container_fileshares_adding_cli"><h3 class="topictitle3" id="d90279e2134">Adición de comparticiones de archivos con la interfaz de línea de mandatos (CLI)</h3>
+<div class="body taskbody"><div class="abstract"><p></p>
+
+
+<div class="shortdesc">Cree una compartición de archivos utilizando el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp>.</div>
+</div>
+<div class="section prereq"></div><ol class="steps"><li class="step stepexpand">Opcional: <span class="cmd">Liste los tamaños de comparticiones de archivos válidos ejecutando el siguiente mandato.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Cree una compartición de archivos ejecutando el siguiente mandato.</span> Para ver costes calculados de la compartición de archivos antes de crear la compartición de archivos, consulte <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">Adición de comparticiones de archivos para volúmenes con la interfaz gráfica de usuario de Bluemix</a> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></code></pre>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp>
+parameters </dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">(Necesario) La IOPS de la compartición de archivos. Los valores válidos son 0.25, 2 y 4 IOPS por GB.</dd>
+<dt class="pt dlterm"><var class="keyword varname">NOMBRE_CA</var></dt>
+<dd class="pd">(Necesario) El nombre de la compartición de archivos. <span class="ph">El nombre puede contener letras en mayúscula, en minúscula, números, signos de subrayado (_) y guiones (-).</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">TAMAÑO_CA</var></dt>
+<dd class="pd">(Necesario) El tamaño del sistema de compartición de archivos en GB. Utilice <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp> para listar todos los tamaños válidos</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Verifique que la compartición de archivos se haya creado correctamente ejecutando el siguiente mandato.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+<div class="section result"><span class="ph"> La creación de la compartición de archivos puede tardar unos minutos en completarse. Después de que la compartición de archivos finalice su compilación, el icono de estado muestra una marca de verificación. Ahora tiene una compartición de archivos disponible en el espacio especificado en la organización. Puede crear más comparticiones de archivos para alojar más volúmenes o puede alojar varios volúmenes en una compartición de archivos. Cada volumen comparte los recursos de la compartición de archivos en la que se aloja de modo que si se alojan varios volúmenes en una compartición de archivos se puede reducir el rendimiento.</span></div><div class="section postreq">A continuación, si es un gestor de la organización puede ver la facturación de la compartición de archivos de la organización.<div class="p"><ol><li>Pulse el avatar del usuario.</li>
+<li>Pulse <span class="ph uicontrol">Cuenta</span>.</li>
+<li>Expanda la organización pulsando el botón <span class="ph uicontrol">+</span>.</li>
+<li>Seleccione <span class="ph uicontrol">Panel de control de uso</span> y revise los detalles de uso y facturación. </li>
+</ol>
+<span class="ph">Para obtener más información, vaya a <span class="ph"><a href="../admin/account.html">Gestión de la cuenta</a></span>.</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90279e2134"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d90279e2312" lang="es-es" id="container_filestorage_managing"><h3 class="topictitle3" id="d90279e2312"> Eliminación de comparticiones de archivos</h3>
+<div class="body taskbody"><p class="shortdesc">Un gestor de organización puede eliminar comparticiones de archivos existentes y ver qué volúmenes se montan en una compartición de archivos.</p>
+<div class="section context">El gestor de organización puede revisar comparticiones de archivos utilizando la GUI o la CLI de <span class="keyword">Bluemix</span> para ver qué volúmenes se montan en ellos y para eliminar las comparticiones de archivos. Los gestores de organizaciones pueden optar por eliminar comparticiones de archivos que no se utilizan actualmente en el desarrollo o en la producción.<div class="steps note"><span class="notetitle">Nota:</span> Las comparticiones de archivos no se pueden suprimir
+a final de mes debido al ciclo de procesamiento de facturas. Si recibe un mensaje de error a finales
+de mes al suprimir una compartición de archivo, espere hasta el primer día del mes siguiente para
+suprimir la compartición de archivo.</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d90279e2376" id="task_ets_khp_y5"><h4 class="topictitle4" id="d90279e2376">Utilización de la interfaz gráfica de usuario (GUI) de <span class="keyword">Bluemix</span></h4>
+<div class="body taskbody"><ol class="steps"><li class="step"><span class="cmd"><span class="ph">En los detalles de la cuenta, en Gestionar organizaciones, seleccione una organización.</span></span></li>
+<li class="step"><span class="cmd"><span class="ph">En la sección de cuota, vea los detalles para los contenedores.</span></span></li>
+</ol>
+<div class="section result">En la tabla Almacenamiento de archivos, puede encontrar una columna <span class="ph uicontrol">ACTION</span> y una columna <span class="ph uicontrol">NAME</span>.<ul><li>Pulse el nombre de la compartición de archivos para ver los volúmenes conectados a la misma.</li>
+<li>Pulse <span class="ph uicontrol">Suprimir</span> para suprimir la compartición de archivos. Primero debe eliminar todos los volúmenes conectados para suprimir una compartición de archivos. Una vez que se suprime una compartición de archivos, ésta se elimina permanentemente de la cuenta. Para eliminar un volumen, consulte <a href="container_volumes_ov.html#container_volumes_remove" title="Si ya no necesita un volumen para almacenar datos para sus contenedores, puede eliminarlo.">Eliminación de volúmenes con la interfaz de línea de mandatos (CLI)</a>.</li>
+</ul>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d90279e2414" id="task_uvm_chp_y5"><h4 class="topictitle4" id="d90279e2414">Utilización de la línea de mandatos</h4>
+<div class="body taskbody"><div class="section result">Para eliminar una compartición de archivos utilizando la CLI, emita los siguientes mandatos:<div class="p"><ol><li>Identifique el nombre de compartición de archivos.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+<li>Inspeccione la compartición de archivos para determinar si existe algún volumen en la misma.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></code></pre>
+</li>
+<li>Si es necesario, elimine un volumen existente.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></code></pre>
+</li>
+<li>Elimine una compartición de archivos existente.
+<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></code></pre>
+</li>
+<li>Liste las comparticiones de archivos existente para confirmar que la compartición de archivos se ha eliminado.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article></article></article></article></div></main></body></html>

@@ -1,0 +1,1701 @@
+<!DOCTYPE html><html lang="de-de">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Verwenden Sie einen einzelnen Container, um beim Entwickeln einer App oder eines Service einfache Tests auszuführen, oder verwenden Sie ihn für kurzfristige Prozesse, die keine hohe Verfügbarkeit erfordern. Sie können dem Container eine öffentliche IP-Adresse zuweisen, um Ihr eigenes Front-End für den Netzbetrieb zu nutzen.">
+<meta name="keywords" content="Einzelner Container, Dashboard, GUI, IBM Containers, Container, CLI (Befehlszeilenschnittstelle), docker run, bx ic, run, Aktualisieren, Befehlszeile, verknüpfen, Verknüpfen, --link, IP-Adresse, Öffentlich, ip-bind, ip-request, ips, ip-unbind, Entfernen, Freigeben (release), docker rm, rm, Lernprogramm, Einführung, Installieren, Plug-in, Images, Bereitstellen, Docker Compose, Multi-Container-Bereitstellung, Multi-Container-App, docker-compose.yml, Skalieren, Lastausgleichsfunktion, nginx, Arbeitslast, yml, Unterstützte Optionen, Häufig gestellte Fragen (FAQs)">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "de-de",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Kurzfristige Tasks in IBM Bluemix Container Service als einzelne Container ausführen</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d75704e6" id="container_single_ui"><h1 class="topictitle1" id="d75704e6">Kurzfristige Tasks als einzelne Container ausführen </h1>
+<div class="abstract"><div class="shortdesc"><span class="ph">Verwenden Sie einen einzelnen Container, um beim Entwickeln einer App oder eines Service einfache Tests auszuführen,
+oder verwenden Sie ihn für kurzfristige Prozesse, die keine hohe Verfügbarkeit erfordern.
+Sie können dem Container eine öffentliche IP-Adresse
+zuweisen, um Ihr eigenes Front-End für den
+Netzbetrieb zu nutzen.</span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Achtung:</span> <span class="ph">Kostenlose Testversionen für <span class="ph">einzelne und skalierbare Container</span> sind nicht verfügbar. <a href="cs_ov.html" title="IBM Bluemix Container Service kombiniert Docker und Kubernetes, um leistungsstarke Tools, ein intuitives Benutzererlebnis sowie integrierte Sicherheit und Isolation zu bieten und um die Bereitstellung, den Betrieb, die Skalierung und die Überwachung von containerisierten Apps über einen Cluster unabhängiger Berechnungshosts anhand der Kubernetes-APIs zu automatisieren.">Lesen Sie die Informationen
+zum Cluster-Management und zur Migration auf Kubernetes in <span class="keyword">IBM®
+Bluemix Container Service</span> unter
+<span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Diese Seite enthält folgende Abschnitte: <div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • Kurzfristige Tasks als einzelne Container über<br>
+die <a href="container_single_ui.html#gui" title="Sie können Container über die Bluemix-GUI erstellen und die erstellten Container anschließend bereitstellen.">GUI</a> oder die<br>
+<a href="container_single_ui.html#container_single_cli" title="Erstellen Sie mit dem Befehl run einen Container. Ein Container muss ein Image enthalten. Wenn Sie noch nicht über ein Image verfügen, können Sie eines der von IBM zertifizierten Images verwenden, die standardmäßig in der privaten Image-Registry Ihrer Organisation verfügbar sind.">CLI</a> ausführen<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_single_updating" title="Um eine App zu aktualisieren, müssen Sie einen neuen Container bereitstellen. Wenn Sie ein neues Image mit einer Push-Operation übertragen, wird der Container nicht automatisch erneut gestartet.">Container aktualisieren</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_linking" title="Wenn ein Container in demselben Bereich mit einem anderen Container verknüpft ist, so wird von IBM Bluemix Container Service im Empfängercontainer ein Hosteintrag für den Quellcontainer erstellt. Anstatt mit einer unter Umständen häufig wechselnden IP-Adresse können Sie mit einem Aliasnamen auf den Quellencontainer verweisen.">Container verknüpfen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_cli_ips" title="Fordern Sie eine öffentliche IP-Adresse an und binden Sie sie an einen Container in Bluemix.">IP-Adressen anfordern und binden</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_single_remove" title="Entfernen Sie gelegentlich nicht verwendete Container, um die Verwendung Ihres Kontingents zu maximieren.">Einzelne Container entfernen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Lernprogramm: <a href="container_single_ui.html#container_gettingstarted_tutorial" title="Mithilfe von IBM Bluemix können Sie Docker-Container in der öffentlichen Cloud ausführen. Verwenden Sie Container zum Bereitstellen eigenständiger sicherer Web-Apps, die unabhängig vom Hostbetriebssystem ausgeführt werden. Die Container sind einfach und benötigen nicht viel Systemressourcen, weil die Container denselben Systemkernel verwenden und somit effizienter als eine virtuelle Maschine ausgeführt werden können. In diesem Lernprogramm wird erklärt, wie mithilfe von Docker-Containern in Bluemix eine Messaging-Web-App erstellt wird. In diesem Prozess schreiben Sie eine Dockerfile, fügen Docker-Images zur privaten Bluemix-Image-Registry hinzu und verlinken Container miteinander."> Webanwendung mit einzelnem Container erstellen</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Lernprogramm: <a href="container_single_ui.html#container_compose_intro" title="Wenn Ihre Apps verschiedene Komponenten wie Datenbanken, Services und Caches enthalten, kann es schwierig sein, das gemeinsame Starten und Beenden aller Container zu koordinieren. In diesem Lernprogramm lernen Sie, wie Sie Ihre App mithilfe eines einzigen Docker Compose-Befehls als Multi-Container-Bereitstellung in einer Microservice-Architektur bereitstellen und ausführen. Jeder Container, der Bestandteil dieses Systems ist, basiert auf einer Docker Compose-Servicedefinition und wird in seiner eigenen isolierten Umgebung ausgeführt.">Multi-Container-Bereitstellung erstellen</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d75704e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d75704e175" id="gui"><h2 class="topictitle2" id="d75704e175">Kurzfristige Tasks als einzelne Container
+über
+die
+<span class="keyword">Bluemix</span>-GUI
+ausführen </h2>
+<div class="body taskbody"><p class="shortdesc">Sie können Container über die
+<span class="keyword">Bluemix</span>-GUI
+erstellen und die erstellten Container anschließend bereitstellen. </p>
+<div class="section prereq" id="gui__prereq_oh5_421_4z"><div class="p">Lesen Sie zunächst folgende Informationen. <ul id="gui__ul_ph5_421_4z"><li id="gui__role">Sie müssen über die Rolle eines Entwicklers für den <span class="keyword">Bluemix</span>-Bereich verfügen, damit Sie einen Container in ihm erstellen können. Weitere Informationen zu Berechtigungen für jede Rolle und dazu, wie Rollen bearbeitet werden, finden Sie unter <span class="ph"><a href="../iam/users_roles.html">Benutzer und Rollen</a></span>.</li>
+<li id="gui__add_image">Über die <span class="keyword">Bluemix</span>-GUI
+erstellen Sie einen Container aus den von IBM bereitgestellten öffentlichen Images oder aus einem bestehenden Image in der privaten
+<span class="keyword">Bluemix</span>-Registry
+Ihrer Organisationen. Weitere Informationen zum Hinzufügen von Images zu Ihrem
+<span class="keyword wintitle strongwintitle">Katalog</span> finden Sie unter
+<a href="container_images_adding_ov.html#container_images_adding_ov" title="Ein Container-Image bildet die Grundlage für die Erstellung eines jeden Containers. Ein Image wird auf der Grundlage einer Dockerfile erstellt. Hierbei handelt es sich um eine Datei, die Anweisungen zum Erstellen des Image und zum Erstellen von Artefakten wie einer App, der Konfiguration der App und ihren Abhängigkeiten enthält. Sie können einen Container als eine ausführbare Datei (.exe oder .bin) betrachten. Sobald Sie diese ausführbare App-Datei ausführen, erstellen Sie eine Instanz Ihrer App. Beim Ausführen eines Containers wird eine Containerinstanz aus dem Image erstellt.">Docker-Images zur privaten Bluemix-Image-Registry Ihrer Organisation hinzufügen</a>. </li>
+<li id="gui__existing_ip">Überprüfen Sie, ob eine IP-Adresse für den Bereich vorhanden ist, die
+Sie anstelle einer neu zu erstellenden IP verwenden können. Weitere Informationen finden Sie
+unter <a href="container_single_ui.html#container_cli_ips_list" title="Wenn auf einzelne Container über das Internet zugegriffen werden soll, müssen Sie eine öffentliche IP-Adresse an die Container binden. Bevor Sie eine IP-Adresse anfordern, überprüfen Sie zunächst die Liste der öffentlichen IP-Adressen, die Ihrer Organisation bereits zugeordnet sind, und stellen Sie fest, ob eine dieser vorhandenen IP-Adressen verfügbar ist.">Über die Befehlszeilenschnittstelle (CLI) nach vorhandener öffentlicher IP-Adresse eines Unternehmens suchen</a>.</li>
+<li id="gui__bind_service">Wenn Sie einen
+<span class="keyword">Bluemix</span>-Service an den Container binden
+möchten, fügen Sie den <span class="keyword">Bluemix</span>-Service zu
+Ihrem Bereich hinzu. Weitere Informationen finden Sie unter
+<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix verfügt über eine Liste mit Services und verwaltet diese für die Entwickler von Apps. Um einen Bluemix-Service hinzuzufügen, der von Ihrem Container verwendet werden soll, müssen Sie eine Instanz dieses Service anfordern und den Service an den Container binden.">Service über die Bluemix-GUI binden</a>. </li>
+<li>Wenn Sie eine gemeinsam genutzte Platte benötigen, die Dateien in einem Container
+zugänglich macht, erstellen Sie einen Datenträger, bevor Sie den Container erstellen. Weitere Informationen finden Sie unter
+<a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">Datenträger über die Befehlszeile (CLI) erstellen</a>. </li>
+</ul>
+</div>
+</div><p class="li stepsection">Gehen Sie wie folgt vor, um einen Container mit einem Image zu
+erstellen und
+bereitzustellen:</p><ol class="steps" id="gui__steps_qh5_421_4z"><li class="step stepexpand" id="gui__start"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">Wählen Sie im Katalog
+<span class="ph uicontrol">Container</span> und anschließend ein Image aus.</span></span> Es werden sowohl die von IBM bereitgestellten Images als auch die in
+Ihrer privaten
+<span class="keyword">Bluemix</span>-Registry
+gespeicherten Images angezeigt. </li>
+<li class="step stepexpand" id="gui__namespace"><span class="cmd">Wenn bereits ein Namensbereich für Ihre Organisation festgelegt ist,
+werden Sie nicht zur Erstellung eines Namensbereichs aufgefordert und können
+mit dem nächsten Schritt fortfahren.</span> Wenn für Ihre Organisation noch kein Namensbereich angegeben ist, werden
+Sie aufgefordert, einen Namensbereich für die Image-Registry festzulegen. Bei einem Namensbereich handelt es sich um einen eindeutigen Namen, der Ihre
+private Registry in <span class="keyword">Bluemix</span>
+kennzeichnet.
+Der Namensbereich für eine Organisation wird einmalig zugeordnet und kann nach seiner Erstellung
+nicht mehr geändert werden. Wenn Sie <span class="keyword">IBM
+Bluemix Container Service</span> in mehreren
+<span class="keyword">Bluemix</span>-Regionen verwenden wollen,
+müssen Sie einen Namensbereich für jede Region einrichten.
+<div class="note tip" id="gui__namespace_naming"><span class="tiptitle">Tipp:</span> Bei
+Namensbereichen sind die folgenden Regeln zu beachten:
+<ul id="gui__ul_rh5_421_4z"><li>Der Name darf nur Kleinbuchstaben, Ziffern und Unterstreichungszeichen (_) enthalten.</li>
+<li>Der Name kann 4 bis 30 Zeichen umfassen. Wenn Sie Container über die Befehlszeile
+verwalten möchten, sollten Sie dem Namensbereich einen kurzen Namen zuordnen, der
+schnell eingegeben werden kann.</li>
+<li>Der Name muss in <span class="keyword">Bluemix</span> eindeutig (einmalig) sein. </li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Definieren Sie als Nächstes Ihren Container.</span> Im Fenster wird standardmäßig die Registerkarte <span class="ph uicontrol">Einzelner Container</span>
+angezeigt. </li>
+<li class="step stepexpand" id="gui__tag">Optional: <span class="cmd">Wählen Sie unter dem Imagenamen den Tag oder die Version des Image aus, das verwendet werden soll. </span></li>
+<li class="step stepexpand" id="gui__space"><span class="cmd">Wählen Sie einen <span class="keyword">Bluemix</span>-Bereich in Ihrer Organisation aus.</span></li>
+<li class="step stepexpand"><span class="cmd">Geben Sie im Feld <span class="ph uicontrol">Containername</span> einen Namen für den Container ein.</span> <div class="note tip"><span class="tiptitle">Tipp:</span> Der Containername muss mit einem Buchstaben beginnen und kann danach Großbuchstaben, Kleinbuchstaben, Ziffern, Punkte (.), Unterstriche (_) und Bindestriche (-) enthalten. </div>
+</li>
+<li class="step stepexpand" id="gui__size"><span class="cmd">Wählen Sie im Feld <span class="ph uicontrol">Größe</span> eine Containergröße aus.</span> Die Standardgröße ist <span class="ph uicontrol" data-hd-audience="yellow">Micro (256 MB
+Hauptspeicher, 16 GB
+Plattenspeicher)</span>. Die von Ihnen ausgewählte Größe wirkt sich auf die Menge an Hauptspeicher und Plattenspeicher aus, die der Rechenhost zur Laufzeit erhält, und kann nach der Erstellung des Containers nicht mehr geändert werden. Die folgenden Größen sind ebenfalls verfügbar:
+<ul data-hd-audience="yellow" id="gui__ul_sh5_421_4z"><li>Pico (64 MB Hauptspeicher, 4 GB Plattenspeicher)</li>
+<li>Nano (128 MB Hauptspeicher, 8 GB Plattenspeicher)</li>
+<li>Tiny (512 MB Hauptspeicher, 32 GB Plattenspeicher)</li>
+<li>S (Klein) (1 GB Hauptspeicher, 64 GB Plattenspeicher)</li>
+<li>M (Mittel) (2 GB Hauptspeicher, 128 GB Plattenspeicher)</li>
+<li>L (Groß) (4 GB Hauptspeicher, 256 GB Plattenspeicher)</li>
+<li>XL (8 GB Hauptspeicher, 512 GB Plattenspeicher)</li>
+<li>XXL (16 GB Hauptspeicher, 1 TB Plattenspeicher) </li>
+</ul>
+
+</li>
+<li class="step stepexpand"><span class="cmd">Wählen Sie im Feld <span class="ph uicontrol">Öffentliche IP-Adresse</span> aus, ob Sie eine neue
+öffentliche
+IP-Adresse anfordern und zuweisen möchten. </span> Öffentliche IP-Adressen lassen öffentliche Verbindungen für den Container zu. Eine öffentliche IP-Adresse
+möchten Sie jedoch z. B. dann nicht verwenden, wenn Sie eine Datenbank verwenden, die für die App des
+Benutzers nur im privaten Netz sichtbar ist.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Das Binden einer öffentlichen IP-Adresse schließt kein SSL-Zertifikat
+ein, mit dem die Daten verschlüsselt werden, die an Ihren und aus Ihrem
+einzelnen Container gesendet werden.
+Falls Ihre App eine SSL-Verschlüsselung erfordert, können Sie entweder eine
+eigene SSL-Lösung implementieren oder anstelle eines einzelnen Containers eine
+Containergruppe verwenden.
+Containergruppen werden an eine öffentliche Route gebunden, die bereits ein
+SSL-Zertifikat beinhaltet, sodass Sie ohne eine weitere Konfiguration über
+HTTPS auf die Containergruppe zugreifen können.
+Weitere Informationen finden Sie unter
+<a href="container_ha.html#container_group_ui" title="Erstellen Sie eine skalierbare Containergruppe über die Bluemix-GUI und stellen Sie die Gruppe bereit. Eine Containergruppe enthält zwei oder mehr Container, von denen dasselbe Image ausgeführt wird. Die Verwendung von Containergruppen ist ratsam zur Ausführung von langfristigen Services mit Arbeitslasten (Workloads), die skalierbar und zuverlässig sein müssen, oder zum Testen im erforderlichen Umfang.">Containergruppe über
+die Bluemix-GUI erstellen</a>.</div>
+
+<p>Wenn
+Sie über eine geeignete IP-Adresse verfügen, wählen Sie <span class="ph uicontrol">In nicht zugewiesenem Zustand
+lassen</span> aus und binden Sie die IP-Adresse an den Container, nachdem der Container erstellt
+wurde. </p>
+</li>
+<li class="step stepexpand"><span class="cmd">Geben Sie im Feld <span class="ph uicontrol">Öffentliche Ports</span> alle öffentlichen Ports an, die veröffentlicht werden sollen. </span> Das Feld wurde mit den Ports vorab gefüllt, die in der Dockerdatei (Dockerfile) zu dem Zeitpunkt für das Image angegeben wurden, als das Image erstellt wurde.
+Wenn Sie einen öffentlichen Port angeben, können Sie zwischen UDP und TCP zum Angeben des IP-Protokolls auswählen, das Sie verwenden möchten. Wenn Sie kein Protokoll angeben, wird der Port automatisch für den TCP-Datenverkehr zugänglich gemacht. 
+Wenn Sie einen öffentlichen Port zugänglich machen, erstellen Sie für Ihren Container auf diese
+Weise eine öffentliche Netzsicherheitsgruppe, die das Senden und Empfangen von
+öffentlichen Daten nur über den zugänglich gemachten Port zulässt.
+Alle anderen öffentlichen Ports sind geschlossen und können nicht für den
+Zugriff auf Ihre App aus dem Internet verwendet werden.
+Sie können mehrere Ports angeben, wenn Sie die Ports durch ein Komma (,) voneinander trennen.  <div class="p" id="gui__ports_p">Wenn in der Dockerfile für das von Ihnen verwendete Image ein Port angegeben ist, schließen Sie diesen Port ein. <div class="note tip"><span class="tiptitle">Tipp:</span> <ul id="gui__ul_uh5_421_4z"><li>Geben Sie für das von IBM
+zertifizierte Liberty Server-Image oder eine geänderte Version dieses Images
+den Port <kbd class="ph userinput">9080</kbd> ein. </li>
+<li>Geben Sie für das von IBM
+zertifizierte Node.js-Image oder eine geänderte Version dieses Images einen
+beliebigen Port, z. B. Port <kbd class="ph userinput">8000</kbd>, ein. </li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Wenn Sie einen Datenträger hinzufügen, einen
+<span class="keyword">Bluemix</span>-Service binden oder
+Umgebungsvariablen hinzufügen möchten, erweitern Sie den Eintrag <span class="ph uicontrol">Erweiterte Optionen</span>. </span></li>
+<li class="step stepexpand" id="gui__volume">Optional: <span class="cmd">Definieren Sie Daten- oder Dateispeicher. Ordnen Sie einen vorhandenen Datenträger zu einem Container bzw. einer
+Containergruppe zu.</span> Ein Datenträger ist eine gemeinsam genutzte Platte, die ermöglicht, dass auf Dateien von einem Container aus zugegriffen werden kann.
+Der Pfad im Container gibt an, wo im Dateisystem des Containers der Datenträger angehängt ist.
+<div class="note restriction"><span class="restrictiontitle">Einschränkung:</span> Sie können Datenträger aus Ihrem <span class="keyword">Bluemix</span>-Bereich nur über die Befehlszeile löschen. </div>
+<ol type="a" class="ol substeps" id="gui__substeps_vh5_421_4z"><li class="li substep"><span class="cmd">Klicken Sie auf <span class="ph uicontrol">Vorhandenen Datenträger zuweisen</span>. </span></li>
+<li class="li substep"><span class="cmd">Wählen Sie den Datenträger aus der Dropdown-Liste aus. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie im nächsten Feld einen Pfad in dem Container an, um den Datenträger zuzuordnen. </span> Beispiel: <span class="ph filepath">/var/lib/mein_datenträger</span></li>
+<li class="li substep"><span class="cmd">Um anzugeben, dass ein Datenträger schreibgeschützt ist, wählen Sie die Option
+<span class="ph uicontrol">Schreibgeschützt</span> aus. </span> Standardmäßig verfügen Datenträger über Lese- und Schreibberechtigung. </li>
+<li class="li substep"><span class="cmd">Um mehrere Datenträger hinzuzufügen, klicken Sie auf <span class="ph uicontrol">Vorhandenen Datenträger zuweisen</span> und
+wiederholen Sie die folgenden Schritte. </span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="gui__env_var">Optional: <span class="cmd">Definieren Sie Umgebungsvariablen. </span> <ol type="a" class="ol substeps" id="gui__substeps_wh5_421_4z"><li class="li substep substepexpand"><span class="cmd">Klicken Sie auf <span class="ph uicontrol">Neue Umgebungsvariable hinzufügen</span>. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Geben Sie einen Namen für die Umgebungsvariable ein. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Geben Sie im nächsten Feld einen Wert für die Umgebungsvariable an. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Um mehrere Umgebungsvariablen hinzuzufügen, klicken Sie auf das Symbol
+<span class="ph uicontrol">Neue Umgebungsvariable hinzufügen</span> und wiederholen Sie die
+angegebenen
+Schritte. </span> <div class="tablenoborder"><table summary="" id="gui__env_keys_group" class="defaultstyle"><caption><span class="tablecap">Tabelle 1. Vorgeschlagene Umgebungsvariablen</span></caption><thead><tr><th id="d75704e521" class="thleft">Umgebungsvariable</th>
+<th id="d75704e523" class="thleft">Beschreibung</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d75704e521 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;app-name&gt;</var></samp></div>
+</td>
+<td headers="d75704e523 ">Einige <span class="keyword">Bluemix</span>-Services unterstützen
+das direkte Binden eines Service an einen Container
+nicht. In einem solchen Fall müssen Sie eine Cloud Foundry-App erstellen und den
+<span class="keyword">Bluemix</span>-Service an diese App
+binden. Anschließend können Sie die App mit <samp class="ph codeph">CCS_BIND_APP</samp> an den Container
+binden. Die Cloud Foundry-App dient als Brücke und ermöglicht <span class="keyword">Bluemix</span> das Einfügen der VCAP_SERVICES-Informationen der Brücken-App in die aktive Containerinstanz. </td>
+</tr>
+<tr><td headers="d75704e521 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;name_der_serviceinstanz1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;name_der_serviceinstanz2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span>  Wenn ein Service die Umgebungsvariable <samp class="ph codeph">CCS_BIND_SRV=</samp> nicht unterstützt, verwenden Sie
+stattdessen <samp class="ph codeph">CCS_BIND_APP=</samp>.</div>
+</td>
+<td headers="d75704e523 ">Wenn Sie einen <span class="keyword">Bluemix</span>-Service
+ohne die Verwendung einer Brücken-App direkt an einen Container binden möchten, verwenden Sie
+<samp class="ph codeph">CCS_BIND_SRV</samp>. Diese Bindung ermöglicht
+<span class="keyword">Bluemix</span> das Einfügen der VCAP_SERVICES-Informationen
+in die aktive Containerinstanz. Zum Auflisten mehrerer <span class="keyword">Bluemix</span>-Services
+fügen Sie diese in dieselbe Umgebungsvariable ein.</td>
+</tr>
+<tr><td headers="d75704e521 "><div class="lines">(Veraltet) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d75704e523 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">Diese Umgebungsvariable wird nicht mehr verwendet:</span> Verwenden
+Sie für den externen Zugriff auf die Container stattdessen <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> oder <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">attach</samp>. Weitere Informationen finden Sie unter
+<a href="container_security.html#container_cli_login_exec" title="Sie können bx ic exec verwenden, um sich bei Ihrem aktiven Container anzumelden.">Mit exec bei einem Container anmelden</a>. </div>
+<span class="ph">Um einen SSH-Schlüssel
+bei der Erstellung an einen Container zu binden, verwenden Sie <samp class="ph codeph">CCS_API_KEY</samp>.</span> </td>
+</tr>
+<tr><td headers="d75704e521 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;dateipfad&gt; </var></samp></div>
+</td>
+<td headers="d75704e523 "><span class="ph" id="gui__d42656e1429">Wenn Sie eine Protokolldatei hinzufügen möchten, die im Container überwacht werden soll, schließen Sie die Umgebungsvariable <samp class="ph codeph">LOG_LOCATIONS</samp> mit dem Pfad zu der Protokolldatei ein. </span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="gui__bind_service_step">Optional: <span class="cmd">Definieren Sie weitere Services für die App. Binden Sie einen <span class="keyword">Bluemix</span>-Service aus Ihrem <span class="keyword">Bluemix</span>-Bereich an Ihren Container. Wählen
+Sie im Abschnitt <span class="ph uicontrol">Servicebindung</span> eine
+<span class="keyword">Bluemix</span>-Serviceinstanz
+aus und klicken Sie auf <span class="ph uicontrol">Hinzufügen</span>, um den Service an den
+Container zu binden. </span> Wenn Sie bisher noch keine <span class="keyword">Bluemix</span>-Services
+zu Ihrem Bereich hinzugefügt haben, werden im Menü keine Services angezeigt. </li>
+<li class="step stepexpand" id="gui__deploy"><span class="cmd">Implementieren Sie den Container und warten Sie, bis die Implementierung
+abgeschlossen ist. Klicken Sie auf <span class="ph uicontrol">Erstellen</span>. </span> Bei der Erstellung des Containers, die einen Moment dauern kann, wird der Container auch in
+<span class="keyword">Bluemix</span> gestartet. Im Abschnitt
+<span class="ph uicontrol">Containerstatus</span> können Sie den Status des Containers ermitteln. Nach Abschluss des
+Erstellungsvorgangs lautet der Status <span class="ph uicontrol">Aktiv</span>.</li>
+</ol>
+<div class="section result" id="gui__result_xh5_421_4z"><p>Wenn Sie <span class="ph uicontrol">In nicht zugewiesenem Zustand
+lassen</span> für die <span class="ph uicontrol">öffentliche IP-Adresse</span> ausgewählt haben, da Sie über
+eine geeignete IP-Adresse verfügen, binden Sie die IP-Adresse jetzt an den Container. Weitere Informationen finden Sie unter
+<a href="container_single_ui.html#container_cli_ips" title="Fordern Sie eine öffentliche IP-Adresse an und binden Sie sie an einen Container in Bluemix.">Öffentliche IP-Adressen anfordern und an Container binden</a>.</p>
+
+<div class="p" id="gui__wait">Wenn Sie von dem Container aus eine Verbindung zu einer externen App herstellen,
+kann die Verbindung zu der angegebenen IP-Adresse erst nach einer Wartezeit von bis zu fünf Minuten nach
+dem Start des Containerprozesses hergestellt werden.
+Anschließend können Sie überprüfen, ob die App im Container ordnungsgemäß ausgeführt wird, indem Sie eine der folgenden Optionen ausführen: <ul id="gui__ul_yh5_421_4z"><li>Öffnen Sie die App in einem Browser, indem Sie eine URL mit der öffentlichen IP-Adresse und dem Port erstellen.
+<p>Beispiel:</p>
+<span class="ph filepath">http://<var class="keyword varname">öffentliche_IP</var>:<var class="keyword varname">öffentlicher_port</var></span>.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn die App einen Service enthält, der keinen HTTP-Endpunkt bereitstellt, kann diese Option die App möglicherweise
+nicht im Browser anzeigen.</div>
+</li>
+<li>In der Linux- oder UNIX-Befehlszeile können Sie den Befehl <span class="ph filepath">nc -zv
+<var class="keyword varname">&lt;öffentliche_IP&gt;</var>
+<var class="keyword varname">&lt;öffentlicher_port&gt;</var></span> ausführen,
+um zu überprüfen, dass an dem angegebenen Port ein Server empfangsbereit ist.</li>
+</ul>
+</div>
+</div><div class="section postreq" id="gui__postreq_zh5_421_4z"><p>Wenn Sie ein Organisationsmanager sind, können Sie als Nächstes die Containerabrechnung für Ihre Organisation anzeigen.</p>
+
+<ol id="gui__ol_a35_421_4z"><li><span class="ph">Wählen Sie in der Anzeige 'Organisationen verwalten'
+bei Ihren Kontodetails eine Organisation aus.</span></li>
+<li>Wählen Sie <span class="ph uicontrol">Nutzungsdashboard</span> aus und überprüfen Sie die Nutzungs- und Abrechnungsdetails. </li>
+</ol>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d75704e757" lang="de-de" id="container_single_cli"><h2 class="topictitle2" id="d75704e757">Kurzfristige Tasks als einzelne Container über die Befehlszeilenschnittstelle (CLI) ausführen</h2>
+<div class="body taskbody"><p class="shortdesc">Erstellen Sie mit dem Befehl <samp class="ph codeph">run</samp> einen Container. Ein Container muss ein Image
+enthalten. Wenn Sie noch nicht über ein Image verfügen, können Sie eines der von IBM zertifizierten
+Images verwenden, die standardmäßig in der privaten Image-Registry Ihrer Organisation verfügbar sind. </p>
+<div class="section prereq"><div class="p" id="container_single_cli__prereq">Führen Sie zunächst die folgenden Schritte aus. <ul><li>Sie müssen über die Rolle eines Entwicklers für den <span class="keyword">Bluemix</span>-Bereich verfügen, damit Sie einen Container in ihm erstellen können. Weitere Informationen zu Berechtigungen für jede Rolle und dazu, wie Rollen bearbeitet werden, finden Sie unter <span class="ph"><a href="../iam/users_roles.html">Benutzer und Rollen</a></span>.</li>
+<li id="container_single_cli__identify_images">Ermitteln Sie ein bestehendes Image in der privaten Image-Registry Ihrer Organisation, das in Ihrem Container verwendet
+werden soll, indem Sie den Befehl <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> ausführen.
+Informationen zum Hinzufügen eines Images zu einer Registry finden Sie unter <a href="container_images_adding_ov.html#container_images_adding_ov" title="Ein Container-Image bildet die Grundlage für die Erstellung eines jeden Containers. Ein Image wird auf der Grundlage einer Dockerfile erstellt. Hierbei handelt es sich um eine Datei, die Anweisungen zum Erstellen des Image und zum Erstellen von Artefakten wie einer App, der Konfiguration der App und ihren Abhängigkeiten enthält. Sie können einen Container als eine ausführbare Datei (.exe oder .bin) betrachten. Sobald Sie diese ausführbare App-Datei ausführen, erstellen Sie eine Instanz Ihrer App. Beim Ausführen eines Containers wird eine Containerinstanz aus dem Image erstellt.">Docker-Images zur privaten Bluemix-Image-Registry Ihrer Organisation hinzufügen</a>. </li>
+<li>Überprüfen Sie, ob eine IP-Adresse für den Bereich vorhanden ist, die
+Sie anstelle einer neu zu erstellenden IP verwenden können. Weitere Informationen finden Sie
+unter <a href="container_single_ui.html#container_cli_ips_list" title="Wenn auf einzelne Container über das Internet zugegriffen werden soll, müssen Sie eine öffentliche IP-Adresse an die Container binden. Bevor Sie eine IP-Adresse anfordern, überprüfen Sie zunächst die Liste der öffentlichen IP-Adressen, die Ihrer Organisation bereits zugeordnet sind, und stellen Sie fest, ob eine dieser vorhandenen IP-Adressen verfügbar ist.">Über die Befehlszeilenschnittstelle (CLI) nach vorhandener öffentlicher IP-Adresse eines Unternehmens suchen</a>.</li>
+<li>Wenn Sie einen
+<span class="keyword">Bluemix</span>-Service an den Container binden
+möchten, fügen Sie den <span class="keyword">Bluemix</span>-Service zu
+Ihrem Bereich hinzu. Weitere Informationen finden Sie unter
+<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix verfügt über eine Liste mit Services und verwaltet diese für die Entwickler von Apps. Um einen Bluemix-Service hinzuzufügen, der von Ihrem Container verwendet werden soll, müssen Sie eine Instanz dieses Service anfordern und den Service an den Container binden.">Service über die Bluemix-GUI binden</a>. </li>
+<li id="container_single_cli__create_shared_volume">Wenn Sie eine gemeinsam genutzte Platte benötigen, die Dateien in einem
+Container zugänglich macht, erstellen Sie einen Datenträger, bevor Sie den Container erstellen. Weitere Informationen finden Sie unter
+<a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">Datenträger über die Befehlszeile (CLI) erstellen</a>. </li>
+</ul>
+</div>
+</div><p class="li stepsection">Erstellen Sie einen Container.</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Erstellen Sie einen Container mit einer bestehenden IP-Adresse und einem bestehenden Image aus der privaten Image-Registry Ihrer Organisation.* </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;ip-adresse&gt;</var>:<var class="keyword varname">&lt;port_in_IP&gt;</var>:<var class="keyword varname">&lt;öffentlicher_port&gt;</var> -e <var class="keyword varname">&lt;umgebungsvariable&gt;</var> -m <var class="keyword varname">&lt;containergröße&gt;</var> --name <var class="keyword varname">&lt;containername&gt;</var> --volume <var class="keyword varname">&lt;datenträgername:mountpfad&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;namensbereich&gt;</var>/<var class="keyword varname">&lt;name_oder_id_des_image&gt;</var></code></pre>
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_single_cli__d41610e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_single_cli__d41610e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+
+<p>Beispiel: </p>
+
+<div class="p">Im folgenden Beispiel wird ein einzelner Container mit den folgenden Details erstellt. <ul><li>Name: <var class="keyword varname">my_container</var></li>
+<li>Größe: <var class="keyword varname">64 MB</var></li>
+<li>Image: <var class="keyword varname">ibmliberty</var></li>
+<li>Angehängter Datenträger: <var class="keyword varname">myvol</var></li>
+<li>Zugänglich gemachter öffentlicher Port: <var class="keyword varname">9080</var></li>
+<li>Gebundene IP-Adresse: <var class="keyword varname">192.0.2.23</var></li>
+<li>Angepasstes Protokolldateiverzeichnis: Standardmäßige Ubuntu-Protokolldatei. Protokolle aus angepassten
+Protokolldateiverzeichnissen können in Kibana nach dem Erstellen des Containers
+angezeigt werden. </li>
+</ul>
+</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p 192.0.2.23:9080:9080 -e <span class="q">"LOG_LOCATION=/var/log/dpkg.log"</span> -m 64 --name my_container --volume myvol:/var/tmp registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty </code></pre>
+
+Wenn der Container erstellt wird, wird er auch gestartet. Sobald die Bereitstellung erfolgt ist, wird die ID für den Container angezeigt. </li>
+<li class="step stepexpand">Optional: <span class="cmd">Listen Sie Ihre aktiven Container auf.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+</ol>
+<div class="section postreq"><div class="p">Wenn Sie von dem Container aus eine Verbindung zu einer externen App herstellen,
+kann die Verbindung zu der angegebenen IP-Adresse erst nach einer Wartezeit von bis zu fünf Minuten nach
+dem Start des Containerprozesses hergestellt werden.
+Anschließend können Sie überprüfen, ob die App im Container ordnungsgemäß ausgeführt wird, indem Sie eine der folgenden Optionen ausführen: <ul id="container_single_cli__d41615e378"><li>Öffnen Sie die App in einem Browser, indem Sie eine URL mit der öffentlichen IP-Adresse und dem Port erstellen.
+<p>Beispiel:</p>
+<span class="ph filepath">http://<var class="keyword varname">öffentliche_IP</var>:<var class="keyword varname">öffentlicher_port</var></span>.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn die App einen Service enthält, der keinen HTTP-Endpunkt bereitstellt, kann diese Option die App möglicherweise
+nicht im Browser anzeigen.</div>
+</li>
+<li>In der Linux- oder UNIX-Befehlszeile können Sie den Befehl <span class="ph filepath">nc -zv
+<var class="keyword varname">&lt;öffentliche_IP&gt;</var>
+<var class="keyword varname">&lt;öffentlicher_port&gt;</var></span> ausführen,
+um zu überprüfen, dass an dem angegebenen Port ein Server empfangsbereit ist.</li>
+</ul>
+</div>
+
+<p>Wenn Sie ein Organisationsmanager sind, können Sie als Nächstes die Containerabrechnung für Ihre Organisation anzeigen.</p>
+
+<div class="p"><ol><li>Klicken Sie auf den Benutzeravatar.</li>
+<li>Klicken Sie auf <span class="ph uicontrol">Konto</span>.</li>
+<li>Erweitern Sie Ihre Organisation, indem Sie auf die Schaltfläche <span class="ph uicontrol">+</span> klicken. </li>
+<li>Wählen Sie <span class="ph uicontrol">Nutzungsdashboard</span> aus und überprüfen Sie die Nutzungs- und Abrechnungsdetails. </li>
+</ol>
+<span class="ph">Weitere Informationen
+finden Sie unter <span class="ph"><a href="../admin/account.html">Konto verwalten</a></span>.</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d75704e757"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75704e1081" lang="de-de" id="container_single_updating"><h2 class="topictitle2" id="d75704e1081">Kurzfristige Tasks in einzelnen Containern über die Befehlszeilenschnittstelle (CLI) aktualisieren </h2>
+<div class="body taskbody"><p class="shortdesc">Um eine App zu aktualisieren, müssen Sie einen neuen Container bereitstellen. Wenn Sie ein
+neues Image mit einer Push-Operation übertragen, wird der Container nicht automatisch erneut
+gestartet. </p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_single_updating__updating_group_cli_table" class="defaultstyle"><caption><span class="tablecap">Tabelle 2. Optionale Tools zum Aktualisieren einer App </span></caption><thead><tr><th id="d75704e1147" class="thleft">Aktualisierungstools</th>
+<th id="d75704e1149" class="thleft">Beschreibung</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d75704e1147 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d75704e1149 ">Automatisieren Sie die App-Builds und die Containerbereitstellung in
+<span class="keyword">Bluemix</span> mithilfe
+von <span class="keyword">Delivery Pipeline</span> (ein
+<span class="keyword">Bluemix</span>-Service, der für
+Sie verfügbar ist). Weitere Informationen finden Sie unter
+<a href="container_integrations.html#container_single_pipeline_ov" title="Automatisieren Sie die Erstellung und die Bereitstellung Ihrer einzelnen Container mit Delivery Pipeline.">Einzelnen Container über Delivery Pipeline erstellen</a>. </td>
+</tr>
+<tr><td headers="d75704e1147 ">UrbanCode Deploy</td>
+<td headers="d75704e1149 ">Automatisieren Sie die App-Builds und die Containerbereitstellungen in <span class="keyword">Bluemix</span>
+mithilfe von UrbanCode Deploy. Weitere Informationen zum Erwerb von UrbanCode Deploy
+finden Sie auf der Produktseite für <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">IBM UrbanCode
+Deploy</a>. </td>
+</tr>
+<tr><td headers="d75704e1147 ">Aktualisieren Sie die App selbst mithilfe der <span class="keyword">IBM
+Bluemix Container Service</span>-CLI</td>
+<td headers="d75704e1149 ">Führen Sie die Schritte in dieser Task aus, um die App selbst zu aktualisieren. </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">So aktualisieren Sie einen Container selbst mithilfe der <span class="keyword">IBM
+Bluemix Container Service</span>-CLI: </p><ol class="steps"><li class="step stepexpand"><span class="cmd">Aktualisieren Sie die App lokal.</span></li>
+<li class="step stepexpand"><span class="cmd">Sie können Ihr Image entweder direkt in <span class="keyword">Bluemix</span> erstellen oder Ihr Image lokal erstellen und testen, bevor Sie es mit einer Push-Operation an <span class="keyword">Bluemix</span> übertragen.</span> <ul><li>Führen Sie den folgenden Befehl aus, um das Image direkt in
+<span class="keyword">Bluemix</span> zu erstellen.*
+<div class="note tip"><span class="tiptitle">Tipp:</span> <span class="ph">Führen Sie <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> aus, um Ihren Namensbereich abzurufen, und ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch Ihren Namensbereich.</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;imagename&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile-position&gt;</var></code></pre>
+Beispiel<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mein_namensbereich</var>/<var class="keyword varname">mein_image</var>:<var class="keyword varname">v1</var> </code></pre>
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_single_updating__d43163e240">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_single_updating__d43163e260">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+<li>Gehen Sie wie folgt vor, um das Image lokal zu erstellen und dann mit einer Push-Operation an <span class="keyword">Bluemix</span> zu übertragen. <div class="p"><ol type="a"><li>Melden Sie sich erneut an, wenn Sie das Plug-in für <span class="keyword">IBM
+Bluemix Container Service</span> verwenden. Legen Sie nicht die
+Umgebungsvariablen für Option 2 fest, sodass <samp class="ph codeph">docker</samp>-Befehle an die Docker Engine auf Ihrer
+lokalen Maschine gesendet werden.
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Erstellen Sie das Image lokal aus Ihrer Dockerfile.
+<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;imagename&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var>
+<var class="keyword varname">&lt;dockerfile-position&gt;</var></code></pre>
+</div>
+<div class="p">Beispiel<pre class="codeblock"><code>docker build -t <var class="keyword varname">mein_ibmliberty_image</var>:<var class="keyword varname">v1</var> </code></pre>
+</div>
+</li>
+<li>Führen Sie einen Container aus dem Image aus, um zu testen, ob Ihre neue App lokal ausgeführt wird, und verwenden Sie dazu den folgenden Befehl.
+Dabei ist <var class="keyword varname">port</var> der Port für den HTTP-Datenverkehr. <div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;containername&gt;</var> <var class="keyword varname">&lt;imagename&gt;</var></code></pre>
+</div>
+<div class="p">Beispiel<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">mein_container</var> <var class="keyword varname">mein_ibmliberty_image</var></code></pre>
+</div>
+<p>Wenn die App ordnungsgemäß ausgeführt wird, ist die Container-ID in der CLI-Ausgabe enthalten.
+Die Protokolle für den Container können Sie überprüfen, indem Sie den Befehl
+<samp class="ph codeph">docker logs
+<var class="keyword varname">&lt;containername_oder_ID&gt;</var> ausführen.</samp> </p>
+</li>
+<li id="container_single_updating__d43163e342">Kennzeichnen Sie das lokale Image mit der privaten <span class="keyword">Bluemix</span>-Registry
+und einem neuen Namen. <span class="ph">Verwenden Sie im Imagenamen nur alphanumerische Zeichen
+(in Kleinschreibung) und Unterstreichungszeichen (_).
+Andere Zeichen wie Bindestriche (-) oder Schrägstriche (/) verhindern möglicherweise das Übertragen des Image mit einer Push-Operation in die Image-Registry. </span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;aktueller_imagename_oder_ID&gt;</var>:<var class="keyword varname">&lt;optionales_tag&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;neuer_imagename&gt;</var>:<var class="keyword varname">&lt;optionales_tag&gt;</var> </code></pre>
+</div>
+<p>Beispiel</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">mein_ibmliberty-image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">mein_ibmliberty-image</var></code></pre>
+</div>
+</li>
+<li>Führen Sie den folgenden Befehl aus, um das Image mit einer Push-Operation in Ihre private
+<span class="keyword">Bluemix</span>-Registry zu übertragen.<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;imagename&gt;</var></code></pre>
+</div>
+<div class="p">Beispiel<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mein_namensbereich</var>/<var class="keyword varname">mein_ibmliberty-image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">Wichtig:</span> <span class="ph">Wenn Sie ein Image mit einer Push-Operation in die private
+<span class="keyword">Bluemix</span>-Registry übertragen, ist die
+angegebene Größe für das Image kleiner als die Größe desselben Images in der lokalen
+Docker-Engine. Der Größenunterschied ist kein Indikator dafür, dass während der Push-Operation ein Problem
+aufgetreten ist. Die komprimierte Größe des Image wird in
+<span class="keyword">IBM
+Bluemix Container Service</span> angegeben.</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Heben Sie die Bindung der öffentlichen IP-Adresse an den Container auf. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;öffentliche_ip-adresse&gt;</var> <var class="keyword varname">&lt;containername_oder_id&gt;</var></code></pre>
+ <p>Der Container ist nicht mehr an die IP-Adresse gebunden, aber die IP wird weiterhin zum Kontingent für die öffentliche IP für Ihre Organisation gerechnet.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Überprüfen Sie, dass die Bindung der IP-Adresse aufgehoben wurde, indem Sie den folgenden Befehl ausführen.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">&lt;containername_oder_id&gt;</var></code></pre>
+
+
+<p>Wenn der Wert für <samp class="ph systemoutput">PublicIpAddress</samp> nicht leer ist, warten Sie nochmals
+einige Minuten und führen Sie den Befehl erneut aus, bevor Sie mit dem nächsten Schritt fortfahren.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie nach dem Entfernen der IP-Adresse des vorhandenen Containers einen weiteren Container
+mit dem aktualisierten Image.*</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span><span class="ph" id="container_single_updating__d43177e3578"> run [-p PORT] [-P] [-d] [-e ENV] [--env-file
+ENVFILE] [-it] [--link NAME:ALIAS] [-m MEMORY] --name NAME [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD [CMD ...]] </span></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Binden Sie die IP-Adresse an den neuen Container.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;öffentliche_ip-adresse&gt;</var> <var class="keyword varname">&lt;containername_oder_id&gt;</var></code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Löschen Sie den alten Container.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75704e1081"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75704e1551" lang="de-de" id="container_linking"><h2 class="topictitle2" id="d75704e1551">Einzelne Container über die Befehlszeilenschnittstelle (CLI) verknüpfen</h2>
+<div class="body taskbody"><p class="shortdesc">Wenn ein Container in demselben Bereich mit einem anderen Container verknüpft ist, so wird von
+<span class="keyword">IBM
+Bluemix Container Service</span>
+im Empfängercontainer ein Hosteintrag für den Quellcontainer erstellt. Anstatt mit einer unter Umständen häufig wechselnden IP-Adresse können Sie mit einem Aliasnamen auf den Quellencontainer verweisen. </p>
+<div class="section context"><p>Wenn ein einzelner Container mit einem anderen Container kommunizieren soll, von dem ein Image ausgeführt wird, zum Beispiel <samp class="ph codeph">dbimage</samp>, können Sie mit einem Aliasnamen für den Host auf den Container verweisen, zum Beispiel <samp class="ph codeph">dbserver</samp>. So
+können Sie das Image <samp class="ph codeph">webserver</samp> erstellen, das immer auf das Datenbankserver-Image mithilfe des Hostnamens <samp class="ph codeph">dbserver</samp> verweist, unabhängig von der IP-Adresse und vom tatsächlichen Namen. Sie können viele
+Instanzen des Paares im selben Image ausführen, ohne die Konfiguration oder IP-Informationen aus der Hand geben zu müssen. Sie können immer auf den Datenbankserver als <samp class="ph codeph">dbserver</samp> verweisen.</p>
+
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Führen Sie den folgenden Befehl aus, um einen Quellcontainer zu erstellen.* </span> <div class="note tip"><span class="tiptitle">Tipp:</span> Stellen Sie sicher, dass Sie die Option <samp class="ph codeph">-p</samp> zum Veröffentlichen des Ports verwenden, die die Portnummer zum Empfängercontainer darstellt. Der Port, der in einer Dockerfile im Image mit der Anweisung
+EXPOSE dargestellt wird, wird zurzeit von der Verknüpfungslaufzeit nicht verwendet.</div>
+
+<div class="note tip"><span class="tiptitle">Tipp:</span> <span class="ph">Führen Sie <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> aus, um Ihren Namensbereich abzurufen, und ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch Ihren Namensbereich.</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;port&gt;</var> --name <var class="keyword varname">&lt;quellcontainername&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;imagename_des_quellcontainers&gt;</var> </code></pre>
+Beispiel<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">17546</var> --name <var class="keyword varname">quelle</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">dbimage</var> </code></pre>
+
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_linking__d36664e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_linking__d36664e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">Führen Sie den folgenden Befehl aus, um einen Empfängercontainer zu erstellen und ihn mit dem Quellcontainer zu verknüpfen. *</span> Wählen Sie als Alias einen benutzerdefinierten Namen für das Image aus, der im Quellcontainer verwendet wird. Sie können dem Host-Container mehrere Ports für den Empfängercontainer verfügbar machen, indem Sie die Option <span class="keyword option">-p</span> mehrere Male einschließen.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;port&gt;</var> -p <var class="keyword varname">&lt;port&gt;</var> --name <var class="keyword varname">&lt;empfängercontainername&gt;</var> --link <var class="keyword varname">&lt;quellcontainername&gt;</var>:<var class="keyword varname">&lt;alias&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;imagename_des_empfängercontainers&gt;</var> </code></pre>
+Beispiel<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p 12534 -p 15256 --name <var class="keyword varname">empfänger</var> --link <var class="keyword varname">quelle</var>:<var class="keyword varname">dbserver</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">webserver</var> </code></pre>
+
+<p>Wenn die ID für den Empfängercontainer angezeigt wird, wurde der Container verknüpft. </p>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Überprüfen Sie, welche Umgebungsvariablen durch die Verknüpfung eingefügt werden. Melden Sie sich dazu mit <samp class="ph codeph">exec</samp> an Ihrem Container an.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">&lt;empfängercontainername&gt;</var> bash </code></pre>
+ <div class="p">Führen Sie den Befehl <samp class="ph codeph">env</samp> im Bash-Fenster aus, damit die Details für den Alias angezeigt werden.
+<pre class="codeblock"><code>"Env": [
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_&lt;source_container_port&gt;/tcp_TCP_PORT=&lt;source_container_port&gt;/tcp",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_&lt;source_container_port&gt;/tcp_TCP=tcp://<var class="keyword varname">&lt;recipient_container_private_IP&gt;</var>:&lt;source_container_port&gt;/tcp",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_space_id=<var class="keyword varname">&lt;space_ID&gt;</var>",
+    "logging_password=",
+    "space_id=<var class="keyword varname">&lt;space_ID&gt;</var>",
+    "logstash_target=logs.opvis.bluemix.net:9091",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_<var class="keyword varname">&lt;source_container_port&gt;</var>/tcp_TCP_ADDR=<var class="keyword varname">&lt;recipient_container_private_ip&gt;</var>",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_metrics_target=metrics.opvis.bluemix.net:9095",
+    "<var class="keyword varname">&lt;alias&gt;</var>_NAME=/<var class="keyword varname">&lt;recipient_container&gt;</var>/<var class="keyword varname">&lt;alias&gt;</var>",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_logstash_target=logs.opvis.bluemix.net:9091",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_logging_password=",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_<var class="keyword varname">&lt;source_container_port&gt;</var>/tcp_TCP_PROTO=tcp",
+    "metrics_target=metrics.opvis.bluemix.net:9095"
+],</code></pre>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75704e1551"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75704e1869" lang="de-de" id="container_cli_ips"><h2 class="topictitle2" id="d75704e1869">Öffentliche IP-Adressen anfordern und an Container binden</h2>
+<div class="body taskbody"><p class="shortdesc">Fordern Sie eine öffentliche IP-Adresse an und binden Sie sie an einen Container
+in <span class="keyword">Bluemix</span>. </p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">Anmerkung:</span> Das Binden einer öffentlichen IP-Adresse schließt kein
+SSL-Zertifikat ein, mit dem die Daten verschlüsselt werden, die an Ihren und
+aus Ihrem einzelnen Container gesendet werden.
+Falls Ihre App eine SSL-Verschlüsselung erfordert, können Sie entweder eine
+eigene SSL-Lösung implementieren oder anstelle eines einzelnen Containers eine
+Containergruppe verwenden.
+Containergruppen werden an eine öffentliche Route gebunden, die bereits ein
+SSL-Zertifikat beinhaltet, sodass Sie ohne eine weitere Konfiguration über
+HTTPS auf die Containergruppe zugreifen können.
+Weitere Informationen finden Sie unter
+<a href="container_ha.html#container_group_ui" title="Erstellen Sie eine skalierbare Containergruppe über die Bluemix-GUI und stellen Sie die Gruppe bereit. Eine Containergruppe enthält zwei oder mehr Container, von denen dasselbe Image ausgeführt wird. Die Verwendung von Containergruppen ist ratsam zur Ausführung von langfristigen Services mit Arbeitslasten (Workloads), die skalierbar und zuverlässig sein müssen, oder zum Testen im erforderlichen Umfang.">Containergruppe über
+die Bluemix-GUI erstellen</a>.</div>
+
+<p>Lesen Sie den Abschnitt
+<a href="container_single_ui.html#container_cli_ips_list" title="Wenn auf einzelne Container über das Internet zugegriffen werden soll, müssen Sie eine öffentliche IP-Adresse an die Container binden. Bevor Sie eine IP-Adresse anfordern, überprüfen Sie zunächst die Liste der öffentlichen IP-Adressen, die Ihrer Organisation bereits zugeordnet sind, und stellen Sie fest, ob eine dieser vorhandenen IP-Adressen verfügbar ist.">Über die Befehlszeilenschnittstelle (CLI) nach vorhandener öffentlicher IP-Adresse eines Unternehmens suchen</a>,
+bevor Sie überprüfen, ob eine öffentliche IP-Adresse für den
+Bereich vorhanden ist,
+die Sie anstelle einer neu zu erstellenden IP verwenden können. </p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Fordern Sie eine öffentlich IP-Adresse an. </span>  Wird eine öffentliche IP-Adresse angefordert, wird dem Bereich eine
+beliebige Adresse aus dem Pool der öffentlichen IP-Adressen
+zugeordnet. Die IP-Adresse wird beibehalten, solange sie einem Bereich zugeordnet ist.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Notieren Sie die IP-Adresse. </span></li>
+<li class="step stepexpand"><span class="cmd">Binden Sie die Adresse an einen neuen Container oder einen bestehenden aktiven Container. </span> <ul class="ul choices"><li class="li choice">Gehen Sie zum Binden der IP-Adresse an einen bestehenden aktiven Container wie folgt vor. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;öffentliche_ip-adresse&gt;</var> <var class="keyword varname">&lt;containername_oder_id&gt;</var></code></pre>
+Beispiel<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind 192.0.2.23 mein_container</code></pre>
+</li>
+<li class="li choice">Gehen Sie zum Binden der IP-Adresse an einen neuen Container wie folgt vor. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var> --name <var class="keyword varname">&lt;containername&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;imagename&gt;</var></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<div class="section result">Die Bindeanforderung wird sofort übergeben. Bis zu dem Container mit der
+IP-Adresse eine Verbindung
+hergestellt werden kann, können jedoch einige Minuten vergehen. </div></div>
+<aside role="complementary" aria-labelledby="d75704e1869"></aside><article class="topic task nested2" role="article" aria-labelledby="d75704e2021" lang="de-de" id="container_cli_ips_list"><h3 class="topictitle3" id="d75704e2021">Über die Befehlszeilenschnittstelle (CLI) nach vorhandener öffentlicher IP-Adresse eines Unternehmens suchen</h3>
+<div class="body taskbody"><p class="shortdesc">Wenn auf einzelne Container über das Internet zugegriffen werden soll,
+müssen Sie eine öffentliche IP-Adresse an die Container binden. Bevor Sie eine
+IP-Adresse anfordern, überprüfen Sie zunächst die Liste der öffentlichen IP-Adressen, die
+Ihrer Organisation bereits zugeordnet sind, und stellen Sie fest, ob eine dieser
+vorhandenen IP-Adressen verfügbar ist. </p>
+<div class="section context"><div class="steps note"><span class="notetitle">Anmerkung:</span> Das Binden einer öffentlichen IP-Adresse schließt kein
+SSL-Zertifikat ein, mit dem die Daten verschlüsselt werden, die an Ihren und
+aus Ihrem einzelnen Container gesendet werden.
+Falls Ihre App eine SSL-Verschlüsselung erfordert, können Sie entweder eine
+eigene SSL-Lösung implementieren oder anstelle eines einzelnen Containers eine
+Containergruppe verwenden.
+Containergruppen werden an eine öffentliche Route gebunden, die bereits ein
+SSL-Zertifikat beinhaltet, sodass Sie ohne eine weitere Konfiguration über
+HTTPS auf die Containergruppe zugreifen können.
+Weitere Informationen finden Sie unter
+<a href="container_ha.html#container_group_ui" title="Erstellen Sie eine skalierbare Containergruppe über die Bluemix-GUI und stellen Sie die Gruppe bereit. Eine Containergruppe enthält zwei oder mehr Container, von denen dasselbe Image ausgeführt wird. Die Verwendung von Containergruppen ist ratsam zur Ausführung von langfristigen Services mit Arbeitslasten (Workloads), die skalierbar und zuverlässig sein müssen, oder zum Testen im erforderlichen Umfang.">Containergruppe über
+die Bluemix-GUI erstellen</a>.</div>
+</div><div class="step"><span class="cmd">Listen Sie die verfügbaren öffentlichen IP-Adressen für Ihren Bereich auf. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</div>
+<div class="section postreq">Wenn Sie nicht über IP-Adressen verfügen oder eine IP-Adresse anfordern
+möchten, stehen Ihnen folgende Optionen zur Verfügung. Sie können eine IP-Adresse entweder beim Erstellen eines einzelnen Containers über die
+<span class="keyword">Bluemix</span>-Benutzerschnittstelle oder mit dem Befehl
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp>
+über die Befehlszeilenschnittstelle anfordern. Weitere Informationen zum Anfordern von
+IP-Adressen über die Befehlszeilenschnittstelle finden Sie unter
+<a href="container_single_ui.html#container_cli_ips" title="Fordern Sie eine öffentliche IP-Adresse an und binden Sie sie an einen Container in Bluemix.">Öffentliche IP-Adressen anfordern und an Container binden</a>. </div></div>
+<aside role="complementary" aria-labelledby="d75704e2021"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d75704e2123" lang="de-de" id="container_cli_ips_unbind"><h3 class="topictitle3" id="d75704e2123">Bindung von öffentlichen IP-Adressen zu einem Container aufheben</h3>
+<div class="body taskbody"><p class="shortdesc">Sie können die Bindung einer öffentlichen IP-Adresse zu einem Container aufheben, die IP-Adresse ist für weitere Container jedoch weiterhin verfügbar und wird weiterhin zum Kontingent für die öffentliche IP für Ihre Organisation gerechnet. </p>
+<ol class="steps"><li class="step stepexpand" id="container_cli_ips_unbind__unbind"><span class="cmd">Heben Sie die Bindung der öffentlichen IP-Adresse an den Container auf. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;öffentliche_ip-adresse&gt;</var> <var class="keyword varname">&lt;containername_oder_id&gt;</var></code></pre>
+ <p>Der Container ist nicht mehr an die IP-Adresse gebunden, aber die IP wird weiterhin zum Kontingent für die öffentliche IP für Ihre Organisation gerechnet.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass die Bindung der IP-Adresse erfolgreich aufgehoben wurde.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75704e2123"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d75704e2206" lang="de-de" id="container_cli_ips_remove"><h3 class="topictitle3" id="d75704e2206">Öffentliche IP-Adressen aus Kontingent entfernen</h3>
+<div class="body taskbody"><p class="shortdesc">Wenn Sie eine öffentliche IP-Adresse nicht verwenden oder eine IP-Adresse löschen müssen, sodass Sie eine neue anfordern können, können Sie eine IP-Adresse aus dem Kontingent Ihrer Organisation entfernen. </p>
+<div class="section prereq">Heben Sie zunächst die Bindung der öffentlichen IP-Adresse zu allen
+Containern auf, die die Adresse verwenden. </div><ol class="steps"><li class="step stepexpand"><span class="cmd">Entfernen Sie die IP-Adresse aus dem Kontingent der Organisation. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release <var class="keyword varname">&lt;öffentliche_IP-adresse&gt;</var> </code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Stellen Sie sicher, dass die IP-Adresse nicht mehr als zugeordnete
+IP-Adresse aufgeführt wird. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75704e2206"></aside></article></article><article class="topic task nested1" role="article" aria-labelledby="d75704e2287" lang="de-de" id="container_single_remove"><h2 class="topictitle2" id="d75704e2287">Einzelne Container entfernen </h2>
+<div class="body taskbody"><p class="shortdesc">Entfernen Sie gelegentlich nicht verwendete Container, um die Verwendung Ihres Kontingents zu maximieren. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Verwenden Sie eine der folgenden Methoden, um einen Container zu entfernen.</span> <ul class="ul choices"><li class="li choice">Führen Sie in der
+<span class="keyword">Bluemix</span>-GUI
+Folgendes aus: <ol type="a"><li>Wählen Sie im
+<span class="keyword">Bluemix</span>-Dashboard
+den Namen des Containers aus, der gelöscht werden soll. </li>
+<li>Erweitern Sie das Menü <span class="ph uicontrol">Weitere Aktionen...</span> und klicken Sie
+auf <span class="ph uicontrol">Löschen</span>. </li>
+</ol>
+<ul><li>Klicken Sie in der Kachel für den Container auf das Zahnradsymbol und anschließend auf <span class="ph uicontrol">Container löschen</span>. </li>
+</ul>
+</li>
+<li class="li choice">Führen Sie über die Befehlszeilenschnittstelle (CLI) folgenden Befehl aus:*
+<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="ph" id="container_single_remove__d42440e180">*In diesem Befehl können Sie
+<samp class="ph codeph"><span class="ph">bx ic</span></samp> durch
+<samp class="ph codeph">docker</samp> ersetzen, wenn Sie <a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">bei
+<span class="keyword">IBM
+Bluemix Container Service</span> angemeldet sind</a> und
+Ihre Umgebungsvariablen zur Verwendung nativer Docker-Befehle definiert haben. </span><span class="ph" id="container_single_remove__d42440e193">Sie können
+native Docker-Befehle in allen Schritten verwenden, die in diesem Abschnitt mit einem Stern (*) gekennzeichnet sind. </span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Überprüfen Sie, ob der Container entfernt wurde, indem Sie den folgenden Befehl ausführen und sich vergewissern,
+dass der Container nicht in der Liste angezeigt wird.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75704e2287"></aside></article><article class="topic tutorial nested1" role="article" aria-labelledby="d75704e2440" lang="de-de" id="container_gettingstarted_tutorial"><h2 class="topictitle2" id="d75704e2440">Lernprogramm: Webanwendung mit einzelnem Container erstellen</h2>
+<div class="body tutorialBody"><p class="shortdesc">Mithilfe von <span class="keyword">IBM
+Bluemix</span> können Sie Docker-Container in der öffentlichen Cloud ausführen.
+Verwenden Sie Container zum Bereitstellen eigenständiger sicherer Web-Apps, die unabhängig vom Hostbetriebssystem ausgeführt werden.
+Die Container sind einfach und benötigen nicht viel Systemressourcen, weil die Container denselben Systemkernel verwenden und somit effizienter als eine virtuelle Maschine ausgeführt werden können. In diesem Lernprogramm wird erklärt, wie mithilfe von Docker-Containern in <span class="keyword">Bluemix</span> eine Messaging-Web-App erstellt wird.
+In diesem Prozess schreiben Sie eine Dockerfile, fügen Docker-Images zur privaten
+<span class="keyword">Bluemix</span>-Image-Registry hinzu und verlinken Container miteinander. </p>
+<div class="section tutorialDesc"></div><section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d75704e2508"><h3 class="sectiontitle" id="d75704e2508">Ziele</h3>
+<p>In diesem Szenario erstellen Sie die Web-App 'Lets-Chat' im <span class="keyword">Bluemix</span>-Bereich. 'Lets-Chat' ist eine Online-Messaging-App, die für kleine Entwicklungsteams konzipiert ist. Mithilfe von <span class="keyword">Bluemix</span> können Sie eine private Docker-Image-Registry
+verwalten und die Web-App so bereitstellen, dass sie öffentlich zugänglich ist. </p>
+
+<figure class="fignone" id="container_gettingstarted_tutorial__getting_started_tutorial"><figcaption>Abbildung 1. Architektur der aktiven Web-App</figcaption><div class="image"><object width="480" data="images/getting_started_tutorial.svg"><img width="480" src="images/getting_started_tutorial.jpg" alt="Diagramm für Lernprogramm 'Lets Chat'"></object></div></figure>
+
+<div class="p">In diesem Szenario werden Anweisungen für die folgenden Tasks bereitgestellt: <ul><li><span class="keyword">Bluemix</span>-Konto einrichten</li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span>-Befehlszeilenschnittstelle einrichten</li>
+<li>Dockerfile erstellen</li>
+<li>Image mit Push-Operation in Ihre private <span class="keyword">Bluemix</span>-Image-Registry übertragen</li>
+<li>Zwei Container verlinken und damit eine Netzverbindung zwischen Containern erstellen</li>
+<li>Container erstellen, der öffentlich zugänglich ist</li>
+</ul>
+</div>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d75704e2559"><h3 class="sectiontitle" id="d75704e2559">Erforderlicher Zeitaufwand</h3>45 Minuten</section>
+<section role="region" aria-labelledby="d75704e2563"><h3 class="sectiontitle" id="d75704e2563">Zielgruppe</h3>
+<p>Dieses Lernprogramm ist für Benutzer konzipiert, die noch nicht mit Docker-Containern in <span class="keyword">Bluemix</span> vertraut sind und erfahren möchten, wie eine aktive App in einer öffentlichen <span class="keyword">Bluemix</span>-Cloud bereitgestellt wird. </p>
+</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e2577" lang="de-de" id="container_gettingstarted_tutorial_lesson_1"><h3 class="topictitle3" id="d75704e2577">Lerneinheit 1: <span class="keyword">IBM
+Bluemix Container Service</span> einrichten</h3>
+<div class="body taskbody"><p class="shortdesc">In dieser Lerneinheit erstellen Sie Ihr <span class="keyword">Bluemix</span>-Konto,
+installieren die <span class="keyword">IBM
+Bluemix Container Service</span>-Befehlszeilenschnittstelle (CLI),
+melden sich an Ihrem Konto an und überprüfen die IBM Standardimages.</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Rufen Sie die
+<a href="https://console.ng.bluemix.net/registration/" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Registrierungsseite
+für <span class="keyword">Bluemix</span></a> auf, um ein Konto zu erstellen. </span> Notieren Sie Ihren Benutzernamen und das zugehörige Kennwort, da Sie diese Informationen zu einem späteren Zeitpunkt wieder benötigen. </li>
+<li class="step stepexpand"><span class="cmd">Installieren Sie die Cloud Foundry-Befehlszeilenschnittstelle (CLI) für <span class="ph">Cloud Foundry-CLI Version <span class="ph" id="container_gettingstarted_tutorial_lesson_1__d28073e278">6.14.0</span> - 6.22.0</span> aus dem <a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">GitHub-Repository</a>. </span> Sie müssen die Cloud Foundry-CLI an der Standardposition für Ihr Betriebssystem installieren,
+da ansonsten die Umgebungsvariable PATH nicht mit Ihrem Installationsverzeichnis übereinstimmt. <div class="steps note"><span class="notetitle">Anmerkung:</span> macOS Sierra-Benutzer müssen Cloud Foundry CLI Version 6.22.0 oder eine höhere Version
+installieren. </div>
+
+
+<div class="p">Führen Sie den folgenden Befehl aus, um zu überprüfen, ob die Cloud Foundry-Befehlszeilenschnittstelle ordnungsgemäß installiert wurde, oder welche Version installiert ist (wenn die Cloud Foundry-CLI bereits installiert war):
+<pre class="codeblock"><code>cf -v </code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="https://www.docker.com/products/docker" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Installieren Sie
+Docker 1.10.0 oder eine höhere Version</a> von der Docker-Website. </span></li>
+<li class="step stepexpand"><span class="cmd">Öffnen Sie das Docker-Terminal. </span> Wenn Sie Docker Toolbox für Windows oder OS X verwenden, öffnen Sie das Programm 'Docker Quickstart Terminal'. </li>
+<li class="step stepexpand"><span class="cmd">Installieren Sie die <a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)"><span class="keyword">Bluemix</span>-CLI</a>.</span></li>
+<li class="step stepexpand"><span class="cmd" id="container_gettingstarted_tutorial_lesson_1__d28073e317">Installieren Sie das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in. </span> <pre class="codeblock" id="container_gettingstarted_tutorial_lesson_1__d28073e328"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">Überprüfen Sie durch Ausführen des folgenden Befehls, ob das Plug-in ordnungsgemäß installiert wurde: <pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>Das Plug-in wird in den Ergebnissen unter dem Namen 'IBM-Containers' angezeigt. </p>
+</li>
+<li class="step stepexpand"><span class="cmd">Da jetzt das <span class="keyword">IBM
+Bluemix Container Service</span>-Plug-in installiert ist,
+führen Sie im Docker-Terminal den Befehl <samp class="ph codeph">docker run hello-world</samp> aus. </span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ Auf diese Art wird überprüft, ob die Docker-Konfiguration ordnungsgemäß eingerichtet wurde. Da von Docker nach dem lokalen Image gesucht wird, wird die folgende Nachricht angezeigt, wenn Sie diesen Befehl zum ersten Mal ausführen:
+<pre class="pre screen"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+Das Image wird aus Docker Hub extrahiert, einem öffentlichen Repository für Images; nach Ausführung des Befehls wird eine Ausgabe angezeigt, die der folgenden ähnelt:
+<pre class="pre screen"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the <span class="q">"hello-world"</span> image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ Wenn der Befehl 'hello-world' nicht ausgeführt wird, führen Sie <samp class="ph codeph">docker version</samp> aus, um festzustellen, ob Docker ordnungsgemäß installiert wurde.
+Benutzer von Windows und OS X müssen sicherstellen, dass sie Docker Quickstart Terminal ausführen und nicht das Standardterminalfenster.</li>
+<li class="step stepexpand">Optional: <span class="cmd">Wenn Sie <span class="keyword">Bluemix</span> zum ersten Mal verwenden, geben Sie einen API-Endpunkt an. Im
+nachfolgenden Codebeispiel wird die Region Ihres <span class="keyword">Bluemix</span>-Konto als Standardwert
+verwendet. Sie können die Region jedoch manuell ändern. </span> <pre class="codeblock"><code>bx api https://api.<var class="keyword varname" data-hd-keyref="DomainName">domänenname</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Melden Sie sich jetzt an Ihrem <span class="keyword">Bluemix</span>-Konto an. </span> Geben Sie die Werte für E-Mail-Adresse und Kennwort ein, die Sie angegeben haben, als Sie das <span class="keyword">Bluemix</span>-Konto erstellt haben.
+Wählen Sie bei Bedarf Ihre bevorzugte Organisation und den Bereich in den Eingabeaufforderungen aus.
+<pre class="codeblock"><code>bx login [-sso]</code></pre>
+<span class="ph">Der Parameter
+<span class="keyword option">--sso</span> für Single Sign-on ist erforderlich, wenn Sie sich mit einer
+eingebundenen ID anmelden. Rufen Sie bei Verwendung dieser Option
+<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>
+auf, um einen nur für eine einzige Anmeldung gültigen Kenncode
+abzurufen. Führen Sie die folgenden
+untergeordneten Schritte aus, wenn Sie die Option
+<span class="keyword option">--sso</span> nicht angeben: </span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Geben Sie für <span class="ph uicontrol">Email</span> Ihre
+IBM ID für
+<span class="keyword">Bluemix</span> an. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie für <span class="ph uicontrol">Kennwort </span> das Kennwort für die
+IBM ID an. </span> Daraufhin werden die
+Bluemix-Organisationen und -Bereiche abgerufen. </li>
+<li class="li substep"><span class="cmd">Geben Sie die Nummer für eine Ihrer <span class="keyword">Bluemix</span>-Organisationen ein. </span></li>
+<li class="li substep"><span class="cmd">Geben Sie die Nummer für einen Ihrer bestehenden <span class="keyword">Bluemix</span>-Bereiche an. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie einen Namensbereich. </span> Der Namensbereich Ihrer Organisation stellt eine eindeutige Kennung für Ihre Registry der Container-Images in einer
+<span class="keyword">Bluemix</span>-Region dar. Der Namensbereich ist somit eine Möglichkeit, Ihr <span class="keyword">Bluemix</span>-Image-Registry
+von den anderen Image-Registrys in der öffentlichen IBM Cloud zu unterscheiden.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn Sie oder ein anderer Benutzer sich bei Ihrer
+<span class="keyword">Bluemix</span>-Organisation und
+erstellten Containern anmelden, haben Sie bereits einen Namensbereich. Durch Ausführung des folgenden Befehls
+können Sie den Wert des Namensbereichs ermitteln:
+<pre class="codeblock"><code><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp></code></pre>
+</div>
+ <div class="p">Tipps zum Erstellen eines Namensbereichs:
+<ul><li>Ihr Namensbereich muss eindeutig sein. Er darf nicht von einer anderen Organisation in demselben Bereich einer öffentlichen IBM Cloud verwendet werden. </li>
+<li>Der Namensbereich kann aus 4 bis 30 Zeichen bestehen und darf nur Kleinbuchstaben, Ziffern und Unterstriche (_) enthalten.</li>
+<li>Halten Sie Ihren Namensbereich kurz. Falls Sie die Befehlszeile verwenden, müssen Sie den Namensbereich häufig eingeben,
+wenn Sie Images kennzeichnen oder mit Push-Operationen übertragen. </li>
+</ul>
+</div>
+
+
+<p>Ersetzen Sie im nachfolgend aufgeführten Befehl <var class="keyword varname">name_ihrer_registry</var> durch den Namensbereich Ihrer Wahl: </p>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">name_ihrer_registry</var></code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Legen Sie eine Variable für den Namensbereich fest. </span> Im gesamten Lernprogramm weisen die Beispielbefehle die Zeichenfolge
+<samp class="ph codeph">$your_namespace</samp> auf; sie gibt die Position an, an der Sie ihren Namensbereich einfügen müssen.
+Erstellen Sie eine Variable im Terminal, um diese Befehle nicht manuell bearbeiten zu müssen.  <pre class="codeblock"><code>your_namespace=<var class="keyword varname">name_ihrer_registry</var></code></pre>
+ Beispiel mit der Zeichenfolge <samp class="ph codeph">ljenkins1</samp> als Namensbereich des Benutzers <pre class="pre screen"><code>$ your_namespace=<var class="keyword varname">ljenkins1</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Initialisieren Sie <span class="keyword">IBM
+Bluemix Container Service</span>. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Sie haben sich jetzt bei <span class="keyword">IBM
+Bluemix Container Service</span> angemeldet.
+Überprüfen Sie jetzt die Standardimages, die Ihnen zur Verfügung stehen. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                        TAG                 IMAGE ID            CREATED             SIZE
+registry.ng.bluemix.net/ibm-mobilefirst-starter   latest              d61c09fd0af7        4 weeks ago         510.2 MB
+registry.ng.bluemix.net/ibm-node-strong-pm        latest              322b9ca7b2dc        2 weeks ago         255.5 MB
+registry.ng.bluemix.net/ibmliberty                latest              33fdda9431c7        2 days ago          292.5 MB
+registry.ng.bluemix.net/ibmnode                   latest              c33c25d4af3b        2 days ago          187.8 MB
+registry.ng.bluemix.net/ibmnode                   v4                  c33c25d4af3b        2 days ago          187.8 MB
+registry.ng.bluemix.net/ibmnode                   v1.1                ef3425f90e1e        2 days ago          175.3 MB
+registry.ng.bluemix.net/ibmnode                   v1.2                c5546bf5e891        2 days ago          183.6 MB</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_1__table_lqp_hkm_2v" class="defaultstyle"><caption><span class="tablecap">Tabelle 3. Weitere Informationen zu Images und Containern</span></caption><thead><tr><th colspan="2" id="d75704e2972" class="thleft"><span class="ph"><img src="images/idea.png" alt="Dieses Symbol zeigt an, dass es zu diesem Schritt der Task weitere Informationen gibt. "></span> Weitere Informationen zu Images und Containern</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: NaN%" headers="d75704e2972 ">Image oder Container</td>
+<td style="width: NaN%" headers="d75704e2972 "><p> Was ist der Unterschied zwischen einem Image und einem Container? Ein Image ist im Wesentlichen eine schreibgeschützte Momentaufnahme definierter Ebenen und Befehle. Erst wenn Sie ein Image ausführen, wird es zu einem Container. Einer der Vorteile dieses Prozesses besteht darin, dass eine Imagemomentaufnahme unabhängig von eventuellen Änderungen am Container unverändert bleibt. Einzelne
+Container sind ihrer Konstruktion nach für temporäre Prozesse
+gedacht.
+Konfigurationen oder Daten, die containerübergreifend erhalten bleiben müssen,
+müssen in das Image geschrieben oder auf einem Persistent Volume gespeichert werden.
+Im Docker-Glossar finden Sie eine <a href="https://docs.docker.com/glossary/?term=image" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Definition eines Image</a>. </p>
+</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75704e2972 ">IBM Images</td>
+<td style="width: NaN%" headers="d75704e2972 "><p>In diesem Lernprogramm verwenden Sie Images von Docker Hub. Von IBM werden jedoch auch vier dieser
+<span class="q">"Imagemomentaufnahmen"</span> bereitgestellt, mit denen Sie eigene Images erstellen oder einen Container ausführen
+können. Weitere Informationen finden Sie unter <a href="container_images_adding_ov.html#container_images_adding_ov" title="Ein Container-Image bildet die Grundlage für die Erstellung eines jeden Containers. Ein Image wird auf der Grundlage einer Dockerfile erstellt. Hierbei handelt es sich um eine Datei, die Anweisungen zum Erstellen des Image und zum Erstellen von Artefakten wie einer App, der Konfiguration der App und ihren Abhängigkeiten enthält. Sie können einen Container als eine ausführbare Datei (.exe oder .bin) betrachten. Sobald Sie diese ausführbare App-Datei ausführen, erstellen Sie eine Instanz Ihrer App. Beim Ausführen eines Containers wird eine Containerinstanz aus dem Image erstellt.">IBM Images</a>. </p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="section result"><p>Glückwunsch! Sie haben erfolgreich ein Bluemix-Konto erstellt, die Plug-ins für die Befehlszeilenschnittstelle installiert und sich angemeldet, um die Images anzuzeigen, die Ihnen zum Erstellen der Web-Apps zur Verfügung stehen. </p>
+
+<p>Fahren Sie mit der nächsten Lerneinheit fort, wenn Sie Images zur Registry hinzufügen möchten. </p>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e3015" lang="de-de" id="container_gettingstarted_tutorial_lesson_2"><h3 class="topictitle3" id="d75704e3015">Lerneinheit 2: Images zur privaten <span class="keyword">Bluemix</span>-Image-Registry hinzufügen</h3>
+<div class="body taskbody"><p class="shortdesc">In dieser Lerneinheit verwenden Sie zwei Methoden, um Images zu einer privaten Image-Registry hinzuzufügen:
+Das Kopieren eines Images von Docker Hub oder das Erstellen einer Dockerfile.
+Wenn Sie eine Dockerfile erstellen, können Sie eigene Befehle zum Image hinzufügen. Dies hat zur Folge, dass jeder von diesem Image gestartete Container diese Befehle enthält. Einer der Vorteile von Containern ist die Tatsache, dass Sie ihnen diese Images die Quellcodeverwaltung erleichtern, sodass jede Person in der Organisation Container mit einer konsistenten Betriebsumgebung erstellen kann. </p>
+<div class="section context">Die folgenden Images werden in dieser Lerneinheit verwendet. Sie können die Dockerfiles auf Images und andere Informationen im Docker Hub überprüfen. <ul><li><a href="https://hub.docker.com/_/mongo/" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">MongoDB</a></li>
+<li><a href="https://hub.docker.com/r/sdelements/lets-chat/" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Let's Chat</a></li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Kopieren Sie das MongoDB-Image aus Docker Hub in die private <span class="keyword">Bluemix</span>-Image-Registry. </span> Das MongoDB-Image wird zum Speichern von Daten verwendet. Der
+MongoDB-Container kann zwar ebenfalls zum Speichern von Daten verwendet werden,
+aber alle in den Container geschriebenen Daten gehen verloren, wenn der
+Container entfernt wird.
+Damit Daten, die in einen Container geschrieben wurden, erhalten bleiben,
+müssen Sie einen Datenträger anhängen, wenn Sie einen Container ausführen. <p>Denken Sie daran, <samp class="ph codeph"><var class="keyword varname">$your_namespace</var></samp> durch den Namensbereich zu ersetzen, den Sie in Lerneinheit 1 erstellt haben, sofern Sie keine Variablenersetzung konfiguriert haben. 
+Wenn Sie feststellen möchten, wie Ihr Namensbereich lautet, führen Sie den Befehl
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace
+get</samp> aus. </p>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">mongo</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></code></pre>
+ Der anfängliche Ausgabecode ähnelt dem nachfolgend aufgeführten Beispiel.
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi mongo registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM mongo
+ ---&gt; 32427ae49eff
+Successfully built 32427ae49eff
+The push refers to a repository [registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>] (len: 1)</code></pre>
+ Im Hintergrund wird das Mongo-Image von Docker Hub in die Bluemix-Image-Registry kopiert.
+Die Ausführung des Befehls <samp class="ph codeph">cpi</samp> kann einige Minuten in Anspruch nehmen; wenn sie vollständig abgeschlossen ist, ähnelt die Ausgabe der im folgenden Beispiel.
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi mongo registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM mongo
+ ---&gt; 32427ae49eff
+Successfully built 32427ae49eff
+The push refers to a repository [registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>] (len: 1)
+32427ae49eff: Pushed
+424ec4bd7fc4: Pushed
+9e3490ec0722: Pushed
+166aa7bca9c1: Pushed
+c79deeebd6f0: Pushed
+c181e50c0e8b: Pushed
+438e27bd44bf: Pushed
+af6f43fa45bb: Pushed
+605e5767a4ac: Pushed
+33e8076f6b28: Pushed
+e63969171eec: Pushed
+latest: digest: sha256:ab092d78d331337cf6cf0ceeda28489f5e154b1403ca1220e9de6b417
+b7cfb95 size: 32158</code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_2__table_sdf_nkm_2v" class="defaultstyle"><thead><tr><th colspan="2" id="d75704e3183" class="thleft"><span class="ph"><img src="images/idea.png" alt="Dieses Symbol zeigt an, dass es zu diesem Schritt der Task weitere Informationen gibt. "></span> Erklärung der Bestandteile dieses Befehls</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: NaN%" headers="d75704e3183 "><samp class="ph codeph">cpi</samp></td>
+<td style="width: NaN%" headers="d75704e3183 ">Der Kopierbefehl. </td>
+</tr>
+<tr><td style="width: NaN%" headers="d75704e3183 "><samp class="ph codeph">mongo</samp></td>
+<td style="width: NaN%" headers="d75704e3183 ">Quellenrepository und Name. Im obigen Fall lautet der Name des Image <var class="keyword varname">mongo</var> und eine weitere Repository-Definition ist nicht erforderlich, da sich das Image in Docker Hub befindet. </td>
+</tr>
+<tr><td style="width: NaN%" headers="d75704e3183 "><samp class="ph codeph">registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></samp></td>
+<td style="width: NaN%" headers="d75704e3183 ">Der Pfad zum Zielregistry, der aus dem eindeutigen Namensbereich und dem Namen des Zielimage besteht.
+In diesem Beispiel lautet der Name des Image <var class="keyword varname">mongo</var>, Sie können für die Images in Ihrer privaten Registry
+jedoch einen beliebigen Namen auswählen. Wenn Sie mit diesem Image in der Befehlszeilenschnittstelle arbeiten, geben Sie das Image mit dem vollständigen Pfad an:
+<samp class="ph codeph">registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></samp></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie einen neuen lokalen Ordner für die Dockerfile und navigieren Sie zu diesem Ordner. </span> Nachdem Sie mithilfe des Befehls <samp class="ph codeph">cpi</samp> ein Image zur Registry hinzugefügt haben, erstellen Sie jetzt ein weiteres Image
+aus einer Dockerfile.
+Eine Dockerfile ermöglicht es Ihnen, ein Image lokal zu erstellen und beliebige zusätzliche Befehle oder Variablen hinzuzufügen, die für die Web-App erforderlich sind. Einige dieser Befehle können zwar während der Containererstellung hinzugefügt werden, dies kann jedoch zu einer Aufteilung in viele Versionen desselben Images führen. Wenn die Befehle zur Dockerfile hinzugefügt werden, ist sichergestellt, dass jeder Container, der auf der Basis dieses Image erstellt wird, diese Befehle aufweist.  <pre class="codeblock"><code>mkdir wrapper &amp;&amp; cd wrapper</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie eine Dockerfile mit dem Ordner <span class="ph filepath">wrapper</span>. </span> Bei Ausführung des folgenden Befehls werden eine Dockerfile erstellt und der angegebene Befehl <var class="keyword varname">FROM</var> hinzugefügt, der in allen Dockerfiles erforderlich ist. <var class="keyword varname">FROM</var> gibt an, welches Image das übergeordnete ist. Im vorliegenden Fall wird das Image <var class="keyword varname">lets-chat</var> als übergeordnetes Image verwendet.  <pre class="codeblock"><code>echo <span class="q">"FROM sdelements/lets-chat:latest"</span> &gt; Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie durch Auflisten der Dateien im aktuellen Verzeichnis sicher, dass die Dockerfile erstellt wurde. </span> <pre class="codeblock"><code>ls</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Fügen Sie einen Befehl für eine Verzögerung beim Einrichten von Netzverbindungen
+zur Dockerfile
+hinzu. </span> Beim Starten des Lets-Chat-Containers richtet <span class="keyword">IBM
+Bluemix Container Service</span>
+das private Containernetz ein und ordnet eine private IP-Adresse für den Container zu. Die Lets-Chat-App benötigt
+beim Starten eine aktive Netzverbindung. Durch das Hinzufügen der Verzögerung beim
+Einrichten von Netzverbindungen wird sichergestellt,
+dass der Vernetzungsprozess für <span class="keyword">IBM
+Bluemix Container Service</span> abgeschlossen
+ist, bevor die App gestartet wird.  <pre class="codeblock"><code>echo <span class="q">"CMD (sleep 60; npm start)"</span> &gt;&gt; Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen und kennzeichnen Sie das Image. </span> Vergessen Sie nicht den Punkt <samp class="ph codeph">.</samp> am Ende des Befehls. Der Punkt signalisiert Docker, im aktuellen lokalen Ordner nach der erforderlichen Dockerfile zu suchen.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/lets-chat .</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass sich das Image <var class="keyword varname">mongo</var> und das Image <var class="keyword varname">lets-chat</var> in der
+Image-Registry von <span class="keyword">Bluemix</span> befinden.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                                  TAG                 IMAGE ID            CREATED             SIZE
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>                          latest              8de059ee71fc        2 minutes ago         317.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat </var>                      latest              d4de00f58363        5 minutes ago          0 B
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibm-node-strong-pm                  latest              322b9ca7b2dc        2 weeks ago         616.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty                          latest              6595ea483bf5        2 weeks ago         552.8 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             latest              b2c351248227        2 weeks ago         472.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v4                  b2c351248227        2 weeks ago         472.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v1.1                7d11220193d6        2 weeks ago         449.2 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v1.2                84efce0c747b        2 weeks ago         465.2 MB</code></pre>
+</li>
+</ol>
+<div class="section result"><p>Jetzt befinden sich die erforderlichen Images in der privaten <span class="keyword">Bluemix</span>-Image-Registry.
+Sie haben erfolgreich ein Docker Hub-Image kopiert, eine Dockerfile erstellt, ein neues Image erstellt und dieses Image mit einer Push-Operation
+in die <span class="keyword">Bluemix</span>-Image-Registry übertragen. </p>
+
+<p>In der nächsten Lerneinheit erstellen Sie die Container, verlinken Sie miteinander und stellen die Web-App bereit. </p>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e3396" lang="de-de" id="container_gettingstarted_tutorial_lesson_3"><h3 class="topictitle3" id="d75704e3396">Lerneinheit 3: Container erstellen und bereitstellen</h3>
+<div class="body taskbody"><p class="shortdesc">Sie verfügen über die erforderlichen Images in der <span class="keyword">Bluemix</span>-Image-Registry,
+um die Messaging-Web-App 'Lets-Chat' bereitzustellen. In dieser Lerneinheit erstellen Sie die Container, verlinken sie miteinander und weisen der App eine öffentliche IP-Adresse zu. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Führen Sie den Container aus dem Mongo-Image aus. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">lc-mongo</var> -p <var class="keyword varname">27017</var> -m <var class="keyword varname">128</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/mongo</code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_3__table_lqp_hkm_2v" class="defaultstyle"><thead><tr><th colspan="2" id="d75704e3483" class="thleft"><span class="ph"><img src="images/idea.png" alt="Dieses Symbol zeigt an, dass es zu diesem Schritt der Task weitere Informationen gibt. "></span> Erklärung der Bestandteile dieses Befehls</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 22.22222222222222%" headers="d75704e3483 ">run</td>
+<td style="width: 77.77777777777779%" headers="d75704e3483 "><p> Mit dem Ausführungsbefehl wird der Container aus dem angegebenen Image erstellt. </p>
+</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75704e3483 ">--name</td>
+<td style="width: 77.77777777777779%" headers="d75704e3483 ">Definiert den Namen des Containers. Im vorliegenden Fall lautet der Name des Containers <var class="keyword varname">lc-mongo</var>. </td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75704e3483 ">-p</td>
+<td style="width: 77.77777777777779%" headers="d75704e3483 "><span class="ph">Für den Zugriff auf die App über das Internet müssen Sie einen öffentlichen Port bereitstellen. 
+Wenn Sie einen öffentlichen Port zugänglich machen, erstellen Sie für Ihren
+Container auf diese Weise eine öffentliche Netzsicherheitsgruppe, die das
+Senden und Empfangen von öffentlichen Daten nur über den zugänglich gemachten
+Port zulässt.
+Alle anderen öffentlichen Ports sind geschlossen und können nicht für den
+Zugriff auf Ihre App aus dem Internet verwendet werden.
+Sie können mehrere Ports einschließen, indem Sie die Option <span class="keyword option">-p</span> mehrfach
+angeben. Ports können nicht zugeordnet oder weitergeleitet werden. Falls Sie keinen Port zugänglich machen, kann nur über das private
+Containernetz auf Ihren Container zugegriffen werden.
+Um über das private Netz mit Ihrem Container zu kommunizieren, können Sie die zugewiesene private IP-Adresse verwenden.</span> Im vorliegenden Fall wird Port 27017 bereitgestellt, da dieser Port in der Dockerfile angegeben wurde. </td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75704e3483 ">-m</td>
+<td style="width: 77.77777777777779%" headers="d75704e3483 "><span class="ph">Geben Sie eine Speicherbegrenzung für Ihren Container in MB ein. Die Speicherbegrenzung ist Teil der Containergröße, die den Maximalwert an Hauptspeicher und Plattenspeicher definiert, den ein Container zur Laufzeit auf dem Rechenhost erhält. Eine
+zugewiesene Containergröße kann nicht mehr geändert werden. </span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass der Container aktiv ist. </span> Warten Sie, bis der Status zu 'Aktiv' wechselt, bevor Sie mit dem nächsten Schritt fortfahren. 
+Bei Bedarf können Sie
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</samp>
+ausführen, bis der Containerstatus 'Aktiv' lautet.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$<span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                PORTS               NAMES
+9f73abc2-9a1        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>:latest       <span class="q">""</span>                  40 seconds ago          Running 5 seconds ago    27017/tcp           lc-mongo</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Nachdem der Container <var class="keyword varname">mongo</var> aktiv ist, führen Sie den Container <var class="keyword varname">lets-chat</var> aus. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">lets-chat</var> --link lc-mongo:mongo -p <var class="keyword varname">8080</var> -m <var class="keyword varname">128</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat</var></code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_3__table_o22_ttv_4x" class="defaultstyle"><thead><tr><th colspan="2" id="d75704e3593" class="thleft"><span class="ph"><img src="images/idea.png" alt="Dieses Symbol zeigt an, dass es zu diesem Schritt der Task weitere Informationen gibt. "></span> Erklärung der Bestandteile dieses Befehls</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 22.22222222222222%" headers="d75704e3593 ">--link</td>
+<td style="width: 77.77777777777779%" headers="d75704e3593 "><p>Das Verknüpfen eines Datenbankcontainers wie <samp class="ph codeph">lc-mongo</samp> mit einem anderen Container ist eine der gebräuchlichsten Verwendungen von <samp class="ph codeph">--link</samp>. Mit dem Flag <samp class="ph codeph">--link</samp> wird ein Hosteintrag im Container <var class="keyword varname">lets-chat</var> für den Container <var class="keyword varname">lc-mongo</var> erstellt, der es den Containern ermöglicht, miteinander zu kommunizieren. </p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Zeigen Sie die Container an. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$<span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+68f6536a-82f        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat</var>:latest   <span class="q">""</span>                  3 days ago          Running 6 seconds ago   8080/tcp                      <var class="keyword varname">lets-chat</var>
+9f73abc2-9a1        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>:latest       <span class="q">""</span>                  3 days ago          Running 3 days ago      27017/tcp                     <var class="keyword varname">lc-mongo</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Listen Sie die verfügbaren IP-Adressen auf. </span> Durch das Binden einer IP-Adresse kann auf eine einzelne Container-Web-App über das Internet zugegriffen werden.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Wenn keine IP-Adressen aufgelistet werden, fordern Sie eine IP-Adresse an. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Wählen Sie eine verfügbare IP-Adresse aus und binden Sie sie an den Container <var class="keyword varname">lets-chat</var>. </span> Beachten Sie, dass Sie zuerst <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__ip_unbind">die Bindung einer IP-Adresse aufheben</a> müssen, wenn alle IP-Adressen bereits gebunden sind. Ersetzen
+Sie die im Beispiel verwendete IP-Adresse durch eine IP-Adresse, die in Ihrer
+Bluemix-Organisation verfügbar ist. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">192.0.2.100</var> lets-chat</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Warten Sie, bis die Bindung der IP-Adresse abgeschlossen ist. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect lets-chat</code></pre>
+Sobald die IP-Adresse an Ihren Container gebunden ist,
+wird sie als <span class="ph uicontrol">PublicIpAdress</span> im Abschnitt <span class="ph uicontrol">Networks</span>
+Ihrer CLI-Ausgabe aufgelistet.
+<pre class="pre screen"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect lets-chat
+...
+<span class="q">"PortMapping"</span>: null,
+<span class="q">"Ports"</span>: {
+    <span class="q">"8080/tcp"</span>: [
+      {
+         <span class="q">"HostIp"</span>: <span class="q">"192.0.2.100"</span>,
+         <span class="q">"HostPort"</span>: <span class="q">"8080"</span>
+      }
+    ]
+ },
+ <span class="q">"PublicIpAddress"</span>: <span class="q">"192.0.2.100"</span>
+...</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Wechseln Sie zur Web-App, die jetzt betriebsbereit ist. Fügen Sie die gebundene öffentliche IP-Adresse einschließlich Port in einen Web-Browser ein.</span> <pre class="codeblock"><code>http://<var class="keyword varname">192.0.2.100</var>:8080</code></pre>
+ <p><img src="images/lets-chat_screenshot.jpg" alt="Melden Sie sich an der Web-App 'Lets-Chat' an. "></p>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Erstellen Sie ein Konto in 'Lets-Chat' und melden Sie sich an, um Ihre aktive Web-App in IBM Containers anzuzeigen. </span> <p><img src="images/lets-chat-room.png" alt="lets-chat room"></p>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Stoppen Sie die Container. </span> Wenn Sie vermeiden möchten, dass von den Containern Ressourcen verbraucht werden, können Sie diese stoppen und entfernen.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop <var class="keyword varname">lets-chat</var> <var class="keyword varname">lc-mongo</var></code></pre>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">lets-chat</var> <var class="keyword varname">lc-mongo</var></code></pre>
+</li>
+</ol>
+<div class="section result" id="container_gettingstarted_tutorial_lesson_3__quiz">Testen Sie Ihr Wissen! Jetzt, da Sie das Lernprogramm durchgearbeitet haben,
+<a href="http://bluemix-quizzes.mybluemix.net/containers/single_containers_gettingstarted_tutorial/quiz.php" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">lassen
+Sie das Gelernte in einem Quiz überprüfen</a>. </div><div class="section postreq"><div class="p"> Womit möchten Sie fortfahren? Es gibt viele weitere
+<span class="keyword">IBM
+Bluemix Container Service</span>-Funktionen,
+die Sie bei diesem Lernprogramm anwenden können:
+<ul><li>Versuchen Sie, einzelne Container durch
+<a href="container_ha.html#container_group_ui" title="Erstellen Sie eine skalierbare Containergruppe über die Bluemix-GUI und stellen Sie die Gruppe bereit. Eine Containergruppe enthält zwei oder mehr Container, von denen dasselbe Image ausgeführt wird. Die Verwendung von Containergruppen ist ratsam zur Ausführung von langfristigen Services mit Arbeitslasten (Workloads), die skalierbar und zuverlässig sein müssen, oder zum Testen im erforderlichen Umfang.">hoch
+verfügbare
+Containergruppen</a> zu ersetzen, und aktivieren Sie die automatische
+Wiederherstellung, von der nicht verfügbare Container automatisch ersetzt
+werden.</li>
+<li>Erstellen Sie
+<a href="container_volumes_ov.html#container_volumes_ui" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Bluemix-GUI können Sie einen Datenträger für Ihren Container erstellen.">Speicherdatenträger</a>
+für Ihre Mongo- und Lets-Chat-Container, damit die Containerdaten bei
+Containerneustarts erhalten bleiben und für mehrere Container in Ihrem privaten
+Netz zugänglich sind.</li>
+<li>Überprüfen Sie Ihre Images in
+<a href="va/va_index.html#va_reviewing">Vulnerability Advisor</a>, der Sie dabei unterstützt, Ihre Organisation zu schützen,
+indem die Images in der Registry auf potenzielle Schwachstellen gescannt
+werden.</li>
+</ul>
+Und noch vieles mehr. Fangen Sie heute an. </div>
+</div></div>
+</article></article><article class="topic tutorial tutorialIntro nested1" role="article" aria-labelledby="d75704e3847" lang="de-de" id="container_compose_intro"><h2 class="topictitle2" id="d75704e3847">Lernprogramm: Multi-Container-Bereitstellung mit Docker Compose und
+<span class="keyword">IBM
+Bluemix Container Service</span> erstellen</h2>
+<div class="body  tutorialIntroBody"><p class="shortdesc">Wenn Ihre Apps verschiedene Komponenten wie Datenbanken, Services und Caches enthalten, kann es schwierig sein,
+das gemeinsame Starten und Beenden aller Container zu koordinieren. In diesem Lernprogramm lernen Sie, wie Sie Ihre App
+mithilfe eines einzigen Docker Compose-Befehls als Multi-Container-Bereitstellung in einer Microservice-Architektur bereitstellen und ausführen.
+Jeder Container, der Bestandteil dieses Systems ist, basiert auf einer Docker Compose-Servicedefinition und
+wird in seiner eigenen isolierten Umgebung ausgeführt. </p>
+<section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d75704e3909"><h3 class="sectiontitle" id="d75704e3909">Szenario</h3>In diesem Lernprogramm wird beschrieben,
+wie Softwareentwickler Docker Compose und <span class="keyword">IBM
+Bluemix Container Service</span> zum Bereitstellen
+einer Multi-Container-Bereitstellung verwenden können, die die Web-App 'Lets-Chat' ausführt, die mit einer Mongo-Datenbank und
+einer nginx-Lastausgleichsfunktion verbunden ist, von der der eingehende Benutzerdatenverkehr ausgeglichen wird. <div class="p"><figure class="fignone" id="container_compose_intro__fig_compose"><figcaption>Abbildung 2. Zielszenario für Multi-Container-App 'Lets-Chat'</figcaption><a href="../api/content/containers/images/container_compose_tutorial.png" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)"><div class="image"><img src="images/container_compose_tutorial.png" width="700" alt="Zielszenario für Multi-Container-App 'Lets-Chat'"></div></a></figure>
+</div>
+<div class="p">Sie arbeiten diese Lerneinheit durch. <dl><dt class="dlterm"><a href="container_single_ui.html#container_compose_config" title="Konfigurieren Sie zuerst jeden Service der Multi-Container-Bereitstellung in einer YAML-Datei mit dem Namen docker-compose.yml. Für jeden Service werden das Image, die bereitzustellenden Ports und die Links zu anderen Services im System angegeben.">Lerneinheit 1: Multi-Container-Bereitstellung konfigurieren</a></dt>
+<dd>Definieren Sie die Services für die App 'Lets-Chat' und die Mongo-Datenbank in einer Konfigurationsdatei mit dem Namen <span class="ph filepath">docker-compose.yml</span>. </dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_run" title="Als Nächstes stellen Sie die Multi-Container-Bereitstellung bereit und führen sie aus. Anstatt den Lets-Chat-Container und den Mongo-Datenbankcontainer separat zu starten und beide manuell zu verknüpfen, verwenden Sie einen einzigen Docker Compose-Befehl, bei dessen Ausführung die Container auf der Basis der Servicedefinition in der Datei docker-compose.yml erstellt werden.">Lerneinheit 2: Multi-Container-Bereitstellung ausführen</a></dt>
+<dd>Führen Sie die App 'Lets-Chat' in einer Multi-Container-Bereitstellung aus und greifen Sie mithilfe eines einzigen Docker Compose-Befehls
+über das Internet darauf zu. </dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_scale" title="Da der Multi-Container-Bereitstellung jetzt aktiv ist, können Sie die Anzahl der Lets-Chat-Containerinstanzen erhöhen, um die App zuverlässiger zu machen.">Lerneinheit 3: Multi-Container-Bereitstellung skalieren</a></dt>
+<dd>Machen Sie die Web-App 'Lets-Chat' durch eine Erhöhung der Anzahl der Containerinstanzen zuverlässiger. </dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_loadbalance" title="Fügen Sie bei höheren Auslastungen zur Multi-Container-Bereitstellung eine nginx-Lastausgleichsfunktion hinzu, von der der eingehende Benutzerdatenverkehr gleichmäßig auf die Lets-Chat-Containerinstanzen verteilt wird.">Lerneinheit 4: Lastausgleichsfunktion zur Multi-Container-Bereitstellung hinzufügen</a></dt>
+<dd>Reagieren Sie auf die höhere Auslastung während der Geschäftszeiten mit dem Hinzufügen einer nginx-Lastausgleichsfunktion
+zur Multi-Container-Bereitstellung, von der der eingehende Datenverkehr gleichmäßig auf die Lets-Chat-Containerinstanzen verteilt wird. </dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_remove" title="Als letzten Schritt entfernen Sie die Multi-Container-Bereitstellung, um genutzte Ressourcen freizugeben und die Verwendung Ihres Kontingents zu maximieren.">Lerneinheit 5: Multi-Container-Bereitstellung entfernen</a></dt>
+<dd>Löschen Sie Ihre Multi-Container-Bereitstellung, um belegte Ressourcen freizugeben und die Verwendung Ihres
+Kontingents zu maximieren. </dd>
+</dl>
+<div class="note tip"><span class="tiptitle">Tipp:</span> Wenn Sie mit <span class="keyword">IBM
+Bluemix Container Service</span> nicht vertraut sind, lesen Sie die <a href="container_single_ui.html#container_gettingstarted_tutorial" title="Mithilfe von IBM Bluemix können Sie Docker-Container in der öffentlichen Cloud ausführen. Verwenden Sie Container zum Bereitstellen eigenständiger sicherer Web-Apps, die unabhängig vom Hostbetriebssystem ausgeführt werden. Die Container sind einfach und benötigen nicht viel Systemressourcen, weil die Container denselben Systemkernel verwenden und somit effizienter als eine virtuelle Maschine ausgeführt werden können. In diesem Lernprogramm wird erklärt, wie mithilfe von Docker-Containern in Bluemix eine Messaging-Web-App erstellt wird. In diesem Prozess schreiben Sie eine Dockerfile, fügen Docker-Images zur privaten Bluemix-Image-Registry hinzu und verlinken Container miteinander.">Einführung zum Lernprogramm</a> und machen sich mit den Unterschieden zwischen <a href="container_ov.html#container_docker_ov" title="Bei IBM Bluemix Container Service handelt es sich um eine Bluemix-Laufzeitumgebung, die das Potenzial der Docker-Technologie nutzt. Erfahrene wie neue Docker-Benutzer werden die im Folgenden beschriebenen Möglichkeiten, die IBM Bluemix Container Service bietet, zu schätzen wissen.">Docker und IBM Containern</a> vertraut.</div>
+</div>
+<p>Weitere Informationen zu Docker Compose finden Sie unter
+<a href="container_single_ui.html#container_compose_faq" title="Lesen Sie diese häufig gestellten Fragen zu Docker Compose.">Häufig gestellte
+Fragen (FAQs) zu Docker Compose</a> und in
+der
+<a href="container_cli_reference_cfic.html#container_cli_reference_docker-compose" title="Diese Befehle ermöglichen das Ausführen und Verwalten der Multi-Container-Bereitstellung mit dem IBM Bluemix Container Service-Plug-in (bx ic).">Docker Compose-Befehlsreferenz</a>. </p>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d75704e4060"><h3 class="sectiontitle" id="d75704e4060">Erforderlicher Zeitaufwand</h3>45 Minuten</section>
+<section role="region" aria-labelledby="d75704e4064" class="section section prerequisites"><h3 class="sectiontitle" id="d75704e4064">Voraussetzungen </h3>
+<a href="container_cli_cfic_install.html#container_cli_compose_install" title="Mehrere einzelne Container können Sie gleichzeitig starten oder stoppen, wenn Sie die Befehlszeilenschnittstelle (CLI) von Docker Compose installieren und verwenden.">Installieren</a> Sie die neueste Version des Docker Compose-Softwarepakets auf dem Computer oder führen Sie ein <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="Möglicherweise müssen Sie ein Upgrade für die Version Ihres Docker Compose-Pakets durchführen, um die neuesten Features verwenden zu können.">Upgrade</a> auf die neuste Version durch. </section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e4078" lang="de-de" id="container_compose_config"><h3 class="topictitle3" id="d75704e4078">Lerneinheit 1: Multi-Container-Bereitstellung konfigurieren</h3>
+<div class="body taskbody"><p class="shortdesc">Konfigurieren Sie zuerst jeden Service der Multi-Container-Bereitstellung in einer YAML-Datei
+mit dem Namen <span class="ph filepath">docker-compose.yml</span>.
+Für jeden Service werden das Image, die bereitzustellenden Ports und die Links zu anderen Services im System angegeben. </p>
+<div class="section prereq">Führen Sie zunächst die folgenden Schritte aus. <ul><li>Führen Sie <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</samp> aus,
+um die Informationen zum Namensbereich abzurufen und diese Informationen in einer Umgebungsvariable
+mit dem Namen <var class="keyword varname">$your_namespace</var> zu speichern.
+<pre class="codeblock"><code><var class="keyword varname">$your_namespace</var>=&lt;my_namespace_information&gt;</code></pre>
+</li>
+<li>Erstellen Sie das <a href="container_single_ui.html#container_gettingstarted_tutorial_lesson_2" title="In dieser Lerneinheit verwenden Sie zwei Methoden, um Images zu einer privaten Image-Registry hinzuzufügen: Das Kopieren eines Images von Docker Hub oder das Erstellen einer Dockerfile. Wenn Sie eine Dockerfile erstellen, können Sie eigene Befehle zum Image hinzufügen. Dies hat zur Folge, dass jeder von diesem Image gestartete Container diese Befehle enthält. Einer der Vorteile von Containern ist die Tatsache, dass Sie ihnen diese Images die Quellcodeverwaltung erleichtern, sodass jede Person in der Organisation Container mit einer konsistenten Betriebsumgebung erstellen kann.">Lets-Chat- und MongoDB-Container-Image</a>
+in der privaten <span class="keyword">Bluemix</span>-Image-Registry. </li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Erstellen Sie das Docker Compose-Projektverzeichnis <var class="keyword varname">composetutorial</var> auf dem Computer, auf dem Sie die Docker Compose-Konfigurationsdatei speichern können, und navigieren Sie in dieses Verzeichnis. </span> Zum Zeitpunkt der Ausführung der Docker Compose-Befehle müssen Sie sich in diesem Verzeichnis befinden, damit die Konfigurationsdatei gefunden wird. Andernfalls gibt der Docker-Dämon eine Fehlernachricht aus. Wählen Sie zur Verkürzung der Bereitstellungszeiten kein Verzeichnis mit Unterverzeichnissen aus, da zum Zeitpunkt der Ausführung alle Dateien an den Docker-Dämon gesendet werden.
+<pre class="codeblock"><code>mkdir <var class="keyword varname">composetutorial</var> &amp;&amp; cd <var class="keyword varname">composetutorial</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie die Datei <span class="ph filepath">docker-compose.yml</span>.</span> Sie können die Konfigurationsdatei mithilfe Ihres bevorzugten CLI-Editors oder einem Texteditor auf dem Computer
+erstellen. Im folgenden Beispiel wird gezeigt, wie Sie die Datei <span class="ph filepath">docker-compose.yml</span>
+mit dem <a href="http://www.nano-editor.org/dist/v2.2/nano.html" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">nano-Editor</a> erstellen können.
+<ol type="a"><li>Öffnen Sie den nano-Editor und geben Sie <span class="ph filepath">docker-compose.yml</span> als Dateinamen ein.
+<pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li>Definieren Sie Services für die Multi-Container-Bereitstellung, die die App 'Lets-Chat' ausführt.
+Kommentare können mit <var class="keyword varname">#</var> eingegeben werden.
+<pre class="codeblock"><code>#Der Name des Service 'Lets-Chat'.
+#Der erste Container, der für diesen Service gestartet wird, trägt den Namen:
+#<span class="ph filepath">composetutorial_lets-chat_1</span>
+lets-chat: 
+  #Container-Image zur Ausführung des Lets-Chat-Service.
+  #Verwenden Sie den vollständigen Pfad zu Ihrer privaten Bluemix-Image-Registry.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat
+  #Geben Sie eine öffentliche IP-Adresse und Port 8080 ein. Führen Sie <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</samp> aus,
+  #um alle verfügbaren öffentlichen IP-Adressen in Ihrem Bereich aufzulisten.
+  #Option 1: Wenn Sie nicht über eine öffentliche IP-Adresse verfügen,
+  #die Sie verwenden können, können Sie eine solche wie folgt anfordern:
+  #Ports:
+  #- "request:8080:8080".
+  #Option 2: Wenn Sie eine öffentliche IP-Adresse binden möchten, nachdem der Lets-Chat-Container
+  #mithilfe des Befehls <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind</samp> erstellt wurde, geben Sie Folgendes ein:
+  #Ports:
+  #- "8080"
+  #Option 3: Binden Sie eine öffentliche IP-Adresse direkt an Ihren 'Lets-Chat'-Container.
+  #Ports:
+  #- "<var class="keyword varname">IHRE_ÖFFENTLICHE_IP-ADRESSE</var>:8080:8080"
+  #Wählen Sie eine der beschriebenen Port-Optionen aus.
+  ports:
+   - "<var class="keyword varname">PORT-OPTION_AUSWÄHLEN</var>"
+  #Der Service 'Lets-Chat' ist mit dem Mongo-Service verknüpft.
+  links: 
+    - mongo
+#Name des Mongo-Datenbankservice.
+#Der erste Container, der für diesen Service gestartet wird, trägt den Namen:
+#<span class="ph filepath">composetutorial_mongo_1</span>
+mongo:
+  #Container-Image zur Ausführung des Mongo-Service.
+  #Verwenden Sie den vollständigen Pfad zu Ihrer privaten Bluemix-Image-Registry.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/mongo
+  #Container-Port 27017 wird in Ihrem privaten Containernetz veröffentlicht.
+  #Wenn von einer Containerinstanz Nachrichten an einen Mongo-Container gesendet werden sollen,
+  #müssen die Anforderungen an diesen Port gesendet werden.
+  expose:
+    - "27017"</code></pre>
+<div class="note tip"><span class="tiptitle">Tipp:</span>  Fügen Sie bei der Erstellung einer eigenen Datei <span class="ph filepath">docker-compose.yml</span> mindestens
+einen Servicenamen sowie den Link zum gewünschten Container-Image ein, damit der Befehl <samp class="ph codeph">docker-compose up</samp>
+den Container anhand der Konfigurationsdatei erstellen kann. </div>
+<div class="steps note"><span class="notetitle">Anmerkung:</span> <span class="keyword">IBM
+Bluemix Container Service</span> unterstützt nur Version 1
+des <span class="ph filepath">docker-compose.yml</span>-Dateiformats. Version 2 wird derzeit nicht unterstützt. Weitere Beispiele zur Erstellung der Datei <span class="ph filepath">docker-compose.yml</span> enthalten die Referenzinformationen für das Docker Compose-Dateiformat der Version 1 in <a href="https://docs.docker.com/compose/compose-file/compose-file-v1/" rel="external" target="_blank" title="(In neuer Registerkarte/neuem Fenster öffnen)">Docker Compose file version 1 reference</a>. </div>
+</li>
+<li>Speichern Sie die Änderungen mit <span class="ph uicontrol">Strg + o</span>. Bestätigen Sie
+die Änderungen durch Drücken der <span class="ph uicontrol">Eingabetaste</span>.</li>
+<li>Verlassen Sie den nano-Editor mit <span class="ph uicontrol">Strg + x</span>. </li>
+</ol>
+</li>
+</ol>
+<div class="section result">Glückwunsch! Jetzt können Sie die <a href="container_single_ui.html#container_compose_run" title="Als Nächstes stellen Sie die Multi-Container-Bereitstellung bereit und führen sie aus. Anstatt den Lets-Chat-Container und den Mongo-Datenbankcontainer separat zu starten und beide manuell zu verknüpfen, verwenden Sie einen einzigen Docker Compose-Befehl, bei dessen Ausführung die Container auf der Basis der Servicedefinition in der Datei docker-compose.yml erstellt werden.">Multi-Container-Bereitstellung,
+die die App 'Lets-Chat' ausführt,</a> mit <span class="keyword">IBM
+Bluemix Container Service</span> und Docker Compose bereitstellen.</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e4307" lang="de-de" id="container_compose_run"><h3 class="topictitle3" id="d75704e4307">Lerneinheit 2: Multi-Container-Bereitstellung ausführen </h3>
+<div class="body taskbody"><p class="shortdesc">Als Nächstes stellen Sie die Multi-Container-Bereitstellung bereit und führen sie aus.
+Anstatt den Lets-Chat-Container und den Mongo-Datenbankcontainer separat zu starten und beide manuell zu verknüpfen,
+verwenden Sie einen einzigen Docker Compose-Befehl, bei dessen Ausführung die Container auf der Basis der Servicedefinition
+in der Datei <span class="ph filepath">docker-compose.yml</span> erstellt werden. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Falls dies noch nicht der Fall ist, <a href="container_cli_cfic_install.html#container_cli_login__option2_li">melden Sie sich am IBM Containers-Plug-in an</a> und konfigurieren die Befehlszeilenschnittstelle (CLI) zum Ausführen nativer Docker-Befehle. </span></li>
+<li class="step stepexpand"><span class="cmd">Navigieren Sie zu dem Verzeichnis mit der Datei <span class="ph filepath">docker-compose.yml</span>. </span> Zur Ausführung von Docker Compose-Befehlen müssen Sie sich in dem Verzeichnis mit der Datei <span class="ph filepath">docker-compose.yml</span> befinden. </li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie die Multi-Container-Bereitstellung bereit und führen Sie sie auf Basis der Servicedefinition in der Datei
+<span class="ph filepath">docker-compose.yml</span> aus. </span> In <span class="keyword">IBM
+Bluemix Container Service</span> sind die meisten Services und Apps Tasks mit langer Laufzeit. Verwenden Sie aus diesem Grund die Option <samp class="ph codeph">-d</samp>, um zu verhindern, dass Sie in der Konsolenausgabe der Container hängen bleiben, ohne die Zuordnung aufheben zu können.
+<pre class="codeblock"><code>docker-compose up -d</code></pre>
+ Bei Verwendung der Option <samp class="ph codeph">-d</samp> können Sie die Containerinstanzen verfolgen, da ihre Namen nach ihrer Erstellung in der Befehlszeilenschnittstelle angezeigt werden.
+<pre class="codeblock"><code>$ docker-compose up -d
+
+Creating composetutorial_mongo_1
+Creating composetutorial_lets-chat_1</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass die Container Ihrer Multi-Container-Bereitstellung aktiv sind. </span> <pre class="codeblock"><code>docker-compose ps</code></pre>
+Sobald die Containerinstanzen ausgeführt werden, wird ein <span class="ph uicontrol">aktiver</span> Status angezeigt. Dieser Prozess kann einige Minuten dauern. Die Ausgabe ähnelt der folgenden:
+<pre class="codeblock"><code>$ docker-compose ps
+
+        Name                   Command      State             Ports
+-----------------------------------------------------------------------
+composetutorial_lets-chat_1                Up      192.0.2.100:8080-&gt;8080/tcp
+composetutorial_mongo_1                    Up      203.0.113.23:27017-&gt;27017/tcp</code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Wenn Sie in der Datei <span class="ph filepath">docker-compose.yml</span> keine IP-Adresse konfiguriert haben, binden Sie eine verfügbare öffentliche IP-Adresse an den Lets-Chat-Container. </span> Führen Sie <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</samp> aus,
+um die in Ihrem Bereich verfügbaren öffentlichen IP-Adressen aufzulisten, oder
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp>, um eine neue öffentliche IP-Adresse anzufordern.
+Ersetzen Sie <var class="keyword varname">&lt;ip-adresse&gt;</var> durch Ihre öffentliche IP-Adresse.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;ip-adresse&gt;</var> composetutorial_lets-chat_1</code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Warten Sie, bis die Bindung der IP-Adresse an den Container abgeschlossen ist. </span> Dieser Prozess kann einige Minuten dauern. Wenn er abgeschlossen ist, wird in der Befehlszeilenschnittstelle die Nachricht <span class="ph uicontrol">OK</span> angezeigt. </li>
+<li class="step stepexpand"><span class="cmd">Greifen Sie über das Internet auf die App 'Lets-Chat' zu. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Öffnen Sie den Web-Browser. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Geben Sie die öffentliche IP-Adresse und den öffentlichen Lets-Chat-Port 8080 wie im folgenden Beispiel in den Web-Browser ein: <samp class="ph codeph">192.0.2.100:8080</samp>.</span> Im Web-Browser wird die Lets-Chat-Anmeldeseite angezeigt.<p><img src="images/lets-chat_screenshot.jpg" alt="Melden Sie sich an der Web-App 'Lets-Chat' an. "></p>
+</li>
+</ol>
+</li>
+</ol>
+<div class="section result">Glückwunsch! Jetzt können Sie die App 'Lets-Chat' verwenden. Jetzt können Sie jederzeit ein Konto erstellen und die Funktionen der App kennenlernen. Wenn Sie die App 'Lets-Chat' zuverlässiger machen möchten, <a href="container_single_ui.html#container_compose_scale" title="Da der Multi-Container-Bereitstellung jetzt aktiv ist, können Sie die Anzahl der Lets-Chat-Containerinstanzen erhöhen, um die App zuverlässiger zu machen.">skalieren Sie die Instanzen der Lets-Chat-Container</a>. </div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e4486" lang="de-de" id="container_compose_scale"><h3 class="topictitle3" id="d75704e4486">Lerneinheit 3: Multi-Container-Bereitstellung skalieren</h3>
+<div class="body taskbody"><p class="shortdesc">Da der Multi-Container-Bereitstellung jetzt aktiv ist, können Sie die Anzahl der Lets-Chat-Containerinstanzen erhöhen,
+um die App zuverlässiger zu machen. </p>
+<div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">Aktualisieren Sie die Datei <span class="ph filepath">docker-compose.yml</span>. </span> Es können nur Services skaliert werden, die keinen öffentlichen Port bereitstellen, da alle Containerinstanzen, die für diesen Service gestartet werden, versuchen würden, denselben Port zu verwenden. Da Sie in der vorherigen Lerneinheit festgelegt haben, dass Port 8080 für den Lets-Chat öffentlich zugänglich gemacht werden soll, müssen Sie diese Einstellung in der Datei <span class="ph filepath">docker-compose.yml</span> ändern. <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Öffnen Sie die Datei <span class="ph filepath">docker-compose.yml</span>. </span> <pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Ersetzen Sie den Parameter <span class="ph uicontrol">ports</span> in der Lets-Chat-Servicedefinition durch den Parameter <span class="ph uicontrol">expose</span> und löschen Sie die öffentliche IP-Adresse. </span> Der Parameter 'expose' veröffentlicht einen Port nur innerhalb des privaten Containernetzes. Die Lets-Chat-Servicedefinition sieht wie folgt aus.
+
+<pre class="codeblock"><code>lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat
+  expose:
+   - "8080"
+  links: 
+    - mongo</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Speichern Sie die Änderungen mit <span class="ph uicontrol">Strg + o</span>. Bestätigen Sie
+die Änderungen durch Drücken der <span class="ph uicontrol">Eingabetaste</span>.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Verlassen Sie den nano-Editor mit <span class="ph uicontrol">Strg + x</span>. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie die Multi-Container-Bereitstellung erneut. Verwenden Sie die Option <samp class="ph codeph">--force-recreate</samp>, um alle
+Instanzen in Ihrer Bereitstellung erneut zu erstellen. </span> <pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Führen Sie ein Scale-up auf 2 Containerinstanzen für den Lets-Chat-Service durch. </span> Bei Ausführung des folgenden Befehls wird von <span class="keyword">IBM
+Bluemix Container Service</span> auf Basis der Servicedefinition in der Datei <span class="ph filepath">docker-compose.yml</span> automatisch eine neue Lets-Chat-Containerinstanz erstellt.
+<div class="steps note"><span class="notetitle">Anmerkung:</span> Wenn Sie die Anzahl der Containerinstanzen reduzieren, wird <span class="keyword">IBM
+Bluemix Container Service</span>
+automatisch gestoppt und zusätzliche Containerinstanzen werden aus der Multi-Container-Bereitstellung entfernt. </div>
+
+<pre class="codeblock"><code>docker-compose scale lets-chat=2</code></pre>
+Die Ausgabe in der Befehlszeilenschnittstelle sieht wie folgt aus.
+<pre class="codeblock"><code>$ docker-compose scale lets-chat=2
+
+Creating and starting composetutorial_lets-chat_2 ... done</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie die Multi-Container-Bereitstellung erneut, um die neue Containerinstanz anzubinden. </span> Von Docker Compose wird derzeit nicht das automatische Anhängen eines Links bzw. Rückgängigmachen des Anhängens eines Links unterstützt;
+aus diesem Grund müssen Sie die Option <samp class="ph codeph">--force-recreate</samp> zum erneuten Erstellen aller Containerinstanzen
+in der Multi-Container-Bereitstellung verwenden.
+<pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass die Mongo-Containerinstanz mit den Lets-Chat-Containerinstanzen verknüpft wurde. </span> <pre class="codeblock"><code>docker inspect composetutorial_lets-chat_1</code></pre>
+
+<pre class="codeblock"><code>docker inspect composetutorial_lets-chat_2</code></pre>
+Die verlinkten Mongo-Containerinstanzen können im Abschnitt <var class="keyword varname">HostConfig &gt; Links</var> Ihrer Antworten überprüft werden.
+<pre class="codeblock"><code>...
+"HostConfig": {
+        "Binds": [],
+        "CapAdd": [],
+        "CapDrop": [],
+        "ContainerIDFile": "",
+        "Links": [
+            "composetutorial_mongo_1:mongo",
+            "composetutorial_mongo_1:composetutorial_mongo_1",
+            "composetutorial_mongo_1:composetutorial_mongo_1"
+        ],
+        "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+        },
+        "LxcConf": [],
+        "PortBindings": {
+            "8080/tcp": [
+                {
+                    "HostPort": "8080"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false
+    },
+...</code></pre>
+</li>
+</ol>
+<div class="section result">Glückwunsch! Sie haben den Lets-Chat-Service erfolgreich skaliert und die App zuverlässiger gemacht. Wenn Sie in der Lage sein möchten,
+auf einen höheren Benutzerdatenverkehr reagieren zu können, <a href="container_single_ui.html#container_compose_loadbalance" title="Fügen Sie bei höheren Auslastungen zur Multi-Container-Bereitstellung eine nginx-Lastausgleichsfunktion hinzu, von der der eingehende Benutzerdatenverkehr gleichmäßig auf die Lets-Chat-Containerinstanzen verteilt wird.">fügen
+Sie die nginx-Lastausgleichsfunktion zur Multi-Container-Bereitstellung hinzu</a>,
+um die Auslastung gleichmäßig auf die Lets-Chat-Containerinstanzen verteilen zu können.</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e4676" lang="de-de" id="container_compose_loadbalance"><h3 class="topictitle3" id="d75704e4676">Lerneinheit 4: Lastausgleichsfunktion zur Multi-Container-Bereitstellung hinzufügen</h3>
+<div class="body taskbody"><p class="shortdesc">Fügen Sie bei höheren Auslastungen zur Multi-Container-Bereitstellung eine nginx-Lastausgleichsfunktion hinzu,
+von der der eingehende Benutzerdatenverkehr gleichmäßig auf die Lets-Chat-Containerinstanzen verteilt wird. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Konfigurieren Sie die Lastausgleichsfunktion <span class="ph uicontrol">nginx</span>.</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Erstellen Sie die Konfigurationsdatei <span class="ph filepath">nginx.conf</span>. </span> <pre class="codeblock"><code>nano <span class="ph filepath">nginx.conf</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Kopieren Sie die folgenden Informationen in die Konfigurationsdatei.</span> Für eine gleichmäßige Lastverteilung auf die Lets-Chat-Containerinstanzen müssen diese in der Konfigurationsdatei als Upstream-Server hinzugefügt werden.
+Auf diese Art werden alle eingehenden Anforderungen an einen der Lets-Chat-Container weitergeleitet.
+<pre class="codeblock"><code>worker_processes 3;
+
+events { worker_connections 1024; }
+
+http {
+
+        upstream lets-chat-app {
+              ip_hash;
+              server composetutorial_lets-chat_1:8080 weight=10 max_fails=3 fail_timeout=30s;
+              server composetutorial_lets-chat_2:8080 weight=10 max_fails=3 fail_timeout=30s;
+        }
+         
+        server {
+              listen 80;
+         
+              location / {
+                proxy_pass http://lets-chat-app;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+              }
+        }
+}</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Speichern Sie die Änderungen mit <span class="ph uicontrol">Strg + o</span>. Bestätigen Sie
+die Änderungen durch Drücken der <span class="ph uicontrol">Eingabetaste</span>.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Verlassen Sie den nano-Editor mit <span class="ph uicontrol">Strg + x</span>. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Erstellen Sie das Image <span class="ph uicontrol">nginx</span> in der privaten
+<span class="keyword">Bluemix</span>-Image-Registry. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Erstellen Sie eine Dockerfile.</span> <pre class="codeblock"><code>nano Dockerfile</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Kopieren Sie die folgenden Informationen in die Dockerfile. </span> Das erstellte Image basiert auf dem von Docker Hub bereitgestellten öffentlichen
+<span class="ph uicontrol">nginx</span>-Image. Kopieren Sie die Datei <span class="ph filepath">nginx.conf</span> mit dem Befehl <samp class="ph codeph">COPY</samp> in die Position der Konfigurationsdatei <span class="ph uicontrol">nginx</span>, um Ihre angepassten Einstellungen anzuwenden, die Sie im vorherigen Schritt angegeben haben.
+<pre class="codeblock"><code>#Verwendet das in Docker Hub verfügbare öffentliche nginx-Image.
+FROM nginx
+#Kopiert die angepasste <span class="ph filepath">nginx.conf</span>-Datei in die Position der nginx-Konfigurationsdatei.
+COPY nginx.conf /etc/nginx/nginx.conf</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Speichern Sie die Änderungen mit <span class="ph uicontrol">Strg + o</span>. Bestätigen Sie
+die Änderungen durch Drücken der <span class="ph uicontrol">Eingabetaste</span>.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Verlassen Sie den nano-Editor mit <span class="ph uicontrol">Strg + x</span>. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Erstellen Sie das <span class="ph uicontrol">nginx</span>-Image und übertragen Sie es mit einer Push-Operation in
+die private <span class="keyword">Bluemix</span>-Image-Registry. </span> <pre class="codeblock"><code>docker build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx .</code></pre>
+
+Die CLI-Ausgabe ähnelt der folgenden:
+<pre class="codeblock"><code>Sending build context to Docker daemon 9.728 kB
+Step 1 : FROM nginx
+ ---&gt; 6f62f48c4e55
+Step 2 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---&gt; bc40817f0593
+Removing intermediate container 64c5e180943f
+Successfully built bc40817f0593
+The push refers to a repository [registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx] (len: 1)
+bc40817f0593: Pushed
+6f62f48c4e55: Pushed
+50ed65ac2e2d: Pushed
+fed44c33bce9: Pushed
+73e8d4f6bf84: Pushed
+latest: digest: sha256:99587168cbf699b32804c4ff0de610460dfa150120b12385b194c2f9236903f5 size: 15270</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Fügen Sie die <span class="ph uicontrol">nginx</span>-Servicedefinition in die Datei <span class="ph filepath">docker-compose.yml</span> ein. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Öffnen Sie die Datei <span class="ph filepath">docker-compose.yml</span>. </span> <pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Kopieren Sie die folgenden Informationen in <span class="ph filepath">docker-compose.yml</span>. Ersetzen Sie <var class="keyword varname">IP-ADRESSE</var> durch die öffentliche IP-Adresse, die Sie für den Zugriff auf die <span class="ph uicontrol">nginx</span>-Lastausgleichsfunktion verwenden möchten. </span> <pre class="codeblock"><code>nginx:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx
+  ports:
+   - "<var class="keyword varname">IP-ADRESSE</var>:80:80"
+  links: 
+    - lets-chat</code></pre>
+Die Datei <span class="ph filepath">docker-compose.yml</span> sieht wie folgt aus.
+<pre class="codeblock"><code>nginx:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx
+  ports:
+   - "<var class="keyword varname">IP-ADRESSE</var>:80:80"
+  links: 
+    - lets-chat
+lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat
+  expose:
+   - "8080"
+  links: 
+    - mongo
+mongo:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/mongo
+  expose:
+    - "27017"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Speichern Sie die Änderungen mit <span class="ph uicontrol">Strg + o</span>. Bestätigen Sie
+die Änderungen durch Drücken der <span class="ph uicontrol">Eingabetaste</span>.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Verlassen Sie den nano-Editor mit <span class="ph uicontrol">Strg + x</span>. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie Ihre Multi-Container-Bereitstellung bereit, der die App 'Lets-Chat' mit der Lastausgleichsfunktion <span class="ph uicontrol">nginx</span> ausführt. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Erstellen Sie die Multi-Container-Bereitstellung erneut. </span> Verwenden Sie die Option <samp class="ph codeph">--force-recreate</samp>, um alle Containerinstanzen in Ihrer
+Multi-Container-Bereitstellung erneut zu erstellen. So können die Links korrekt zugeordnet werden.
+<pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Stellen Sie sicher, dass die Container korrekt verknüpft sind. </span> <pre class="codeblock"><code>docker inspect composetutorial_nginx_1</code></pre>
+Die verlinkten Lets-Chat-Containerinstanzen können im Abschnitt
+<var class="keyword varname">HostConfig &gt; Links</var> Ihrer Antworten überprüft werden.
+<pre class="codeblock"><code>...
+"HostConfig": {
+        "Binds": [],
+        "CapAdd": [],
+        "CapDrop": [],
+        "ContainerIDFile": "",
+        "Links": [
+            "composetutorial_lets-chat_2:composetutorial_lets-chat_2",
+            "composetutorial_lets-chat_1:composetutorial_lets-chat_1",
+            "composetutorial_lets-chat_1:composetutorial_lets-chat_1",
+            "composetutorial_lets-chat_2:lets-chat",
+            "composetutorial_lets-chat_2:composetutorial_lets-chat_2"
+        ],
+        "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+        },
+        "LxcConf": [],
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostPort": "80"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false
+    },
+...</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Stellen Sie sicher, dass Ihre angepassten <span class="ph filepath">nginx.config</span>-Einstellungen auf die
+<span class="ph uicontrol">nginx</span>-Containerinstanz angewendet werden.</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Melden Sie sich am <span class="ph uicontrol">nginx</span>-Container an. </span> <pre class="codeblock"><code>docker exec -it composetutorial_nginx_1 bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Überprüfen Sie die Hostkonfiguration. </span> <pre class="codeblock"><code>cat <span class="ph filepath">/etc/hosts</span></code></pre>
+Bei Anwendung der angepassten Einstellungen werden
+die verknüpften Lets-Chat-Containerinstanzen einschließlich der privaten IP-Adressen in der Ausgabe
+der Befehlszeilenschnittstelle aufgelistet.<pre class="codeblock"><code>127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+198.51.100.19	composetutorial_lets-chat_1
+198.51.100.18	composetutorial_lets-chat_2
+198.51.100.20	instance-000f2b2b
+198.51.100.18	lets-chat
+198.51.100.20	composetutorial-nginx-1
+198.51.100.19	composetutoral_lets-chat_1
+198.51.100.18	composetutorial_lets-chat_2
+198.51.100.20	instance-000f2b2b</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Melden Sie vom Container durch Eingeben von <samp class="ph codeph">exit</samp> in der Befehlszeilenschnittstelle (CLI) ab. </span></li>
+</ol>
+</li>
+</ol>
+<div class="section result">Glückwunsch! Jetzt können Sie die Arbeitslast gleichmäßig auf die Lets-Chat-Container verteilen und so auf höheren Benutzerdatenverkehr reagieren.
+In einem letzten Schritt können Sie <a href="container_single_ui.html#container_compose_remove" title="Als letzten Schritt entfernen Sie die Multi-Container-Bereitstellung, um genutzte Ressourcen freizugeben und die Verwendung Ihres Kontingents zu maximieren.">die
+Multi-Container-Bereitstellung löschen</a>, um belegte freizugeben und die Verwendung Ihres Kontingents zu maximieren. </div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75704e5020" lang="de-de" id="container_compose_remove"><h3 class="topictitle3" id="d75704e5020">Lerneinheit 5: Multi-Container-Bereitstellung entfernen </h3>
+<div class="body taskbody"><p class="shortdesc">Als letzten Schritt entfernen Sie die Multi-Container-Bereitstellung, um genutzte Ressourcen freizugeben
+und die Verwendung Ihres Kontingents zu maximieren. </p>
+<div class="section context"><div class="note attention"><span class="attentiontitle">Achtung:</span> Das Löschen der Multi-Container-Bereitstellung kann nicht rückgängig gemacht werden.
+Wenn Sie die Konfiguration für die Multi-Container-Bereitstellung aufbewahren möchten,
+entfernen Sie nicht die Datei <span class="ph filepath">docker-compose.yml</span>. </div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Stoppen Sie alle aktiven Containerinstanzen in der Multi-Container-Bereitstellung. </span> <pre class="codeblock"><code>docker-compose stop</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Entfernen Sie alle Containerinstanzen in der Multi-Container-Bereitstellung. </span> <pre class="codeblock"><code>docker-compose rm</code></pre>
+ Während des Löschvorgangs müssen Sie bestätigen, dass alle Containerinstanzen gelöscht
+werden sollen. Geben Sie dazu <span class="ph uicontrol">y</span> ein.</li>
+<li class="step stepexpand">Optional: <span class="cmd">Stellen Sie sicher, dass alle Containerinstanzen aus dem Containersystem entfernt wurden.</span> <pre class="codeblock"><code>docker-compose ps</code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Löschen Sie die Datei <span class="ph filepath">docker-compose.yml</span>.</span> <div class="note tip"><span class="tiptitle">Tipp:</span> Wenn Sie die Datei wiederverwenden möchten, speichern Sie sie in einem System für Quellcodeverwaltung, anstatt sie zu löschen. </div>
+
+
+<pre class="codeblock"><code>rm <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="step stepexpand">Optional: <span class="cmd">Löschen Sie das Docker Compose-Projektverzeichnis.</span> <pre class="codeblock"><code>cd &amp;&amp; rmdir composetutorial</code></pre>
+</li>
+</ol>
+<div class="section result">Sie haben die Multi-Container-Bereitstellung erfolgreich gelöscht und die Verwendung Ihres Kontingents maximiert. </div></div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d75704e5127" lang="de-de" id="container_compose_yml"><h3 class="topictitle3" id="d75704e5127">Unterstützte Optionen in der Datei <span class="ph filepath">docker-compose.yml</span></h3>
+<div class="body conbody"><p class="shortdesc"></p>
+<div>Überprüfen Sie die unterstützten Optionen für die Datei <span class="ph filepath">docker-compose.yml</span> in
+<span class="keyword">IBM
+Bluemix Container Service</span>.<ul><li><a href="container_single_ui.html#container_compose_yml__environment">environment</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__expose">expose</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__image">image</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__links">links</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__mem">mem_limit</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__ports">ports</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__volumes">volumes</a></li>
+</ul>
+</div><section role="region" aria-labelledby="d75704e5217" id="container_compose_yml__environment"><h4 class="sectiontitle" id="d75704e5217"><span class="ph"><samp class="ph codeph">environment</samp></span></h4>Verwenden Sie den Parameter
+<span class="ph uicontrol">environment</span>, um eine Umgebungsvariable festzulegen oder einen
+<span class="keyword">Bluemix</span>-Service bzw. eine App an Ihren Docker Compose-Service
+zu binden. <div class="steps note"><span class="notetitle">Anmerkung:</span>  Wenn Sie einen <span class="keyword">Bluemix</span>-Service
+an Ihre Multi-Container-Bereitstellung binden möchten, müssen Sie eine Instanz dieses Service in Ihrem Bereich erstellen.
+Weitere Informationen finden Sie unter
+<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix verfügt über eine Liste mit Services und verwaltet diese für die Entwickler von Apps. Um einen Bluemix-Service hinzuzufügen, der von Ihrem Container verwendet werden soll, müssen Sie eine Instanz dieses Service anfordern und den Service an den Container binden.">Service über die Bluemix-GUI binden</a>.
+<p>Einige Services unterstützen das direkte Binden eines Service an einen Container
+nicht. In diesem Fall müssen Sie eine Cloud Foundry-App erstellen.
+Weitere Informationen enthält <a href="container_troubleshoot.html#ts_bridge_app">Bluemix-Service wird nicht direkt an einen Container gebunden</a>. </p>
+</div>
+<ul><li><span class="keyword option">Bluemix-Service binden</span><p>Zum Binden eines Service wird der Schlüssel <span class="ph uicontrol">CCS_BIND_SRV</span> verwendet. Ersetzen
+Sie <var class="keyword varname">&lt;name_der_serviceinstanz&gt;</var> durch den Namen der Serviceinstanz, die Sie
+in Ihrer privaten <span class="keyword">Bluemix</span>-Registry erstellt haben.</p>
+<pre class="codeblock"><code>environment:
+  - "CCS_BIND_SRV=<var class="keyword varname">&lt;name_der_serviceinstanz&gt;</var>"</code></pre>
+</li>
+<li><span class="keyword option">Cloud Foundry-App binden</span><p>Zum Binden einer App wird der Schlüssel <span class="ph uicontrol">CCS_BIND_APP</span> verwendet.
+Ersetzen
+Sie <var class="keyword varname">&lt;app-name&gt;</var> durch den Namen der Cloud Foundry-App, die Sie in Ihrer privaten
+<span class="keyword">Bluemix</span>-Registry erstellt haben.</p>
+<pre class="codeblock"><code>environment:
+  - "CCS_BIND_APP=<var class="keyword varname">&lt;app-name&gt;</var>"</code></pre>
+</li>
+</ul>
+<dl><dt class="dlterm">Beispiel</dt>
+<dd>Mit der folgenden Beispieldatei <span class="ph filepath">docker-compose.yml</span> wird eine
+Cloud Foundry-App mit dem Namen <var class="keyword varname">containerbridge</var> gebunden und eine Umgebungsvariable
+mit dem Namen <var class="keyword varname">tmp_folder</var> zum Lets-Chat-Service hinzugefügt. <pre class="codeblock"><code>#Der Name des Service.
+lets-chat: 
+  #Container-Image zur Ausführung des Lets-Chat-Service. Ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch den Namen des
+betreffenden Namensbereichs.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/lets-chat
+  #Mit <span class="ph uicontrol">CCS_BIND_SRV</span> können Sie einen <span class="keyword">Bluemix</span>-Service und mit <span class="ph uicontrol">CCS_BIND_APP</span>eine Cloud Foundry-App an den Docker Compose-Service binden.
+  environment:
+   - "CCS_BIND_APP=containerbridge"   - "tmp_folder=/tmp"</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75704e5336" id="container_compose_yml__expose"><h4 class="sectiontitle" id="d75704e5336"><span class="ph"><samp class="ph codeph">expose</samp></span></h4>Stellt Ports nur im privaten
+Netz bereit. Dieser Port ist für alle verknüpften Services zugänglich. <dl><dt class="dlterm">Beispiel</dt>
+<dd>Mit der folgenden Beispieldatei <span class="ph filepath">docker-compose.yml</span> wird der Port
+8080 nur für das interne Netz bereitgestellt. Der verknüpfte Mongo-Container verwendet diesen Port, um
+Anforderungen an den Lets-Chat-Container zu senden.
+<pre class="codeblock"><code>lets-chat: 
+  #Container-Image zur Ausführung des Lets-Chat-Service. Ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch den
+Namen des betreffenden Namensbereichs.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/lets-chat
+  #Einen Port nur im privaten Netz verfügbar machen.
+  expose:
+   - "8080"
+  links: 
+    - mongo
+mongo:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/mongo</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75704e5368" id="container_compose_yml__image"><h4 class="sectiontitle" id="d75704e5368"><span class="ph"><samp class="ph codeph">image</samp></span></h4>Definiert das Basisimage, das
+Sie zum Ausführen Ihres Docker Compose-Service verwenden möchten. Das Image muss in Ihrer privaten
+<span class="keyword">Bluemix</span>-Registry verfügbar sein,
+damit es in der Datei <span class="ph filepath">docker-compose.yml</span> verwendet werden kann. <p>Verwenden Sie
+zum Definieren des Image den vollständigen Pfad zu Ihrer privaten <span class="keyword">Bluemix</span>-Registry
+im folgenden Format:  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/<var class="keyword varname">&lt;image&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var>.</p>
+<dl><dt class="dlterm">Beispiel</dt>
+<dd>Mit der folgenden Beispieldatei <span class="ph filepath">docker-compose.yml</span> wird das Lets-Chat-Image
+als Basis für den Lets-Chat-Service definiert. <pre class="codeblock"><code>#Der Name des Service.
+lets-chat: 
+  #Container-Image zur Ausführung des Lets-Chat-Service. Ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch den
+Namen des betreffenden Namensbereichs.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/lets-chat
+  </code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75704e5419" id="container_compose_yml__links"><h4 class="sectiontitle" id="d75704e5419"><span class="ph"><samp class="ph codeph">links</samp></span></h4>Verknüpft einen Container mit allen
+Containern, die für einen anderen Service gestartet werden. Links legen die Abhängigkeit zwischen Services
+fest und damit die Reihenfolge, in der die Container gestartet werden, wenn Sie den Befehl <samp class="ph codeph">docker-compose up</samp>
+ausführen. Geben Sie den Servicenamen an, um einen Service zu verknüpfen. <dl><dt class="dlterm">Beispiel</dt>
+<dd>Mit der folgenden Beispieldatei <span class="ph filepath">docker-compose.yml</span> wird der nginx-Container mit allen
+Containern verknüpft, die für den Lets-Start-Service gestartet werden.
+<pre class="codeblock"><code>#Der Name des Service.
+nginx:
+  #Container-Image zur Ausführung des nginx-Service. Ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch den
+Namen des betreffenden Namensbereichs.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/nginx 
+  #Geben Sie den Namen des Service ein, den Sie verknüpfen möchten.
+  links: 
+    - lets-chat
+lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich</var>/lets-chat</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75704e5454" id="container_compose_yml__mem"><h4 class="sectiontitle" id="d75704e5454"><span class="ph"><samp class="ph codeph">mem_limit</samp></span></h4>Legt die Größe für Ihre
+Containerinstanz fest. Die Containergröße definiert den Maximalwert an Hauptspeicher und Plattenspeicher, den ein Container
+zur Laufzeit auf dem Rechenhost erhält. Eine zugewiesene Containergröße kann nicht mehr geändert
+werden. <p>Wählen Sie in <span class="keyword">IBM
+Bluemix Container Service</span> eine der folgenden Größen aus. </p>
+<ul data-hd-audience="yellow"><li>Pico (64 MB Hauptspeicher, 4 GB Plattenspeicher)</li>
+<li>Nano (128 MB Hauptspeicher, 8 GB Plattenspeicher)</li>
+<li>Micro (256 MB Hauptspeicher, 16 GB Plattenspeicher)</li>
+<li>Tiny (512 MB Hauptspeicher, 32 GB Plattenspeicher)</li>
+<li>S (Klein) (1024 MB Hauptspeicher, 64 GB Plattenspeicher)</li>
+<li>M (Mittel) (2048 MB Hauptspeicher, 128 GB Plattenspeicher)</li>
+<li>L (Groß) (4096 MB Hauptspeicher, 256 GB Plattenspeicher)</li>
+<li>XL (8192 MB Hauptspeicher, 512 GB Plattenspeicher)</li>
+<li>XXL (16384 MB Hauptspeicher, 1 TB Plattenspeicher) </li>
+</ul>
+Geben Sie die gewünschte Größe in Megabyte ohne die Einheitenbezeichnung <samp class="ph codeph">'M'</samp>
+ein. Wenn Sie keine Größe angeben, werden alle Container standardmäßig mit der Größe <span class="ph uicontrol">Micro</span> erstellt. <dl><dt class="dlterm">Beispiel</dt>
+<dd>Mit der folgenden Beispieldatei <span class="ph filepath">docker-compose.yml</span> wird die Containergröße
+für den Lets-Chat-Service auf 512 Megabyte festgelegt. <pre class="codeblock"><code>#Der Name des Service.
+lets-chat: 
+  #Container-Image zur Ausführung des Lets-Chat-Service. Ersetzen Sie <var class="keyword varname">&lt;mein_namensbereich&gt;</var> durch den Namen
+des betreffenden Namensbereichs.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/lets-chat
+  #Geben Sie die gewünschte Größe in Megabyte ein.
+  mem_limit: 512</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75704e5516" id="container_compose_yml__ports"><h4 class="sectiontitle" id="d75704e5516"><span class="ph"><samp class="ph codeph">ports</samp></span></h4>Verwenden Sie die Option
+<span class="ph uicontrol">ports</span>, um einen öffentlichen Port für jeden Container bereitzustellen,
+der für Ihren Service gestartet wird. Wählen Sie eine der folgenden Konfigurationen aus. <ul><li><span class="keyword option">Öffentliche IP-Adresse anfordern</span><div class="p">Diese Konfiguration fordert eine neue öffentliche IP-Adresse
+für Ihren Bereich an, stellt den öffentlichen Port 8080 bereit und bindet die angeforderte
+IP-Adresse an den Container. <div class="steps note"><span class="notetitle">Anmerkung:</span> Das verfügbare Kontingent der öffentlichen IP-Adressen
+muss ausreichend groß sein, um neue IP-Adressen für Ihren Bereich zuzuordnen. </div>
+</div>
+<pre class="codeblock"><code>ports:
+  - "request:8080:8080"</code></pre>
+</li>
+<li><span class="keyword option">Öffentlichen Port bereitstellen</span><p>Diese Konfiguration stellt den öffentlichen Port 8080
+bereit. Dabei wird keine IP-Adresse an den Container gebunden. Um Ihre App über das Internet zugänglich zu
+machen, müssen Sie eine <a href="container_single_ui.html#container_cli_ips" title="Fordern Sie eine öffentliche IP-Adresse an und binden Sie sie an einen Container in Bluemix.">öffentliche IP-Adresse binden</a>, nachdem
+der Container erstellt wurde. </p>
+<pre class="codeblock"><code>ports:
+  - "8080"</code></pre>
+</li>
+<li><span class="keyword option">Vorhandene öffentliche IP-Adresse binden</span><div class="p">Diese Konfiguration stellt den öffentlichen Port 8080
+bereit und bindet automatisch eine vorhandene öffentliche IP-Adresse an den Container, nachdem der Container
+erstellt wurde. <div class="steps note"><span class="notetitle">Anmerkung:</span> Die verwendete IP-Adresse muss Ihrem Bereich zugeordnet sein und für die Verwendung
+zur Verfügung stehen. Wenn die IP-Adresse bereits an einen Container gebunden ist, müssen Sie
+zuerst die <a href="container_single_ui.html#container_cli_ips_unbind" title="Sie können die Bindung einer öffentlichen IP-Adresse zu einem Container aufheben, die IP-Adresse ist für weitere Container jedoch weiterhin verfügbar und wird weiterhin zum Kontingent für die öffentliche IP für Ihre Organisation gerechnet.">Bindung aufheben</a>. </div>
+</div>
+<pre class="codeblock"><code>ports:
+  - "<var class="keyword varname">IP_ADDRESS</var>:8080:8080"</code></pre>
+</li>
+</ul>
+</section><section role="region" aria-labelledby="d75704e5568" id="container_compose_yml__volumes"><h4 class="sectiontitle" id="d75704e5568"><span class="ph"><samp class="ph codeph">volumes</samp></span></h4>Verwenden Sie den Parameter
+<span class="ph uicontrol">volumes</span>, um einen vorhandenen Datenträger an Ihren Service zu binden. <div class="steps note"><span class="notetitle">Anmerkung:</span> Sie müssen
+zuerst einen Datenträger erstellen, bevor Sie den Datenträger zur Servicedefinition in
+der Datei <span class="ph filepath">docker-compose.yml</span> hinzufügen können. Weitere Informationen finden Sie im Abschnitt
+<a href="container_volumes_ov.html#container_volumes_cli" title="Ein Datenträger ist eine persistente Speicherposition für die Daten, die eine App erstellt oder die Dateien, die die App für die Ausführung erfordert. Über die Befehlszeile (CLI) können Sie einen Datenträger für Ihren Container erstellen.">Datenträger über die Befehlszeile (CLI) erstellen</a>. Informationen dazu, wie Sie den Datenträger mit Daten füllen, bevor Sie ihn an den Container anhängen, enthält <a href="container_volumes_ov.html#container_volumes_mount" title="Nach der Erstellung eines Datenträgers können Sie den Datenträger an einen Container anhängen und Dateien hinzufügen, auf die alle Container zugreifen können, an die der Datenträger angehängt ist.">Dateien über die Befehlszeilenschnittstelle (CLI) zu Datenträgern hinzufügen</a>. </div>
+<dl><dt class="dlterm">Beispiel</dt>
+<dd>Mit der folgenden Beispieldatei <span class="ph filepath">docker-compose.yml</span> wird ein externer Datenträger mit dem Namen <var class="keyword varname">mein_datenträger</var> zum Lets-Chat-Service hinzugefügt. Der Datenträger wird mit Lese- und Schreibzugriff an den Folder <span class="ph filepath">/tmp/data</span> angehängt.
+<pre class="codeblock"><code>version: '2'
+#Der Name des Service.
+lets-chat: 
+  #Container-Image zur Ausführung des Lets-Chat-Service. Ersetzen Sie &lt;mein_namensbereich&gt; durch den Namen des
+betreffenden Namensbereichs.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;mein_namensbereich&gt;</var>/lets-chat
+  #Der Datenträger muss zuerst erstellt werden, bevor Sie ihn hinzufügen können.
+  volumes:
+   - <var class="keyword varname">mein_datenträger</var>:<span class="ph filepath">/tmp/data</span>:rw
+#Datenträger als extern deklarieren.
+volumes:
+  mein_datenträger:
+    external: true</code></pre>
+</dd>
+</dl>
+</section></div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d75704e5626" lang="de-de" id="container_compose_faq"><h3 class="topictitle3" id="d75704e5626">Häufig gestellte Fragen (FAQs) zu Docker Compose</h3>
+<div class="body conbody"><p class="shortdesc">Lesen Sie diese häufig gestellten Fragen zu Docker Compose.</p>
+<div class="p"><dl><dt class="dlterm">Wie kann der Docker Compose-Client eingerichtet werden, damit er auf den
+IBM Containers-Service verweist?</dt>
+<dd>Bei der Anmeldung an der <span class="keyword">IBM
+Bluemix Container Service</span>-CLI können
+Sie <span class="keyword">IBM
+Bluemix Container Service</span>-Befehle (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) ausführen oder Umgebungsvariablen für die
+Verwendung nativer Docker-Befehle (<samp class="ph codeph">docker</samp>) definieren. Zur Ausführung von Docker Compose-Befehlen
+für <span class="keyword">IBM
+Bluemix Container Service</span> müssen Sie die Umgebungsvariablen
+zur Ausführung nativer Docker-Befehle für <span class="keyword">IBM
+Bluemix Container Service</span>
+definieren. Weitere Informationen finden Sie unter
+<a href="container_cli_cfic_install.html#container_cli_login" title="Melden Sie sich nach der Installation der Befehlszeilenschnittstelle (CLI) an, um sie zu verwenden.">Beim IBM Bluemix Container Service-CLI-Plug-in anmelden(bx ic)</a>. </dd>
+<dt class="dlterm">Wie können skalierbare Containergruppen mit Docker Compose verwendet werden?</dt>
+<dd>Docker Compose unterstützt das <span class="keyword">IBM
+Bluemix Container Service</span>-Gruppenkonzept
+nicht, das die gleichmäßige Lastverteilung auf mehrere Containerinstanzen bereits beinhaltet. Wenn Sie für eine gleichmäßige
+Lastverteilung zwischen den Containerinstanzen sorgen möchten, müssen Sie einen weiteren Container hinzufügen,
+der die Lastausgleichsfunktion ausführt und mit den Containerinstanzen verknüpft.</dd>
+<dt class="dlterm">Welche Version des <span class="ph filepath">docker-compose.yml</span>-Dateiformats wird für
+<span class="keyword">IBM
+Bluemix Container Service</span> unterstützt?</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> unterstützt nur Version 1
+des <span class="ph filepath">docker-compose.yml</span>-Dateiformats. Version 2 wird derzeit nicht unterstützt.</dd>
+<dt class="dlterm">Wie können Docker Compose-Befehle im Modus mit Zuordnung ausgeführt werden?</dt>
+<dd>Bei der Ausführung des Befehls <samp class="ph codeph">docker-compose up</samp> im Modus mit Zuordnung können Fehler
+auftreten. Docker Compose kann derzeit nur im Modus mit aufgehobener Zuordnung mit
+<span class="keyword">IBM
+Bluemix Container Service</span> ausgeführt werden. Die
+Option <samp class="ph codeph">-d</samp> verhindert, dass Sie in der Konsolenausgabe der Container hängen bleiben, ohne die
+Zuordnung aufheben zu können.</dd>
+<dt class="dlterm">Wie kann auf die Protokolle einer einzelnen Containerinstanz zugegriffen werden, die in der Multi-Container-Bereitstellung
+ausgeführt wird?</dt>
+<dd>Der Befehl <samp class="ph codeph">docker-compose logs</samp> wird von
+<span class="keyword">IBM
+Bluemix Container Service</span> derzeit nicht
+unterstützt.</dd>
+<dt class="dlterm">Welche Parameteroptionen werden in der Datei <span class="ph filepath">docker-compose.yml</span> unterstützt? </dt>
+<dd>Eine Liste der unterstützten Parameter finden Sie unter <a href="container_single_ui.html#container_compose_yml">Unterstützte Optionen in der Datei docker-compose.yml</a>.</dd>
+</dl>
+</div>
+</div>
+</article></article></article></div></main></body></html>

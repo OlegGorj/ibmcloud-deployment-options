@@ -1,0 +1,970 @@
+<!DOCTYPE html><html lang="ko-kr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="고가용성 컨테이너를 사용하면 앱의 가동 중단 시간이 줄어 듭니다. 더욱 광범위하게 컨테이너 설정을 분배할수록 앱의 가동이 중단될 가능성이 줄어듭니다. 호스트 장애, 네트워크 장애 또는 애플리케이션 소프트웨어 장애와 같은 잠재적인 장애 조건 시 복원력을 높이기 위해 IBM Bluemix Container Service에서 기본 제공되는 기능을 사용하여 고가용성을 달성할 수 있습니다.">
+<meta name="keywords" content="컨테이너 그룹, 컨테이너, IBM Containers, 고가용성, 대시보드, GUI, cli, bx ic, group-create, autoscaling, auto scaling, auto-scaling, 스케일링, 로드 밸런싱, 라우트, 공유, 업데이트, 지역, IP 주소, 사설, 로드 밸런서, 제거, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ko-kr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service를 사용하여 고가용성 프로세스를 컨테이너 그룹으로 실행</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d49593e6" id="container_ha"><h1 class="topictitle1" id="d49593e6">고가용성 프로세스를 컨테이너 그룹으로 실행</h1>
+<div class="abstract"><div class="shortdesc">고가용성 컨테이너를 사용하면 앱의 가동 중단 시간이 줄어 듭니다.
+더욱 광범위하게 컨테이너 설정을 분배할수록 앱의 가동이 중단될 가능성이
+줄어듭니다. 호스트 장애, 네트워크 장애 또는 애플리케이션 소프트웨어 장애와 같은
+잠재적인 장애 조건 시 복원력을 높이기 위해 <span class="keyword">IBM®
+Bluemix® Container Service</span>에서 기본 제공되는 기능을
+사용하여 고가용성을 달성할 수 있습니다. </div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">주의:</span> <span class="ph"><span class="ph">단일 및 확장 가능 컨테이너</span>의 무료 평가판은 사용할 수 없습니다. 
+<a href="cs_ov.html" title="IBM Bluemix Container Service는 Kubernetes API를 사용하여 독립적인 컴퓨팅 호스트의 클러스터에서 컨테이너화된 앱의 배치, 오퍼레이션, 스케일링 및 모니터링을 자동화하는 강력한 도구, 직관적인 사용자 경험, 기본 제공 보안 및 격리를 제공할 수 있도록 Docker 및 Kubernetes를 결합합니다.">클러스터 관리에 대해 알아보고
+<span class="keyword">Bluemix</span> 퍼블릭에서
+<span class="keyword">IBM
+Bluemix Container Service</span>의 Kubernetes로 마이그레이션하십시오. </a></span></div>
+</div>
+
+
+<div class="p">이 페이지의
+내용:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • 가용성별 <a href="container_ha.html#ha_groups">컨테이너 그룹 설정을 위한 옵션</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">GUI</a> 또는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>에서 컨테이너 그룹으로 장기 서비스 실행<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 자동으로 <a href="container_ha.html#container_group_ui_as" title="컨테이너에 대한 자동 스케일링 기능은 더 이상 사용되지 않습니다. IBM Bluemix Container Service를 사용하여 기능을 대체할 수 있습니다. 세부사항은 Auto-Scaling 폐기를 참조하십시오.">그룹 스케일링</a>(더 이상 사용되지 않음)<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 다른 영역으로 <a href="container_ha.html#container_group_migrate" title="동일한 조직의 다른 영역에 컨테이너 그룹을 이동해야 하는 경우 라우트가 같은 두 번째 컨테이너를 작성할 수 있습니다. 그런 다음 앱의 가동을 중단시키지 않고 첫 번째 그룹을 제거할 수 있습니다.">그룹 이동</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_update_ui" title="컨테이너 그룹에서 실행 중인 앱을 업데이트하려면 사용자 이미지를 업데이트하고 여기에서 새 컨테이너 그룹을 배치해야 합니다. 업데이트 프로세스 중에는 이전에 실행 중인 컨테이너 그룹을 중지할 필요가 없습니다. 새 컨테이너 그룹을 작성하고 이에 기존 라우트 정보를 맵핑한 후에, 기한이 지난 컨테이너 그룹에서 라우트를 맵핑 해제할 수 있습니다. 가동 중지 시간 없이 새 앱이 배치됩니다.">GUI</a> 또는 <a href="container_ha.html#container_group_update_cli" title="컨테이너 그룹에서 실행 중인 앱을 업데이트하려면 사용자 이미지를 업데이트하고 여기에서 새 컨테이너 그룹을 배치해야 합니다. 업데이트 프로세스 중에는 이전에 실행 중인 컨테이너 그룹을 중지할 필요가 없습니다. 새 컨테이너 그룹을 작성하고 이에 기존 라우트 정보를 맵핑한 후에, 기한이 지난 컨테이너 그룹에서 라우트를 맵핑 해제할 수 있습니다. 가동 중지 시간 없이 새 앱이 배치됩니다.">CLI</a>를 사용하여 컨테이너 그룹에서 실행되는 앱 업데이트<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_ha_space" title="동일한 Bluemix 영역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성하고 두 그룹 모두에 동일한 라우트를 맵핑할 수 있습니다. 이 설정을 사용하는 경우 컨테이너 그룹이나 그룹의 로드 밸런서가 중단되면 트래픽이 다른 컨테이너 그룹으로 라우팅됩니다.">동일한 영역</a>, <a href="container_ha_org.html">다른 영역</a> 또는 <a href="container_ha.html#container_ha_regions" title="글로벌 로드 밸런싱을 제공하는 DNS(Domain Name System)에서 앱의 도메인 이름을 구성하는 경우, 라우트에서 동일한 호스트 이름을 사용하는 서로 다른 Bluemix 지역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성할 수 있습니다. 이 설정을 사용하면 사용자가 속한 지역별로 로드 밸런싱이 수행되도록 허용할 수 있습니다. 한 지역에 있는 컨테이너 그룹, 하드웨어 또는 전체 데이터 센터가 중단되면 트래픽이 다른 지역에 배치된 컨테이너 그룹으로 라우팅됩니다.">다른 지역</a>에서 고가용성 그룹 실행<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_private_ip" title="그룹을 공용에 노출하지 않고 그룹에 액세스하려면 컨테이너 그룹에 대한 로드 밸런서 IP 주소를 식별하십시오.">사설 그룹</a>에 연결<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 그룹 <a href="container_ha.html#container_group_remove" title="할당량의 사용을 최대화하려면 사용하지 않는 컨테이너 그룹을 가끔씩 제거하십시오.">제거</a> </div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d49593e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d49593e193" id="ha_groups"><h2 class="topictitle2" id="d49593e193">가용성별로 컨테이너 그룹을 설정하기 위한 옵션</h2>
+<div class="body taskbody"><div class="section context" id="ha_groups__context_nwq_pf1_4z"><p>가용성이 증가하는 정도로 정렬된 다음 잠재적 컨테이너 그룹 설정을
+검토하십시오. </p>
+
+<div class="image"><img id="ha_groups__image_owq_pf1_4z" src="images/container_ha_roadmap.png" alt="고가용성 로드맵"></div>
+<ol id="ha_groups__ol_pwq_pf1_4z"><li>자동 복구와 n+1 인스턴스 패턴을 가진 하나의 컨테이너 그룹</li>
+<li>자동 복구, n+2 인스턴스 패턴 및 연관관계 방지를 사용하는 하나의 컨테이너 그룹</li>
+<li>동일한 영역에서 실행되고 동일한 라우트를 공유하는
+자동 복구, n+2 인스턴스 패턴 및 연관관계 방지를 사용하는 두 개의 컨테이너 그룹</li>
+<li>서로 다른 영역에서 실행되고 동일한 라우트를 공유하는
+자동 복구, n+2 인스턴스 패턴 및 연관관계 방지를 사용하는 두 개의 컨테이너 그룹</li>
+<li>서로 다른 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역에서 실행되고 동일한 라우트를 공유하는
+자동 복구, n+2 인스턴스 패턴 및 연관관계 방지를 사용하는 두 개의 컨테이너 그룹</li>
+<li>서로 다른 지역에서 실행되고 동일한 라우트를 공유하는
+자동 복구, n+2 인스턴스 패턴 및 연관관계 방지를 사용하는 두 개의 컨테이너 그룹</li>
+</ol>
+
+<div class="p">이와 같은 기술을 사용하여 앱의 가용성을 높이는 방법을 자세히 알아보십시오. <dl><dt class="dlterm">단일 컨테이너가 아닌 컨테이너 그룹에 앱 배치</dt>
+<dd><span class="ph">컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가
+포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나
+필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오. </span> <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오."><span class="keyword">Bluemix</span>
+GUI</a> 또는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>에서 컨테이너 그룹을 작성할 수 있습니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">컨테이너 그룹에서 자동 복구 사용</dt>
+<dd><span class="ph">컨테이너 그룹에 자동 복구를 사용하고
+그룹이 10분 동안 실행된 경우, 그룹의 로드 밸런서가 HTTP 요청을 통해 그룹에 있는 각 컨테이너
+인스턴스의 상태를 정기적으로 확인하기 시작합니다. 컨테이너 인스턴스가 100초 내에
+응답하지 않으면 비활성으로 표시됩니다. 비활성 컨테이너 인스턴스는
+그룹에서 제거되고 자동 복구를 통해 다시 작성됩니다. 자동 복구는 그룹에 있는 컨테이너 인스턴스의
+복구를 3번 시도합니다. 자동 복구는 3번의 시도 후에 그룹에 있는 컨테이너
+인스턴스를 60분 동안 복구하지 않습니다. 60분 후에 자동 복구 프로세스가 다시 시작됩니다.</span> <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오."><span class="keyword">Bluemix</span> GUI</a>
+또는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>에서
+자동 복구를 사용하여 컨테이너 그룹을 작성할 수 있습니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">앱의 워크로드를 처리하는 데 충분한 인스턴스에 두 개를 더하여 포함</dt>
+<dd><span class="ph">컨테이너 그룹에 고가용성을 부여하고 실패에 더 탄력적이게 하려면 예상된 워크로드를 다루기 위한 최소 수보다 많은 추가 인스턴스를 포함하는 것을 고려하십시오. 추가 인스턴스는 다른 인스턴스가 충돌하는 경우 워크로드를 처리할 수 있습니다. 워크로드에 영향을 주지 않고 실패한 인스턴스의 자동 복구를 보장하려면 하나의 추가 인스턴스를 포함하십시오. 두 개의 동시 실패로부터 보호하려면 두 개의 추가 인스턴스를 포함하십시오. 이 설정은 <var class="keyword varname">N+2</var> 패턴이며 여기서 <var class="keyword varname">N</var>은 요청을 다루기 위한 인스턴스의 수이고 <var class="keyword varname">+2</var>는 두 개의 추가 인스턴스입니다. </span> <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오."><span class="keyword">Bluemix</span> GUI</a> 또는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>에서 컨테이너 그룹을 작성할 때 포함할 인스턴스 수를 지정할 수 있습니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">컴퓨팅 노드에 컨테이너 인스턴스 분산</dt>
+<dd>컨테이너 그룹 작성 시 그룹의 각 인스턴스를 동일한 실제 컴퓨팅 노드에
+배치할 수 있습니다. 컨테이너 인스턴스가 동일한 컴퓨팅 노드에 있는 이와 같은 설정을
+연관관계 또는 코로케이션이라고 합니다. <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>에서 컨테이너 그룹을 작성하는 경우 연관관계 방지
+옵션(<samp class="ph codeph">--anti</samp>)을 사용하여 앱의 가용성을 높이기 위해 컨테이너 인스턴스를
+서로 다른 컴퓨팅 노드에 분산할 수 있습니다. <div class="p"><div class="steps note"><span class="notetitle">참고:</span> CLI에서
+<samp class="ph codeph">--anti</samp> 옵션을 사용하려면 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) 버전 0.8.934 이상이 설치되어 있어야 합니다. </div>
+</div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">동일한 라우트를 사용하는 여러 컨테이너 그룹 작성</dt>
+<dd>동일한 라우트를 사용하는 동일한 <span class="keyword">Bluemix</span> 영역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성할 수 있습니다. 한 컨테이너 그룹의 인스턴스에 연결할 수 없는
+오류가 발생하면 사용자 트래픽이 두 번째 컨테이너 그룹에 자동으로 라우팅됩니다. 컨테이너 그룹 간
+라우트 공유에 대한 자세한 정보는 <a href="container_ha.html#container_ha_space" title="동일한 Bluemix 영역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성하고 두 그룹 모두에 동일한 라우트를 맵핑할 수 있습니다. 이 설정을 사용하는 경우 컨테이너 그룹이나 그룹의 로드 밸런서가 중단되면 트래픽이 다른 컨테이너 그룹으로 라우팅됩니다.">동일한 영역에서 고가용성 컨테이너 그룹 실행</a>의 내용을 참조하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm"><span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역에서 컨테이너 그룹 분산</dt>
+<dd><span class="ph"><span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역은
+<span class="keyword">IBM
+Bluemix Container Service</span>가 실행되는 지역 내의 위치입니다. 
+<span class="keyword">IBM
+Bluemix Container Service</span>가
+<span class="keyword">Bluemix</span> 영역에서
+처음 사용될 때 컨테이너는 해당 지역의 기본 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역에 작성됩니다. </span>
+<div class="tablenoborder"><table summary="IBM Bluemix Container Service 가용성 구역" id="ha_groups__table_qwq_pf1_4z" class="defaultstyle"><caption><span class="tablecap">표 1. <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역</span></caption><thead><tr><th id="d49593e611" class="thleft">지역</th>
+<th id="d49593e613" class="thleft">데이터 센터 위치</th>
+<th id="d49593e615" class="thleft"><span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역 이름</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49593e611 ">미국 남부</td>
+<td headers="d49593e613 ">댈러스 1</td>
+<td headers="d49593e615 ">dal09-01</td>
+</tr>
+<tr><td headers="d49593e611 ">미국 남부</td>
+<td headers="d49593e613 ">댈러스 2</td>
+<td headers="d49593e615 ">dal09-02</td>
+</tr>
+<tr><td headers="d49593e611 ">미국 남부</td>
+<td headers="d49593e613 ">댈러스 3</td>
+<td headers="d49593e615 ">dal10-03</td>
+</tr>
+<tr><td headers="d49593e611 ">영국</td>
+<td headers="d49593e613 ">런던</td>
+<td headers="d49593e615 ">lon02-01</td>
+</tr>
+<tr><td headers="d49593e611 ">영국</td>
+<td headers="d49593e613 ">암스테르담</td>
+<td headers="d49593e615 ">ams03-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>다른 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역으로 영역을 마이그레이션하려면 <a href="container_ha_org.html">container_ha_org.html</a>의 내용을 참조하십시오. </p>
+<div class="p"><div class="note important"><span class="importanttitle">중요사항:</span> 다른 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역으로 영역을 구성한 후에 컨테이너 그룹을 작성하기 위해 이 명령을 사용해야 할 수도 있습니다. </div>
+<span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역 1:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+<div class="p"><span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역 2:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+</dd>
+<dt class="dlterm">구역에 컨테이너 그룹 분산</dt>
+<dd><span class="keyword">Bluemix</span> 구역에 컨테이너 그룹을 분산하면 사용자가 있는
+구역을 기반으로 로드 밸런싱이 발생하도록 할 수 있습니다. 컨테이너 그룹, 하드웨어 또는
+한 지역에 있는 전체 데이터 센터가 중단되면 트래픽이 다른 지역에 배치된 컨테이너 그룹으로
+라우팅됩니다. <p>여러 지역에 컨테이너 그룹을 배치하려면 <a href="container_ha.html#container_ha_regions" title="글로벌 로드 밸런싱을 제공하는 DNS(Domain Name System)에서 앱의 도메인 이름을 구성하는 경우, 라우트에서 동일한 호스트 이름을 사용하는 서로 다른 Bluemix 지역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성할 수 있습니다. 이 설정을 사용하면 사용자가 속한 지역별로 로드 밸런싱이 수행되도록 허용할 수 있습니다. 한 지역에 있는 컨테이너 그룹, 하드웨어 또는 전체 데이터 센터가 중단되면 트래픽이 다른 지역에 배치된 컨테이너 그룹으로 라우팅됩니다.">다른 Bluemix 지역에서 고가용성 컨테이너 그룹 실행</a>의 내용을 참조하십시오. </p>
+<div class="p"><div class="note important"><span class="importanttitle">중요사항:</span> 사용자 정의 도메인을 구성한 후 컨테이너 그룹을 작성하기 위해 이러한 명령을 사용할 수도 있습니다.</div>
+
+지역 1:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d mydomain.net --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.ng.bluemix.net/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+<div class="p">지역 2:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d eu-gb.mydomain.net --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.eu-gb.bluemix.net/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+</dd>
+</dl>
+</div>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d49593e806" lang="ko-kr" id="container_group_ui"><h2 class="topictitle2" id="d49593e806"><span class="keyword">Bluemix</span> GUI에서 컨테이너 그룹으로 장기 서비스 실행</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Bluemix</span> GUI에서
+확장 가능한 그룹 컨테이너를 작성하고 배치합니다. <span class="ph">컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가
+포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나
+필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오. </span></p>
+<div class="section prereq"><div class="p">시작하기 전에 다음의 전제조건을 고려하십시오.  <ul><li><span class="keyword">Bluemix</span> 영역에서 컨테이너를 작성하려면 이 영역에 대해 개발자 역할이 있어야 합니다.
+각 역할의 권한 및
+역할 편집 방법에 대한 자세한 정보는 <span class="ph"><a href="../iam/users_roles.html">사용자 및 역할</a></span>의 내용을 참조하십시오.</li>
+<li><span class="keyword">Bluemix</span>
+GUI에서 IBM 제공 공용 이미지 또는 조직의 개인용 <span class="keyword">Bluemix</span>
+레지스트리에 있는 기존 이미지로부터 컨테이너를 작성합니다. <span class="keyword wintitle">카탈로그</span>에 이미지를 추가하는 것에 대한
+자세한 정보는 <a href="container_images_adding_ov.html#container_images_adding_ov" title="컨테이너 이미지는 작성하는 모든 컨테이너의 기초가 됩니다. 이미지는 빌드 아티팩트(예: 앱, 앱의 구성 및 이의 종속 항목) 및 이미지를 빌드하는 지시사항이 포함된 파일인 Dockerfile에서 작성됩니다. 컨테이너 이미지를 실행 파일(.exe 또는 .bin)로서 생각하십시오. 실행 가능 앱 파일을 실행하는 즉시 앱의 인스턴스가 작성됩니다. 컨테이너를 실행하면 이미지에서 컨테이너 인스턴스가 작성됩니다.">조직의 개인용 Bluemix 이미지 레지스트리에 Docker 이미지 추가</a>의 내용을 참조하십시오.</li>
+<li><span class="keyword">Bluemix</span> 서비스를 컨테이너에 바인드하고자 함을 아는 경우에는
+<span class="keyword">Bluemix</span> 서비스를 영역에 추가하십시오. 자세한 정보는
+<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix에는 서비스 목록이 있으며 앱 개발자 대신 해당 서비스를 관리합니다. 사용할 컨테이너의 Bluemix 서비스를 추가하려면 이 서비스의 인스턴스를 요청하고 서비스를 컨테이너에 바인드해야 합니다.">Bluemix GUI에서 서비스 바인딩</a>의 내용을 참조하십시오.</li>
+<li>(선택사항) 컨테이너 그룹 내에서 파일에 액세스할 수 있도록 하는 공유 디스크를 원하는 경우,
+컨테이너 그룹을 작성하기 전에 볼륨을 작성하십시오. 자세한 정보는
+<a href="container_volumes_ov.html#container_volumes_cli" title="볼륨은 앱이 작성하는 데이터 또는 앱이 실행해야 하는 파일의 지속적 스토리지 위치입니다. 명령행에서 컨테이너의 볼륨을 작성할 수 있습니다.">명령행(CLI)에서 볼륨 작성</a>의 내용을 참조하십시오.</li>
+</ul>
+</div>
+</div><div class="section context"></div><p class="li stepsection">컨테이너 그룹을 작성하고 배치하려면 다음을 수행하십시오. </p><ol class="steps"><li class="step stepexpand" data-hd-audience="yellow"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">카탈로그에서 <span class="ph uicontrol">컨테이너</span>를 선택하고 이미지를 선택하십시오. </span></span> 개인용 <span class="keyword">Bluemix</span> 레지스트리에 저장된 이미지와 IBM이 제공한 이미지가 모두 표시됩니다. </li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">조직에 대해 네임스페이스가 이미 설정되면, 새로 작성하도록 프롬프트가 표시되지 않으며 다음 단계를 계속할 수 있습니다. </span> 아직 조직에 대해 네임스페이스가 지정되지 않은 경우, 이미지 레지스트리에 대해 네임스페이스를 구성하기 위한 프롬프트가 표시됩니다. 네임스페이스는 <span class="keyword">Bluemix</span>에서 개인용 레지스트리를 식별하는 고유 이름입니다. 네임스페이스는 조직에 대해 한 번 지정되며 작성된 후에는 변경할 수 없습니다.여러 <span class="keyword">Bluemix</span> 지역에서 <span class="keyword">IBM
+Bluemix Container Service</span>를 사용하려면
+각 지역의 네임스페이스를 설정해야 합니다. <div class="note tip" id="container_group_ui__d30998e134"><span class="tiptitle">팁:</span> 네임스페이스에 대한 다음 규칙을 준수하십시오.
+<ul id="container_group_ui__d30998e136"><li>소문자, 숫자, 밑줄(_)만 포함할 수 있습니다.</li>
+<li>길이는 4 - 30자까지 가능합니다. 명령행에서 컨테이너를 관리할 계획이면 빨리 입력할 수 있는 짧은 네임스페이스 이름을 선호할 것입니다.</li>
+<li>해당 이름은 <span class="keyword">Bluemix</span>에서 고유해야 합니다. </li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">사용자 조직의 <span class="keyword">Bluemix</span> 영역 중 하나를 선택하십시오. </span></li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__group_not_single"><span class="cmd">그리고 컨테이너 그룹의 정의를 시작하십시오. </span> 기본적으로 창이 <span class="ph uicontrol">단일</span> 탭으로 열리므로, <span class="ph uicontrol">확장 가능 그룹</span> 탭을 선택하여 컨테이너 그룹을 작성하십시오. </li>
+<li class="step stepexpand" data-hd-audience="yellow">옵션: <span class="cmd">이미지 이름 아래에서 사용할 이미지의 태그 또는 버전을 선택하십시오.</span></li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__enter_name"><span class="cmd"><span class="ph uicontrol">컨테이너 그룹 이름</span> 필드에서 컨테이너의 이름을 입력하십시오.</span> <div class="note tip"><span class="tiptitle">팁:</span> 컨테이너 이름은 문자로 시작해야 하며 대문자, 소문자, 숫자, 마침표(.), 밑줄(_)
+또는 하이픈(-)을 포함할 수 있습니다.</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__enter_instances"><span class="cmd"><span class="ph uicontrol">인스턴스</span> 필드에서 그룹의 인스턴스 수를 지정하십시오. </span> 기본값은 <span class="ph uicontrol">2</span>입니다. 각 인스턴스는 동일한 크기이며 동일한 이미지를 사용해야 합니다. <span class="ph">앱에 필요한 컨테이너 그룹 인스턴스 수는 앱에서 요청을
+처리할 수 있는 시간 및 예상 워크로드에 따라 달라집니다. 예를 들어,
+멀티태스킹 또는 네트워크 연결은 앱에 필요한 인스턴스 수에 영향을 미칩니다. </span>
+
+<p><span class="ph">원하는 인스턴스 수를 판별하려면 앱을 실행하는 Bluemix에 단일 컨테이너를
+배치하고 이 컨테이너에서 로드 테스트를 수행하십시오. 예를 들어, 앱이 초당 100개의 요청을 처리할 수 있지만
+사용자가 초당 300개 요청의 평균 워크로드를 예상하는 경우에 컨테이너 그룹에 대한 적정 인스턴스 수는 3개입니다. </span></p>
+
+<p><span class="ph">컨테이너 그룹에 고가용성을 부여하고 실패에 더 탄력적이게 하려면 예상된 워크로드를 다루기 위한 최소 수보다 많은 추가 인스턴스를 포함하는 것을 고려하십시오. 추가 인스턴스는 다른 인스턴스가 충돌하는 경우 워크로드를 처리할 수 있습니다. 워크로드에 영향을 주지 않고 실패한 인스턴스의 자동 복구를 보장하려면 하나의 추가 인스턴스를 포함하십시오. 두 개의 동시 실패로부터 보호하려면 두 개의 추가 인스턴스를 포함하십시오. 이 설정은 <var class="keyword varname">N+2</var> 패턴이며 여기서 <var class="keyword varname">N</var>은 요청을 다루기 위한 인스턴스의 수이고 <var class="keyword varname">+2</var>는 두 개의 추가 인스턴스입니다. </span> 그룹이 배치된 후 추가 인스턴스가 필요함을 안 경우 그룹을 다시 작성할 필요 없이 더 많은 인스턴스를 추가할 수 있습니다.</p>
+
+<div class="note important"><span class="importanttitle">중요사항:</span> 컨테이너 그룹에는 최소 두 개의 컨테이너 인스턴스가
+있어야 합니다. 그룹에 인스턴스가 하나뿐이며 해당 인스턴스를 사용할 수 없게 되면
+앱의 가동이 중단될 수 있습니다.</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd"><span class="ph uicontrol">크기</span> 필드에서 컨테이너 크기를 선택하십시오.</span> 기본 크기는 <span class="ph uicontrol" data-hd-audience="yellow">Micro (256MB 메모리, 16GB 스토리지)</span>입니다. 선택하는 크기에 따라
+런타임 중에 컨테이너가 컴퓨팅 호스트에서 얻는 메모리와 디스크 공간의 크기가 달라지며,
+컨테이너를 작성한 후에는 변경할 수 없습니다. 기타 사용 가능한 크기는 다음과 같습니다.
+<ul data-hd-audience="yellow" id="container_group_ui__d30998e178"><li>Pico(64MB 메모리, 4GB 디스크 공간)</li>
+<li>Nano(128 MB 메모리, 8GB 디스크 공간)</li>
+<li>Tiny(512MB 메모리, 32GB 디스크 공간)</li>
+<li>Small(1GB 메모리, 64GB 디스크 공간)</li>
+<li>Medium(2GB 메모리, 128GB 디스크 공간)</li>
+<li>Large(4GB 메모리, 256GB 디스크 공간)</li>
+<li>X-Large(8GB 메모리, 512GB 디스크 공간)</li>
+<li>2X-Large(16GB 메모리, 1TB 디스크 공간)</li>
+</ul>
+
+</li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__route"><span class="cmd">전체 공용 URL을 선택하십시오. </span> 이 URL은 라우트라고도 불립니다. 단일 컨테이너 인스턴스의 IP 주소보다는 컨테이너 그룹의
+호스트와 도메인을 사용하여 앱에 대한 로드 밸런싱을 제공합니다.
+네트워크 연결을 분석하는 데 최대 5분이 소요될 수 있으므로, 빌드 후 즉시
+공용 URL에서 컨테이너 그룹을 사용하지 못할 수도 있습니다. <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">호스트</span> 필드에서 호스트 이름을 지정하십시오(예: <span class="ph filepath"><var class="keyword varname">mycontainerhost</var></span>).</span> 호스트 이름에는 밑줄(_)을 포함하지 마십시오. </li>
+<li class="li substep substepexpand"><span class="cmd">시스템 <span class="ph uicontrol">도메인</span>의 경우, <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>를 선택하십시오.</span> 시스템 도메인에서 이미 SSL 인증서를 제공해서 추가적인 구성 없이 HTTPS로
+컨테이너 그룹에 액세스할 수 있습니다. 사용자의 조직을 위해 작성한 사용자 정의 도메인을 선택할 수도 있습니다. 사용자 정의 도메인을 작성하려면 공용 DNS 서버에서 사용자 정의 도메인을 등록하고, <span class="keyword">Bluemix</span>에서
+사용자 정의 도메인을 구성한 후에 사용자 정의 도메인을 공용 DNS 서버의 <span class="keyword">Bluemix</span>
+시스템 도메인에 맵핑해야 합니다. 사용자 정의 도메인이 <span class="keyword">Bluemix</span>
+시스템 도메인에 맵핑된 후에 사용자 정의 도메인에 대한 요청이 <span class="keyword">Bluemix</span>에 있는
+사용자의 애플리케이션으로 라우팅됩니다. 사용자 정의 도메인을 작성할 때는 도메인 이름에 밑줄(_)을 포함하지 마십시오. 사용자 정의 도메인에 대한 자세한 정보는
+<a href="../manageapps/updapps.html#domain">사용자 정의 도메인 작성 및 사용</a>을 참조하십시오. 사용자 정의 도메인의 보안을 유지하려면 컨테이너 그룹에 HTTPS로 액세스할 수 있도록 <a href="../manageapps/secapps.html#ssl_certificate">SSL
+인증서를 업로드</a>하십시오.  <p>라우트 도메인과 호스트가 결합되어 전체 공용 라우트 URL(예:
+<samp class="ph codeph">http://<var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>)을 구성하며
+<span class="keyword">Bluemix</span> 내에서 고유해야 합니다. </p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd"><span class="ph uicontrol">HTTP 포트</span> 필드에 공개할 공용 포트를 지정하십시오. </span> 포트를 입력하거나 드롭 다운 목록에서 포트를 선택할 수 있습니다. 포트를 입력할 때는 사용하려는 IP 프로토콜을 표시하기 위해 UDP와 TCP 사이에서 선택할 수 있습니다. 프로토콜을 지정하지 않으면
+포트가 자동으로 TCP 트래픽에 대해 노출됩니다. 이미지가 빌드되었을 때 그 이미지에 대한 Dockerfile에 지정된 포트로 드롭 다운 목록이 채워져 있습니다. 컨테이너 그룹의 경우 여러 개의 포트를 포함할 수 없습니다. <span class="ph">라우트를 바인드할 때 그룹의 컨테이너는 그룹의 노출된
+포트에서 HTTP 트래픽을 청취해야 합니다. 비HTTP 포트는 공개적으로 노출할 수 없습니다. HTTPS 트래픽이 노출된 포트에 도착하면 (Go)라우터가 HTTPS 종료를 완료합니다. 그런 다음 (Go)라우터와 컨테이너 사이의 가상 사설 네트워크(VPN)에 HTTP 프로토콜이 사용됩니다. </span> <div class="p" id="container_group_ui__d30998e222">사용 중인 이미지의 Dockerfile에 포트가 지정된 경우 해당 포트를 포함하십시오.<div class="note tip"><span class="tiptitle">팁:</span> <ul id="container_group_ui__d30998e225"><li>IBM 인증 Liberty Server 이미지 또는 이 이미지의 수정된 버전에 대해서는 포트 <kbd class="ph userinput">9080</kbd>을 입력하십시오.</li>
+<li>IBM 인증 Node.js 이미지 또는 이 이미지의 수정된 버전에 대해서는
+임의의 포트(예: <kbd class="ph userinput">8000</kbd>)를 입력하십시오. </li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_group_ui__auto-recovery">옵션: <span class="cmd">자동 복구를 사용으로 설정하십시오. <span class="ph uicontrol">자동 복구 사용</span>을 선택하십시오. </span> 자동 복구는 사용할 수 없는 컨테이너 인스턴스를 제거하고 새 컨테이너 인스턴스로 바꿉니다. <p><span class="ph">컨테이너 그룹에 자동 복구를 사용하고
+그룹이 10분 동안 실행된 경우, 그룹의 로드 밸런서가 HTTP 요청을 통해 그룹에 있는 각 컨테이너
+인스턴스의 상태를 정기적으로 확인하기 시작합니다. 컨테이너 인스턴스가 100초 내에
+응답하지 않으면 비활성으로 표시됩니다. 비활성 컨테이너 인스턴스가
+그룹에서 제거되고 자동 복구를 통해 다시 작성됩니다. 자동 복구는 그룹에 있는 컨테이너 인스턴스의
+복구를 3번 시도합니다. 자동 복구는 3번의 시도 후에 그룹에 있는 컨테이너
+인스턴스를 60분 동안 복구하지 않습니다. 60분 후에 자동 복구 프로세스가 다시 시작됩니다.</span></p>
+</li>
+<li class="step stepexpand" id="container_group_ui__volume">옵션: <span class="cmd">데이터 또는 파일 스토리지를 정의하십시오. 기존 볼륨을 컨테이너 또는 컨테이너 그룹과 연관시키십시오. </span> 볼륨은 컨테이너 내에서 파일에 액세스할 수 있도록 허용하는 공유 디스크입니다.
+컨테이너의 경로는 볼륨이 마운트되는 컨테이너의 파일 시스템을 표시합니다.
+<div class="note restriction"><span class="restrictiontitle">제한사항:</span> 명령행을 사용하는 방법으로만 <span class="keyword">Bluemix</span> 영역에서 볼륨을 삭제할 수 있습니다. </div>
+<ol type="a" class="ol substeps" id="container_group_ui__d30998e258"><li class="li substep"><span class="cmd"><span class="ph uicontrol">기본 볼륨 지정</span>을 클릭하십시오.</span></li>
+<li class="li substep"><span class="cmd">드롭 다운 목록에서 볼륨을 선택하십시오.</span></li>
+<li class="li substep"><span class="cmd">다음 필드에서 볼륨을 맵핑할 컨테이너의 경로를 지정하십시오. </span> 예를 들어, <span class="ph filepath">/var/lib/my_volume</span>입니다. </li>
+<li class="li substep"><span class="cmd">볼륨을 읽기 전용으로 지정하려면 <span class="ph uicontrol">읽기 전용</span>을 선택하십시오.</span> 기본적으로 볼륨은 읽기/쓰기입니다.</li>
+<li class="li substep"><span class="cmd">볼륨을 여러 개 추가하려면 <span class="ph uicontrol">기존 볼륨 지정</span>을 클릭하고
+이 단계를 반복하십시오. </span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_group_ui__env_var">옵션: <span class="cmd">환경 변수를 정의하십시오. </span> <ol type="a" class="ol substeps" id="container_group_ui__d30998e292"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">새 환경 변수 추가</span>를 클릭하십시오. </span></li>
+<li class="li substep substepexpand"><span class="cmd">환경 변수의 이름을 입력하십시오. </span></li>
+<li class="li substep substepexpand"><span class="cmd">그다음 필드에 환경 변수의 값을 지정하십시오.</span></li>
+<li class="li substep substepexpand"><span class="cmd">환경 변수를 여러 개 추가하려면 <span class="ph uicontrol">새 환경 변수 추가</span>를 클릭하고 이 단계를 반복하십시오. </span> <div class="tablenoborder"><table summary="" id="container_group_ui__d30998e311" class="defaultstyle"><caption><span class="tablecap">표 2. 제안된 환경 변수</span></caption><thead><tr><th id="d49593e1273" class="thleft">환경 변수</th>
+<th id="d49593e1275" class="thleft">설명</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49593e1273 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d49593e1275 ">일부 <span class="keyword">Bluemix</span> 서비스는 컨테이너에 대한 직접 바인딩을 지원하지 않습니다. 
+이 경우에는 Cloud Foundry 앱을 작성하고 <span class="keyword">Bluemix</span> 서비스를
+이에 바인드해야 합니다. 그리고 <samp class="ph codeph">CCS_BIND_APP</samp>를 사용하여 앱을 컨테이너에 바인드하십시오. 
+Cloud Foundry 앱은 브릿지 역할을 하며, <span class="keyword">Bluemix</span>에서
+브릿지 앱의 VCAP_SERVICES 정보를 실행 중인 컨테이너 인스턴스에 삽입할 수 있도록 허용합니다. </td>
+</tr>
+<tr><td headers="d49593e1273 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">참고:</span>  서비스가 <samp class="ph codeph">CCS_BIND_SRV=</samp> 환경 변수 사용을 지원하지 않는 경우에는
+<samp class="ph codeph">CCS_BIND_APP=</samp>를 대신 사용하십시오. </div>
+</td>
+<td headers="d49593e1275 ">브릿지 앱을 사용하지 않고 <span class="keyword">Bluemix</span> 서비스를
+컨테이너에 직접 바인드하려면 <samp class="ph codeph">CCS_BIND_SRV</samp>를 사용하십시오. 이 바인딩을 사용하면
+<span class="keyword">Bluemix</span>에서 VCAP_SERVICES 정보를
+실행 중인 컨테이너 인스턴스에 삽입할 수 있습니다. 다수의 <span class="keyword">Bluemix</span>
+서비스를 나열하려면 동일한 환경 변수의 일부로서 이를 포함하십시오. </td>
+</tr>
+<tr><td headers="d49593e1273 "><div class="lines">(더 이상 사용되지 않음) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d49593e1275 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">이 환경 변수는 더 이상 사용되지 않습니다. :</span> 대신 사용자 컨테이너에 대한 외부 액세스에는 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> 또는 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">attach</samp>를 사용하십시오. 자세한 정보는
+<a href="container_security.html#container_cli_login_exec" title="실행 중인 컨테이너에 로그인해야 하는 경우 bx ic exec를 사용할 수 있습니다.">exec를 사용하여 컨테이너에 로그인</a>의 내용을 참조하십시오.</div>
+
+<span class="ph">컨테이너를 작성할 때 이에 SSH 키를 추가하기 위해 <samp class="ph codeph">CCS_API_KEY</samp>를 사용할 수 있습니다.</span></td>
+</tr>
+<tr><td headers="d49593e1273 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d49593e1275 "><span class="ph" id="container_group_ui__d31079e1430">컨테이너에서 모니터링할 로그 파일을 추가하려면 <samp class="ph codeph">LOG_LOCATIONS</samp>
+환경 변수를 로그 파일의 경로와 함께 포함시키십시오.</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_group_ui__service">옵션: <span class="cmd">앱에 대한 기타 서비스를 정의하십시오. <span class="keyword">Bluemix</span> 영역의 <span class="keyword">Bluemix</span> 서비스를 컨테이너에 바인드하십시오. 
+<span class="ph uicontrol">서비스 바인딩</span> 섹션에서 <span class="keyword">Bluemix</span> 서비스 인스턴스를 선택하고 <span class="ph uicontrol">추가</span>를 클릭하여 서비스를 컨테이너에 바인드하십시오. </span> 아직 영역에 추가된 <span class="keyword">Bluemix</span> 서비스가 없으면 서비스가 메뉴에 표시되지 않습니다. </li>
+<li class="step stepexpand" id="container_group_ui__create"><span class="cmd">컨테이너를 배치하고 완료될 때까지 대기하십시오. <span class="ph uicontrol">작성</span>을 클릭하십시오.</span> 컨테이너가 작성될 때(잠시 시간이 걸릴 수 있음) <span class="keyword">Bluemix</span>에서도
+컨테이너가 시작됩니다. <span class="ph uicontrol">CONTAINER HEALTH</span> 섹션에서 컨테이너의 상태를 확인하십시오.
+작성이 완료되면 상태는 <span class="ph uicontrol">실행 중</span>입니다. </li>
+</ol>
+<div class="section result"><p id="container_group_ui__wait"><span class="ph" id="container_group_ui__buildroute">컨테이너에서 외부 애플리케이션에 연결 중인 경우에는
+컨테이너 프로세스를 실행한 후에 최대 5분을 기다려야 지정된 라우트에
+연결될 수 있습니다. 그런 다음, 브라우저에서
+<span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>을 열어서 앱이 컨테이너 그룹에서 실행 중인지 확인할 수 있습니다.</span></p>
+</div><div class="section postreq"><div class="p" id="container_group_ui__ha_setup">더욱 광범위하게 컨테이너 설정을 분배할수록 앱의 가동이 중단될 가능성이
+줄어듭니다. 컨테이너 그룹을 작성한 후 앱을 더욱 광범위하게 분배할 수 있도록
+동일한 영역, 동일한 조직의 다른 영역 또는 다른 지역에 동일한 이미지를 사용하여
+다른 그룹을 작성하십시오. 자세한 정보는 다음 주제를 참조하십시오.<ul><li><a href="container_ha.html#container_ha" title="고가용성 컨테이너를 사용하면 앱의 가동 중단 시간이 줄어 듭니다. 더욱 광범위하게 컨테이너 설정을 분배할수록 앱의 가동이 중단될 가능성이 줄어듭니다. 호스트 장애, 네트워크 장애 또는 애플리케이션 소프트웨어 장애와 같은 잠재적인 장애 조건 시 복원력을 높이기 위해 IBM Bluemix Container Service에서 기본 제공되는 기능을 사용하여 고가용성을 달성할 수 있습니다.">고가용성 프로세스를 컨테이너 그룹으로 실행</a></li>
+<li><a href="container_ha_org.html">container_ha_org.html</a></li>
+<li><a href="container_ha.html#container_ha_regions" title="글로벌 로드 밸런싱을 제공하는 DNS(Domain Name System)에서 앱의 도메인 이름을 구성하는 경우, 라우트에서 동일한 호스트 이름을 사용하는 서로 다른 Bluemix 지역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성할 수 있습니다. 이 설정을 사용하면 사용자가 속한 지역별로 로드 밸런싱이 수행되도록 허용할 수 있습니다. 한 지역에 있는 컨테이너 그룹, 하드웨어 또는 전체 데이터 센터가 중단되면 트래픽이 다른 지역에 배치된 컨테이너 그룹으로 라우팅됩니다.">다른 Bluemix 지역에서 고가용성 컨테이너 그룹 실행</a></li>
+</ul>
+</div>
+
+<p>컨테이너 그룹에서 실행되는 컨테이너 인스턴스 수를 늘리거나 줄이려면 <span class="keyword">Bluemix</span> GUI에서 컨테이너 그룹을 여십시오. 인스턴스의 수를 늘리려면
+<span class="ph uicontrol">+</span> 단추를 클릭하고, 수를 줄이려면 <span class="ph uicontrol">-</span> 단추를 클릭하십시오.
+그런 다음, <span class="ph uicontrol">저장</span>을 클릭하십시오.</p>
+</div></div>
+<aside role="complementary" aria-labelledby="d49593e806"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e1510" lang="ko-kr" id="container_group_cli"><h2 class="topictitle2" id="d49593e1510">명령행 인터페이스(CLI)를 사용하여 컨테이너 그룹으로 장기 서비스 실행</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> CLI에서
+확장 가능한 그룹 컨테이너를 작성하고 배치합니다. <span class="ph">컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가
+포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나
+필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오. </span></p>
+<div class="section prereq"><div class="p" id="container_group_cli__prereq">시작하기 전에 다음과 같은 단계를 고려하십시오. <ul><li><span class="keyword">Bluemix</span> 영역에서 컨테이너를 작성하려면 이 영역에 대해 개발자 역할이 있어야 합니다.
+각 역할의 권한 및
+역할 편집 방법에 대한 자세한 정보는 <span class="ph"><a href="../iam/users_roles.html">사용자 및 역할</a></span>의 내용을 참조하십시오.</li>
+<li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> 명령을
+실행하여 컨테이너에서 사용할 기존 이미지를 조직의 개인용 이미지 레지스트리에서 식별하십시오. 레지스트리에 이미지를
+추가하려면 <a href="container_images_adding_ov.html#container_images_adding_ov" title="컨테이너 이미지는 작성하는 모든 컨테이너의 기초가 됩니다. 이미지는 빌드 아티팩트(예: 앱, 앱의 구성 및 이의 종속 항목) 및 이미지를 빌드하는 지시사항이 포함된 파일인 Dockerfile에서 작성됩니다. 컨테이너 이미지를 실행 파일(.exe 또는 .bin)로서 생각하십시오. 실행 가능 앱 파일을 실행하는 즉시 앱의 인스턴스가 작성됩니다. 컨테이너를 실행하면 이미지에서 컨테이너 인스턴스가 작성됩니다.">조직의 개인용 Bluemix 이미지 레지스트리에 Docker 이미지 추가</a>의 내용을 참조하십시오. </li>
+<li><span class="keyword">Bluemix</span> 서비스를 컨테이너에 바인드하고자 함을 아는 경우에는
+<span class="keyword">Bluemix</span> 서비스를 영역에 추가하십시오. 자세한 정보는
+<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix에는 서비스 목록이 있으며 앱 개발자 대신 해당 서비스를 관리합니다. 사용할 컨테이너의 Bluemix 서비스를 추가하려면 이 서비스의 인스턴스를 요청하고 서비스를 컨테이너에 바인드해야 합니다.">Bluemix GUI에서 서비스 바인딩</a>의 내용을 참조하십시오.</li>
+<li>여러 컨테이너에서 파일에 대한 액세스를 허용하는 공유 디스크를 원하는 경우에는
+컨테이너를 작성하기 전에 볼륨을 작성하십시오. 자세한 정보는
+<a href="container_volumes_ov.html#container_volumes_cli" title="볼륨은 앱이 작성하는 데이터 또는 앱이 실행해야 하는 파일의 지속적 스토리지 위치입니다. 명령행에서 컨테이너의 볼륨을 작성할 수 있습니다.">명령행(CLI)에서 볼륨 작성</a>의 내용을 참조하십시오.</li>
+</ul>
+</div>
+</div><div class="section context"></div><p class="li stepsection">확장 가능 컨테이너 그룹을 작성하십시오. </p><ol class="steps"><li class="step stepexpand"><span class="cmd">다음 <samp class="ph codeph">group-create</samp> 명령 중 하나를 실행하여 조직의 개인용 이미지
+레지스트리에 있는 기존 이미지를 사용해 컨테이너 그룹을 작성하십시오. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --anti --auto --desired <var class="keyword varname">&lt;instances&gt;</var> -e "LOG_LOCATIONS=<var class="keyword varname">&lt;file_path&gt;</var>" -m <var class="keyword varname">&lt;size&gt;</var> --name <var class="keyword varname">&lt;name&gt;</var> -p <var class="keyword varname">&lt;public_port&gt;</var> -n <var class="keyword varname">&lt;hostname&gt;</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --volume <var class="keyword varname">&lt;volume_name&gt;:&lt;mount_path&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;namespace&gt;</var>/<var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+예<p>다음 예제는 <span class="ph uicontrol">ibmliberty</span> 이미지에서 3개의 인스턴스가 있는 이름이 <var class="keyword varname">my_group</var>인 컨테이너 그룹을 작성합니다. 연관관계
+방지 및 자동복구 기능이 앱에 대한 고가용성을 보장하기 위해 그룹에 사용됩니다. 인터넷에서 그룹에 액세스하기 위해
+공용 포트 9080이 노출되고 라우트 <span class="ph filepath">myhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>가 그룹에 맵핑됩니다. 볼륨 <var class="keyword varname">myvol</var>이 그룹에 마운트되어 컨테이너 데이터를 지속하고 표준 Ubuntu 로그 파일이 사용자 정의 로그 파일 위치로 추가됩니다.사용자 정의 로그 파일 위치의 로그는 그룹을 작성한 후 Kibana에서 볼 수 있습니다. </p>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --anti --auto --desired 3 -e <span class="q">"LOG_LOCATIONS=/var/log/dpkg.log"</span> -m 64 --name my_group -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --volume myvol:/var/tmp registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+
+컨테이너 그룹이 작성되면 시작됩니다. 컨테이너 그룹이 배치되면 이 그룹의 ID가 표시됩니다.</li>
+<li class="step stepexpand">옵션: <span class="cmd">실행 중인 컨테이너 그룹을 나열하십시오.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span> </code></pre>
+
+
+<p><span class="ph" id="container_group_cli__d29445e196">컨테이너에서 외부 애플리케이션에 연결 중인 경우에는
+컨테이너 프로세스를 실행한 후에 최대 5분을 기다려야 지정된 라우트에
+연결될 수 있습니다. 그런 다음, 브라우저에서
+<span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>을 열어서 앱이 컨테이너 그룹에서 실행 중인지 확인할 수 있습니다.</span></p>
+</li>
+</ol>
+<div class="section postreq"><div class="p">더욱 광범위하게 컨테이너 설정을 분배할수록 앱의 가동이 중단될 가능성이
+줄어듭니다. 컨테이너 그룹을 작성한 후 앱을 더욱 광범위하게 분배할 수 있도록
+동일한 영역, 동일한 조직의 다른 영역 또는 다른 지역에 동일한 이미지를 사용하여
+다른 그룹을 작성하십시오. 자세한 정보는 다음 주제를 참조하십시오.<ul><li><a href="container_ha.html#container_ha" title="고가용성 컨테이너를 사용하면 앱의 가동 중단 시간이 줄어 듭니다. 더욱 광범위하게 컨테이너 설정을 분배할수록 앱의 가동이 중단될 가능성이 줄어듭니다. 호스트 장애, 네트워크 장애 또는 애플리케이션 소프트웨어 장애와 같은 잠재적인 장애 조건 시 복원력을 높이기 위해 IBM Bluemix Container Service에서 기본 제공되는 기능을 사용하여 고가용성을 달성할 수 있습니다.">고가용성 프로세스를 컨테이너 그룹으로 실행</a></li>
+<li><a href="container_ha_org.html">container_ha_org.html</a></li>
+<li><a href="container_ha.html#container_ha_regions" title="글로벌 로드 밸런싱을 제공하는 DNS(Domain Name System)에서 앱의 도메인 이름을 구성하는 경우, 라우트에서 동일한 호스트 이름을 사용하는 서로 다른 Bluemix 지역의 동일한 이미지에서 두 개의 컨테이너 그룹을 작성할 수 있습니다. 이 설정을 사용하면 사용자가 속한 지역별로 로드 밸런싱이 수행되도록 허용할 수 있습니다. 한 지역에 있는 컨테이너 그룹, 하드웨어 또는 전체 데이터 센터가 중단되면 트래픽이 다른 지역에 배치된 컨테이너 그룹으로 라우팅됩니다.">다른 Bluemix 지역에서 고가용성 컨테이너 그룹 실행</a></li>
+</ul>
+</div>
+
+<p>컨테이너 그룹이 작성된 후에는 컨테이너 그룹에서 실행되는 인스턴스의 수를 늘리거나 줄일 수 있음은 물론 환경 변수를 더 추가할 수도 있습니다. 자세한 정보는
+<a href="container_cli_reference_cfic.html#container_cli_reference_cfic__group_update"><samp class="ph codeph"><span class="ph">bx ic</span> group-update</samp></a>
+명령을 검토하십시오. </p>
+</div></div>
+<aside role="complementary" aria-labelledby="d49593e1510"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e1791" lang="ko-kr" id="container_group_ui_as"><h2 class="topictitle2" id="d49593e1791">컨테이너 그룹 자동 스케일링(더 이상 사용되지 않음)</h2>
+<div class="body taskbody"><p class="shortdesc">컨테이너에 대한 자동 스케일링 기능은 더 이상 사용되지 않습니다. 
+<span class="keyword">IBM
+Bluemix Container Service</span>를 사용하여 기능을 대체할 수 있습니다. <span class="ph">세부사항은
+<a href="https://www.ibm.com/blogs/bluemix/2017/03/retirement-ibm-container-autoscaling-beta-capability" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Auto-Scaling 폐기</a>를 참조하십시오.</span></p>
+<div class="section context">Cloud Foundry 애플리케이션 스케일링에 대한 정보를 찾으십니까? <a href="https://www.ng.bluemix.net/docs/services/Auto-Scaling/index.html" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)"><span class="keyword">IBM Auto-Scaling for Bluemix</span></a>을 확인하십시오.</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d49593e1873" id="migrating_autoscaling"><h3 class="topictitle3" id="d49593e1873">Kubernetes Autoscaling으로 마이그레이션</h3>
+<div class="body taskbody"><p class="li stepsection"><p><a href="cs_ov.html" title="IBM Bluemix Container Service는 Kubernetes API를 사용하여 독립적인 컴퓨팅 호스트의 클러스터에서 컨테이너화된 앱의 배치, 오퍼레이션, 스케일링 및 모니터링을 자동화하는 강력한 도구, 직관적인 사용자 경험, 기본 제공 보안 및 격리를 제공할 수 있도록 Docker 및 Kubernetes를 결합합니다.">Kubernetes</a>에서는
+<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Horizontal
+Pod Autoscaling</a>을 사용하여 CPU를 기반으로 앱을 스케일링할 수 있습니다. </p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">필수 <a href="cs_cli_install.html" title="IBM Bluemix Container Service CLI 또는 API를 사용하여 Kubernetes 클러스터를 작성하고 관리할 수 있습니다.">CLI</a>를 설치하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_index.html#clusters" title="Kubernetes는 컴퓨팅 시스템의 클러스터 상에서 앱 컨테이너를 스케줄링하기 위한 오케스트레이션 도구입니다. Kubernetes를 통해 개발자는 컨테이너의 처리능력과 유연성을 활용하여 고가용성 애플리케이션을 신속하게 개발할 수 있습니다.">Bluemix에서
+Kubernetes 클러스터 시작하기</a>의 단계에 따라 클러스터를 작성하십시오. 
+로깅, 모니터링, Vulnerability Advisor 및 해당 위치의 기타 사용자 정의를 포함하여
+반드시 현재 컨테이너 그룹을 복제하도록 클러스터를 설정하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd">클러스터의 <a href="cs_cli_configure.html" title="Kubernetes CLI와 함께 제공되는 명령을 사용하여 Bluemix에서 클러스터를 관리할 수 있습니다. 클러스터를 작성한 후, 로컬 CLI에 대한 컨텍스트를 환경 변수가 있는 해당 클러스터로 설정하십시오. 그런 다음, Kubernetes kubectl 명령을 실행하여 Bluemix에서 클러스터 관련 작업을 수행할 수 있습니다.">컨텍스트를 설정</a>하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_apps_cli.html" title="클러스터가 작성된 후에 Kubernetes CLI를 사용하여 해당 클러스터에 앱을 배치할 수 있습니다.">CLI에서</a> 클러스터에 앱을 배치하십시오. </span> 앱을 배치할 때는 CPU를 요청해야 합니다.
+
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__table_px1_qsx_yy" class="defaultstyle"><thead><tr><th colspan="2" id="d49593e1953" class="thleft"><span class="ph"><img src="images/idea.png" alt="이 아이콘은 이 태스크 단계에 대해 학습할 정보가 더 있음을 나타냅니다."></span> 이 명령의 컴포넌트 이해</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d49593e1953 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d49593e1953 ">배치하려는 애플리케이션입니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d49593e1953 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d49593e1953 ">컨테이너의 필수 CPU(밀리 코어 단위로 지정됨)입니다. 예: <samp class="ph codeph">--requests=200m</samp>.</td>
+</tr>
+<tr><td style="width: 50%" headers="d49593e1953 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d49593e1953 ">true인 경우, 외부 서비스를 작성합니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d49593e1953 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d49593e1953 ">외부에서 앱이 사용 가능한 포트입니다. </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">참고:</span> 보다 복잡한 배치를 위해서는 <a href="cs_apps_cli.html" title="클러스터가 작성된 후에 Kubernetes CLI를 사용하여 해당 클러스터에 앱을 배치할 수 있습니다.">배치 스크립트</a>를 작성해야 할 수 있습니다. </div>
+</li>
+<li class="step stepexpand"><span class="cmd">Horizontal Pod Autoscaler를 작성하고 정책을 정의하십시오. </span>  <samp class="ph codeph">kubetcl autoscale</samp> 명령으로 작업하는 방법에 대한 자세한 정보는
+<a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Kubernetes 문서</a>를 참조하십시오.
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__table_pgd_btx_yy" class="defaultstyle"><thead><tr><th colspan="2" id="d49593e2013" class="thleft"><span class="ph"><img src="images/idea.png" alt="이 아이콘은 이 태스크 단계에 대해 학습할 정보가 더 있음을 나타냅니다."></span> 이 명령의 컴포넌트 이해</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d49593e2013 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d49593e2013 ">Horizontal Pod Autoscaler에서 유지하는 평균 CPU 사용률(백분율로 지정됨)입니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d49593e2013 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d49593e2013 ">지정된 CPU 사용 백분율을 유지하기 위해 사용되는 배치된 포드의 최소 수입니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d49593e2013 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d49593e2013 ">지정된 CPU 사용 백분율을 유지하기 위해 사용되는 배치된 포드의 최대 수입니다. </td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">애플리케이션이 올바르게 작동 중인지 확인하십시오.</span> <ul><li>서비스 대시보드를 확인하여 앱이 실행 중인지 확인하십시오. </li>
+<li>앱을 확인하여 키 변경사항이 구현되었는지 확인하십시오. </li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Containers의 원래 인스턴스를 <a href="container_ha.html#container_group_remove" title="할당량의 사용을 최대화하려면 사용하지 않는 컨테이너 그룹을 가끔씩 제거하십시오.">디프로비저닝하고 제거</a>하십시오. </span></li>
+</ol>
+</div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d49593e2054" lang="ko-kr" id="container_group_migrate"><h2 class="topictitle2" id="d49593e2054">컨테이너 그룹을 다른 <span class="keyword">Bluemix</span> 영역으로 이동</h2>
+<div class="body taskbody"><p class="shortdesc">동일한 조직의 다른 영역에 컨테이너 그룹을 이동해야 하는 경우
+라우트가 같은 두 번째 컨테이너를 작성할 수 있습니다. 그런 다음 앱의 가동을 중단시키지 않고
+첫 번째 그룹을 제거할 수 있습니다.</p>
+<div class="section context"> 기존 라우트를 새 컨테이너 그룹에 맵핑할 때 컨테이너 인스턴스의
+참조는 영역의 로드 밸런서에 추가됩니다. 결과적으로
+로드 밸런서가 수신 트래픽을 라우팅할 때 새 컨테이너 그룹을 고려합니다. 
+컨테이너 그룹을 삭제하는 경우, 로드 밸런서는 관련 컨테이너 인스턴스 참조를 자동으로 제거합니다. </div><ol class="steps"><li class="step stepexpand"><span class="cmd">Cloud Foundry CLI에 로그인하십시오. 
+프롬프트가 표시되면 <span class="keyword">Bluemix</span> 사용자 이름과 비밀번호를 입력하십시오. </span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+
+<p><span class="ph">싱글 사인온 매개변수 <span class="keyword option">-sso</span>는 연합 ID로 로그인할 때 필요합니다. 이 옵션이 사용되면 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>를 열고 일회성 패스코드를 얻으십시오. <span class="keyword option">--sso</span> 옵션을 포함하지 않는 경우에는 다음의 하위 단계를 완료하십시오.</span></p>
+<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">이메일</span>에 대해 <span class="keyword">Bluemix</span>의 IBM ID를 입력하십시오. </span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">비밀번호</span>에 대해 IBM ID의 비밀번호를 입력하십시오. </span> 사용자의 Bluemix 조직과 영역이 검색됩니다. </li>
+<li class="li substep"><span class="cmd"><span class="keyword">Bluemix</span> 조직 중 하나를 표시하는 번호를 입력하십시오. </span></li>
+<li class="li substep"><span class="cmd">기존 <span class="keyword">Bluemix</span> 영역 중 하나를 표시하는 번호를 입력하십시오. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span>를 초기화하십시오. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">컨테이너 그룹을 작성하고 이에 라우트를 맵핑하십시오. </span> 다음 명령은 <span class="ph uicontrol">ibmliberty</span> 이미지에서 이름이 <var class="keyword varname">my_group_1</var>인 컨테이너 그룹을 작성합니다. 컨테이너 그룹은
+공용 라우트 <span class="ph filepath">myhost를 사용하여 액세스할 수 있습니다.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>.
+<div class="steps note"><span class="notetitle">참고:</span> 호스트 이름(이 예에서는 <var class="keyword varname">myhost</var>)은
+<span class="keyword">Bluemix</span>의 모든 조직에서 고유해야 합니다. 
+따라서 계속 진행하려면 <var class="keyword varname">myhost</var>의 새 이름을 선택해야 합니다. </div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">my_group_1</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">컨테이너 그룹이 작성되었는지 확인하십시오.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">조직 영역을 변경하십시오. <var class="keyword varname">SPACE</var>를 컨테이너 그룹을 이동할
+영역의 이름으로 대체하십시오. </span> <pre class="codeblock"><code>cf target -s <var class="keyword varname">SPACE</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">새 영역을 지시하도록 <span class="keyword">IBM
+Bluemix Container Service</span>를 다시 초기화하십시오. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">새 영역에서 다른 컨테이너 그룹을 작성하고 기존 라우트를 이에 맵핑하십시오. </span> 다음 명령은 <span class="ph uicontrol">ibmliberty</span> 이미지에서 이름이 <var class="keyword varname">my_group_2</var>인 컨테이너 그룹을 작성합니다. 
+이는 사용자가 작성한 첫 번째 컨테이너 그룹과 동일한 공용 라우트에 맵핑됩니다.
+<div class="steps note"><span class="notetitle">참고:</span> 컨테이너 그룹의 이름은 조직 영역 내에서 고유해야 합니다. 
+조직의 다른 영역에서 새 컨테이너 그룹을 작성할 때 이 이름을 다시 사용할 수 있습니다. </div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">my_group_2</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">컨테이너 그룹이 작성되었는지 확인하십시오.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+
+이제 새 영역에서 새 컨테이너 그룹을 작성했으며 기존 라우트를 이에 맵핑했으므로,
+계속 진행하여 첫 번째 컨테이너 그룹을 제거할 수 있습니다. </li>
+<li class="step stepexpand"><span class="cmd">첫 번째 컨테이너 그룹이 작성된 조직 영역으로 변경하십시오. <var class="keyword varname">SPACE</var>를 사용자 영역의 이름으로 바꾸십시오. </span> <pre class="codeblock"><code>cf target -s <var class="keyword varname">SPACE</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">선택된 영역을 지시하도록 <span class="keyword">IBM
+Bluemix Container Service</span>를 다시 초기화하십시오. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">컨테이너 그룹에서 라우트를 맵핑 해제하십시오. <var class="keyword varname">myhost</var>를 선택된 호스트의 이름으로 대체하십시오. </span> 컨테이너 그룹에서 라우트를 맵핑 해제하는 경우, 모든 컨테이너 참조가
+로드 밸런서에서 삭제되며 수신 트래픽을 라우팅할 때 고려되지 않습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> <var class="keyword varname">my_group_1</var>  </code></pre>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">컨테이너 그룹을 제거하십시오. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove <var class="keyword varname">my_group_1</var></code></pre>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">컨테이너 그룹이 제거되었는지 확인하십시오.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49593e2054"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e2395" lang="ko-kr" id="container_group_update_ui"><h2 class="topictitle2" id="d49593e2395"><span class="keyword">Bluemix</span> GUI를 사용하여 컨테이너 그룹에서 실행되는 앱 업데이트</h2>
+<div class="body taskbody"><p class="shortdesc">컨테이너 그룹에서 실행 중인 앱을 업데이트하려면 사용자 이미지를 업데이트하고 여기에서
+새 컨테이너 그룹을 배치해야 합니다. 업데이트 프로세스 중에는 이전에 실행 중인 컨테이너 그룹을 중지할 필요가 없습니다. 
+새 컨테이너 그룹을 작성하고 이에 기존 라우트 정보를 맵핑한 후에, 기한이 지난 컨테이너 그룹에서 라우트를 맵핑 해제할 수 있습니다. 
+가동 중지 시간 없이 새 앱이 배치됩니다. </p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_group_update_ui__update_options_ui" class="defaultstyle"><caption><span class="tablecap">표 3. 앱 업데이트를 위한 선택적 도구</span></caption><thead><tr><th id="d49593e2466" class="thleft">업데이트 도구</th>
+<th id="d49593e2468" class="thleft">설명</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49593e2466 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d49593e2468 ">사용자가 사용할 수 있는 <span class="keyword">Bluemix</span> 서비스인
+<span class="keyword">Delivery Pipeline</span>을 사용하여
+<span class="keyword">Bluemix</span>에 대한 컨테이너 배치 및 앱 빌드를 자동화합니다. 자세한 정보는
+<a href="container_integrations.html#container_group_pipeline_ov" title="Delivery Pipeline을 사용하여 컨테이너 그룹의 빌드 및 배치를 자동화합니다.">Delivery Pipeline을 사용하여 컨테이너 그룹 작성</a>의 내용을 참조하십시오.</td>
+</tr>
+<tr><td headers="d49593e2466 "><span class="keyword">Bluemix</span>
+GUI에서 <span class="keyword">Active Deploy</span> </td>
+<td headers="d49593e2468 ">더 이상 사용되지 않는 항목을 대체하도록 새 컨테이너의 배치를 조정합니다. 
+Active Deploy에서는 문제점이 발견될 때 롤백이 가능하도록 더 이상 사용되지 않는 컨테이너 그룹이 유지됩니다. 자세한 정보는
+<a href="../services/ActiveDeploy/updatingapps.html#updatingappsgui" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Active Deploy
+서비스(GUI)에서 앱 또는 컨테이너 그룹 업데이트</a>를 참조하십시오. </td>
+</tr>
+<tr><td headers="d49593e2466 ">UrbanCode Deploy</td>
+<td headers="d49593e2468 ">UrbanCode Deploy를 사용하여
+<span class="keyword">Bluemix</span>에 대한 컨테이너 배치 및 앱 빌드를 자동화합니다. 
+UrbanCode Deploy 구매에 대한 자세한 정보는
+<a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">IBM UrbanCode
+Deploy</a> 제품 페이지를 참조하십시오. </td>
+</tr>
+<tr><td headers="d49593e2466 "><span class="keyword">IBM
+Bluemix Container Service</span> CLI 및 <span class="keyword">Bluemix</span> GUI의 조합을 사용하여 직접 앱 업데이트</td>
+<td headers="d49593e2468 ">앱을 직접 업데이트하려면 이 태스크의 단계를 완료하십시오. </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection"><span class="keyword">IBM
+Bluemix Container Service</span> CLI 및
+<span class="keyword">Bluemix</span> GUI를 사용하여 직접 앱을 업데이트하려면 다음을 수행하십시오. </p><ol class="steps"><li class="step stepexpand"><span class="cmd">사용자의 Dockerfile과 앱 코드가 저장되는 디렉토리로 변경하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd">로컬로 앱을 업데이트하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span>에서 직접 이미지를 빌드하거나, <span class="keyword">Bluemix</span>에
+푸시하기 전에 로컬로 이미지를 빌드하고 테스트하십시오.</span> <ul><li><span class="keyword">Bluemix</span>에서 직접 이미지를 빌드하려면 다음 명령을 실행하십시오.*<div class="note tip"><span class="tiptitle">팁:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>을 실행하여
+네임스페이스를 검색하고 <var class="keyword varname">&lt;my_namespace&gt;</var>를 자신의 네임스페이스 정보로 대체하십시오. </span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+예<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var>.</code></pre>
+<div class="steps note"><span class="notetitle">참고:</span> <span class="ph" id="container_group_update_ui__d32458e176">*이 명령에서 <a href="container_cli_cfic_install.html#container_cli_login" title="CLI를 설치한 후 CLI를 사용하기 위해 로그인합니다."><span class="keyword">IBM
+Bluemix Container Service</span></a>에 로그인하고
+환경 변수를 기본 Docker 명령을 사용하도록 설정한 경우 <samp class="ph codeph"><span class="ph">bx ic</span></samp>를
+<samp class="ph codeph">docker</samp>로 대체할 수 있습니다. </span><span class="ph" id="container_group_update_ui__d32458e187">이 주제에서 별표(*)로 표시된 모든 단계에서 기본 Docker
+명령을 사용할 수 있습니다. </span></div>
+</li>
+<li>로컬로 이미지를 빌드한 후에 해당 이미지를 <span class="keyword">Bluemix</span>에 푸시하려면 다음 단계를 따르십시오.<div class="p"><ol type="a"><li><span class="keyword">IBM
+Bluemix Container Service</span>의 플러그인을 사용 중인 경우에는 다시 로그인하십시오. <samp class="ph codeph">docker</samp> 명령을
+로컬 시스템의 Docker 엔진에 보내도록, 옵션 2의 환경 변수를
+설정하지 마십시오.<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Dockerfile에서 로컬로 이미지를 빌드하십시오.<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">예<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>다음 명령을 사용하여 새 앱이 로컬로 실행되는지 테스트하도록 이미지에서 컨테이너를 실행하십시오.
+여기서 <var class="keyword varname">Port</var>는 HTTP 트래픽에 사용되는 포트입니다. <div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">예<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>앱이
+올바로 실행 중이면 컨테이너 ID가 CLI 출력에 표시됩니다. 컨테이너 관련
+로그를 검토하려면 <samp class="ph codeph">docker logs
+<var class="keyword varname">&lt;container_name_or_id&gt;</var>.</samp>를 실행하십시오. </p>
+</li>
+<li id="container_group_update_ui__d32441e256">개인용 <span class="keyword">Bluemix</span> 레지스트리와 새 이름을 사용하여 로컬 이미지에 태그를 지정하십시오. <span class="ph">이미지 이름에는 소문자의 영숫자 문자 또는 밑줄(_)만 사용하십시오.
+하이픈(-) 또는 슬래시(/) 등의 기타 기호를 사용하면 이미지가 이미지 레지스트리에
+푸시되지 않습니다.</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>예</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>다음 명령을 사용하여 개인용 <span class="keyword">Bluemix</span>
+레지스트리에 이미지를 푸시하십시오. <div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">예<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">중요사항:</span> <span class="ph">개인용 <span class="keyword">Bluemix</span> 레지스트리에 이미지를 푸시하면 이미지와 관련하여 보고된
+크기가 로컬 Docker 엔진에 있는 동일한 이미지의 크기보다 작습니다. 크기가 다르다고 해서 이미지를 푸시할 때 문제가 발생한 것은 아닙니다.
+이미지의 압축 크기는 <span class="keyword">IBM
+Bluemix Container Service</span>에서 보고됩니다. </span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">이미지가 <span class="keyword">Bluemix</span> 레지스트리에 푸시되었는지 확인하십시오.*</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+images</code></pre>
+</div>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">이미지 취약점을 검토하십시오.</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="keyword">Bluemix</span> GUI에서 카탈로그로 이동하고 <span class="ph uicontrol">컨테이너</span>를 선택하십시오. </span></li>
+<li class="li substep substepexpand"><span class="cmd">추가한 이미지를 클릭하십시오. </span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">취약성 평가</span> 섹션에서 취약성 평가 상태를 검토하십시오. </span> 다음 조건 중 하나로 상태가 표시됩니다.
+<ul><li><span class="keyword wintitle">안전하게 배치 가능</span> - 중대한 취약점이 발견되지 않았습니다.</li>
+<li><span class="keyword wintitle">배치 시 주의 필요</span> - 중대한 취약점이 발견되었으며 해결되어야 합니다. </li>
+<li><span class="keyword wintitle">배치 차단됨</span> - 중대한 취약점이 발견되었으며 이미지를 배치하기 전에 해결되어야 합니다. </li>
+<li><span class="keyword wintitle">불완전</span> - 스캔이 완료되지 않았습니다. 스캔이 실행 중이거나
+이미지의 운영 체제가 호환 가능하지 않을 수 있습니다. 대기하고 다시 스캔을 시도하십시오. 스캔이
+아직 완료되지 않은 경우 다시 이미지를 푸시하여 새 스캔을 시작하십시오. 스캔이 불완전한 이미지는
+배치에 대해 차단되지 않습니다.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">실행 중인 컨테이너 그룹에 맵핑된 라우트 정보를 기록해 놓으십시오. </span> <ol type="a"><li><span class="keyword">Bluemix</span> GUI에서 컨테이너 그룹을 선택하십시오. </li>
+<li>라우트를 기록해 놓으십시오. 호스트와 도메인이 결합되어
+전체 공용 라우트 URL을 형성합니다(예: <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>).</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">다른 확장 가능한 컨테이너 그룹을 작성하고 라우트를 포함하십시오. </span> <ol type="a"><li><span class="ph" data-hd-otherprops="registry_check">카탈로그에서 <span class="ph uicontrol">컨테이너</span>를 선택하고 이미지를 선택하십시오. </span></li>
+<li>그리고 컨테이너 그룹의 정의를 시작하십시오. 기본적으로 창이 <span class="ph uicontrol">단일</span> 탭으로 열립니다.
+그런 다음 컨테이너 그룹을 작성하기 위해 <span class="ph uicontrol">확장 가능</span> 탭을 선택하십시오. 
+컨테이너 그룹을 정의할 때는 이전 단계에서 검색한 호스트 이름과 도메인을 <kbd class="ph userinput">호스트</kbd> 및
+<kbd class="ph userinput">도메인</kbd> 필드에 입력하십시오. <p>컨테이너 그룹 작성 방법에 대한 자세한 정보는
+<a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">Bluemix GUI에서 컨테이너 그룹으로 장기 서비스 실행</a> 주제를 검토하십시오. </p>
+</li>
+<li><span class="ph uicontrol">작성</span>을 클릭하여 업데이트된 이미지에서 컨테이너 그룹을 배치하십시오.
+배치 프로세스 수행 중에 컨테이너 그룹도 시작됩니다. <p><span class="ph" id="container_group_update_ui__d32587e594">컨테이너에서 외부 애플리케이션에 연결 중인 경우에는
+컨테이너 프로세스를 실행한 후에 최대 5분을 기다려야 지정된 라우트에
+연결될 수 있습니다. 그런 다음, 브라우저에서
+<span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>을 열어서 앱이 컨테이너 그룹에서 실행 중인지 확인할 수 있습니다.</span></p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">이전 컨테이너 그룹에서 라우트를 맵핑 해제하십시오. </span> <ol type="a"><li><span class="keyword">Bluemix</span> GUI에서 오래된 컨테이너 그룹을 선택하십시오. </li>
+<li><span class="ph uicontrol">그룹 세부사항</span> 섹션에서 라우트를 편집하십시오. </li>
+<li>호스트 이름을 변경하십시오. 여러 도메인 이름이 있는 경우 컨테이너 그룹을 위해 새 도메인 이름을 선택할 수도 있습니다. </li>
+<li><span class="ph uicontrol">저장</span>을 클릭하여 변경사항을 저장하십시오. <div class="steps note"><span class="notetitle">참고:</span> 라우트 맵핑 해제를 실행하려면 최대 5분 정도 소요됩니다. </div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">이전 컨테이너 그룹을 삭제하십시오. </span> <ol type="a"><li><span class="keyword">Bluemix</span> GUI에서 오래된 컨테이너 그룹을 선택하십시오. </li>
+<li><span class="ph uicontrol">추가 조치...</span> 메뉴에서 <span class="ph uicontrol">삭제</span>를 클릭하여 컨테이너 그룹을 제거하십시오. </li>
+</ol>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49593e2395"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e2980" lang="ko-kr" id="container_group_update_cli"><h2 class="topictitle2" id="d49593e2980">명령행을 사용하여 컨테이너 그룹에서 실행되는 앱 업데이트</h2>
+<div class="body taskbody"><p class="shortdesc">컨테이너 그룹에서 실행 중인 앱을 업데이트하려면 사용자 이미지를 업데이트하고 여기에서
+새 컨테이너 그룹을 배치해야 합니다. 업데이트 프로세스 중에는 이전에 실행 중인 컨테이너 그룹을 중지할 필요가 없습니다. 
+새 컨테이너 그룹을 작성하고 이에 기존 라우트 정보를 맵핑한 후에, 기한이 지난 컨테이너 그룹에서 라우트를 맵핑 해제할 수 있습니다. 
+가동 중지 시간 없이 새 앱이 배치됩니다. </p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_group_update_cli__updating_group_cli_table" class="defaultstyle"><caption><span class="tablecap">표 4. 앱 업데이트를 위한 선택적 도구</span></caption><thead><tr><th id="d49593e3039" class="thleft">업데이트 도구</th>
+<th id="d49593e3041" class="thleft">설명</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49593e3039 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d49593e3041 ">사용자가 사용할 수 있는 <span class="keyword">Bluemix</span> 서비스인
+<span class="keyword">Delivery Pipeline</span>을 사용하여
+<span class="keyword">Bluemix</span>에 대한 컨테이너 배치 및 앱 빌드를 자동화합니다. 자세한 정보는
+<a href="container_integrations.html#container_group_pipeline_ov" title="Delivery Pipeline을 사용하여 컨테이너 그룹의 빌드 및 배치를 자동화합니다.">Delivery Pipeline을 사용하여 컨테이너 그룹 작성</a>의 내용을 참조하십시오.</td>
+</tr>
+<tr><td headers="d49593e3039 "><span class="keyword">Active Deploy</span>작성</td>
+<td headers="d49593e3041 ">더 이상 사용되지 않는 항목을 대체하도록 새 컨테이너 그룹의 배치를 조정합니다. 
+Active Deploy에서는 문제점이 발견될 때 롤백이 가능하도록 더 이상 사용되지 않는 컨테이너 그룹이 유지됩니다. 자세한 정보는
+<a href="../services/ActiveDeploy/updatingapps.html#updatingappscli" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Active Deploy
+서비스(CLI)에서 앱 또는 컨테이너 그룹 업데이트</a>를 참조하십시오. </td>
+</tr>
+<tr><td headers="d49593e3039 ">UrbanCode Deploy</td>
+<td headers="d49593e3041 ">UrbanCode Deploy를 사용하여
+<span class="keyword">Bluemix</span>에 대한 컨테이너 배치 및 앱 빌드를 자동화합니다. 
+UrbanCode Deploy 구매에 대한 자세한 정보는
+<a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">IBM UrbanCode
+Deploy</a> 제품 페이지를 참조하십시오. </td>
+</tr>
+<tr><td headers="d49593e3039 "><span class="keyword">IBM
+Bluemix Container Service</span> CLI를 사용하여 직접 앱 업데이트</td>
+<td headers="d49593e3041 ">앱을 직접 업데이트하려면 이 태스크의 단계를 완료하십시오. </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection"><span class="keyword">IBM
+Bluemix Container Service</span> CLI를 사용하여 직접 앱을 업데이트하려면 다음을 수행하십시오. </p><ol class="steps"><li class="step stepexpand"><span class="cmd">로컬로 앱을 업데이트하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span>에서 직접 이미지를 빌드하거나, <span class="keyword">Bluemix</span>에
+푸시하기 전에 로컬로 이미지를 빌드하고 테스트하십시오.</span> <ul><li><span class="keyword">Bluemix</span>에서 직접 이미지를 빌드하려면 다음 명령을 실행하십시오.*<div class="note tip"><span class="tiptitle">팁:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>을 실행하여
+네임스페이스를 검색하고 <var class="keyword varname">&lt;my_namespace&gt;</var>를 자신의 네임스페이스 정보로 대체하십시오. </span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+예<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var>.</code></pre>
+<div class="steps note"><span class="notetitle">참고:</span> <span class="ph" id="container_group_update_cli__d31889e176">*이 명령에서 <a href="container_cli_cfic_install.html#container_cli_login" title="CLI를 설치한 후 CLI를 사용하기 위해 로그인합니다."><span class="keyword">IBM
+Bluemix Container Service</span></a>에 로그인하고
+환경 변수를 기본 Docker 명령을 사용하도록 설정한 경우 <samp class="ph codeph"><span class="ph">bx ic</span></samp>를
+<samp class="ph codeph">docker</samp>로 대체할 수 있습니다. </span><span class="ph" id="container_group_update_cli__d31889e187">이 주제에서 별표(*)로 표시된 모든 단계에서 기본 Docker
+명령을 사용할 수 있습니다. </span></div>
+</li>
+<li>로컬로 이미지를 빌드한 후에 해당 이미지를 <span class="keyword">Bluemix</span>에 푸시하려면 다음 단계를 따르십시오.<div class="p"><ol type="a"><li><span class="keyword">IBM
+Bluemix Container Service</span>의 플러그인을 사용 중인 경우에는 다시 로그인하십시오. <samp class="ph codeph">docker</samp> 명령을
+로컬 시스템의 Docker 엔진에 보내도록, 옵션 2의 환경 변수를
+설정하지 마십시오.<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Dockerfile에서 로컬로 이미지를 빌드하십시오.<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">예<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>다음 명령을 사용하여 새 앱이 로컬로 실행되는지 테스트하도록 이미지에서 컨테이너를 실행하십시오.
+여기서 <var class="keyword varname">Port</var>는 HTTP 트래픽에 사용되는 포트입니다. <div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">예<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>앱이
+올바로 실행 중이면 컨테이너 ID가 CLI 출력에 표시됩니다. 컨테이너 관련
+로그를 검토하려면 <samp class="ph codeph">docker logs
+<var class="keyword varname">&lt;container_name_or_id&gt;</var>.</samp>를 실행하십시오. </p>
+</li>
+<li id="container_group_update_cli__d31872e256">개인용 <span class="keyword">Bluemix</span> 레지스트리와 새 이름을 사용하여 로컬 이미지에 태그를 지정하십시오. <span class="ph">이미지 이름에는 소문자의 영숫자 문자 또는 밑줄(_)만 사용하십시오.
+하이픈(-) 또는 슬래시(/) 등의 기타 기호를 사용하면 이미지가 이미지 레지스트리에
+푸시되지 않습니다.</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>예</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>다음 명령을 사용하여 개인용 <span class="keyword">Bluemix</span>
+레지스트리에 이미지를 푸시하십시오. <div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">예<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">중요사항:</span> <span class="ph">개인용 <span class="keyword">Bluemix</span> 레지스트리에 이미지를 푸시하면 이미지와 관련하여 보고된
+크기가 로컬 Docker 엔진에 있는 동일한 이미지의 크기보다 작습니다. 크기가 다르다고 해서 이미지를 푸시할 때 문제가 발생한 것은 아닙니다.
+이미지의 압축 크기는 <span class="keyword">IBM
+Bluemix Container Service</span>에서 보고됩니다. </span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">실행 중인 컨테이너 그룹에 맵핑된 라우트 정보를 기록해 놓으십시오. </span> <ol type="a"><li>다음 명령을 실행하여 컨테이너 그룹의 이름 또는 ID를 가져오십시오. <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</div>
+</li>
+<li>그룹 ID 또는 이름으로 다음 명령을 실행하여 라우트를 검색하십시오. <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP </span></code></pre>
+</div>
+ 
+라우트는 <samp class="ph codeph">"Routes"</samp> 섹션에서 찾을 수 있습니다. 호스트와 도메인이 결합되어
+전체 공용 라우트 URL을 형성합니다(예: <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>).</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">다른 확장 가능한 컨테이너 그룹을 작성하고 라우트를 포함하십시오. </span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create [--anti] [--auto] [-d DOMAIN] [--desired DESIRED] [-e ENV] [--env-file
+ENVFILE]<span class="ph"> [--http_monitor_enabled] [--http_monitor_path] [--http_monitor_rc_list] [--ip
+IP_ADDRESS]</span> [-m MEMORY] [--max MAX] [--min MIN] [-n HOST] --name NAME [-p PORT] [--session-affinity] [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD] </span></code></pre>
+
+새 컨테이너 그룹을 라우트에 맵핑하기 위한 호스트 이름 및 도메인을 포함하십시오.
+<p>컨테이너 그룹 작성에 대한 자세한 정보는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">명령행 인터페이스(CLI)를 사용하여 컨테이너 그룹으로 장기 서비스 실행</a>의 내용을 참조하십시오. </p>
+</li>
+<li class="step stepexpand"><span class="cmd">이전 컨테이너 그룹에서 라우트를 맵핑 해제하십시오. </span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap [-d DOMAIN] [-n HOST] GROUP </span></code></pre>
+ <div class="steps note"><span class="notetitle">참고:</span> 라우트 맵핑 해제를 실행하려면 최대 5분 정도 소요됩니다. </div>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">이전 컨테이너 그룹을 삭제하십시오. </span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">모든 컨테이너 그룹을 나열하여 해당 컨테이너 그룹이 제거되었는지 확인하십시오. </span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49593e2980"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e3470" lang="ko-kr" id="container_ha_space"><h2 class="topictitle2" id="d49593e3470">동일한 영역에서 고가용성 컨테이너 그룹 실행</h2>
+<div class="body taskbody"><p class="shortdesc">동일한 <span class="keyword">Bluemix</span> 영역의
+동일한 이미지에서 두 개의 컨테이너 그룹을 작성하고 두 그룹 모두에 동일한 라우트를 맵핑할 수 있습니다.
+이 설정을 사용하는 경우 컨테이너 그룹이나 그룹의 로드 밸런서가 중단되면 트래픽이
+다른 컨테이너 그룹으로 라우팅됩니다.</p>
+<div class="section prereq">
+<p><object data="images/container_ha_space.svg"><img src="images/container_ha_space.jpg" alt="동일한 영역에서 고가용성 컨테이너 그룹 작성"></object></p>
+
+<p><span class="ph" id="container_ha_space__create_intro">시작하기 전에, 컨테이너 그룹 작성에 대한 세부 정보가 필요한 경우에는
+<a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a> 또는 <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오."><span class="keyword">Bluemix</span> GUI</a>를 사용하여 이의 작성에 관한 정보를 검토하십시오. </span></p>
+</div><p class="li stepsection">동일한 <span class="keyword">Bluemix</span> 영역에서 고가용성 컨테이너 그룹을 작성하려면 다음을 수행하십시오.</p><ol class="steps"><li class="step stepexpand"><span class="cmd">다음 요구사항을 충족하는 컨테이너 그룹을 작성하십시오. </span> <ul><li id="container_ha_space__at_least_2">컨테이너 그룹의 인스턴스 수는 앱에서 예상되는 워크로드를
+지원해야 합니다. <span class="ph">원하는 인스턴스 수를 판별하려면 앱을 실행하는 Bluemix에 단일 컨테이너를
+배치하고 이 컨테이너에서 로드 테스트를 수행하십시오. 예를 들어, 앱이 초당 100개의 요청을 처리할 수 있지만
+사용자가 초당 300개 요청의 평균 워크로드를 예상하는 경우에 컨테이너 그룹에 대한 적정 인스턴스 수는 3개입니다. </span>
+<span class="ph">컨테이너 그룹에 고가용성을 부여하고 실패에 더 탄력적이게 하려면 예상된 워크로드를 다루기 위한 최소 수보다 많은 추가 인스턴스를 포함하는 것을 고려하십시오. 추가 인스턴스는 다른 인스턴스가 충돌하는 경우 워크로드를 처리할 수 있습니다. 워크로드에 영향을 주지 않고 실패한 인스턴스의 자동 복구를 보장하려면 하나의 추가 인스턴스를 포함하십시오. 두 개의 동시 실패로부터 보호하려면 두 개의 추가 인스턴스를 포함하십시오. 이 설정은 <var class="keyword varname">N+2</var> 패턴이며 여기서 <var class="keyword varname">N</var>은 요청을 다루기 위한 인스턴스의 수이고 <var class="keyword varname">+2</var>는 두 개의 추가 인스턴스입니다. </span></li>
+<li id="container_ha_space__ha_autorecovery">충돌된 컨테이너가 자동으로 복구될 수 있도록
+컨테이너 그룹의 자동 복구를 사용하십시오.</li>
+<li id="container_ha_space__ha_antiaffinity">연관관계 방지를 사용하십시오. <span class="ph">연관관계 방지를 사용하면 컨테이너 인스턴스가 별도의 물리적
+컴퓨팅 노드에서 펼쳐지며, 따라서 하드웨어 고장으로 인해 컨테이너가 충돌할 가능성이 낮아집니다. </span>
+연관관계 방지에서는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>를 사용하고 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 명령에서
+<samp class="ph codeph">--anti</samp> 옵션을 포함해야 합니다. CLI에서
+<samp class="ph codeph">--anti</samp> 옵션을 사용하려면 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 버전 0.8.934 이상이 설치되어 있어야 합니다. <span class="ph">각 <span class="keyword">Bluemix</span> 지역 및 조직에는
+배치에 사용할 수 있는 컴퓨팅 노드 세트가 제한되어 있으므로, 보다 큰 그룹 크기에서는 이 옵션을 사용하지 못할 수 있습니다. 배치에 성공하지 못하면
+그룹의 컨테이너 인스턴스 수를 줄이거나 <samp class="ph codeph">--anti</samp> 옵션을
+제거하십시오.</span></li>
+<li>볼륨의 파일을 저장하고 컨테이너에 볼륨을 마운트하거나 Cloudant®
+데이터베이스와 같은 외부 데이터 저장소에 데이터를 저장(선호됨)할 수
+있습니다. 로컬 컨테이너 파일 시스템에 지속적 파일을 포함시키지 마십시오. 컨테이너 그룹을 작성하기 전에
+볼륨을 작성해야 합니다.</li>
+<li id="container_ha_space__single">컨테이너 그룹 대신 단일 컨테이너를 작성하지 마십시오. 일반적으로 단일 컨테이너는
+단기 프로세스에 사용되고 컨테이너 그룹과 같은 기본 제공 고가용성 기능이
+없습니다.</li>
+</ul>
+이러한 제한사항을 포함하는 CLI
+명령의 예입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --min 3 --max 5 --desired 3 --auto --anti --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory</var>/<var class="keyword varname">path</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">첫 번째 컨테이너 그룹과 동일한 영역에서 다음 요구사항을 충족하는 두 번째 그룹을 작성하십시오. </span> <ul><li>컨테이너 그룹은 다른 이름을 보유해야 하지만, 작성된 이전의 컨테이너 그룹과 동일한 호스트 이름을 사용해야 합니다. </li>
+<li id="container_ha_space__at_least_2_abbrev">앱의 예상된 워크로드를 지원하려면, 설명된 대로
+<var class="keyword varname">N+2</var> 패턴을 사용하여 컨테이너 그룹에 대한 인스턴스의 수를 판별하십시오. </li>
+<li>충돌된 컨테이너가 자동으로 복구될 수 있도록
+컨테이너 그룹의 자동 복구를 사용하십시오.</li>
+<li id="container_ha_space__ha_antiaffinity_abbrev">연관관계 방지를 사용하여 별도의 실제 컴퓨팅 노드에서 컨테이너 인스턴스를 펼치십시오. </li>
+<li>컨테이너 그룹은 이전 단계에서 작성한 첫 번째 컨테이너 그룹과 같은 라우트에
+맵핑되어야 합니다. </li>
+<li>컨테이너에 지속적 파일을 포함시키지 마십시오. 첫 번째 컨테이너에 마운트한 볼륨과 동일한
+볼륨을 이 컨테이너에 마운트하거나 동일한 Cloudant 데이터베이스를 사용할 수 있습니다.</li>
+</ul>
+</li>
+</ol>
+<div class="section postreq">앱을 더욱 광범위하게 배포하려면 <a href="container_ha_org.html">container_ha_org.html</a>의 내용을 참조하십시오.</div></div>
+<aside role="complementary" aria-labelledby="d49593e3470"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e3705" id="container_ha_regions"><h2 class="topictitle2" id="d49593e3705">다른 <span class="keyword">Bluemix</span> 지역에서 고가용성 컨테이너 그룹 실행</h2>
+<div class="body taskbody"><p class="shortdesc">글로벌 로드 밸런싱을 제공하는 DNS(Domain Name System)에서 앱의 도메인 이름을 구성하는 경우, 라우트에서
+동일한 호스트 이름을 사용하는 서로 다른 <span class="keyword">Bluemix</span> 지역의
+동일한 이미지에서 두 개의 컨테이너 그룹을 작성할 수 있습니다. 이 설정을 사용하면
+사용자가 속한 지역별로 로드 밸런싱이 수행되도록 허용할 수 있습니다. 한 지역에 있는 컨테이너 그룹, 하드웨어 또는
+전체 데이터 센터가 중단되면 트래픽이 다른 지역에 배치된 컨테이너 그룹으로
+라우팅됩니다. </p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">중요사항:</span> 사용자 정의 도메인이 있어야 합니다. <span class="ph filepath">mybluemix.net</span>를 사용할 수 없습니다.</div>
+
+<p><object data="images/container_ha_region.svg"><img src="images/container_ha_region.jpg" alt="여러 지역에 고가용성 컨테이너 그룹 작성"></object></p>
+
+<p><span class="ph">시작하기 전에, 컨테이너 그룹 작성에 대한 세부 정보가 필요한 경우에는
+<a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a> 또는 <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오."><span class="keyword">Bluemix</span> GUI</a>를 사용하여 이의 작성에 관한 정보를 검토하십시오. </span></p>
+</div><p class="li stepsection">다른 <span class="keyword">Bluemix</span> 지역에서 고가용성 컨테이너 그룹을 작성하려면 다음을 수행하십시오.</p><ol class="steps"><li class="step stepexpand"><span class="cmd">글로벌 DNS 로드 밸런싱을 수행할 수 있는 공인 도메인 등록자에 사용자 정의 도메인을
+등록하십시오.</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span>에서,
+사용할 모든 지역에서 다음 단계를 반복하십시오.</span> <div class="note remember"><span class="remembertitle">알아두기:</span> 특정 국가에서 데이터 호스팅을 금지하는 규제가 있는 경우 해당 국가의 지역을 선택하지 마십시오.</div>
+<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph">계정 세부사항의 조직 관리에서 조직을 선택하십시오. </span></span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">도메인</span> 섹션에서 <span class="ph uicontrol">도메인 추가</span>를 클릭하고 사용자 정의 도메인의 이름을 입력하십시오. </span></li>
+<li class="li substep"><span class="cmd">HTTP 트래픽만이 아니라 HTTPS와 HTTP 트래픽을 모두 허용하려면 SSL 인증서를
+<span class="keyword">Bluemix</span>에 업로드하십시오.</span> 자세한 정보는 <a href="../manageapps/secapps.html">앱 보안</a>을 참조하십시오.</li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">저장</span>을 클릭하십시오.</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">다음 요구사항을 충족하는 컨테이너 그룹을 작성하십시오. </span> <ul><li>컨테이너 그룹의 인스턴스 수는 앱에서 예상되는 워크로드를
+지원해야 합니다. <span class="ph">원하는 인스턴스 수를 판별하려면 앱을 실행하는 Bluemix에 단일 컨테이너를
+배치하고 이 컨테이너에서 로드 테스트를 수행하십시오. 예를 들어, 앱이 초당 100개의 요청을 처리할 수 있지만
+사용자가 초당 300개 요청의 평균 워크로드를 예상하는 경우에 컨테이너 그룹에 대한 적정 인스턴스 수는 3개입니다. </span>
+<span class="ph">컨테이너 그룹에 고가용성을 부여하고 실패에 더 탄력적이게 하려면 예상된 워크로드를 다루기 위한 최소 수보다 많은 추가 인스턴스를 포함하는 것을 고려하십시오. 추가 인스턴스는 다른 인스턴스가 충돌하는 경우 워크로드를 처리할 수 있습니다. 워크로드에 영향을 주지 않고 실패한 인스턴스의 자동 복구를 보장하려면 하나의 추가 인스턴스를 포함하십시오. 두 개의 동시 실패로부터 보호하려면 두 개의 추가 인스턴스를 포함하십시오. 이 설정은 <var class="keyword varname">N+2</var> 패턴이며 여기서 <var class="keyword varname">N</var>은 요청을 다루기 위한 인스턴스의 수이고 <var class="keyword varname">+2</var>는 두 개의 추가 인스턴스입니다. </span></li>
+<li>충돌된 컨테이너가 자동으로 복구될 수 있도록
+컨테이너 그룹의 자동 복구를 사용하십시오.</li>
+<li>연관관계 방지를 사용하십시오. <span class="ph">연관관계 방지를 사용하면 컨테이너 인스턴스가 별도의 물리적
+컴퓨팅 노드에서 펼쳐지며, 따라서 하드웨어 고장으로 인해 컨테이너가 충돌할 가능성이 낮아집니다. </span>
+연관관계 방지에서는 <a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">CLI</a>를 사용하고 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 명령에서
+<samp class="ph codeph">--anti</samp> 옵션을 포함해야 합니다. CLI에서
+<samp class="ph codeph">--anti</samp> 옵션을 사용하려면 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 버전 0.8.934 이상이 설치되어 있어야 합니다. <span class="ph">각 <span class="keyword">Bluemix</span> 지역 및 조직에는
+배치에 사용할 수 있는 컴퓨팅 노드 세트가 제한되어 있으므로, 보다 큰 그룹 크기에서는 이 옵션을 사용하지 못할 수 있습니다. 배치에 성공하지 못하면
+그룹의 컨테이너 인스턴스 수를 줄이거나 <samp class="ph codeph">--anti</samp> 옵션을
+제거하십시오.</span></li>
+<li>컨테이너에 지속적 파일을 포함시키지 마십시오. 지역 전체에서 복제하는 Cloudant 데이터베이스에 파일을 저장할 수 있습니다. IBM
+jStart® 팀이 작성한 <a href="https://github.com/ibmjstart/bluemix-cloudant-replicator" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">명령행 유틸리티</a>를 사용하여
+데이터베이스 복제 구성을 자동화할 수 있습니다.</li>
+<li>컨테이너 그룹 대신 단일 컨테이너를 작성하지 마십시오. 일반적으로 단일 컨테이너는
+단기 프로세스에 사용되고 컨테이너 그룹과 같은 기본 제공 고가용성 기능이
+없습니다.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">다른 지역에 두 번째 그룹을 작성하십시오.</span> 추가 지역에 대해 반복하십시오. <ul><li>앱의 예상된 워크로드를 지원하려면, 설명된 대로
+<var class="keyword varname">N+2</var> 패턴을 사용하여 컨테이너 그룹에 대한 인스턴스의 수를 판별하십시오. </li>
+<li>충돌된 컨테이너가 자동으로 복구될 수 있도록
+컨테이너 그룹의 자동 복구를 사용하십시오.</li>
+<li>연관관계 방지를 사용하여 별도의 실제 컴퓨팅 노드에서 컨테이너 인스턴스를 펼치십시오. </li>
+<li>컨테이너 그룹은 이전 단계에서 작성한 첫 번째 컨테이너 그룹과 같은 라우트에
+맵핑되어야 합니다. </li>
+<li>컨테이너에 지속적 파일을 포함시키지 마십시오. Cloudant 데이터베이스의 다른 인스턴스에
+파일을 저장할 수 있습니다. </li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">경로가 <span class="keyword">Bluemix</span>로 분석되도록 DNS를 구성하십시오. </span>  <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">DNS 등록자가 사용자에게 지정한 이름 서버를 기록해 놓으십시오. 이 서버를 DNS 등록자의
+NS 레코드로 추가해야 합니다.</span></li>
+<li class="li substep"><span class="cmd">DNS 등록자에서 이름 서버를 제공하여 도메인을 위임하십시오.</span></li>
+<li class="li substep"><span class="cmd">노드의 로드 밸런싱 및 장애 조치(failover)를 구성하십시오.</span></li>
+</ol>
+</li>
+</ol>
+<div class="section postreq">고가용성 CF 앱을 설정하는 데 대한 구체적인 예는 <a href="http://www.ibm.com/developerworks/cloud/library/cl-multi-region-bluemix-apps-with-cloudant-and-dyn-trs/index.html" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">IBM Cloudant 및 Dyn으로 여러 지역 <span class="keyword">Bluemix</span>
+애플리케이션 구성 및 실행</a>을 참조하십시오. Dyn 사용 방법을 설명하는 섹션은
+컨테이너 그룹에도 적용됩니다.</div></div>
+<aside role="complementary" aria-labelledby="d49593e3705"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e4006" lang="ko-kr" id="container_group_private_ip"><h2 class="topictitle2" id="d49593e4006">사설 컨테이너 그룹에 연결</h2>
+<div class="body taskbody"><p class="shortdesc">그룹을 공용에 노출하지 않고 그룹에 액세스하려면 컨테이너 그룹에 대한 로드 밸런서 IP 주소를 식별하십시오. </p>
+<div class="section context">모든 컨테이너 그룹은 그룹 내 개별 컨테이너에 대한 요청의 균형을 맞추는 기본 제공 <a href="container_planning.html#group_loadbalancing" title="컨테이너 그룹은 수신 트래픽을 균등하게(라운드 로빈) 그룹의 컨테이너 인스턴스에 라우팅하는 내장 로드 밸런싱을 제공합니다. 컨테이너 그룹이 작성되거나 인스턴스가 기존 그룹에 추가되면 사용자 스스로 인스턴스를 추가하거나 인스턴스가 자동 복구 중에 재작성되어도 로드 밸런싱이 사용으로 설정됩니다.">로드 밸런서</a>를 사용하여 배치됩니다. 컨테이너 그룹은 그룹에 맵핑되는 URL로 자주 공개적으로 노출됩니다. 그룹이 공용이 아닌 경우, 컨테이너 그룹은 로드 밸런서에 자동으로 지정되는 사설 IP 주소를 통해 액세스할 수 있습니다. 이 사설 IP 주소는 또한 HTTPS 및 TCP를 통해 통신하는 앱이 컨테이너 그룹에 액세스하도록 허용합니다. 로드 밸런서의 사설 IP 주소를 판별하려면 다음 단계를 완료하십시오. </div><ol class="steps"><li class="step stepexpand"><span class="cmd">영역에서 실행 중인 컨테이너 그룹을 나열하십시오. </span> 컨테이너 그룹에 대해 노출된 포트를 참고하십시오. 이 경우 <var class="keyword varname">9080</var>입니다.
+컨테이너 그룹에 노출된 포트가 없는 경우, 새 컨테이너 그룹을 작성하고 포트를
+노출해야 합니다. 컨테이너 그룹의 로드 밸런서에는 노출된 포트에서만 액세스가 가능합니다.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+
+
+<pre class="pre screen"><code>Group ID                               Name                      Status            Created                         Updated   Port   
+cb628ddd-a1e7-4944-9a42-02abc80ea6ee   container_group_example   CREATE_COMPLETE   2016-09-26 15:43:00 -0400 EDT             9080   </code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">컨테이너 그룹을 검사하십시오. </span>  <var class="keyword varname">container_group_example</var>을 사용자의 컨테이너 그룹 이름으로 바꾸십시오. <span class="ph uicontrol">로드 밸런서</span> 섹션에서 <span class="ph uicontrol">사설 IP 주소</span> 필드를 검토하십시오.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">container_group_example</var></code></pre>
+
+
+<pre class="pre screen"><code>    "Loadbalancer": {
+        "intermediate_ip_address": "192.0.2.1", 
+        "private_ip_address": "198.51.100.27"
+    }, </code></pre>
+
+
+<div class="note important"><span class="importanttitle">중요사항:</span> <span class="ph uicontrol">intermediate_ip_address</span>는 컨테이너 그룹이 공용에 노출될 때 공용 네트워크에서 컨테이너 그룹으로 트래픽을 안전하게 라우트하기 위해 GoRouter에서 사용합니다. 사설 네트워크에서 컨테이너 그룹에 액세스하는 데는 로드 밸런서의 <span class="ph uicontrol">intermediate_ip_address</span>를 사용하지 마십시오. 추가 라우팅테이블 검색이 필요하고 네트워크 지연을 일으킬 수 있습니다.</div>
+</li>
+<li class="step stepexpand"><span class="cmd">로드 밸런서 사설 IP 주소를 식별하십시오. </span> 동일한 영역의 앱은 비공개적으로 컨테이너 그룹과 통신하기 위해 이 사설 IP 주소를 사용할 수 있습니다. 로드 밸런서에 액세스하려면 다음 형식의 노출된 포트를 포함시켜야 합니다. <samp class="ph codeph">198.51.100.27:9080</samp>. </li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49593e4006"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49593e4127" lang="ko-kr" id="container_group_remove"><h2 class="topictitle2" id="d49593e4127">컨테이너 그룹 제거</h2>
+<div class="body taskbody"><p class="shortdesc">할당량의 사용을 최대화하려면 사용하지 않는 컨테이너 그룹을 가끔씩 제거하십시오. </p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">중요사항:</span>  컨테이너 그룹을 제거하기 전이나 <samp class="ph codeph">cf delete-route</samp> 명령을 사용하여 라우트를 삭제하기 전에 다음 명령 중
+하나를 실행하여 컨테이너 그룹에서 라우트를 제거하십시오.
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">host</var> -d <var class="keyword varname">domain</var> <var class="keyword varname">group_name_or_ID</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">다음 방법 중 하나를 사용하여 컨테이너 그룹을 제거하십시오. </span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI에서 컨테이너 그룹을 선택하고 <span class="ph uicontrol">추가 조치...</span> 메뉴에서 <span class="ph uicontrol">삭제</span>를 클릭하십시오. </li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">다음 명령을 실행하고 컨테이너 그룹이 목록에 나타나지 않는지 확인하여 컨테이너 그룹이 제거되었는지 확인하십시오.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49593e4127"></aside></article></article></div></main></body></html>

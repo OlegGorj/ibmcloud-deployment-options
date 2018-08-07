@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="fr-fr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="Après avoir consulté le rapport de vulnérabilités, découvrez comment corriger les vulnérabilités signalées.">
+<meta name="keywords" content="Vulnerability Advisor, vulnérabilités, sécurité du conteneur, sécurité de l'image">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "fr-fr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Résolution des vulnérabilités dans les conteneurs ou les images</title>
+</head>
+<body id="va_report"><main role="main"><article role="article" aria-labelledby="d246e2"><h1 class="topictitle1" id="d246e2">Résolution des vulnérabilités dans les conteneurs ou les images</h1>
+<div class="body taskbody"><p class="shortdesc">Après avoir consulté le rapport de vulnérabilités, découvrez comment corriger les vulnérabilités signalées.</p>
+<div class="section context"><p>Vulnerability Advisor propose des actions correctives pour les vulnérabilités signalées. Certaines des vulnérabilités signalées peuvent être résolues en mettant à jour le document Dockerfile. Pour
+vous aider à résoudre plus rapidement des vulnérabilités courantes, utilisez les exemples de code suivants pour implémenter la
+solution dans votre Dockerfile.</p>
+
+<div class="p" id="va_report__common_vulnerabilities">
+
+<dl><dt class="dlterm">Age maximal du mot de passe</dt>
+<dd>Vulnérabilité :
+<pre class="pre screen"><code>L'âge maximal du mot de passe doit être défini sur 90 jours. :
+PASS_MAX_DAYS n'est pas défini sur 90 dans /etc/login.defs. Il est actuellement défini sur 99999.
+La longueur minimale du mot de passe doit être de 8. La longueur minimale du mot de passe n'est pas spécifiée 
+dans /etc/pam.d/common-password. Il est recommandé de la définir sur 8 au moins.</code></pre>
+</dd>
+<dd class="ddexpand">Correction : Appliquez la conformité du mot de passe en ajoutant le code suivant à votre document Dockerfile :<pre class="codeblock"><code># Set password length and expiry for compliance with vulnerability advisor
+RUN sed -i 's/ˆPASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs
+RUN sed -i 's/sha512/sha512 minlen=8/' /etc/pam.d/common-password</code></pre>
+</dd>
+<dt class="dlterm">Vulnérabilité SSH</dt>
+<dd>Vulnérabilité : <pre class="pre screen"><code>Le serveur SSH ne doit pas être installé.</code></pre>
+</dd>
+<dd class="ddexpand">2Correctif : <p>Au lieu d'utiliser SSH, utilisez <samp class="ph codeph">docker attach</samp> ou <samp class="ph codeph">docker exec</samp> pour accéder à votre conteneur. Retirez le serveur SSH de votre conteneur en ajoutant le code suivant à votre fichier Dockerfile :</p>
+<pre class="codeblock"><code># Remove SSH for compliance with vulnerability advisor
+RUN apt-get purge -y openssh-server
+RUN apt-get remove -y openssh-sftp-server
+RUN apt-get -y autoremove</code></pre>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></main></body></html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2015, 2016">
+
+<meta name="description" content="部署映像之前，可以查看映像的漏洞顾问程序报告，其中详细描述了任何有漏洞的包、不安全的容器或应用程序设置，以及映像是否符合组织策略。">
+<meta name="keywords" content="漏洞顾问程序, 漏洞, 容器安全性, 映像安全性">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>复查看到顾问程序映像报告</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d351e2"><h1 class="topictitle1" id="d351e2">复查映像 VA 报告</h1>
+<div class="body taskbody"><p class="shortdesc">部署映像之前，可以查看映像的漏洞顾问程序报告，其中详细描述了任何有漏洞的包、不安全的容器或应用程序设置，以及映像是否符合组织策略。</p>
+<div class="section context"><p>容器映像由 IBM 提供，也可以由您的组织进行添加。在部署映像之前，您可能必须先对该映像进行配置，使其满足您组织的策略所设置的需求。只有组织管理员才能更改策略以允许部署有漏洞的映像。有关查看和更改组织策略的步骤，请参阅<a href="va_managing_policy.html" title="如果您是 Bluemix 组织的管理员，那么可以设置策略来警告用户或者阻止基于具有特定安全和配置问题的映像部署容器。">复查组织策略</a>。</p>
+
+<p>通过完成以下步骤来复查潜在映像安全和配置问题：</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">登录到 <span class="keyword">Bluemix</span>。</span> 仅当您登录时，才在用户界面中提供 <span class="ph">漏洞顾问程序</span>。
+</li>
+<li class="step stepexpand"><span class="cmd">在<span class="ph uicontrol">漏洞评估</span>部分中，查看漏洞评估的状态。</span> 状态显示为以下某个条件：
+<ul><li><span class="keyword wintitle">可以安全地部署</span> - 未发现安全问题。</li>
+<li><span class="keyword wintitle">小心部署</span> - 发现待解决的安全或配置问题，但您的组织策略允许部署有漏洞的映像。如果部署此映像，您将收到警告。</li>
+<li><span class="keyword wintitle">部署已阻止</span> - 发现安全或配置问题，并且必须解决这些漏洞后才能部署映像，因为您的组织策略不允许部署有漏洞的映像。</li>
+<li><span class="keyword wintitle">未完成</span> - 扫描未完成。扫描可能仍在运行或者映像的操作系统不兼容。等待然后再次尝试扫描。如果扫描仍未完成，请重新推送映像以启动新的扫描。不会阻止部署未完成扫描的映像。</li>
+</ul>
+
+<p>复查构成漏洞顾问程序安全性评估的详细报告：</p>
+</li>
+<li class="step stepexpand"><span class="cmd">选择映像并在<span class="ph uicontrol">漏洞评估</span>部分中，单击<span class="ph uicontrol">查看报告</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">复查以下各部分以了解映像中每个包的潜在安全和配置问题：</span> <div class="p"><ul id="va_reviewing__report"><li><span class="ph uicontrol">组织策略</span><p>列出映像是否遵循组织管理员所设置的策略。</p>
+</li>
+<li><span class="ph uicontrol">风险分析</span><p>如果映像存在一个或多个漏洞，那么此部分会显示由漏洞顾问程序计算的风险分级。风险是使用 <a href="https://www.first.org/cvss" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">CVSS</a> 计算器和 <a href="https://exchange.xforce.ibmcloud.com/" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）"><span class="keyword">IBM® X-Force® Exchange</span></a> 技术来计算的。</p>
+</li>
+<li><span class="ph uicontrol">有漏洞的包</span><p>列出具有已知漏洞问题的包，这些问题通过<a href="va_index.html" title="漏洞顾问程序会在部署之前检查容器映像的安全性状态，同时检查运行中容器的状态。">使用漏洞顾问程序管理容器和映像安全性</a>列出的 Docker 映像类型的已发布安全通知进行每日更新。通常，要使有漏洞的包能够通过扫描，需要该包的更高版本，其中包含对该漏洞的修订。同一个包可能会有多个漏洞，在这种情况下，对包进行一次升级可能会更正多个问题。单击安全通知代码，以复查包的更多信息以及更新包的步骤。</p>
+</li>
+<li><span class="ph uicontrol">容器设置</span><p>列出您可以采取的提高映像安全性的建议。“<span class="keyword wintitle">纠正措施</span>”列描述如何提高安全性。</p>
+</li>
+<li><span class="ph uicontrol">应用程序配置</span><p>列出不安全的映像的应用程序设置。
+“<span class="keyword wintitle">纠正措施</span>”列描述如何提高安全性。</p>
+</li>
+<li><span class="ph uicontrol">容器实例</span><p>列出已在组织中运行并且使用此映像的容器。</p>
+</li>
+</ul>
+</div>
+
+
+<p>针对列出的每项，提供纠正措施或建议。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">修正<span class="ph uicontrol">漏洞评估</span>报告中所述的问题，并重新构建映像。</span> Dockerfile 中的一些问题可通过使用 <a href="va_report.html" title="查看漏洞报告后，了解如何修订报告的漏洞。">解决容器或映像中的漏洞</a> 中所提供的代码来解决。</li>
+</ol>
+<div class="section result"></div><div class="section postreq">部署映像后，漏洞顾问程序将继续在容器中扫描以查找安全和配置问题。您可以通过执行<a href="va_reviewing_container.html" title="在仪表板中，您可以查看容器的状态，以确定其安全性是否符合组织策略。 您还可以查看容器的漏洞报告，其中详细描述了任何有漏洞的包和不安全的容器或应用程序设置。">查看容器漏洞</a>中的所述的步骤，解决找到的任何问题。</div></div>
+<aside role="complementary" aria-labelledby="d351e2"></aside></article></main></body></html>

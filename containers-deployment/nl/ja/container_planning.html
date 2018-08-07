@@ -1,0 +1,917 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service には、アプリと組織の機能要件と非機能要件を満たすコンテナー開発環境を構成するために、多くのオプションが用意されています。 まずは、それらのオプションについて説明します。">
+<meta name="keywords" content="計画, IBM Containers, コンテナー, 決定, 組織管理者, 管理, 名前空間, 割り当て量, 支払い, データ・ストレージ, ファイル共有, 開発者, ダッシュボード, GUI, CLI, REST, API, インストール, プラグイン, プライベート・イメージ, ローカル・イメージ, イメージ, Docker ハブ, イメージの表示, レジストリー, 脆弱性, ネットワーク遅延, Dockerfile, ヒント, 異常終了, シャットダウン, プライベート・ネットワーク, IP アドレス, 経路, コンテナーの異常終了, コンテナーの開始, パブリック・ネットワーク, インターネット, 単一コンテナー, Docker Compose, アクセス可能, コンテナー・グループ, サービス, VCAP_SERVICES, ボリューム, グループ, ロード・バランシング, アンチアフィニティー, 計算ノード, 高可用性, 自動リカバリー, リカバリー, 自動, 正常でないグループ・インスタンス, 自動スケーリング, 拡大, 縮小, スケール">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>単一コンテナーとスケーラブル・コンテナーの使用の計画</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d67434e6" id="container_planning"><h1 class="topictitle1" id="d67434e6"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>の使用の計画</h1>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix® Container Service</span> には、アプリと組織の機能要件と非機能要件を満たすコンテナー開発環境を構成するために、多くのオプションが用意されています。
+まずは、それらのオプションについて説明します。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <span class="ph"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix</span> Public の <span class="keyword">IBM
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></span></div>
+</div>
+
+
+<div class="p">このページでは、次について説明します。
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#roles">ユーザー・ロールについて</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#container_planning_org_ov" title="Bluemix では、組織を使用して、チーム・メンバー間のコラボレーションを可能にしたり、プロジェクトのクラウド・リソースを簡単に論理グループ化したりできます。 どの組織にも、開発環境 (スペース) をセットアップしたり、アプリのためのコンテナーを正常に作成するために必要となるクラウド・リソースへのアクセス権をチーム・メンバーに付与したりする作業を担当する組織管理者が割り当てられます。このセットアップには、パブリック IP アドレス、データ・ストレージ、コンテナー・メモリーの割り当てが含まれます。また、組織管理者は、現在の割り当て量やクラウド・リソースの使用状況を表示したり、必要に応じてそれらを調整したりすることができます。">単一コンテナーとスケーラブルなコンテナー・グループのための <span class="keyword">Bluemix</span> 組織の管理</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_namespace" title="IBM Bluemix Container Service のプライベート・イメージを保管および管理するには、すべての組織が、その組織用のプライベート Dockerイメージ・レジストリーを Bluemix 内にセットアップする必要があります。このプライベート・レジストリーの名前を名前空間 と呼びます。これは、Bluemix 内で固有でなければなりません。">プライベート <span class="keyword">Bluemix</span> レジストリーのための名前空間のセットアップ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_quota" title="Bluemix のどの組織も、コンテナー・メモリー、パブリック IP アドレス、ファイル共有、組織内のすべてのスペースで共有するサービスの数として、値が事前設定されています。これらの事前設定値を、割り当て量と呼びます。">割り当て量と使用可能な <span class="keyword">Bluemix</span> アカウント・タイプ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_fileshare" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">永続ストレージのセットアップ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#container_planning_container_ov" title="Bluemix の IBM Bluemix Container Service でアプリを実行するコンテナーを作成するには、組織スペースに対する開発者権限が付与されている必要があります。アプリの開発者にとって、コンテナーのコンポーネントどうしの関係や、アプリの機能要件や非機能要件を満たすためにコンテナーの構成を変更する方法を知っておくことは重要です。">IBM Bluemix Container Service での単一コンテナーとスケーラブルなコンテナー・グループの作成</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_cli-ui" title="IBM Bluemix Container Service を操作するときには、Bluemix GUI を利用するか、コマンド・ライン・インターフェース (CLI) をインストールするか、REST API に対して HTTP 要求を送信して IBM Bluemix Container Service にアクセスできます。">Bluemix GUI、CLI、または REST API</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_images" title="コンテナー・イメージとは、作成するすべてのコンテナーの基本です。 イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。 コンテナー・イメージは、実行可能ファイル (.exe または .bin) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。 コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。コンテナー・イメージは、プライベート Bluemix レジストリーに保管され、CLI からのみ追加できます。コンテナー・イメージからコンテナーを作成するためには、その前に、使用したいコンテナー・イメージをすべてレジストリーに置いておく必要があります。">IBM パブリック・イメージ、Docker Hub のイメージ、プライベート・イメージ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_private_network" title="コンテナーのプライベート・ネットワークによって、1 つのスペースの中で実行される複数の単一コンテナーやコンテナー・グループに対して個々に安全な環境が作成されます。 同じプライベート・ネットワークに接続された各コンテナーは、プライベート IP アドレスを使用して、そのプライベート・ネットワーク内の他のコンテナーとの間でデータを送受信できます。パブリック・ポートと、単一コンテナー用のパブリック IP アドレスまたはコンテナー・グループ用のパブリック経路のいずれかがバインドされるまで、コンテナーをパブリックに使用することはできません。">プライベート・コンテナー・ネットワークの設定</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_public_network" title="デフォルトでは、IBM Bluemix Container Service 内のあらゆる単一コンテナーおよびコンテナー・グループがプライベート・ネットワークから使用可能です。 しかし、アプリをインターネットからアクセスできるようにしたり、組織の他のスペースのコンテナーにアクセスしたりしたい場合があります。 そのような場合、コンテナーを公開する必要があります。 選択するコンテナーのタイプに応じて、コンテナーを公開するためのさまざまな方法があります。">パブリック・ネットワーク設定</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_bmx_service" title="Bluemix には、IBM Bluemix Container Service でアプリに追加機能を組み込んだりアプリの実装やコンテナーの管理を簡単にしたりするために使用できる、さまざまなサービスが用意されています。"><span class="keyword">Bluemix</span> サービスの統合</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_volumes" title="アプリが作成するデータまたはアプリが実行する必要のあるファイルを保管する場所を決定します。">永続データ・ストレージのオプション</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_types" title="IBM Bluemix Container Service でコンテナーを作成する前に、必要なコンテナーのタイプを決定します。 IBM Bluemix Container Service では、さまざまなアプローチでクラウド内にコンテナーを作成できます。 どのアプローチを選択するかは、コンテナー内で実行するアプリの要件や依存関係に応じて異なります。">コンテナーのタイプ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_monlog" title="Bluemix では、コンテナーにはモニタリングとロギングが組み込まれるので、コンテナーの正常性を厳重に監視できます。">モニタリング・オプションとロギング・オプション</a></div>
+</div>
+</div>
+<div class="section context"></div></div>
+<article class="topic task nested1" role="article" aria-labelledby="d67434e301" id="roles"><h2 class="topictitle2" id="d67434e301">ユーザー・ロールについて</h2>
+<div class="body taskbody"><div class="section context" id="roles__context_tc2_pxz_nz"><p data-hd-otherprops="registry_check">コンテナーは、組織の管理者とコンテナー開発者によって管理されます。
+次の図は、組織のコンテナー構成例を示しています。組織管理者またはコンテナー開発者が設定できるコンポーネントが強調表示されています。
+<a href="../api/content/containers/images/container_planning_container_ov_bluemixify.png" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><img id="roles__image_qlf_pxz_nz" src="images/container_planning_container_ov_bluemixify.png" width="700" alt="コンテナー開発者または組織管理者が構成できる IBM&#xA;Bluemix Container Service のコンポーネントを表す図。"></a></p>
+各コンポーネント、決定項目、構成できる内容については、このトピックのサブセクションを参照してください。それらの構成の中には、コンテナー作成後には変更できないものもあります。
+それらの構成を事前に理解しておくと、メモリー、ディスク・スペース、IP アドレスなどのあらゆるリソースを開発チームのために確保できるうえに、組織の割り当て分を最大限に活用することができます。</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d67434e321" lang="ja-jp" id="container_planning_org_ov"><h2 class="topictitle2" id="d67434e321"><span class="keyword">IBM
+Bluemix Container Service</span> の <span class="keyword">Bluemix</span> 組織の管理</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Bluemix</span> では、組織を使用して、チーム・メンバー間のコラボレーションを可能にしたり、プロジェクトのクラウド・リソースを簡単に論理グループ化したりできます。
+どの組織にも、開発環境 (スペース) をセットアップしたり、アプリのためのコンテナーを正常に作成するために必要となるクラウド・リソースへのアクセス権をチーム・メンバーに付与したりする作業を担当する組織管理者が割り当てられます。このセットアップには、パブリック IP アドレス、データ・ストレージ、コンテナー・メモリーの割り当てが含まれます。また、組織管理者は、現在の割り当て量やクラウド・リソースの使用状況を表示したり、必要に応じてそれらを調整したりすることができます。</p>
+<div class="section prereq">始めに、組織内の<a data-hd-audience="yellow" href="../iam/users_roles.html#userroles">ユーザーのロールを確認</a>してください。
+<ul><li>ユーザーに組織における<dfn class="term">管理者</dfn>ロールを付与することにより、組織管理者を割り当てます。</li>
+<li>ユーザーにスペースにおける<dfn class="term">開発者</dfn>または<dfn class="term">監査員</dfn>のロールを付与することにより、コンテナー作成者を割り当てます。</li>
+</ul>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d67434e411" id="container_planning_namespace"><h3 class="topictitle3" id="d67434e411">プライベート <span class="keyword">Bluemix</span> レジストリーのための組織の名前空間の設定</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" data-hd-otherprops="registry_check" id="namespace_def"><span class="keyword">IBM
+Bluemix Container Service</span> のプライベート・イメージを保管および管理するには、すべての組織が、その組織用のプライベート Dockerイメージ・レジストリーを <span class="keyword">Bluemix</span> 内にセットアップする必要があります。このプライベート・レジストリーの名前を<dfn class="term">名前空間</dfn> と呼びます。これは、<span class="keyword">Bluemix</span> 内で固有でなければなりません。</span></p>
+<div class="section context"><span class="ph">名前空間を使用して、プライベート・イメージ・レジストリーの固有の URL が生成されます。したがって、<span class="keyword">Bluemix</span> レジストリー URL に名前空間が付加されて、<span class="ph filepath">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var></span> のようになります。
+CLI からイメージを操作するときには、常に、プライベート・レジストリーの完全な URL を入力する必要があります。<span class="keyword">IBM
+Bluemix Container Service</span> を複数の <span class="keyword">Bluemix</span> 領域で使用する場合、
+すべての領域で名前空間をセットアップする必要があります。</span> プライベート・レジストリー内に格納されたすべてのコンテナー・イメージは、組織のすべてのユーザーによって共有されます。<div class="steps note"><span class="notetitle">注:</span> どの組織についても、一度に設定できる名前空間は <span class="keyword">Bluemix</span> 領域ごとに 1 つのみです。
+組織に名前空間を設定した後に、変更することはできません。削除のみ可能です。</div>
+<p>組織の名前空間を選択する際には、以下の規則を考慮してください。</p>
+<ul data-hd-otherprops="registry_check"><li><span class="keyword">Bluemix</span> では、名前空間は固有でなければなりません。</li>
+<li>名前空間の長さは 4 文字以上 30 文字以下です。</li>
+<li>名前空間の先頭は文字または数字 (1 つ以上) でなければなりません。</li>
+<li>名前空間で使用できるのは英小文字、数字、下線文字 (_) のみです。</li>
+</ul>
+</div><p class="li stepsection"><p><span class="keyword">Bluemix</span> GUI から、以下のステップを実行します。</p>
+</p><ol><li class="step stepexpand"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">カタログから、<span class="ph uicontrol">「コンテナー」</span>を選択し、イメージを選択します。</span></span></li>
+<li class="step stepexpand"><span class="cmd">組織の名前空間が既に設定されている場合は、名前空間の作成を要求するプロンプトは出されず、次のステップに進むことができます。</span> 組織の名前空間をまだ指定していない場合は、イメージ・レジストリーで名前空間を設定するように求められます。</li>
+</ol><p class="li stepsection"><p>CLI から、<span class="keyword">IBM
+Bluemix Container Service</span> にログインした後、以下のコマンドを実行します。</p>
+</p><ol start="3"><li class="step stepexpand"><span class="cmd">組織の名前空間を設定します。
+<var class="keyword varname">&lt;my_namespace&gt;</var> を、組織に設定する名前空間に置き換えてください。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">注:</span> 組織の名前空間が既に設定されているかどうかがわからない場合は、<a href="container_planning.html#namespace_get" title="組織の名前空間が既に設定されている場合は、Bluemix GUI または CLI から取得できます。">組織の名前空間の取得</a>のトピックの手順に従ってください。</div>
+</li>
+</ol></div>
+<aside role="complementary" aria-labelledby="d67434e411"></aside><article class="topic task nested3" role="article" aria-labelledby="d67434e591" id="namespace_get"><h4 class="topictitle4" id="d67434e591">組織の名前空間の取得</h4>
+<div class="body taskbody"><p class="shortdesc">組織の名前空間が既に設定されている場合は、<span class="keyword">Bluemix</span> GUI または CLI から取得できます。</p>
+<div class="section context"><div class="steps note"><span class="notetitle">注:</span> <span class="keyword">Bluemix</span> GUI で名前空間を確認できるのは、プライベート・イメージが既にプライベート・イメージ・レジストリーに追加されている場合のみです。IBM 提供のイメージからこの情報を取得することはできません。
+レジストリー内にまだプライベート・イメージがない場合に、組織の名前空間を調べるには、CLI の方法を選択してください。</div>
+</div><p class="li stepsection"><p><span class="keyword">Bluemix</span> GUI から、以下のステップを実行します。</p>
+</p><ol><li class="step stepexpand"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">カタログから、<span class="ph uicontrol">「コンテナー」</span>を選択し、イメージを選択します。</span></span></li>
+<li class="step stepexpand"><span class="cmd">イメージ名の下で<span class="ph uicontrol">「URL のコピー (Copy URL)」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> という形式のコピーした URL から、名前空間を取得できます。</span></li>
+</ol><p class="li stepsection"><p>CLI から、<span class="keyword">IBM
+Bluemix Container Service</span> サービスにログインして、以下のコマンドを実行します。</p>
+</p><ol start="4"><li class="step stepexpand"><span class="cmd">名前空間情報を取得します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</li>
+</ol></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e662" id="container_planning_quota"><h3 class="topictitle3" id="d67434e662">割り当て量と <span class="keyword">Bluemix</span> アカウント</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph"><span class="keyword">Bluemix</span> のどの組織も、コンテナー・メモリー、パブリック IP アドレス、ファイル共有、組織内のすべてのスペースで共有するサービスの数として、値が事前設定されています。これらの事前設定値を、割り当て量と呼びます。</span></p>
+<div class="section context"><span class="ph" id="container_planning_quota__account_def"><span class="keyword">Bluemix</span> には、<span class="keyword">IBM
+Bluemix Container Service</span> で使用できるさまざまなアカウントが用意されています。
+アカウントのタイプに応じて、組織で利用可能な割り当て量や、コンテナー・リソースの利用料金の課金方法が異なります。</span>
+組織のスペースに含まれているアプリケーションまたはサービスはすべて、実行中かどうかにかかわらず、割り当て量の使用量としてカウントされます。
+そのため、<a href="container_planning.html#maximize_quota">既存の割り当て量を最大限に使用する</a>ためにできることを知っておくことが重要です。
+<a href="container_planning.html#bluemix_account">従量課金 (PAYG) プランまたはサブスクリプション・プラン</a>は、組織のニーズに合わせて <a href="container_planning.html#change_quota"><span class="keyword">Bluemix</span> スペースに割り振る</a>ことができる<a href="container_planning.html#default_quota_paid">デフォルトの割り当て量の制限</a>を使用してセットアップされます。</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e763" id="bluemix_account"><h4 class="topictitle4" id="d67434e763"><span class="keyword">Bluemix</span> アカウント・タイプ</h4>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context">以下の表に、提供されているアカウント・タイプの概要を示します。
+各アカウント・タイプと課金タイプの詳細については、<a href="../pricing/index.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">価格設定</a>のトピックを参照してください。<div class="tablenoborder"><table summary="Bluemix のアカウント・タイプの概要" id="bluemix_account__table_psk_cl5_jw" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="keyword">Bluemix</span> のアカウント・タイプの概要</span></caption><thead><tr><th id="d67434e792" class="thleft">アカウント・タイプ</th>
+<th id="d67434e794" class="thleft">説明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67434e792 ">無料試用</td>
+<td headers="d67434e794 "><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix</span> Public の <span class="keyword">IBM
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></td>
+</tr>
+<tr><td headers="d67434e792 ">従量制課金</td>
+<td headers="d67434e794 ">従量制課金アカウントの契約では、使用した <span class="keyword">Bluemix</span> リソースの分のみ支払います。</td>
+</tr>
+<tr><td headers="d67434e792 ">サブスクリプション</td>
+<td headers="d67434e794 ">サブスクリプション・アカウントの契約では、毎月最小限の使用量を守ることを誓約し、その最低料金に適用されるサブスクリプション割引を受けます。
+また、最小限の使用量を超過した場合は、その超過分の料金を支払います。</td>
+</tr>
+<tr><td headers="d67434e792 "><span class="keyword">Bluemix</span> Dedicated</td>
+<td headers="d67434e794 "><span class="keyword">Bluemix</span> Dedicated では、最低 1 年間の契約が必要になります。
+その期間中の月々の支払額は、希望する専用サービスと、すべての公開サービスへのアクセス権限を付与するサブスクリプション・アカウントに基づきます。</td>
+</tr>
+<tr><td headers="d67434e792 "><span class="keyword">Bluemix</span> ローカル</td>
+<td headers="d67434e794 "><span class="keyword">Bluemix</span> Local を使用するには、最低 1 年間の契約が必要になります。
+その期間中の月々の支払額は、希望するローカル・サービスと、すべての公開サービスへのアクセス権限を付与するサブスクリプション・アカウントに基づきます。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e864" id="default_quota_paid"><h4 class="topictitle4" id="d67434e864">有料アカウントのデフォルト割り当て量</h4>
+<div class="body taskbody"><div class="section context">有料アカウントすべては、次の表にまとめられているデフォルトの割り当て量の制限付きでセットアップされます。さらに多くのリソースが必要な場合、<a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> サポート・チケット</a>を開いて割り当て量の追加を要求できます。
+<div class="tablenoborder"><table summary="有料アカウントの割り当て量の概要" id="default_quota_paid__table_eq1_ccd_bx" class="defaultstyle"><caption><span class="tablecap">表 2. 有料アカウントの割り当て量の概要</span></caption><thead><tr><th id="d67434e886" class="thleft">リソース</th>
+<th id="d67434e888" class="thleft">有料アカウントの割り当て量の制限</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67434e886 ">パブリック IP アドレス</td>
+<td headers="d67434e888 ">64</td>
+</tr>
+<tr><td headers="d67434e886 ">コンテナー・メモリー</td>
+<td headers="d67434e888 ">64 GB <div class="steps note"><span class="notetitle">注:</span> スペース内のすべてのコンテナーは、そのコンテナーが実行中かどうかにかかわらず、割り当て量の使用量としてカウントされます。
+メモリーの空き容量を増やすためには、未使用のコンテナーを削除する必要があります。</div>
+</td>
+</tr>
+<tr><td headers="d67434e886 ">ファイル共有</td>
+<td headers="d67434e888 ">10 個のファイル共有</td>
+</tr>
+<tr><td headers="d67434e886 ">コンテナーおよびコンテナー・グループ</td>
+<td headers="d67434e888 ">数は無制限<div class="steps note"><span class="notetitle">注:</span> コンテナーおよびコンテナー・グループのサイズでは、コンテナー・メモリーの制限が考慮されますが、特定のコンテナー数に制限されることはありません。</div>
+</td>
+</tr>
+<tr><td headers="d67434e886 ">イメージ</td>
+<td headers="d67434e888 ">25<div class="steps note"><span class="notetitle">注:</span> IBM イメージは、プライベート <span class="keyword">Bluemix</span> レジストリーのイメージ制限のカウントには含まれません。</div>
+</td>
+</tr>
+<tr><td headers="d67434e886 ">スペース</td>
+<td headers="d67434e888 ">数は無制限<div class="steps note"><span class="notetitle">注:</span> どのスペースも、少なくとも 2 つのパブリック IP アドレスと、2 GB のコンテナー・メモリー (新しいスペースにログインし、<span class="keyword">IBM
+Bluemix Container Service</span> で使用しようとするときに自動的に割り振られる) が必要です。これらのリソースは割り当て量に組み込まれますが、特定のスペース数に制限されることはありません。</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e942" id="change_quota"><h4 class="topictitle4" id="d67434e942">スペースに割り振られる割り当て量</h4>
+<div class="body taskbody"><div class="section context">従量課金 (PAYG) プランまたはサブスクリプション・プランでは、各スペースに対して、メモリー、ファイル共有の数、およびパブリック IP アドレスの数の割り当て量を、該当する割り当て量の制限に達するまで調整できます。コンテナーのスペース割り当て量を増減するには、以下の手順を実行します。</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" id="change_quota__view_quota_1">「組織の管理」のアカウントの詳細から、組織を選択します。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph" id="change_quota__view_quota_2">割り当て量セクションに、コンテナーの詳細が表示されます。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「割り当て量」</span>テーブルで、<span class="ph uicontrol">「編集」</span>ボタンをクリックして、スペースごとに割り振られた割り当て量を変更します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「保存」</span>ボタンをクリックして、変更を保存します。</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">ヒント:</span> 最大の割り当て量に達する場合には、<a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> サポート・チケット</a>を開いて割り当て量の追加を要求できます。</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e979" id="maximize_quota"><h4 class="topictitle4" id="d67434e979">割り当て量を最大限使用するためのヒント</h4>
+<div class="body taskbody"><div class="section context">不要なコンテナー・リソースを解放し、割り当て量を最大限使用するために、以下のヒントを考慮してください。
+<ul><li>使用していないコンテナーを削除して、それらのコンテナーの構成が割り当て量に計上されないようにしてください。詳しくは、<a href="container_single_ui.html#container_single_remove" title="割り当て量を最大限使用できるよう、未使用のコンテナーを時々削除してください。">単一コンテナーの削除</a>、<a href="container_ha.html#container_group_remove" title="割り当て量を最大限使用できるよう、未使用のコンテナー・グループを時々削除してください。">コンテナー・グループの削除</a>、および<a href="container_single_ui.html#container_compose_remove" title="最後のステップとして、マルチコンテナー・デプロイメントを削除して、使用済みのリソースを解放し、割り当て量の使用を最大化します。">マルチコンテナー・アプリの削除</a>を参照してください。</li>
+<li>コンテナーをインターネットからアクセス可能にしてはならない場合は、パブリック IP アドレスをコンテナーにバインドしないでください。</li>
+<li>パブリック IP アドレスの使用数を減らすには、単一コンテナーの代わりにコンテナー・グループを使用することを検討してください。
+コンテナー・グループは、IP アドレスの割り当て量に左右されないパブリック・アクセス用の経路を使用します。詳細については、<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">Bluemix GUI から長期サービスをコンテナー・グループとして実行する</a>を参照してください。</li>
+</ul>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e1021" id="container_planning_fileshare"><h3 class="topictitle3" id="d67434e1021">永続データ・ストレージ</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="fileshare_def">ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、<span class="keyword">Bluemix</span> スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。
+ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。</span></p>
+<div class="section context"><span class="ph">スペースに最初のボリュームを作成するとすぐに、4 IOPS (IOPS: 1 秒あたりの入出力操作) の 20 GB のデフォルトのファイル共有が無料で作成されます。
+ボリュームのサイズとファイル共有のサイズは比例します。
+ボリュームを追加すると、各ボリュームに等量のファイル共有ストレージが割り当てられます。</span><p><span class="ph">組織管理者は、スペースのストレージのニーズに合わせて、特定のストレージ・サイズおよび IOPS を指定してファイル共有を作成することができます。
+ファイル共有をプロビジョンするときには、サイズは 20 GB から 12 TB まで、1 GB あたりの IOPS は、0.25、2 または 4 を指定できます。ファイル共有サイズと IOPS 数値の比が、コンテナー・ボリュームとの間のデータの読み取り/書き込み速度に影響を与えます。</span></p>
+<div class="p">ファイル共用を作成するには、以下を参照してください。<ul><li><a href="container_volumes_ov.html#container_fileshares_adding_ui" title="ファイル共有とは、NFS (ネットワーク・ファイル・システム) ベースの永続的なストレージ・システムであり、Bluemix スペースに Docker ボリュームをホストし、ユーザーがコンテナーおよびアプリ関連ファイルを保管して利用できるようにします。 ファイル共有の中にファイルを保管するには、コンテナー・ボリュームを作成し、そのボリュームにデータを保存する必要があります。">Bluemix GUI を使用したボリュームのファイル共有の追加</a></li>
+<li><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="bx ic volume-fs-create コマンドを使用して、ファイル共有を作成します。">コマンド・ライン・インターフェース (CLI) を使用したファイル共有の追加</a></li>
+</ul>
+</div>
+</div></div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d67434e1109" lang="ja-jp" id="container_planning_container_ov"><h2 class="topictitle2" id="d67434e1109"><span class="keyword">Bluemix</span> での <span class="keyword">IBM
+Bluemix Container Service</span> を使用したコンテナーの作成</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Bluemix</span> の <span class="keyword">IBM
+Bluemix Container Service</span> でアプリを実行するコンテナーを作成するには、組織スペースに対する開発者権限が付与されている必要があります。アプリの開発者にとって、コンテナーのコンポーネントどうしの関係や、アプリの機能要件や非機能要件を満たすためにコンテナーの構成を変更する方法を知っておくことは重要です。</p>
+<div class="section prereq">始める前に、スペースに対する<dfn class="term">開発者</dfn>または<dfn class="term">監査員</dfn>のロールを割り当てられていることを確認してください。組織の管理者や所有者が、スペースへのアクセス権限を付与できます。</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d67434e1197" id="container_planning_cli-ui"><h3 class="topictitle3" id="d67434e1197"><span class="keyword">Bluemix</span> GUI、コマンド・ライン、および REST API</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="cli_def"><span class="keyword">IBM
+Bluemix Container Service</span> を操作するときには、<span class="keyword">Bluemix</span> GUI を利用するか、コマンド・ライン・インターフェース (CLI) をインストールするか、REST API に対して HTTP 要求を送信して <span class="keyword">IBM
+Bluemix Container Service</span> にアクセスできます。</span></p>
+<div class="section context"><p><span class="keyword">IBM
+Bluemix Container Service</span> のタスクの大部分は、<span class="keyword">Bluemix</span> GUI と <a href="container_planning.html#install" title="CLI からコンテナーを管理するためには、IBM Bluemix Container Service CLI をインストールして構成します。">CLI</a> のどちらでも実行できます。しかし、<span class="keyword">Bluemix</span> GUI または CLI のどちらかでしか実行できないタスクもあります。そのため、両方を使用してコンテナーを管理できるように準備しておいてください。</p>
+<p><span class="keyword">Bluemix</span> GUI と CLI のどちらも使用しない場合は、HTTP 要求を直接 <a href="container_planning.html#use_api" title="IBM Bluemix Container Service API を使用すれば、単一コンテナーやコンテナー・グループの操作に REST を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> API</a> サーバーに送信することにより、REST を使用してコンテナーを管理できます。</p>
+以下の表に、<span class="keyword">Bluemix</span> GUI、<span class="keyword">IBM
+Bluemix Container Service</span> CLI、または REST API のいずれかを必要とするすべてのコンテナー関連タスクを示します。
+ここにリストされていないタスクは、すべての方法で実行できます。
+<div class="tablenoborder"><table summary="Bluemix GUI、IBM Bluemix Container Service CLI、または REST API のいずれかを必要とするコンテナー関連タスク" id="container_planning_cli-ui__table_egk_dh3_rx" class="defaultstyle"><caption><span class="tablecap">表 3. <span class="keyword">Bluemix</span> GUI、<span class="keyword">IBM
+Bluemix Container Service</span> CLI、または REST API のいずれかを必要とするコンテナー関連タスク</span></caption><thead><tr><th style="width: 25%" id="d67434e1386" class="thleft">タスク</th>
+<th style="width: 25%" id="d67434e1388" class="thleft">GUI</th>
+<th style="width: 25%" id="d67434e1390" class="thleft">CLI</th>
+<th style="width: 25%" id="d67434e1392" class="thleft">API</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 25%" headers="d67434e1386 ">イメージの脆弱性を確認する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">レジストリーにイメージをプッシュする</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">レジストリーからイメージをプルする</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">Docker Hub からイメージをコピーする</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">割り当て分の割り振りを変更する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">組織とスペースの固有の割り当て分を取得する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">詳細なログ情報を表示する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">追加のログを指定する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">ログをカスタマイズする</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">実行中のコンテナーにログインする</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">Docker Compose を使用する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">スペースのボリュームをリストする</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">ファイルをボリュームに書き込む</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">ボリュームを削除する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67434e1386 ">システム・メッセージを取得する</td>
+<td style="width: 25%" headers="d67434e1388 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1390 "><img src="images/close.png" style="width: 1" alt="サポート対象外アイコン"></td>
+<td style="width: 25%" headers="d67434e1392 "><img src="images/healthy.png" style="width: 3" alt="サポート対象アイコン"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e1533" id="install"><h4 class="topictitle4" id="d67434e1533">CLI のインストール</h4>
+<div class="body taskbody"><p class="shortdesc">CLI からコンテナーを管理するためには、<span class="keyword">IBM
+Bluemix Container Service</span> CLI をインストールして構成します。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd"><a href="container_cli_cfic_install.html#container_cli_cfic_install" title="ネイティブの Docker CLI コマンドを実行してご使用のコンテナーを管理するには、IBM Bluemix Container Service プラグイン (bx ic) をインストールします。"><span class="keyword">IBM
+Bluemix Container Service</span> CLI</a> とその前提条件をインストールします。</span> CLI から <span class="keyword">IBM
+Bluemix Container Service</span> を操作するには、Cloud Foundry CLI (<samp class="ph codeph">cf</samp>)、Bluemix CLI (<samp class="ph codeph">bx</samp>)、および <span class="keyword">IBM
+Bluemix Container Service</span> のプラグイン (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) をインストールする必要があります。</li>
+<li class="step stepexpand">オプション: <span class="cmd"><a href="container_cli_cfic_install.html#container_cli_compose_install" title="複数の単一コンテナーを一度に開始および停止するには、Docker Compose CLI をインストールします。">Docker Compose</a> をインストールします。</span> <span class="keyword">IBM
+Bluemix Container Service</span>で Docker Compose のコマンドを実行するためには、追加のソフトウェア・パッケージが必要です。</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span> CLI にログインします。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) を実行するか、ネイティブ Docker コマンドを実行するかを選択します。</span> <ul><li><span class="ph uicontrol">オプション 1</span> (デフォルト)<p><span class="keyword">IBM
+Bluemix Container Service</span> ラッパー Docker の単純なシェル。
+ローカルの Docker デーモンは、<span class="keyword">IBM
+Bluemix Container Service</span> の影響を受けません。
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> コマンドは <span class="keyword">Bluemix</span> スペース内のコンテナーを管理する場合に使用し、<samp class="ph codeph">docker</samp> コマンドはローカルでコンテナーを管理する場合に使用します。
+いずれにしても <samp class="ph codeph">docker</samp> コマンドは、ローカルのイメージ開発には常に必要です。</p>
+<p>例えば、オプション 1 を使用する場合、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> コマンドは <span class="keyword">Bluemix</span> スペース内にコンテナーを作成し、<samp class="ph codeph">docker run</samp> はローカルにコンテナーを作成します。
+このオプションは、Docker と <span class="keyword">IBM
+Bluemix Container Service</span> のどちらの使用にも慣れていない場合や、コンテナーのテストをローカルで行う場合に便利です。</p>
+</li>
+<li><span class="ph uicontrol">オプション 2</span><p>現在の CLI セッションのローカルの Docker デーモンを <span class="keyword">IBM
+Bluemix Container Service</span> にリダイレクトして、<span class="keyword">Bluemix</span> スペース内でのコンテナーの管理に <samp class="ph codeph">docker</samp> コマンドが使用可能なときは、常に <span class="ph"><samp class="ph codeph">bx ic</samp></span> コマンドの代わりに使用できるようにします。</p>
+<p>例えば、オプション 2 では、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> コマンドと <samp class="ph codeph">docker run</samp> コマンドのどちらを使用してもスペース内にコンテナーを作成できます。
+このオプションは、Docker の使用経験があり、<samp class="ph codeph">docker</samp> コマンドの方が慣れている場合や、<span class="keyword">IBM
+Bluemix Container Service</span> の処理に自動化スクリプトを適用している場合に便利です。</p>
+<p>例外として、<span class="keyword">IBM
+Bluemix Container Service</span> に固有なタスクを行うのに、引き続き <span class="ph"><samp class="ph codeph">bx ic</samp></span> コマンドを使用する必要があります。
+例えば、名前空間を設定するには、コマンド <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp> を使用する必要があります。
+<samp class="ph codeph">docker namespace-set</samp> は、有効なコマンドではありません。
+この構成でサポートされる <samp class="ph codeph">docker</samp> コマンドのリストについては、<a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="IBM Bluemix Container Service プラグイン (bx ic) では、bx ic コマンドの代わりに使用できるよう、一部の docker コマンドがサポートされています。このプラグインにログインするときに、 Docker CLI コマンドを使用するための環境変数の構成を行います。そうすると、可能な場合は必ず bx ic コマンドの代わりに docker コマンドを実行できるようになります。例えば、bx ic images を使用してプライベート Bluemix レジストリー内のイメージを表示する代わりに、docker images を実行します。">IBM Bluemix Container Service プラグイン (bx ic) でサポートされている Docker コマンド</a>を参照してください。</p>
+<div class="p">このオプションを構成するには、ログイン時に端末に表示される環境変数をコピーして貼り付けます。
+<ul><li><samp class="ph codeph">DOCKER_HOST</samp> は、Docker ホストを <span class="keyword">IBM
+Bluemix Container Service</span> に設定します。</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp> は、Cloud Foundry 用 <span class="keyword">IBM
+Bluemix Container Service</span> プラグインの認証鍵の場所を設定します。</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp> は、TLS を使用し、リモート・サーバーを検証します。</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">ヒント:</span> <span class="keyword">IBM
+Bluemix Container Service</span> 資料に記載されている作業を実行している場合、
+アスタリスク (*) のマークがあるすべてのステップで <samp class="ph codeph">docker</samp> コマンドを実行できます。</div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e1875" id="use_api"><h4 class="topictitle4" id="d67434e1875">REST API によるコンテナーの管理</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> API を使用すれば、単一コンテナーやコンテナー・グループの操作に REST を使用できます。</p>
+<div class="section context"> <span class="keyword">IBM
+Bluemix Container Service</span> サービスにログインするには、まず <span class="keyword">Bluemix</span> にログインする必要があります。以下の手順に従って、<span class="keyword">Bluemix</span> アクセス・トークンと、コンテナーで操作するスペースの ID をそれぞれ取得します。</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span> API に対して GET HTTP 要求を実行して、現在の認証エンドポイント情報を取得します。</span> <pre class="codeblock"><code>GET <samp class="ph codeph">http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/info</samp></code></pre>
+出力は、以下のようになります。
+<pre class="pre screen"><code>{
+  "name": "Bluemix",
+  "build": "235011",
+  "support": "http://ibm.biz/bluemix-supportinfo",
+  "version": 0,
+  "description": "IBM Bluemix",
+  "authorization_endpoint": "https://login.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/UAALoginServerWAR",
+  "token_endpoint": "https://uaa.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>",
+  "allow_debug": true
+}</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">その許可エンドポイントで認証を行い、<span class="keyword">Bluemix</span> アクセス・トークンを取得します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">前のステップの API 出力から、<span class="ph uicontrol">authorization_endpoint</span> を探します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">許可エンドポイント URL の末尾に <span class="ph uicontrol">/oauth/token</span> を追加します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">その許可エンドポイントに <samp class="ph codeph">POST</samp> 要求を送信して、<span class="keyword">Bluemix</span> アクセス・トークンを取得します。</span> <pre class="codeblock"><code>POST <samp class="ph codeph">https://login.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/UAALoginServerWAR/oauth/token</samp> </code></pre>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_u5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">表 4. <span class="keyword">Bluemix</span> で認証を行うための要求の入力パラメーター</span></caption><thead><tr><th id="d67434e2003" class="thleft">要求の入力パラメーター</th>
+<th id="d67434e2005" class="thleft">値</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67434e2003 ">ヘッダー</td>
+<td headers="d67434e2005 "><ul><li>Accept: <samp class="ph codeph">application/json;charset=utf-8</samp></li>
+<li>Authorization: <samp class="ph codeph">Basic Y2Y6</samp></li>
+<li>Content-Type: <samp class="ph codeph">application/x-www-form-urlencoded;charset=utf</samp></li>
+</ul>
+</td>
+</tr>
+<tr><td headers="d67434e2003 ">本文</td>
+<td headers="d67434e2005 "><samp class="ph codeph">grant_type=password&amp;username=<var class="keyword varname">&lt;username&gt;</var>
+&amp;password=<var class="keyword varname">&lt;password&gt;</var></samp>
+<div class="p"><div class="steps note"><span class="notetitle">注:</span> <var class="keyword varname">&lt;username&gt;</var> と <var class="keyword varname">&lt;password&gt;</var> は、<span class="keyword">Bluemix</span> のユーザー名とパスワードで置き換えます。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+出力は、以下のようになります。
+<pre class="pre screen"><code>{
+  "access_token": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMzhlZGZiZS0wOTJiLTQ4MmYtOTBhYi05ZGMyNzhlNGYyMmQiLCJzdWIiOiIyNjRmNjI1ZS0xNzliLTQ0NzYtYTJjNi1jZWZmMGM4YTFkNDUiLCJzY29wZSI6WyJvcGVuaWQiLCJjbG91ZF9jb250cm9sbGVyLnJlYWQiLCJwYXNzd29yZC53cml0ZSIsImNsb3VkX2NvbnRyb2xsZXIud3JpdGUiXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6IjI2NGY2MjVlLTE3OWItNDQ3Ni1hMmM2LWNlZmYwYzhhMWQ0NSIsIm9yaWdpbiI6InVhYSIsInVzZXJfbmFtZSI6Im5zcGllc0B1cy5pYm0uY29tIiwiZW1haWwiOiJuc3BpZXNAdXMuaWJtLmNvbSIsImF1dGhfdGltZSI6MTQ3MjU4NTUwNiwicmV2X3NpZyI6Ijc0MDA2OGI3IiwiaWF0IjoxNDcyNTg1NTA2LCJleHAiOjE0NzM3OTUxMDYsImlzcyI6Imh0dHBzOi8vdWFhLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiYXVkIjpbImNmIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIl19.B0jSzjrglzCv4EfAPmKCH-ZKsLOTXpsk5qrYTTL-GPI",
+  "token_type": "bearer",
+  "refresh_token": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4YWE3MmI0Yy02MGE4LTQwZmEtOGIxZi04NTllYWE1ZDBmMWUtciIsInN1YiI6IjI2NGY2MjVlLTE3OWItNDQ3Ni1hMmM2LWNlZmYwYzhhMWQ0NSIsInNjb3BlIjpbIm9wZW5pZCIsImNsb3VkX2NvbnRyb2xsZXIucmVhZCIsInBhc3N3b3JkLndyaXRlIiwiY2xvdWRfY29udHJvbGxlci53cml0ZSJdLCJpYXQiOjE0NzI1ODU1MDYsImV4cCI6MTQ3NTE3NzUwNiwiY2lkIjoiY2YiLCJjbGllbnRfaWQiOiJjZiIsImlzcyI6Imh0dHBzOi8vdWFhLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoibnNwaWVzQHVzLmlibS5jb20iLCJvcmlnaW4iOiJ1YWEiLCJ1c2VyX2lkIjoiMjY0ZjYyNWUtMTc5Yi00NDc2LWEyYzYtY2VmZjBjOGExZDQ1IiwicmV2X3NpZyI6Ijc0MDA2OGI3IiwiYXVkIjpbImNmIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIl19.9TOrq_sg2CFIktjVLBNTc-yfnCRrSQyNV-lZt7N9FrM",
+  "expires_in": 1209599,
+  "scope": "openid cloud_controller.read password.write cloud_controller.write",
+  "jti": "d38edfbe-092b-482f-90ab-9dc278e4f22d"
+}</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">CLI 応答からの <span class="ph uicontrol">access_token</span> をメモして、次のステップで使用します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span> スペースの ID を取得します。</span> <span class="keyword">IBM
+Bluemix Container Service</span> サービスで認証を行うには、前のステップで取得した <span class="keyword">Bluemix</span> アクセス・トークンに加えて、コンテナーを操作するために組織内のスペースの ID を取得する必要があります。
+<p>スペース ID がわかっている場合は、このステップをスキップして、次のステップに進むことができます。スペース ID がわからない場合は、次の手順に従って取得してください。</p>
+<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="keyword">Bluemix</span> 組織の ID を取得します。</span> <pre class="codeblock"><code>GET http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v2/organizations</code></pre>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_v5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">表 5. <span class="keyword">Bluemix</span> 組織およびスペースを取得するための要求の入力パラメーター</span></caption><thead><tr><th id="d67434e2104" class="thleft">要求の入力パラメーター</th>
+<th id="d67434e2106" class="thleft">値</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67434e2104 ">ヘッダー</td>
+<td headers="d67434e2106 "><ul><li>Accept: <samp class="ph codeph">application/json;charset=utf-8</samp></li>
+<li>Authorization: <samp class="ph codeph">bearer <var class="keyword varname">&lt;access_token&gt;</var></samp></li>
+<li>Content-Type: <samp class="ph codeph">application/x-www-form-urlencoded;charset=utf</samp></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+出力は、以下のようになります。
+組織の ID は、<span class="ph uicontrol">metadata</span> セクションの <span class="ph uicontrol">guid</span> として見つけることができます。
+<pre class="pre screen"><code>"metadata": {
+        "guid": "31eb6110-5935-446f-ac94-f97f5852b19b",
+        "url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b",
+        "created_at": "2016-01-07T18:55:19Z",
+        "updated_at": "2016-02-09T15:56:22Z"
+      },
+      "entity": {
+        "name": "org@us.ibm.com",
+        "billing_enabled": false,
+        "quota_definition_guid": "7f66aaf3-9e9b-49f4-83d9-40d92d318ff3",
+        "status": "active",
+        "quota_definition_url": "/v2/quota_definitions/7f66aaf3-9e9b-49f4-83d9-40d92d318ff3",
+        "spaces_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/spaces",
+        "domains_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/domains",
+        "private_domains_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/private_domains",
+        "users_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/users",
+        "managers_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/managers",
+        "billing_managers_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/billing_managers",
+        "auditors_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/auditors",
+        "app_events_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/app_events",
+        "space_quota_definitions_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/space_quota_definitions"
+      }</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">前のステップの API 出力にある <span class="ph uicontrol">entity</span> セクションから <span class="ph uicontrol">spaces_url</span> フィールドを探します。その組織にあるすべてのスペースのリストを取得するために、<span class="ph uicontrol">spaces_url</span> に対して GET API 呼び出しを実行します。</span> この API 呼び出しを実行するには、前のステップで使用したものと同じヘッダー情報を使用します。
+<pre class="codeblock"><code>GET http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/spaces</code></pre>
+出力は、以下のようになります。
+スペースの ID は、<span class="ph uicontrol">metadata</span> セクションの <span class="ph uicontrol">guid</span> として見つけることができます。
+<pre class="pre screen"><code>"metadata": {
+        "guid": "0e65c436-9413-46e2-8b42-ff06aa74ac21",
+        "url": "/v2/spaces/0e65c436-9413-46e2-8b42-ff06aa74ac21",
+        "created_at": "2016-01-07T18:55:22Z",
+        "updated_at": null
+      },
+      "entity": {
+        "name": "dev",
+...</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">REST を使用して <span class="keyword">IBM
+Bluemix Container Service</span> でコンテナーを操作します。</span> サポートされるすべての <span class="keyword">IBM
+Bluemix Container Service</span> API 呼び出しは、<a href="http://ccsapi-doc.mybluemix.net/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">API のドキュメンテーション</a>に記載されています。
+<p>すべての API 呼び出しには、ヘッダー情報の一部としてアクセス・トークンとスペース ID が必要です。次の表を参照してください。</p>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_w5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">表 6. <span class="keyword">IBM
+Bluemix Container Service</span> API を操作するための要求の入力パラメーター</span></caption><thead><tr><th id="d67434e2207" class="thleft">要求の入力パラメーター</th>
+<th id="d67434e2209" class="thleft">値</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67434e2207 "><span class="keyword">IBM
+Bluemix Container Service</span> のベース URL</td>
+<td headers="d67434e2209 "><span class="ph filepath">https://containers-api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v3</span></td>
+</tr>
+<tr><td headers="d67434e2207 ">ヘッダー</td>
+<td headers="d67434e2209 "><ul><li>X-Auth-Token: <samp class="ph codeph">bearer <var class="keyword varname">&lt;access_token&gt;</var></samp></li>
+<li>X-Auth-Project-Id: <samp class="ph codeph"><var class="keyword varname">&lt;space_ID&gt;</var></samp></li>
+<li>Content-Type: <samp class="ph codeph">application/json</samp></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e2249" id="container_planning_images"><h3 class="topictitle3" id="d67434e2249">IBM パブリック・イメージ、Docker Hub のイメージ、プライベート・イメージ</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" data-hd-otherprops="registry_check" id="image_def">コンテナー・イメージとは、作成するすべてのコンテナーの基本です。
+イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。
+コンテナー・イメージは、実行可能ファイル (<span class="ph filepath">.exe</span> または <span class="ph filepath">.bin</span>) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。
+コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。</span><span class="ph" data-hd-otherprops="registry_check">コンテナー・イメージは、プライベート <span class="keyword">Bluemix</span> レジストリーに保管され、CLI からのみ追加できます。コンテナー・イメージからコンテナーを作成するためには、その前に、使用したいコンテナー・イメージをすべてレジストリーに置いておく必要があります。</span></p>
+<div class="section context"><span class="keyword">IBM
+Bluemix Container Service</span> の使用を計画するときには、使用するコンテナー・イメージについて決定する必要があります。
+プライベート <span class="keyword">Bluemix</span> レジストリーにイメージを作成し、ビルドして使用するには、いくつかの方法があります。<div class="note important" id="container_planning_images__max_size"><span class="importanttitle">重要:</span> <span class="keyword">IBM
+Bluemix Container Service</span> で単一コンテナーまたはスケーラブルなコンテナー・グループとして実行できる各イメージの最大サイズは 10 GB です。</div>
+<dl id="container_planning_images__available_images"><dt class="dlterm">IBM パブリック・イメージ</dt>
+<dd>手始めに、IBM Liberty や IBM Node のイメージなどの、<span class="keyword">IBM
+Bluemix Container Service</span> に用意されている <a href="container_images.html#images" title="コンテナーは IBM イメージから作成することができます。イメージは、単一コンテナーとしてもスケーラブル・コンテナー・グループとしてもデプロイできます。">IBM パブリック・イメージ</a>のいずれかを使用して、<span class="keyword">IBM
+Bluemix Container Service</span> の機能をテストします。
+そして、それらのイメージのいずれかを親イメージとして使用し、Dockerfile を変更し、独自のアプリ・コードを使用して、親イメージの上に独自のイメージをビルドできます。</dd>
+<dt class="dlterm">Docker Hub のイメージ</dt>
+<dd><a href="container_images_adding_ov.html#container_images_copying" title="以下のいずれかのロケーションから組織のプライベート Bluemix レジストリーへイメージをコピーできます。">イメージを Docker Hub から直接</a>プライベート <span class="keyword">Bluemix</span> レジストリーにコピーするか、または<a href="container_images_adding_ov.html#container_images_pulling" title="Docker Hub または専用レジストリーからイメージをプルし、ローカルでそのイメージに変更を加え、組織の専用 Bluemix レジストリーにプッシュすることができます。">イメージを Docker Hub からプル</a>し、ローカルで変更を加えた後、レジストリー内で直接ビルドします。</dd>
+<dt class="dlterm">独自イメージの作成</dt>
+<dd>ローカル Docker 環境で既に使用しているコンテナー・イメージがある場合は、それらを <span class="keyword">IBM
+Bluemix Container Service</span> で使用するために、<a href="container_images_adding_ov.html#container_images_pulling" title="Docker Hub または専用レジストリーからイメージをプルし、ローカルでそのイメージに変更を加え、組織の専用 Bluemix レジストリーにプッシュすることができます。">それらをプライベート <span class="keyword">Bluemix</span> レジストリーにプッシュ</a>することができます。また、独自の Dockerfile をローカルに作成し、ビルドし、テストした後、プライベート・イメージ・レジストリーにプッシュすることもできます。</dd>
+</dl>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e2419" id="viewing_images"><h4 class="topictitle4" id="d67434e2419">プライベート・イメージ・レジストリー内のイメージの表示</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Bluemix</span> GUI または CLI を使用して、プライベート <span class="keyword">Bluemix</span> イメージ・レジストリー内にある使用可能なすべてのコンテナー・イメージを表示できます。</p>
+<div class="step"><span class="cmd">IBM 提供のイメージと、ユーザーがプライベート・レジストリーにプッシュしたイメージを表示します。</span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI で、カタログを選択してから<span class="ph uicontrol">「コンテナー」</span>を選択します。
+IBM 提供のイメージと、ユーザーが <span class="keyword">Bluemix</span> プライベート・レジストリーにプッシュしたイメージが表示されます。</li>
+<li class="li choice">CLI から、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> を実行します。</li>
+</ul>
+</div>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e2476" id="vulnerability_advisor"><h4 class="topictitle4" id="d67434e2476">イメージ脆弱性の検討</h4>
+<div class="body taskbody"><p class="shortdesc">プライベート <span class="keyword">Bluemix</span> レジストリーにイメージを追加すると、Vulnerability Advisor によって自動的にイメージがスキャンされ、組織管理者が設定した標準ポリシーおよび Ubuntu の既知の問題のデータベースとの照合が行われます。Vulnerability Advisor は、インベントリー・パッケージ、構成、開かれているポート、および Docker メタデータを検査します。
+スキャンが完了したら、イメージをコンテナー内で使用する前に、潜在的な脆弱性のリストを検討し、必要に応じて対処できます。組織管理者が設定したポリシーに応じて、そのイメージからのコンテナーのデプロイメントを禁止したり、ユーザーに警告を表示したりできます。</p>
+<div class="section context"><div class="p"><ul><li>イメージの脆弱性をリストする場合は、<a href="va/va_index.html#va_reviewing">イメージ・レポートの検討</a>を参照してください。</li>
+<li>組織内でカスタム・ポリシーをセットアップする場合は、<a href="va/va_index.html#va_managing_policy">組織ポリシーの検討</a>を参照してください。</li>
+</ul>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e2516" id="tips"><h4 class="topictitle4" id="d67434e2516">コンテナーのシャットダウンを回避するための Dockerfile のヒント</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> には、ユーザーのためにコンテナーを安全に保ち、クラウド・リソースを管理する多くの機能が備わっています。
+アプリによっては、<span class="keyword">Bluemix</span> でローカル・コンテナーを正常に実行するために、Dockerfile に構成を追加する必要がある場合があります。</p>
+<div class="section context"><dl><dt class="dlterm">ネットワーク遅延のための準備</dt>
+<dd>コンテナーが開始されると、<span class="keyword">IBM
+Bluemix Container Service</span> はプライベート・コンテナー・ネットワークをセットアップし、コンテナーにプライベート IP アドレスを割り当てます。
+この処理には数秒かかる場合があります。
+開始時にアクティブなネットワーク接続が必要なアプリの場合は、Dockerfile にスリープ・コマンドを追加して、<a href="container_planning.html#network_delay" title="コンテナーが開始されると、IBM Bluemix Container Service はプライベート・コンテナー・ネットワークをセットアップし、コンテナー・ポートを公開し、コンテナーにプライベート IP アドレスを割り当てます。 この処理には数秒かかる場合があります。 アプリがその開始時にアクティブなネットワーク接続を必要とする場合に、コンテナーのプライベート・ネットワークがまだセットアップされていない可能性があり、アプリが異常終了する原因になることがあります。 アプリが開始される前に IBM Bluemix Container Service ネットワーキングが完了するように、以下のいずれかの解決方法を実施してネットワーク遅延を操作することを検討してください。"><span class="keyword">IBM
+Bluemix Container Service</span> ネットワーキングが先に完了するようにしてください</a>。</dd>
+<dt class="dlterm">長期実行コマンドの使用</dt>
+<dd>コンテナーを稼働中の状態に保つには、少なくとも 1 つの長期実行プロセスをコンテナー・イメージに含める必要があります。
+例えば、<samp class="ph codeph">echo "Hello world"</samp> は短期実行プロセスです。
+イメージの中に他のコマンドが指定されていない場合、コンテナーは、このコマンドの実行後にシャットダウンされます。
+<samp class="ph codeph">echo "Hello world"</samp> コマンドを長期実行プロセスに変換するには、例えば、何度もループ実行したり、<samp class="ph codeph">echo</samp> コマンドをアプリ内の別の長期実行プロセスの中に含めたりします。</dd>
+</dl>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e2606" id="container_planning_private_network"><h3 class="topictitle3" id="d67434e2606"><span class="keyword">IBM
+Bluemix Container Service</span> のプライベート・コンテナー・ネットワーク設定</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="private_network_def">コンテナーのプライベート・ネットワークによって、1 つのスペースの中で実行される複数の単一コンテナーやコンテナー・グループに対して個々に安全な環境が作成されます。
+同じプライベート・ネットワークに接続された各コンテナーは、プライベート IP アドレスを使用して、そのプライベート・ネットワーク内の他のコンテナーとの間でデータを送受信できます。パブリック・ポートと、単一コンテナー用のパブリック IP アドレスまたはコンテナー・グループ用のパブリック経路のいずれかがバインドされるまで、コンテナーをパブリックに使用することはできません。</span></p>
+<div class="section context"><span class="keyword">IBM
+Bluemix Container Service</span> のデフォルトのプライベート・ネットワーク設定を使用するかVPN 経由で社内データ・センターにコンテナーを接続するかを選択できます。<dl><dt class="dlterm"><span class="keyword">IBM
+Bluemix Container Service</span> のデフォルトのプライベート・ネットワーク設定</dt>
+<dd><span class="ph"><span class="keyword">Bluemix</span> では、すべてのスペースに、
+デフォルトの <span class="keyword">IBM
+Bluemix Container Service</span> ネットワーク設定を適用したコンテナー・プライベート・ネットワークが既に用意されています。
+この設定には、プライベート IP アドレスを使用してコンテナーおよびコンテナー・グループ間でのプライベート・ネットワーク通信を可能にするデフォルトのプライベート・ネットワーク・セキュリティー・グループの自動設定も含まれます。コンテナーまたはコンテナー・グループをスペースに作成すると、デフォルトの <span class="keyword">IBM
+Bluemix Container Service</span> プライベート・ネットワークに自動的に接続され、サブネット 172.31.0.0/16 からプライベート IP アドレスが割り当てられます。プライベート IP アドレスが割り当てられると、同じネットワーク内のすべてのコンテナーが単一のコンテナーのプライベート IP アドレスを使用して、またはコンテナー・グループを使用している場合はグループのロード・バランサーのプライベート IP アドレスを使用して、すべてのコンテナー・ポートでセキュアに通信できるようになります。コンテナー・ポートをホスト・ポートにマッピングする必要はありません。</span></dd>
+<dt class="dlterm">コンテナーを社内データセンターに接続するための仮想プライベート・ネットワーク</dt>
+<dd><span class="ph" id="container_planning_private_network__vpn_def"><span class="keyword">Bluemix</span> のプライベート・コンテナー・ネットワーク内の単一コンテナーとコンテナー・グループを、
+企業のデータ・センターにセキュアに接続できます。
+<span class="keyword">IBM
+VPN</span> は、業界標準の Internet Protocol Security (IPsec) プロトコル・スイートに基づき、インターネット上にセキュアなエンドツーエンドの通信チャネルを確立します。
+IPsec プロトコルは、VPN エンドポイント間で交換されるパッケージを暗号化して、ネットワーク・レベルのピア認証、データ保全性、およびデータ機密性を提供します。
+<span class="keyword">Bluemix</span> 内のコンテナーと企業のデータ・センターの間にセキュアな接続をセットアップするためには、お客様のオンプレミスのデータ・センターに IPsec VPN ゲートウェイまたは SoftLayer サーバーを設置する必要があります。
+<span class="keyword">IBM
+VPN</span> サービスを使用して、VPN ゲートウェイを 1 スペースにつき 1 つ構成し、異なる宛先への接続を最大で 16 個定義することができます。</span><p><span class="keyword">Bluemix</span> のコンテナーへのセキュア VPN 接続をセットアップする場合は、<a href="container_security.html#container_vpn" title="Bluemix のプライベート・コンテナー・ネットワーク内の単一コンテナーとコンテナー・グループを、 企業のデータ・センターにセキュアに接続できます。 IBM VPN は、業界標準の Internet Protocol Security (IPsec) プロトコル・スイートに基づき、インターネット上にセキュアなエンドツーエンドの通信チャネルを確立します。 IPsec プロトコルは、VPN エンドポイント間で交換されるパッケージを暗号化して、ネットワーク・レベルのピア認証、データ保全性、およびデータ機密性を提供します。 Bluemix 内のコンテナーと企業のデータ・センターの間にセキュアな接続をセットアップするためには、お客様のオンプレミスのデータ・センターに IPsec VPN ゲートウェイまたは SoftLayer サーバーを設置する必要があります。 IBM VPN サービスを使用して、VPN ゲートウェイを 1 スペースにつき 1 つ構成し、異なる宛先への接続を最大で 16 個定義することができます。"><span class="keyword">IBM
+VPN</span></a>を参照してください。</p>
+</dd>
+</dl>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e2764" id="network_delay"><h4 class="topictitle4" id="d67434e2764">コンテナーの開始時にネットワーク遅延を操作するためのヒント</h4>
+<div class="body taskbody"><p class="shortdesc">コンテナーが開始されると、<span class="keyword">IBM
+Bluemix Container Service</span> はプライベート・コンテナー・ネットワークをセットアップし、コンテナー・ポートを公開し、コンテナーにプライベート IP アドレスを割り当てます。
+この処理には数秒かかる場合があります。
+アプリがその開始時にアクティブなネットワーク接続を必要とする場合に、コンテナーのプライベート・ネットワークがまだセットアップされていない可能性があり、アプリが異常終了する原因になることがあります。
+アプリが開始される前に <span class="keyword">IBM
+Bluemix Container Service</span> ネットワーキングが完了するように、以下のいずれかの解決方法を実施してネットワーク遅延を操作することを検討してください。</p>
+<div class="step"><span class="cmd">ネットワーク遅延を操作する方法を、次の中から選択します。</span> <ul class="ul choices"><li class="li choice">コンテナー開始時に実行される Dockerfile に sleep コマンドを追加します。<p>次のサンプル Dockerfile では、コンテナーはアプリが開始されるまで 60 秒待機します。</p>
+<pre class="codeblock"><code>FROM sdelements/lets-chat:latest
+CMD (sleep 60; npm start)</code></pre>
+</li>
+<li class="li choice">アプリ・コードを調整してアクティブなネットワーク接続を検査します。
+例えばアプリ開始前にパブリック IP アドレスに ping します。
+その IP アドレスに ping できない場合は、数秒スリープしてから再試行します。
+IP アドレスを解決できたらアプリを開始します。</li>
+</ul>
+</div>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e2822" id="container_planning_public_network"><h3 class="topictitle3" id="d67434e2822">パブリック・ネットワーク設定の決定</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">デフォルトでは、<span class="keyword">IBM
+Bluemix Container Service</span> 内のあらゆる単一コンテナーおよびコンテナー・グループがプライベート・ネットワークから使用可能です。
+しかし、アプリをインターネットからアクセスできるようにしたり、組織の他のスペースのコンテナーにアクセスしたりしたい場合があります。
+そのような場合、コンテナーを公開する必要があります。</span> 選択するコンテナーのタイプに応じて、コンテナーを公開するためのさまざまな方法があります。</p>
+<div class="section context"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e2887" id="public_single_compose"><h4 class="topictitle4" id="d67434e2887">単一コンテナーと Docker Compose のパブリック・ネットワーク設定</h4>
+<div class="body taskbody"><p class="shortdesc">スペース内に作成するすべての単一コンテナーには、プライベート IP アドレスが割り当てられます。この IP アドレスは、プライベート・ネットワークからコンテナーにアクセスするときにしか使用できません。プライベート・ネットワーク通信は、パブリック・ネットワークとの間のネットワーク・トラフィックを一切許可しないデフォルトのプライベート・ネットワーク・セキュリティー・グループによって保護されています。
+アプリをパブリック・ネットワークから利用可能にするには、パブリック・ポートを公開し、パブリック IP アドレスをコンテナーにバインドする必要があります。</p>
+<div class="section context"><p>スペースをコンテナーにバインドするには、パブリック IP アドレスを要求する必要があります。パブリック IP アドレスを要求すると、パブリック IP アドレス・プールからランダムに IP アドレスがスペースに割り振られます。
+スペースに割り振られた IP アドレスは変更されません。
+パブリック IP アドレスをコンテナーにバインドするには、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> コマンドで <samp class="ph codeph">-p</samp> オプションを使用して、HTTP ポートを公開する必要もあります。
+ポートを公開すると、公開したポートでのみパブリック・データを送受信できるパブリック・ネットワーク・セキュリティー・グループがコンテナー用に作成されます。
+その他のすべてのパブリック・ポートは閉じられるため、それらのポートを使用してインターネットからアプリにアクセスすることはできません。</p>
+
+<div class="steps note"><span class="notetitle">注:</span> パブリック IP アドレスをバインドしても、単一のコンテナーとの間で送受信するデータを暗号化する SSL 証明書は組み込まれません。ご使用のアプリに SSL 暗号化が必要である場合は、独自の SSL ソリューションを実装するか、または単一のコンテナーの代わりにコンテナー・グループを使用することができます。
+既に SSL 証明書が組み込まれているパブリック経路にコンテナー・グループがバインドされているなら、追加の構成を行わずに HTTPS でコンテナー・グループにアクセスできます。</div>
+
+<p>スペースで使用可能なパブリック IP アドレスの数は、組織の<a href="container_planning.html#container_planning_quota" title="Bluemix のどの組織も、コンテナー・メモリー、パブリック IP アドレス、ファイル共有、組織内のすべてのスペースで共有するサービスの数として、値が事前設定されています。これらの事前設定値を、割り当て量と呼びます。">割り当て量</a>に応じて異なります。</p>
+
+<div class="p">スペースで使用可能なパブリック IP アドレスのリストを調べるには、以下のコマンドを実行します。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+返されたリストには、使用可能なパブリック IP アドレスが示されていないか、コンテナーにバインドされているパブリック IP アドレス、または、バインドされていないパブリック IP アドレスが示されます。</div>
+
+<div class="p"><dl><dt class="dlterm">スペースで使用可能なパブリック IP アドレスがない場合</dt>
+<dd><ul><li>CLI 出力: <pre class="codeblock"><code>IP Address      Container ID</code></pre>
+</li>
+<li>対応方法: <div class="p">新しいパブリック IP アドレスを要求し、コンテナーにバインドします。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt class="dlterm">スペース内でパブリック IP アドレスが使用可能で、コンテナーにバインドされていない場合</dt>
+<dd><ul><li>CLI 出力: <pre class="codeblock"><code>IP Address      Container ID   
+192.0.2.56</code></pre>
+</li>
+<li>対応方法: <div class="p">パブリック IP アドレスをコンテナーにバインドします。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt class="dlterm">スペース内でパブリック IP アドレスが使用可能だが、コンテナーに既にバインドされている場合</dt>
+<dd><ul><li>CLI 出力: <pre class="codeblock"><code>IP Address      Container ID   
+192.0.2.56   d7b4a167-8e51-4b16-b591-1a17cb7ee41f </code></pre>
+</li>
+<li>対応方法: <ul><li>既にバインドされている IP アドレスをコンテナーからアンバインドし、新しいコンテナーにバインドします。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</li>
+<li><div class="p">新しいパブリック IP アドレスを要求し、コンテナーにバインドします。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e3062" id="public_container_groups"><h4 class="topictitle4" id="d67434e3062">コンテナー・グループのパブリック・ネットワーク設定</h4>
+<div class="body taskbody"><p class="shortdesc">インターネットからコンテナー・グループにアクセスできるようにするには、ポートを公開し、パブリック経路またはパブリック IP アドレスをそのコンテナー・グループにバインドする必要があります。</p>
+<div class="section context"><div class="p"><dl><dt class="dlterm">デフォルトのドメインを使用したパブリック経路</dt>
+<dd>パブリック経路は、ホストとドメイン名から構成され、コンテナー・グループにアクセスするために Web ブラウザーに入力する完全なパブリック URL を構成します。
+どの経路も、<span class="keyword">Bluemix</span> 内で固有でなければなりません。
+<p>コンテナー作成時に、<var class="keyword varname">mycontainerhost</var> など、経路のためのホスト名を選択できます。
+デフォルトのシステム・ドメインは <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> であり、SSL 証明書が既に用意されているため、追加の構成を行わなくてもコンテナー・グループに HTTPS を使用してアクセスできます。</p>
+<p>例:  <span class="ph filepath">https://<var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span></p>
+<div class="steps note"><span class="notetitle">注:</span> パブリック経路を使用するには、コンテナー・グループの作成時にグループの HTTP ポートを公開する必要があります。HTTP 以外のポートはパブリックに公開できません。1 つのコンテナー・グループで公開できるパブリック・ポートは 1 つのみです。
+1 つのコンテナー・グループで複数のパブリック・ポートはサポートされません。</div>
+</dd>
+<dt class="dlterm">カスタムのドメインを使用したパブリック経路</dt>
+<dd>デフォルト・ドメイン <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> の代わりに独自のカスタム・ドメインを使用する場合は、パブリック DNS サーバーにそのカスタム・ドメインを登録し、Bluemix にカスタム・ドメインを構成してから、パブリック DNS サーバーでそのカスタム・ドメインを Bluemix システム・ドメインにマップする必要があります。
+カスタム・ドメインが Bluemix システム・ドメインにマップされた後、カスタム・ドメインを求める要求は、Bluemix 内のアプリケーションにルーティングされます。カスタム・ドメインを作成する際、ドメイン名に下線 (_) を含めないでください。
+<p>カスタム・ドメインを作成する場合は、<a href="../manageapps/updapps.html#domain">カスタム・ドメインの作成と使用</a>を参照してください。</p>
+<p>カスタム・ドメインのセキュリティーを確保するには、<a href="../manageapps/secapps.html#ssl_certificate">SSL 証明書をアップロード</a>して、HTTPS でコンテナー・グループにアクセスできるようにします。</p>
+</dd>
+<dt class="dlterm">パブリック IP アドレス</dt>
+<dd>コマンド・ラインでコンテナー・グループを作成する際に、IP アドレスをバインドすることもできます。コンテナーにはパブリック経路または浮動 IP アドレスのいずれかのみをバインドでき、両方はバインドできません。コンテナー・グループから IP アドレスを削除するには、コンテナー・グループを削除して作成し直す必要があります。
+<div class="p">パブリック IP アドレスを使用するコンテナー・グループの作成の例:
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p <var class="keyword varname">9080</var> --ip <var class="keyword varname">192.0.2.56</var>  --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</div>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e3168" id="container_planning_bmx_service"><h3 class="topictitle3" id="d67434e3168">コンテナーで使用するための <span class="keyword">Bluemix</span> サービスの統合</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="service_def"><span class="keyword">Bluemix</span> には、<span class="keyword">IBM
+Bluemix Container Service</span> でアプリに追加機能を組み込んだりアプリの実装やコンテナーの管理を簡単にしたりするために使用できる、さまざまなサービスが用意されています。</span></p>
+<div class="section context"><div class="p">以下の方法で、<span class="keyword">Bluemix</span> で使用可能なサービスをすべて表示できます。<ul><li><span class="keyword">Bluemix</span> ユーザー・インターフェースから、<span class="keyword">Bluemix</span>
+<span class="keyword wintitle">カタログ</span>を選択します。</li>
+<li>CLI から、<samp class="ph codeph">cf marketplace</samp> コマンドを実行します。</li>
+</ul>
+</div>
+<span class="keyword">IBM
+Bluemix Container Service</span> で <span class="keyword">Bluemix</span> サービスを使用するには、コンテナーを作成する前に、スペース内に<a href="../services/reqnsi.html#req_instance">そのサービスのインスタンスを作成する</a>必要があります。
+スペース内にサービス・インスタンスを作成した後に、そのサービスを定義した環境変数にコンテナーからアクセスできるように、<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">コンテナーにサービスをバインドする</a>必要があります。
+これらの環境変数を VCAP_SERVICES と呼びます。サービスをコンテナーにバインドすると、そのサービスが、コンテナー内に VCAP_SERVICES を環境変数として渡します。
+そのため、コンテナーで VCAP_SERVICES を使用して、エンドポイント、ユーザー名、パスワードなどのサービスの情報を検索できます。
+<p>コンテナー管理に役立つサービスについて詳しくは、<a href="container_integrations.html#container_integrations" title="Bluemix カタログにあるさまざまなサービスを IBM Bluemix Container Service で使用できます。 これらの Bluemix サービスの多くは、コンテナーにデプロイするアプリに追加機能を提供します。さらに、Bluemix サービスの中には、コンテナーの管理に役立つものもあります。">単一コンテナーとスケーラブル・コンテナーとサービスの統合</a>を参照してください。</p>
+</div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d67434e3330" id="container_planning_volumes"><h3 class="topictitle3" id="d67434e3330">永続データ・ストレージのオプション</h3>
+<div class="body taskbody"><p class="shortdesc">アプリが作成するデータまたはアプリが実行する必要のあるファイルを保管する場所を決定します。</p>
+<div class="section context">単一コンテナーは、設計上、存続時間が短期です。ただし、コンテナーを再始動してもデータが永続するようにしたり、スペース内のコンテナー間でデータを共有したり、
+グループ内の複数のコンテナー・インスタンス間でデータを共有したりするために選択できる、いくつかのオプションがあります。
+<p><a href="../api/content/containers/images/data_options.png" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><img src="images/data_options.png" width="400" alt="データやファイルの保管場所のオプション。"></a></p>
+<div class="tablenoborder"><table summary="アプリ・ファイルの保管のオプション" id="container_planning_volumes__table_pvn_fks_bw" class="defaultstyle"><caption><span class="tablecap">表 7. アプリ・ファイルの保管のオプション</span></caption><thead><tr><th style="width: 33.33333333333333%" id="d67434e3399" class="thleft">データ・ストレージのオプション</th>
+<th style="width: 33.33333333333333%" id="d67434e3401" class="thleft">説明</th>
+<th style="width: 33.33333333333333%" id="d67434e3403" class="thleft">保管可能なデータ量の制限</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 33.33333333333333%" headers="d67434e3399 ">オプション 1: 実行時にコンテナー内にデータを保管</td>
+<td style="width: 33.33333333333333%" headers="d67434e3401 ">このオプションではアプリ・データは保存されません。
+データは、実行時にのみコンテナーから利用可能です。
+コンテナーを再作成すると、すべてのデータが失われます。</td>
+<td style="width: 33.33333333333333%" headers="d67434e3403 ">コンテナーのサイズ</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67434e3399 ">オプション 2: コンテナー・ボリューム内にデータを保管</td>
+<td style="width: 33.33333333333333%" headers="d67434e3401 ">Docker 内にボリュームをマウントすると、そのボリュームはローカル・ファイル・システムにマウントされます。
+<span class="keyword">IBM
+Bluemix Container Service</span> では、計算ホストへのアクセスが制限されるので、ホスト・ディレクトリーをコンテナーにマウントすることができません。
+代わりに、組織規模のボリュームを使用して、コンテナーを再始動してもデータを保持します。ボリュームは、分離されたファイル共有上でホストされます。そこでは、安全にアプリ・データが保管され、ファイルに対するアクセスや権限が管理されます。
+この分離のために、コンテナー内の非 root ユーザーに<a href="container_planning.html#nonroot_image">マウントされたボリュームに対する書き込み権限を付与する</a>必要があります。<p>このオプションの場合は、データは保存され、コンテナーを再始動してもアクセスできます。スペース内の複数のコンテナー間でデータを共有できます。
+コンテナーが削除されても、関連するボリュームは削除されません。</p>
+<div class="steps note"><span class="notetitle">注:</span> ボリュームをコンテナーにマウントするには、まず、ボリュームを作成する必要があります。<a href="container_volumes_ov.html#container_volumes_ui" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。 Bluemix GUI から、コンテナーのボリュームを作成できます。"><span class="keyword">Bluemix</span> GUI によるボリュームの作成</a>を参照してください。</div>
+</td>
+<td style="width: 33.33333333333333%" headers="d67434e3403 ">ボリュームをホストするファイル共有のサイズ</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67434e3399 ">オプション 3: オンプレミス・データベースにコンテナーを接続</td>
+<td style="width: 33.33333333333333%" headers="d67434e3401 ">このオプションの場合、クラウド内のコンテナーとローカル環境の間の<a href="container_security.html#container_vpn" title="Bluemix のプライベート・コンテナー・ネットワーク内の単一コンテナーとコンテナー・グループを、 企業のデータ・センターにセキュアに接続できます。 IBM VPN は、業界標準の Internet Protocol Security (IPsec) プロトコル・スイートに基づき、インターネット上にセキュアなエンドツーエンドの通信チャネルを確立します。 IPsec プロトコルは、VPN エンドポイント間で交換されるパッケージを暗号化して、ネットワーク・レベルのピア認証、データ保全性、およびデータ機密性を提供します。 Bluemix 内のコンテナーと企業のデータ・センターの間にセキュアな接続をセットアップするためには、お客様のオンプレミスのデータ・センターに IPsec VPN ゲートウェイまたは SoftLayer サーバーを設置する必要があります。 IBM VPN サービスを使用して、VPN ゲートウェイを 1 スペースにつき 1 つ構成し、異なる宛先への接続を最大で 16 個定義することができます。">セキュア VPN 接続</a>を使用して、オンプレミスの既存のデータベース内にデータを保存してアクセスできます。</td>
+<td style="width: 33.33333333333333%" headers="d67434e3403 ">オンプレミス・データベースから使用可能なディスク・スペース</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67434e3399 ">オプション 4: <span class="keyword">Bluemix</span> データベース・サービスをコンテナーにバインド</td>
+<td style="width: 33.33333333333333%" headers="d67434e3401 ">このオプションの場合、クラウド内のコンテナーにリンクされたデータベース・サービスを使用して、データを保存し、アクセスすることができます。
+<span class="keyword">Bluemix</span> のデータベース・サービスのほとんどは、少量のデータ用のディスク・スペースを無料で提供しているため、機能をテストすることができます。</td>
+<td style="width: 33.33333333333333%" headers="d67434e3403 ">選択するデータベース・サービスおよびプラン</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e3496" id="nonroot_image"><h4 class="topictitle4" id="d67434e3496"><span class="keyword">Bluemix</span> のコンテナー・ボリュームへの非 root ユーザーのアクセス権限</h4>
+<div class="body taskbody"><div class="section context">組織規模のコンテナー・ボリュームを使用してアプリ・データを保持する場合は、コンテナー内のユーザーに、ボリューム・マウント・パス上のファイルとフォルダーの書き込み権限があることを確認してください。<p><span class="keyword">IBM
+Bluemix Container Service</span> では、Docker Engine 用に ユーザー名前空間機能が使用可能に設定されています。ユーザー名前空間には、コンテナーの root ユーザーが他のコンテナーや計算ホストにアクセスできないように分離する効果があります。
+ただし、ボリュームは、コンテナーの計算ホストの外部の NFS ファイル共有上にあります。
+ボリュームはコンテナー内の root ユーザーを認識するようにセットアップされますが、ボリュームはコンテナーの外部にあるため、ユーザー名前空間を認識しません。</p>
+<p>一部のアプリケーションでは、コンテナー内のユーザーだけが root ユーザーになります。しかし、多くのアプリケーションでは、コンテナー・マウント・パスに書き込む非 root ユーザーを指定します。ボリュームに対する書き込み権限を必要とする非 root ユーザーを指定するアプリケーションを設計する場合は、Dockerfile とエントリー・ポイント・スクリプトに、次の処理を追加する必要があります。</p>
+<ul><li>非 root ユーザーを作成する。</li>
+<li>そのユーザーを一時的に root グループに追加する。</li>
+<li>ボリューム・マウント・パスにディレクトリーを作成して、適切なユーザー権限を設定する。</li>
+</ul>
+<p></p>
+<p>詳しくは、<a href="container_volumes_ov.html#container_volumes_write" title="非 root ユーザーには、ボリューム・マウント・パスに対する書き込み権限がありません。 書き込み権限を付与するには、イメージの Dockerfile を編集して、適切な権限を設定したディレクトリーをマウント・パス上に作成する必要があります。">適切な非 root 権限での Dockerfile の作成</a>を参照してください。</p>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67434e3531" id="container_planning_types"><h3 class="topictitle3" id="d67434e3531">コンテナー・タイプ</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> でコンテナーを作成する前に、必要なコンテナーのタイプを決定します。
+<span class="keyword">IBM
+Bluemix Container Service</span> では、さまざまなアプローチでクラウド内にコンテナーを作成できます。
+どのアプローチを選択するかは、コンテナー内で実行するアプリの要件や依存関係に応じて異なります。</p>
+<div class="section context"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67434e3601" id="single_container_type"><h4 class="topictitle4" id="d67434e3601">単一コンテナー</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="ph"><span class="keyword">IBM
+Bluemix Container Service</span> の単一コンテナーは、ローカル Docker 環境で作成するコンテナーと似ています。
+単一コンテナーは、<span class="keyword">IBM
+Bluemix Container Service</span> を手始めに使用して、IBM Cloud でのコンテナーの動作や <span class="keyword">IBM
+Bluemix Container Service</span> が提供する機能を学習するための良い手段になります。簡単なアプリ・テストの実行やアプリの開発プロセスにおいて、単一コンテナーを使用することもできます。単一のコンテナーは再始動されることがあり、長期実行プログラムをホストすることは想定されていないので、高可用性が必要なアプリケーションにはコンテナー・グループを使用する必要があります。</span></p>
+<div class="section context"><div class="p">単一コンテナーの場合のデプロイメント速度の考慮事項:
+<ul><li>大きく影響するのはイメージのサイズです。イメージが小さいほど、デプロイメントも高速になります。</li>
+<li>最初に数回イメージをデプロイした後に、デプロイメントの速度は速くなります。最初は、イメージをホスト上のレジストリーにダウンロードする必要があります。それ以降のデプロイメントは速くなります。</li>
+<li>ネットワーキングのセットアップに数分かかる場合があります。</li>
+<li>単一のコンテナーをデプロイする方が、グループのルーティング設定をする必要のあるコンテナー・グループをデプロイするよりも高速です。</li>
+<li>リンクされているコンテナーのデプロイメントは、接続を作成する必要があるため、他のデプロイメントほど高速でない場合があります。</li>
+</ul>
+</div>
+
+<p><span class="keyword">Bluemix</span> GUI で単一コンテナーを作成するには、<a href="container_single_ui.html#container_single_ui" title="単一コンテナーは、アプリやサービスの開発時に単純なテストを実行するために、または高可用性を必要としない短期間のプロセスのために使用します。独自のネットワーキング・フロントエンドを使用するために、パブリック IP アドレスをコンテナーに割り当てることができます。">短期実行タスクを単一コンテナーとして実行する</a> を参照してください。</p>
+
+<p>CLI で単一コンテナーを作成するには、<a href="container_single_ui.html#container_single_cli" title="run コマンドを使用して、コンテナーを作成します。コンテナーには、イメージを含める必要があります。イメージがまだない場合には、デフォルトで組織のプライベート・ イメージ・レジストリーで使用可能な IBM 認定のデフォルト・イメージのいずれかを使用できます。">コマンド・ライン・インターフェース (CLI) により短期実行タスクを単一コンテナーとして実行する</a>を参照してください。</p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67434e3689" id="container_groups_type"><h4 class="topictitle4" id="d67434e3689">コンテナー・グループ</h4>
+<div class="body taskbody"><p class="shortdesc">コンテナー・グループは、複数の単一コンテナーで構成されます。それらはすべて同じコンテナー・イメージから作成されたものであり、同じ方法で構成されています。</p>
+<div class="section context"><span class="ph">アプリに必要なコンテナー・グループのインスタンス数は、予想されるワークロードや、アプリが要求を処理できる時間によって異なります。
+例えば、マルチタスキングやネットワーク接続によって、アプリに必要なインスタンス数は左右されます。</span>
+<span class="ph">必要なインスタンス数を決定するには、アプリを実行するコンテナーを 1 つ Bluemix にデプロイし、そのコンテナーで負荷テストを実行します。
+例えば、アプリで処理できる要求が 1 秒あたり 100 個であるのに対し、予想される平均ワークロードが 1 秒あたり 300 個だとすると、コンテナー・グループに必要なインスタンス数は 3 になります。</span>
+<span class="ph">コンテナー・グループの可用性と耐障害性を高めるために、予想されるワークロードを処理する最低限の数のインスタンスではなく余分にインスタンスを組み込むことを検討してください。
+インスタンスを余分に組み込んでおくことで、さらに別のインスタンスが異常終了した場合でもワークロードを処理できます。障害が起きたインスタンスをワークロードに影響を与えずに自動復旧するには、1 つ余分にインスタンスを組み込みます。2 つが同時に障害を発生した場合に対応できるようにするには、2 つ余分にインスタンスを組み込みます。このセットアップは <var class="keyword varname">N+2</var> パターンです。
+<var class="keyword varname">N</var> は要求を処理するインスタンスの数、<var class="keyword varname">+2</var> は追加の 2 つのインスタンスです。</span><p>コンテナー・グループにはさらに、アプリを高可用性にするための無料オプションが用意されています。</p>
+<ul><li><a href="container_planning.html#group_loadbalancing" title="コンテナー・グループには、着信トラフィックをグループ内の各コンテナー・インスタンスに均等に送付 (ラウンドロビン) するための組み込みのロード・バランシング機能があります。 コンテナー・グループの作成時、または既存グループにインスタンスが追加された時点では、自分で追加したインスタンスか自動リカバリー時に再作成されたインスタンスかに関係なく、ロード・バランシングが有効になっています。">組み込みのロード・バランシング</a></li>
+<li>コンテナー・グループ・インスタンスを複数の物理計算ノードに分散させる<a href="container_planning.html#group_anti-affinity" title="コンテナー・グループを作成する際に、bx ic group-create コマンドで --anti オプションを使用して、アンチアフィニティー・フィーチャーを有効にするかどうかを選択できます。">アンチアフィニティー</a></li>
+<li>正常でないコンテナー・グループ・インスタンスの<a href="container_planning.html#group_autorecovery" title="コンテナー・グループを作成する際に、bx ic group-create コマンドで --auto オプションを使用して、自動リカバリーを有効にするかどうかを選択できます。">自動リカバリー</a></li>
+<li>CPU とメモリーの使用状況に基づいたコンテナー・グループ・インスタンスの<a href="container_planning.html#group_autoscaling" title="コンテナー・グループには、アプリで使用されている CPU およびメモリーに基づいて、コンテナー・グループのインスタンスを自動スケーリングする機能があります。">自動スケーリング</a></li>
+</ul>
+コンテナー・グループの可用性をさらに高めるには、同じイメージをベースとする、同じ経路にマップされる別のコンテナー・グループを作成します。
+1 つ目のコンテナー・グループが異常終了した場合に、2 つ目のコンテナー・グループがワークロード全体を引き継ぐことができます。
+2 つ目のコンテナー・グループを <span class="keyword">IBM
+Bluemix Container Service</span> アーキテクチャーに分散させるには、以下のオプションから選択します。
+<ul><li><a href="container_ha.html#container_ha_space" title="同じイメージを使用して、同じ Bluemix スペースに 2 つのコンテナー・グループを作成し、両方のグループに同じ経路をマップすることができます。このセットアップでは、コンテナー・グループまたはグループのロード・バランサーがダウンした場合に、トラフィックはもう一方のコンテナー・グループにルーティングされます。">同じスペース内に 2 つ目のコンテナー・グループを作成する</a>。</li>
+<li><a href="container_ha_org.html"><span class="keyword">IBM
+Bluemix Container Service</span> アベイラビリティー・ゾーンを使用して、複数のスペースにコンテナー・グループを分散させる</a>。</li>
+<li><a href="container_ha.html#container_ha_regions" title="グローバル・ロード・バランシングを備えたドメイン・ネーム・システム (DNS) を使用してアプリのドメイン名を構成する場合は、経路で同じホスト名を使用する別々の Bluemix 地域に、同じイメージを使用して 2 つのコンテナー・グループを作成することができます。このセットアップでは、ユーザーが存在する地域に基づいてロード・バランシングを実行できます。 ある地域でコンテナー・グループ、ハードウェア、あるいはデータ・センター全体がダウンした場合に、別の地域にデプロイされているコンテナー・グループにトラフィックが転送されます。"><span class="keyword">Bluemix</span> 複数の地域にコンテナー・グループを分散させる</a>。</li>
+</ul>
+<div class="p">コンテナー・グループの場合のデプロイメント速度の考慮事項:
+<ul><li>大きく影響するのはイメージのサイズです。イメージが小さいほど、デプロイメントも高速になります。</li>
+<li>最初に数回イメージをデプロイした後に、デプロイメントの速度は速くなります。最初は、イメージをホスト上のレジストリーにダウンロードする必要があります。それ以降のデプロイメントは速くなります。</li>
+<li>ネットワーキングのセットアップに数分かかる場合があります。</li>
+<li>単一のコンテナーをデプロイする方が、ルーティング設定をする必要のあるコンテナー・グループをデプロイするよりも高速です。</li>
+<li>経路にバインドされていないコンテナー・グループは、経路なしのコンテナー・グループより速くデプロイされます。</li>
+<li>アンチアフィニティーが有効になっていないコンテナー・グループは、アンチアフィニティーが有効になっているコンテナー・グループより高速です。アンチアフィニティーを有効にすると、指定されている数のホストがそれぞれイメージ・レイヤーをダウンロードする必要があります。</li>
+</ul>
+</div>
+<p><span class="keyword">Bluemix</span> GUI からコンテナー・グループを作成する場合は、<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。"><span class="keyword">Bluemix</span> GUI からのコンテナー・グループの実行</a>のトピックを参照してください。</p>
+<p>CLI からコンテナー・グループを作成するには、<a href="container_ha.html#container_group_cli" title="スケーラブル・コンテナー・グループを IBM Bluemix Container Service CLI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">CLI からのコンテナー・グループの実行</a>を参照してください。</p>
+</div></div>
+<article class="topic task nested4" role="article" aria-labelledby="d67434e3870" id="group_loadbalancing"><h5 class="topictitle5" id="d67434e3870">コンテナー・グループのロード・バランシング</h5>
+<div class="body taskbody"><p class="shortdesc">コンテナー・グループには、着信トラフィックをグループ内の各コンテナー・インスタンスに均等に送付 (ラウンドロビン) するための組み込みのロード・バランシング機能があります。
+コンテナー・グループの作成時、または既存グループにインスタンスが追加された時点では、自分で追加したインスタンスか自動リカバリー時に再作成されたインスタンスかに関係なく、ロード・バランシングが有効になっています。</p>
+<div class="section context"><div class="p"><img id="group_loadbalancing__loadbalancing_gif" src="images/container_group_loadbalancing.gif" longdesc="transcript_loadbalancing.html" alt="ワークロードを均等に分散させるために、ユーザーはグループ・インスタンスに転送されます。">
+<a href="../api/content/containers/images/container_group_loadbalancing_infinite.gif" rel="external" target="_blank" title="もう 1 度見たい場合は、このアニメーションを新規タブで再ロードしてください。 (新しいタブまたはウィンドウで開く)"><img src="images/refresh.png" alt="再ロード・アイコン"></a><ul><li><span class="keyword calloutlabel">&nbsp;A&nbsp;</span>: 3 つのインスタンスが含まれるコンテナー・グループ</li>
+<li><span class="keyword calloutlabel">&nbsp;B&nbsp;</span>: コンテナー・グループのロード・バランサー</li>
+<li><span class="keyword calloutlabel">&nbsp;1、2、3&nbsp;</span>: コンテナー・グループ内のインスタンス</li>
+</ul>
+</div>
+
+<p>新しいインスタンスがコンテナー・グループに追加されると、ロード・バランサーは、新しいコンテナー・インスタンスへのトラフィックの送信をいつ開始するかを、TCP ソケット接続を確立して判別します。
+コンテナー・インスタンスが定義済みポートのリスニングを開始すると、ロード・バランサーにより、そのインスタンスへのトラフィックの送信が開始されます。
+ロード・バランサーは、グループにプライベート IP アドレスを割り当てて、同じスペース内の他のコンテナーやサービスからそのグループにアクセスできるようにします。</p>
+
+<p>このプライベート IP アドレスは個々のインスタンスではなくグループに割り当てられるため、グループにインスタンスを追加したり、自動リカバリー時にインスタンスが再作成されたりしても、プライベート IP アドレスは変更されません。
+このプライベート IP アドレスを確認するには、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp> を実行します。</p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67434e3930" id="group_anti-affinity"><h5 class="topictitle5" id="d67434e3930">コンテナー・グループのアンチアフィニティー</h5>
+<div class="body taskbody"><p class="shortdesc">コンテナー・グループを作成する際に、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> コマンドで <samp class="ph codeph">--anti</samp> オプションを使用して、アンチアフィニティー・フィーチャーを有効にするかどうかを選択できます。</p>
+<div class="section context"><p><span class="ph">アンチアフィニティーを有効にすると、コンテナー・インスタンスが別々の物理計算ノードに分散されるので、ハードウェア障害のためにコンテナーが異常終了する可能性が小さくなります。</span></p>
+
+<p>CLI から <samp class="ph codeph">--anti</samp> オプションを使用するには、<span class="keyword">IBM
+Bluemix Container Service</span> プラグイン (<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) バージョン 0.8.934 以降をインストールしておく必要があります。大きいグループ・サイズの場合は、このオプションを使用できない可能性があります。 <span class="keyword">Bluemix</span> のどの地域およびどの組織にも、デプロイできる計算ノードのセットには限りがあるからです。デプロイメントに失敗した場合は、グループ内のコンテナー・インスタンスの数を減らすか、<samp class="ph codeph">--anti</samp> オプションを外してください。</p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67434e3997" id="group_autorecovery"><h5 class="topictitle5" id="d67434e3997">コンテナー・グループの自動リカバリー</h5>
+<div class="body taskbody"><p class="shortdesc">コンテナー・グループを作成する際に、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> コマンドで <samp class="ph codeph">--auto</samp> オプションを使用して、自動リカバリーを有効にするかどうかを選択できます。</p>
+<div class="section context"><p><img id="group_autorecovery__autorecovery_gif" src="images/container_group_autorecovery.gif" longdesc="transcript_autorecovery.html" alt="グループ内のインスタンスに障害が発生すると、そのインスタンスは削除され、新しいインスタンスが開始されます。テキスト記述が記されているリンクをたどります。">
+<a href="../api/content/containers/images/container_group_autorecovery_infinite.gif" rel="external" target="_blank" title="もう 1 度見たい場合は、このアニメーションを新規タブで再ロードしてください。 (新しいタブまたはウィンドウで開く)"><img src="images/refresh.png" alt="再ロード・アイコン"></a></p>
+
+<p><span class="ph" id="group_autorecovery__auto-recovery">コンテナー・グループで自動リカバリーが有効になり、そのグループが 10 分間実行すると、そのグループのロード・バランサーは HTTP 要求を介して、グループ内の各コンテナー・インスタンスの正常性に関する定期的な検査を開始します。
+コンテナー・インスタンスが 100 秒以内に応答しない場合、それは非アクティブとしてマークされます。
+非アクティブなコンテナー・インスタンスはグループから削除されて、自動リカバリーにより再作成されます。
+自動リカバリーでは、グループ内にコンテナー・インスタンスをリカバリーする試行を 3 回行います。
+3 回目の試行の後、そのグループでは、自動リカバリーによるコンテナー・インスタンスのリカバリーが 60 分間行われなくなります。
+60 分後に、自動リカバリーのプロセスが再開します。</span></p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67434e4049" id="group_autoscaling"><h5 class="topictitle5" id="d67434e4049">コンテナー・グループの自動スケーリング</h5>
+<div class="body taskbody"><p class="shortdesc">コンテナー・グループには、アプリで使用されている CPU およびメモリーに基づいて、コンテナー・グループのインスタンスを自動スケーリングする機能があります。</p>
+<div class="section context">グループのコンテナー・インスタンスを追加または削除する条件を決定する自動スケーリング・ポリシーを定義できます。
+そのようにして、アプリのワークロードに基づいてコンテナー・グループのスケールを自動調整できます。
+現在のところ、この自動スケーリングのベータ版は、ロンドン地域で新しい Bluemix コンソールで提供されています。
+コンテナー・グループを作成するときに、自動スケーリングのさまざまなオプションが表示されます。
+<p>コンテナー・グループ・インスタンスの自動スケーリングについての詳細は、<a href="container_ha.html#container_group_ui_as" title="コンテナーの自動スケーリング機能は推奨されていません。 この機能は、IBM Bluemix Container Service を使用して置き換えることができます。 詳しくは、Auto-Scaling Retirement を参照してください。">コンテナー・グループの自動スケーリング (非推奨)</a>を参照してください。</p>
+</div></div>
+</article></article><article class="topic task nested3" role="article" aria-labelledby="d67434e4101" id="docker_compose_type"><h4 class="topictitle4" id="d67434e4101">Docker Compose</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">アプリによっては、データベースとサービスとキャッシュ、というように、それぞれ固有のコンテナーで実行する必要がある複数のコンポーネントから構成されるものがあります。
+すべてのコンテナーを同時に始動、リンク、シャットダウンさせるための調整作業は非常に難しいことがありますが、Docker Compose を使用してマルチコンテナー・デプロイメントを構成すれば、コマンド 1 つでそのアプリを実行できます。Docker Compose は、それぞれに固有のイメージおよび構成をベースとする単一コンテナー・インスタンスの集まりと見なすことができます。</span> マルチコンテナー・デプロイメントを一度構成し、<span class="keyword">Bluemix</span> にデプロイします。</p>
+<div class="section context"><div class="steps note"><span class="notetitle">注:</span> Docker Compose では、<span class="keyword">IBM
+Bluemix Container Service</span> のグループの概念はサポートされません。そのため、アプリのロード・バランシング、自動リカバリー、自動スケーリングを行う場合は、独自のツールを使用する必要があります。</div>
+
+<div class="p">Docker Compose の場合のデプロイメント速度の考慮事項:
+<ul><li>Docker Compose デプロイメントは、調整されたデプロイメントをセットアップする必要があるため、他のデプロイメントほど高速ではない可能性があります。</li>
+<li>大きく影響するのはイメージのサイズです。イメージが小さいほど、デプロイメントも高速になります。</li>
+<li>最初に数回イメージをデプロイした後に、デプロイメントの速度は速くなります。最初は、イメージをホスト上のレジストリーにダウンロードする必要があります。それ以降のデプロイメントは速くなります。</li>
+<li>ネットワーキングのセットアップに数分かかる場合があります。</li>
+</ul>
+</div>
+
+<p>Docker Compose でマルチコンテナー・デプロイメントを構成する場合は、<a href="container_single_ui.html#container_compose_intro" title="データベース、サービス、キャッシュなど、複数のコンポーネントを伴うアプリの場合、始動やシャットダウンが一緒に実行されるようにすべてのコンテナーを調整するのは、難しい場合があります。 このチュートリアルでは、単一の Docker Compose コマンドを使用することにより、マイクロサービス・アーキテクチャーでマルチコンテナー・デプロイメントとしてアプリをデプロイして実行する方法について学習します。このシステムに含まれる各コンテナーは、Docker Compose サービス定義に基づいており、独自の分離された環境で実行されます。">チュートリアル: Docker Compose と IBM Bluemix Container Service を使用してマルチコンテナー・デプロイメントを作成する</a>を参照してください。</p>
+</div></div>
+</article></article><article class="topic concept nested2" role="article" aria-labelledby="d67434e4164" lang="ja-jp" id="container_planning_monlog"><h3 class="topictitle3" id="d67434e4164">モニタリングとロギング</h3>
+<div class="body conbody"><p class="shortdesc"><span class="keyword">Bluemix</span> では、コンテナーにはモニタリングとロギングが組み込まれるので、コンテナーの正常性を厳重に監視できます。</p>
+<div class="note important"><span class="importanttitle">重要:</span> このサービスは、機密データの処理を目的としたものではありません。</div>
+<p><span class="keyword">IBM
+Bluemix</span> には、プラットフォーム・ベースのモニタリングとロギング機能が備わっています。
+メトリックとログ・データは、クラウドやその他のソースで実行されているコンテナーなどの計算インスタンスから収集できます。
+そして、分析、洞察、および実行のために、複数のソースから集約したデータを可視化することができます。</p>
+<figure class="fignone" id="container_planning_monlog__fig_architecture"><figcaption>図 1. モニタリングおよびロギング・サービスのアーキテクチャー</figcaption><div class="image"><object data="images/architecture_logmet.svg"><img src="images/architecture_logmet.jpg" alt="モニタリングおよびロギング・サービスのアーキテクチャー"></object></div></figure>
+<dl><dt class="dlterm">モニタリング</dt>
+<dd><span class="ph" id="container_planning_monlog__monitoring">コンテナーのメトリックはコンテナー外部から収集されるので、コンテナー内部にエージェントをインストールして保守する必要はありません。コンテナー内エージェントでは、コンテナーが急速に作成されて破棄されるような、短期間だけ存在する軽量クラウド・インスタンスおよび自動スケーリング・グループに対して、
+オーバーヘッドおよびセットアップ時間がかなり大きくなる可能性があります。外部からのこのデータ収集方法によって、こういった問題点がなくなり、モニタリングの負担がユーザーにかからなくなります。</span></dd>
+<dd class="ddexpand" id="container_planning_monlog__default_metrics"><p>ホスト内で実行中のプロセスが、メトリックに関するエージェントレス・モニタリングを実行します。このプロセスは<dfn class="term">クローラー</dfn>とも呼ばれ、すべてのコンテナーから以下の情報を常に収集します。</p>
+
+<div class="p"><ul><li>CPU</li>
+<li>メモリー </li>
+<li>ネットワーク情報</li>
+</ul>
+</div>
+
+<p>このメトリック・データは Graphite で収集され、<span class="keyword">Bluemix</span> ユーザー・インターフェースと拡張モニタリング・ビューの両方で表示されます。Docker 規則およびグループ・アカウンティング情報が、モニタリング・データ収集の基本的メカニズムとして使用されます。</p>
+
+<p>データを収集するためにインストールされているプラグインのリストは、<span class="ph filepath">/etc/collectd/collectd.conf</span> で参照できます。それらのプラグインの機能について詳しくは、<a href="https://collectd.org/documentation/manpages/collectd.conf.5.shtml" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">collectd の資料</a>を参照してください。</p>
+</dd>
+</dl>
+<dl><dt class="dlterm">ロギング</dt>
+<dd><span class="ph" id="container_planning_monlog__logging">コンテナーのログは、メトリックと同様に、クローラーを使用してコンテナー外部からモニターおよび転送されます。そのデータは、クローラーによって Bluemix のマルチテナント <a href="https://www.elastic.co/products/elasticsearch" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Elasticsearch</a> に送信されます。
+この処理方法は他のコンテナー内エージェントによって収集されるログと似ていますが、わざわざコンテナー内部にエージェントをインストールする必要はありません。</span></dd>
+<dd class="ddexpand"><p>デフォルトでは、クローラーは以下の場所から情報を取得します。</p>
+<ul id="container_planning_monlog__default_logs"><li><span class="ph filepath">/var/log/messages</span>: システム・メッセージ。</li>
+<li><span class="ph filepath">/docker.log</span>: Docker ログ。<p>Docker ログ・ファイルはコンテナー内にファイルとして保管されることはありませんが、収集されます。
+このログ・ファイルがデフォルトで収集されるのは、コンテナーの <samp class="ph codeph">stdout</samp> (標準出力) 情報と <samp class="ph codeph">stderr</samp> (標準エラー) 情報の公開に関する標準 Docker 規約であるためです。コンテナー・プロセスが <samp class="ph codeph">stdout</samp> または <samp class="ph codeph">stderr</samp> を出力すると、その情報が収集されます。</p>
+</li>
+</ul>
+追加のログを収集するには、<a href="container_single_ui.html#gui__env_keys_group">GUI</a> または <a href="container_single_ui.html#container_single_cli" title="run コマンドを使用して、コンテナーを作成します。コンテナーには、イメージを含める必要があります。イメージがまだない場合には、デフォルトで組織のプライベート・ イメージ・レジストリーで使用可能な IBM 認定のデフォルト・イメージのいずれかを使用できます。">CLI</a> でコンテナーを作成する際に、<samp class="ph codeph">LOG_LOCATIONS</samp> 環境変数をログ・ファイルへのパスと共に追加します。</dd>
+</dl>
+<p>ログとメトリックの収集方法、そしてカスタム・ダッシュボードの作成方法について詳しくは、<a href="../services/cloud-monitoring/containers/analyzing_metrics_bmx_ui.html#analyzing_metrics_bmx_ui">コンテナーのモニタリングとロギング</a>を参照してください</p>
+</div>
+<aside role="complementary" aria-labelledby="d67434e4164"></aside></article></article></article></div></main></body></html>

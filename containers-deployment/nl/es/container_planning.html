@@ -1,0 +1,917 @@
+<!DOCTYPE html><html lang="es-es">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service ofrece varias opciones para configurar el entorno de desarrollo del contenedor para satisfacer los requisitos funcionales y no funcionales de su app y organización. Sepa cuáles son las opciones de las que dispone antes de empezar.">
+<meta name="keywords" content="planificación, IBM Containers, contenedores, decisiones, gestor de organización, administrar, espacio de nombres, cuota, pagar, almacenamiento de datos, comparticiones de archivos, desarrollador, panel de control, interfaz gráfica de usuario (GUI), CLI, REST, API, Instalar, plugin, imagen privada, imagen local, imágenes, Docker Hub, ver imágenes, registro, vulnerabilidades, imagen, retraso de red, Dockerfile, sugerencia, bloqueo, apagar, red privada, dirección IP, ruta, el contenedor se bloquea, iniciar un contenedor, red pública, internet, contenedor único, Docker Compose, accessible, grupo de contenedores, servicios, VCAP_SERVICES, volúmenes, contenedores únicos, grupos de contenedores, grupo, equilibrio de carga, antiafinidad, nodos de cálculo, alta disponibilidad, recuperación automática, recuperación, automática, instancias de grupo erróneas, escalado automático, aumento, reducción, escalado">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "es-es",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Planificación para utilizar contenedores únicos y escalables</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d67479e6" id="container_planning"><h1 class="topictitle1" id="d67479e6">Planificación para utilizar <span class="ph">contenedores únicos y escalables</span></h1>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix Container Service</span> ofrece varias opciones para configurar el entorno de desarrollo del contenedor para satisfacer los requisitos funcionales y no funcionales de su app y organización. Sepa cuáles son las opciones de las que dispone antes de empezar.</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Atención:</span> <span class="ph">No hay disponibles pruebas gratuitas para los <span class="ph">contenedores únicos y escalables</span>.
+<a href="cs_ov.html" title="IBM Bluemix Container Service combina Docker y Kubernetes para ofrecer herramientas potentes, una interfaz intuitiva para el usuario y funciones integradas de seguridad e identificación para automatizar el despliegue, operación, escalado y supervisión de apps contenerizadas sobre un clúster de hosts de cálculo independientes mediante el uso de las API de Kubernetes.">Obtenga más información acerca de la gestión de clústeres y migre a Kubernetes en <span class="keyword">IBM
+Bluemix Container Service</span> en <span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">En esta página:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#roles">Información sobre los roles de usuario</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#container_planning_org_ov" title="En Bluemix, puede utilizar organizaciones para permitir la colaboración entre miembros de equipos y facilitar la agrupación lógica de recursos de nube en un proyecto. A cada organización se le asigna un gestor de organización que es responsable de configurar los entornos de desarrollo (espacios) y de otorgar a los miembros del equipo acceso a recursos de nube que son necesarios para crear satisfactoriamente contenedores para sus apps. Esta configuración incluye la asignación de direcciones IP públicas, almacenamiento de datos y memoria de contenedor. Como gestor de organización también puede ver la cuota y el uso actual de recursos de nube, y ajustarlos según sea necesario.">Gestión de su organización de <span class="keyword">Bluemix</span> para contenedores individuales y grupos de contenedores escalables</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_namespace" title="Para guardar y gestionar imágenes privadas correspondientes a IBM Bluemix Container Service, cada organización debe configurar su propio registro privado de imágenes de Docker en Bluemix. Este nombre del registro privado se denomina un espacio de nombres y debe ser exclusivo dentro de Bluemix.">Configuración de un espacio de nombres para el registro privado de <span class="keyword">Bluemix</span></a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_quota" title="Cada organización de Bluemix tiene un valor preestablecido para la memoria de contenedor, direcciones IP públicas, comparticiones de archivos y el número de servicios que se comparten entre todos los espacios de una organización. Estos valores prestablecidos se denominan cuota.">Tipos de cuentas de <span class="keyword">Bluemix</span> y de cuotas disponibles</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_fileshare" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">Configuración de almacenamiento permanente</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#container_planning_container_ov" title="Para crear contenedores que ejecutan la app con IBM Bluemix Container Service en Bluemix, debe tener asignados derechos de desarrollador para un espacio de organización. Como desarrollador de apps, es importante saber cuántos componentes de contenedor están relacionados y cómo puede cambiar la configuración de un contenedor para satisfacer los requisitos funcionales y no funcionales de la app.">Creación de contenedores individuales y de grupos de contenedores escalables en el servicio IBM Bluemix Container</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_cli-ui" title="Cuando está pensando en trabajar con IBM Bluemix Container Service, puede utilizar la interfaz gráfica de usuario (GUI) de Bluemix, instalar la interfaz de línea de mandatos (CLI), o enviar solicitudes HTTP a la API REST para acceder a IBM Bluemix Container Service.">GUI, CLI o API REST de Bluemix</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_images" title="Una imagen de contenedor es la base para cada contenedor que pueda crear. Se crea una imagen a partir de Dockerfile, que es un archivo que contiene instrucciones para crear la imagen y crear artefactos, como una app, la configuración de la app y sus dependencias. Piense en una imagen de contenedor como un archivo ejecutable (.exe o .bin). Tan pronto se ejecuta el archivo de app ejecutable, se crea una instancia de la app. Al ejecutar un contenedor, cree una instancia de contenedor a partir de la imagen. Las imágenes de contenedor se almacenan en el registro de Bluemix privado y pueden añadirse únicamente desde la CLI. Cada imagen de contenedor que desea utilizar debe estar en un registro para poder crear un contenedor a partir de la misma.">Imágenes privadas, de Docker Hub y públicas de IBM</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_private_network" title="Una red privada de contenedor crea un entorno aislado y seguro para los contenedores únicos y los grupos de contenedores que se ejecutan en un espacio. Los contenedores que están conectados a la misma red privada pueden enviar y recibir datos de otros contenedores en la red privada, utilizando las direcciones IP privadas. Los contenedores no están públicamente disponibles hasta que se enlazan un puerto público y una dirección IP pública para contenedores únicos o una ruta pública para grupos de contenedores.">Valores de red de contenedor privado</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_public_network" title="De forma predeterminada, cada contenedor único y grupo de contenedores en IBM Bluemix Container Service está disponible para la red privada. Sin embargo, la app puede requerir accesibilidad desde Internet, o desea acceder a contenedores en otros espacios de la organización. En estos casos, debe exponer el contenedor al público. En función del tipo de contenedor que elija, existen distintas formas de hacer que un contenedor esté disponible para el público.">Valores de red pública</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_bmx_service" title="Bluemix ofrece varios servicios que puede utilizar con IBM Bluemix Container Service para ofrecer prestaciones adicionales a la app o para simplificar la implementación de la app y la gestión del contenedor.">Integración de servicios de <span class="keyword">Bluemix</span></a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_volumes" title="Decide dónde almacenar los datos que la app crea o los archivos que la app requiere ejecutar.">Opciones de almacén de datos permanente</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_types" title="Antes de crear un contenedor con IBM Bluemix Container Service, decida sobre el tipo de contenedor que necesita. IBM Bluemix Container Service ofrece distintos enfoques para crear contenedores en la nube. El enfoque que elija dependerá de los requisitos y dependencias de la app que se ejecuta en el contenedor.">Tipos de contenedor</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_monlog" title="En Bluemix, los contenedores incorporan supervisión y registro, lo que permite seguir muy de cerca el estado de los contenedores.">Opciones de supervisión y de registro</a></div>
+</div>
+</div>
+<div class="section context"></div></div>
+<article class="topic task nested1" role="article" aria-labelledby="d67479e308" id="roles"><h2 class="topictitle2" id="d67479e308">Información sobre los roles de usuario</h2>
+<div class="body taskbody"><div class="section context" id="roles__context_tc2_pxz_nz"><p data-hd-otherprops="registry_check">Los contenedores se gestionan mediante gestores de la organización y desarrolladores de contenedores. La siguiente imagen muestra una configuración de contenedor de ejemplo de una organización y resalta los componentes que puede establecer el gestor de la organización o el desarrollador del contenedor. Componentes de <a href="../api/content/containers/images/container_planning_container_ov_bluemixify.png" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)"><img id="roles__image_qlf_pxz_nz" src="images/container_planning_container_ov_bluemixify.png" width="700" alt="Un diagrama que muestra los componentes de IBM Bluemix Container Service que el desarrollador del contenedor o el gestor de la organización pueden configurar."></a></p>
+Revise las subsecciones de este tema para buscar información sobre cada componente, y la decisión y las configuraciones que puede adoptar. Algunas de estas configuraciones no pueden cambiarse una vez que se ha creado un contenedor. Conocer estas configuraciones de antemano puede ayudarle a garantizar que todos los recursos como, por ejemplo, la memoria, el espacio de disco y las direcciones IP, estén disponibles para el equipo de desarrollo, así como para maximizar el uso de su cuota de organización.</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d67479e328" lang="es-es" id="container_planning_org_ov"><h2 class="topictitle2" id="d67479e328">Gestión de la organización de <span class="keyword">Bluemix</span> para <span class="keyword">IBM
+Bluemix Container Service</span></h2>
+<div class="body taskbody"><p class="shortdesc">En <span class="keyword">Bluemix</span>, puede utilizar organizaciones para permitir la colaboración entre miembros de equipos y facilitar la agrupación lógica de recursos de nube en un proyecto. A cada organización se le asigna un gestor de organización que es responsable de configurar los entornos de desarrollo (espacios) y de otorgar a los miembros del equipo acceso a recursos de nube que son necesarios para crear satisfactoriamente contenedores para sus apps. Esta configuración incluye la asignación de direcciones IP públicas, almacenamiento de datos y memoria de contenedor. Como gestor de organización también puede ver la cuota y el uso actual de recursos de nube, y ajustarlos según sea necesario. </p>
+<div class="section prereq">Antes de empezar, <a data-hd-audience="yellow" href="../iam/users_roles.html#userroles">confirme los roles de los usuarios</a> de la organización. <ul><li>Asigne gestores de la organización otorgando a un usuario el rol <dfn class="term">gestor</dfn> dentro de la
+organización.</li>
+<li>Asigne creadores de contenedores otorgando al usuario un rol <dfn class="term">desarrollador</dfn> o <dfn class="term">auditor</dfn>
+dentro del espacio.</li>
+</ul>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d67479e419" id="container_planning_namespace"><h3 class="topictitle3" id="d67479e419">Definición del espacio de nombres de la organización para el registro privado de <span class="keyword">Bluemix</span></h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" data-hd-otherprops="registry_check" id="namespace_def">Para guardar y gestionar imágenes privadas correspondientes a <span class="keyword">IBM
+Bluemix Container Service</span>, cada organización debe configurar su propio registro privado de imágenes de Docker en <span class="keyword">Bluemix</span>. Este nombre del registro privado se denomina
+un <dfn class="term">espacio de nombres</dfn> y debe ser exclusivo dentro de <span class="keyword">Bluemix</span>.</span></p>
+<div class="section context"><span class="ph">El espacio de nombres se utiliza para generar un URL exclusivo para su registro de imágenes privado. Por lo tanto, el espacio de nombres se añade al URL de registro de
+<span class="keyword">Bluemix</span> tal como se indica a continuación: <span class="ph filepath">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">espacio_nombres</var></span>. Debe especificar el URL completo para su registro privado siempre que desee trabajar con una de las
+imágenes de la CLI. Si desea utilizar <span class="keyword">IBM
+Bluemix Container Service</span> en varias regiones de <span class="keyword">Bluemix</span>, debe configurar un espacio de nombres para
+cada región. </span> Todas las imágenes de contenedor que se almacenan en el registro privado las comparten todos los usuarios de una organización.<div class="steps note"><span class="notetitle">Nota:</span> Cada organización
+solamente puede tener un espacio de nombres por región de <span class="keyword">Bluemix</span>
+a la vez. Una vez que se haya establecido el espacio de nombres para una organización, no se puede modificar, solo se puede suprimir. </div>
+<p>Considere las siguientes reglas al elegir un espacio de nombres para la organización.</p>
+<ul data-hd-otherprops="registry_check"><li>El espacio de nombres debe ser exclusivo en <span class="keyword">Bluemix</span>. </li>
+<li>El espacio de nombres puede tener una longitud de 4 a 30 caracteres.</li>
+<li>El espacio de nombres debe empezar por al menos una letra o un número.</li>
+<li>El espacio de nombres solamente puede contener letras en minúsculas, números o subrayados (_). </li>
+</ul>
+</div><p class="li stepsection"><p>Desde la interfaz gráfica de usuario (GUI) de <span class="keyword">Bluemix</span>, siga estos pasos.</p>
+</p><ol><li class="step stepexpand"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">Desde el catálogo, seleccione
+<span class="ph uicontrol">Contenedores</span> y elija una imagen.</span></span></li>
+<li class="step stepexpand"><span class="cmd">Si ya se ha definido un espacio de nombres para su organización, no se le solicita que cree uno y puede continuar con el siguiente paso. </span> Si aún no se ha especificado ningún espacio de nombres para su organización,
+se le solicitará que defina uno para el registro de imágenes. </li>
+</ol><p class="li stepsection"><p>Desde la CLI, ejecute el mandato siguiente después de iniciar la sesión en el <span class="keyword">IBM
+Bluemix Container Service</span>:</p>
+</p><ol start="3"><li class="step stepexpand"><span class="cmd">Establezca un espacio de nombres para la organización. Sustituya <var class="keyword varname">&lt;mi_espacio_nombres&gt;</var> por el
+espacio de nombres que desea establecer para la organización.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">Nota:</span> Si no está seguro de si ya se ha establecido un espacio de nombres para la organización, siga los pasos en el tema de <a href="container_planning.html#namespace_get" title="Si ya se ha establecido un espacio de nombres para la organización, puede recuperarla desde la interfaz gráfica de usuario o la CLI de Bluemix.">Recuperación del espacio de nombres para la organización</a>.</div>
+</li>
+</ol></div>
+<aside role="complementary" aria-labelledby="d67479e419"></aside><article class="topic task nested3" role="article" aria-labelledby="d67479e601" id="namespace_get"><h4 class="topictitle4" id="d67479e601">Recuperación del espacio de nombres para la organización</h4>
+<div class="body taskbody"><p class="shortdesc">Si ya se ha establecido un espacio de nombres para la organización, puede recuperarla desde la interfaz gráfica de usuario o la CLI de
+<span class="keyword">Bluemix</span>. </p>
+<div class="section context"><div class="steps note"><span class="notetitle">Nota:</span> Puede identificar el espacio de nombres desde la interfaz gráfica de usuario (GUI) de <span class="keyword">Bluemix</span> solamente si ya se ha añadido una imagen privada al registro de imágenes privado. No puede recuperar esta información desde una imagen proporcionada por IBM. Si todavía no hay
+imágenes privadas en el registro, elija la opción de CLI para identificar el espacio de nombres para la organización. </div>
+</div><p class="li stepsection"><p>Desde la interfaz gráfica de usuario (GUI) de <span class="keyword">Bluemix</span>, siga estos pasos. </p>
+</p><ol><li class="step stepexpand"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">Desde el catálogo, seleccione
+<span class="ph uicontrol">Contenedores</span> y elija una imagen.</span></span></li>
+<li class="step stepexpand"><span class="cmd">En el nombre de imagen, pulse <span class="ph uicontrol">Copiar URL</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Recupere el espacio de nombres del URL copiado, que está en el siguiente formato: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var>.</span></li>
+</ol><p class="li stepsection"><p>Desde la CLI, inicie la sesión en el servicio de <span class="keyword">IBM
+Bluemix Container Service</span>
+y ejecute el siguiente mandato.</p>
+</p><ol start="4"><li class="step stepexpand"><span class="cmd">Recupere la información del espacio de nombres. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</li>
+</ol></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e674" id="container_planning_quota"><h3 class="topictitle3" id="d67479e674">Cuota y cuentas de <span class="keyword">Bluemix</span></h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Cada organización de <span class="keyword">Bluemix</span> tiene un valor preestablecido para la memoria de contenedor,
+direcciones IP públicas, comparticiones de archivos y el número de servicios que se comparten entre todos los espacios de una
+organización. Estos valores prestablecidos se denominan cuota. </span></p>
+<div class="section context"><span class="ph" id="container_planning_quota__account_def"><span class="keyword">Bluemix</span>
+ofrece distintas cuentas que puede utilizar con <span class="keyword">IBM
+Bluemix Container Service</span>. El tipo de cuenta afecta a la cuota que está disponible en la organización y la forma de facturación por el uso de los recursos de contenedor.</span> Cualquier aplicación o servicio en un espacio de la organización contribuye al uso de la cuota, tanto si están o no en ejecución. Es importante saber lo que puede hacer para <a href="container_planning.html#maximize_quota">maximizar el uso de la cuota existente</a>. Los planes de
+<a href="container_planning.html#bluemix_account">Pago según uso o Suscripción</a> están configurados con un <a href="container_planning.html#default_quota_paid">límite de cuota predeterminado</a> que puede <a href="container_planning.html#change_quota">asignarse a los espacios de
+<span class="keyword">Bluemix</span></a> para que coincida con las necesidades de su organización.</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e774" id="bluemix_account"><h4 class="topictitle4" id="d67479e774">Tipos de cuenta de <span class="keyword">Bluemix</span></h4>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context">La siguiente tabla proporciona una visión general de los tipos de cuenta que están disponibles. Para obtener información detallada sobre cada tipo de cuenta y facturación, revise el tema <a href="../pricing/index.html" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">Tarifas</a>.
+<div class="tablenoborder"><table summary="Visión general del tipo de cuenta de Bluemix" id="bluemix_account__table_psk_cl5_jw" class="defaultstyle"><caption><span class="tablecap">Tabla 1. Visión general del tipo de cuenta de <span class="keyword">Bluemix</span></span></caption><thead><tr><th id="d67479e803" class="thleft">Tipo de cuenta</th>
+<th id="d67479e805" class="thleft">Descripción</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67479e803 ">Prueba gratuita</td>
+<td headers="d67479e805 ">No hay disponibles pruebas gratuitas para los <span class="ph">contenedores únicos y escalables</span>.
+<a href="cs_ov.html" title="IBM Bluemix Container Service combina Docker y Kubernetes para ofrecer herramientas potentes, una interfaz intuitiva para el usuario y funciones integradas de seguridad e identificación para automatizar el despliegue, operación, escalado y supervisión de apps contenerizadas sobre un clúster de hosts de cálculo independientes mediante el uso de las API de Kubernetes.">Obtenga más información acerca de la gestión de clústeres y migre a Kubernetes en <span class="keyword">IBM
+Bluemix Container Service</span> en <span class="keyword">Bluemix</span> Public.</a></td>
+</tr>
+<tr><td headers="d67479e803 ">Pago según uso</td>
+<td headers="d67479e805 ">Si se registra para una cuenta Pago según uso, sólo pagará por los recursos de <span class="keyword">Bluemix</span> que utilice.</td>
+</tr>
+<tr><td headers="d67479e803 ">Suscripción</td>
+<td headers="d67479e805 ">Si se registra para una cuenta Suscripción, se compromete a una cantidad de gasto mínimo al mes y recibirá un descuento de suscripción que se aplica a dicho cargo mínimo. También puede pagar cualquier uso que exceda la cantidad de gasto mínimo.</td>
+</tr>
+<tr><td headers="d67479e803 "><span class="keyword">Bluemix</span> dedicado</td>
+<td headers="d67479e805 ">Con <span class="keyword">Bluemix</span> dedicado, debe registrarse para un plazo mínimo de un año. Lo que deberá abonar cada mes durante dicho plazo dependerá de los servicios dedicados que desee, más una cuenta de suscripción que le ofrece acceso a todos los servicios públicos. </td>
+</tr>
+<tr><td headers="d67479e803 "><span class="keyword">Bluemix</span> local</td>
+<td headers="d67479e805 ">Con <span class="keyword">Bluemix</span> local, debe registrarse para un plazo mínimo de un año. Lo que deberá abonar cada mes durante dicho plazo dependerá de los servicios locales que desee, más una cuenta de suscripción que le ofrece acceso a todos los servicios públicos.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e878" id="default_quota_paid"><h4 class="topictitle4" id="d67479e878">Cuota predeterminada para las cuentas de pago</h4>
+<div class="body taskbody"><div class="section context">Cada cuenta de pago está configurada con límites de cuota predeterminados que se pueden revisar en la
+tabla siguiente. Si necesita más recursos, puede solicitar añadir cuota adicional abriendo una
+incidencia de soporte de <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span></a>.<div class="tablenoborder"><table summary="Visión general de cuota para las cuentas de pago" id="default_quota_paid__table_eq1_ccd_bx" class="defaultstyle"><caption><span class="tablecap">Tabla 2. Visión general de cuota para las cuentas de pago</span></caption><thead><tr><th id="d67479e899" class="thleft">Recurso</th>
+<th id="d67479e901" class="thleft">Límites de cuota de las cuentas de pago</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67479e899 ">Direcciones IP públicas</td>
+<td headers="d67479e901 ">64</td>
+</tr>
+<tr><td headers="d67479e899 ">Memoria de contenedor</td>
+<td headers="d67479e901 ">64 GB <div class="steps note"><span class="notetitle">Nota:</span> Cada contenedor del espacio contribuye al uso de la cuota, ya se esté
+ejecutando o no el contenedor. Para liberar memoria, debe eliminar contenedores no utilizados. </div>
+</td>
+</tr>
+<tr><td headers="d67479e899 ">Comparticiones de archivos</td>
+<td headers="d67479e901 ">10 comparticiones de archivos</td>
+</tr>
+<tr><td headers="d67479e899 ">Contenedores y grupos de contenedores</td>
+<td headers="d67479e901 ">Número ilimitado<div class="steps note"><span class="notetitle">Nota:</span> El tamaño del contenedor y de los grupos de contenedores cuenta para el límite de memoria de contenedor, pero no está limitado a un número de contenedores específico.</div>
+</td>
+</tr>
+<tr><td headers="d67479e899 ">Imágenes</td>
+<td headers="d67479e901 ">25<div class="steps note"><span class="notetitle">Nota:</span> Las imágenes de IBM no cuentan en lo que se refiere al límite de imágenes del registro de <span class="keyword">Bluemix</span> privado.</div>
+</td>
+</tr>
+<tr><td headers="d67479e899 ">Espacios</td>
+<td headers="d67479e901 ">Número ilimitado<div class="steps note"><span class="notetitle">Nota:</span> Cada espacio requiere como mínimo 2 direcciones IP públicas y 2 GB de memoria de contenedor que se asignan automáticamente al iniciar sesión
+en un espacio nuevo e intentar utilizarlo con el <span class="keyword">IBM
+Bluemix Container Service</span>. Estos recursos cuentan para la cuota,
+pero no está limitado a un número de espacios específico. </div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e955" id="change_quota"><h4 class="topictitle4" id="d67479e955">Asignación de cuota en un espacio</h4>
+<div class="body taskbody"><div class="section context">Con los planes de pago según uso o de suscripción puede ajustar la asignación de cuota para la
+memoria, el número de comparticiones de archivos y el número de direcciones IP públicas para cada
+espacio hasta que se alcance el límite de la cuota. Para aumentar o reducir la cuota de espacio para contenedores,
+siga estos pasos.</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" id="change_quota__view_quota_1">En los detalles de la cuenta, en Gestionar organizaciones, seleccione una organización.</span></span></li>
+<li class="step"><span class="cmd"><span class="ph" id="change_quota__view_quota_2">En la sección de cuota, vea los detalles para los contenedores.</span></span></li>
+<li class="step"><span class="cmd">En la tabla <span class="ph uicontrol">Asignación de cuota</span>, cambie la cuota asignada para el espacio pulsando el botón <span class="ph uicontrol">Editar</span>.</span></li>
+<li class="step"><span class="cmd">Guarde los cambios pulsando el botón <span class="ph uicontrol">Guardar</span>.</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">Consejo:</span> Si se alcanza el máximo de cuota, puede solicitar añadir cuota adicional abriendo una
+incidencia de soporte de <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span></a>.</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e993" id="maximize_quota"><h4 class="topictitle4" id="d67479e993">Consejos para maximizar el uso de la cuota</h4>
+<div class="body taskbody"><div class="section context">Tenga en cuenta las siguientes sugerencias para liberar recursos de contenedor cuando no son necesarios y maximizar el uso de su cuota. <ul><li>Asegúrese de que elimina los contenedores que ya no están en uso de modo que sus configuraciones no se tengan en cuenta en la cuota. Para obtener más información, consulte <a href="container_single_ui.html#container_single_remove" title="Para maximizar el uso de su cuota, elimine los contenedores que no se utilicen.">Eliminación de contenedores únicos</a>, <a href="container_ha.html#container_group_remove" title="Para maximizar el uso de su cuota, elimine los grupos de contenedores que no se utilicen.">Eliminación de grupos de contenedores</a> y <a href="container_single_ui.html#container_compose_remove" title="Como paso final, elimine el despliegue de multicontenedor para liberar recursos utilizados y maximizar el uso de su cuota.">Eliminar una app de multicontenedor</a>.</li>
+<li>No enlace una dirección IP pública al contenedor cuando el contenedor no debe estar accesible desde Internet.</li>
+<li>Para reducir el uso de direcciones IP públicas, piense en utilizar grupos de contenedores en lugar de un único contenedor. Los grupos de contenedor utilizan una ruta para el acceso público que no está sujeto a la cuota de direcciones IP. Para obtener más información, consulte <a href="container_ha.html#container_group_ui" title="Cree y despliegue un grupo de contenedores escalable desde la interfaz gráfica de usuario (GUI) de Bluemix. Un grupo de contenedores incluye dos o más contenedores que se ejecutan en la misma imagen. Utilice grupos de contenedores para servicios a largo plazo en ejecución con cargas de trabajo que requieren escalabilidad y fiabilidad, o para realizar pruebas a la escala necesaria.">Ejecución de servicios a largo plazo como grupos de contenedor desde la interfaz gráfica de usuario de Bluemix</a>.</li>
+</ul>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e1035" id="container_planning_fileshare"><h3 class="topictitle3" id="d67479e1035">Almacenamiento de datos permanentes</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="fileshare_def">Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de <span class="keyword">Bluemix</span> y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores
+y guardar los datos en este volumen.</span></p>
+<div class="section context"><span class="ph">Tan pronto como haya creado su primer volumen en un espacio, se crea una compartición de archivos predeterminada con 20 GB a 4 IOPS (Operaciones de entrada/salida por segundo) sin ningún coste. El tamaño del volumen es relativo al tamaño de la compartición de archivos. Al añadir más volúmenes, a cada volumen se le asigna una cantidad igual de almacenamiento de compartición de archivos.</span><p><span class="ph">El gestor de organización puede crear comparticiones de archivos con tamaño de almacenamiento e IOPS para satisfacer las necesidades de almacenamiento del espacio. Las comparticiones de archivos pueden suministrarse en tamaños de 20 GB a 12 TB y en IOPS por GB de 0,25, 2 o 4. El tamaño de la compartición de archivos en relación con el número de impactos de IOPS que agilizan que los datos se puedan leer de y grabar en el volumen de contenedor.</span></p>
+<div class="p">Para crear una compartición de archivo, consulte: <ul><li><a href="container_volumes_ov.html#container_fileshares_adding_ui" title="Una compartición de archivos es un sistema de almacenamiento basado en NFS (Network File System) que aloja volúmenes Docker en un espacio de Bluemix y permite que un usuario almacene y acceda a un contenedor y a archivos relacionados con la app. Para almacenar archivos en una compartición de archivos, debe crear un volumen de contenedores y guardar los datos en este volumen.">Adición de comparticiones de archivos para volúmenes con la interfaz gráfica de usuario de Bluemix</a></li>
+<li><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="Cree una compartición de archivos utilizando el mandato bx ic volume-fs-create.">Adición de comparticiones de archivos con la interfaz de línea de mandatos (CLI)</a></li>
+</ul>
+</div>
+</div></div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d67479e1124" lang="es-es" id="container_planning_container_ov"><h2 class="topictitle2" id="d67479e1124">Creación de los contenedores con <span class="keyword">IBM
+Bluemix Container Service</span> en <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc">Para crear contenedores que ejecutan la app con <span class="keyword">IBM
+Bluemix Container Service</span> en <span class="keyword">Bluemix</span>, debe tener asignados derechos de desarrollador para un espacio de organización. Como desarrollador de apps, es importante saber cuántos componentes de contenedor están relacionados y cómo puede cambiar la configuración de un contenedor para satisfacer los requisitos funcionales y no funcionales de la app. </p>
+<div class="section prereq">Antes de comenzar, asegúrese de que haya asignado el rol <dfn class="term">desarrollador</dfn> o
+<dfn class="term">auditor</dfn> para el espacio. El gestor o propietario de la organización puede otorgar acceso a un
+espacio.</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d67479e1213" id="container_planning_cli-ui"><h3 class="topictitle3" id="d67479e1213">La GUI de <span class="keyword">Bluemix</span>, la línea de mandatos y la API REST </h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="cli_def">Cuando está pensando en trabajar con <span class="keyword">IBM
+Bluemix Container Service</span>, puede utilizar la interfaz gráfica de usuario (GUI) de <span class="keyword">Bluemix</span>, instalar la interfaz de línea de mandatos
+(CLI), o enviar solicitudes HTTP a la API REST para acceder a <span class="keyword">IBM
+Bluemix Container Service</span>.</span></p>
+<div class="section context"><p>La GUI de <span class="keyword">Bluemix</span> y la <a href="container_planning.html#install" title="Instale y configure la CLI de IBM Bluemix Container Service para gestionar sus contenedores desde la CLI.">CLI</a> se pueden usar para realizar la mayoría de las tareas de <span class="keyword">IBM
+Bluemix Container Service</span>. Sin embargo, hay tareas que pueden realizarse solamente a través de la interfaz gráfica de usuario o la CLI de
+<span class="keyword">Bluemix</span>. Por lo tanto, esté preparado para utilizar los dos para gestionar sus contenedores. </p>
+<p>Si no quiere usar la GUI ni la CLI de <span class="keyword">Bluemix</span>, puede enviar solicitudes HTTP directamente al servidor de <a href="container_planning.html#use_api" title="Utilice la API de IBM Bluemix Container Service para trabajar con contenedores únicos y grupos de contenedores utilizando REST."><span class="keyword">IBM
+Bluemix Container Service</span> API</a> para gestionar sus contenedores con REST. </p>
+La siguiente tabla muestra todas las tareas relacionadas con contenedores que requieren la GUI de <span class="keyword">Bluemix</span>, la CLI de <span class="keyword">IBM
+Bluemix Container Service</span> o la API REST. Las tareas que no aparecen aquí las pueden realizar todos los métodos. <div class="tablenoborder"><table summary="Tareas relacionadas con contenedor que requieren la GUI de Bluemix, la CLI de IBM Bluemix Container Service o la API REST" id="container_planning_cli-ui__table_egk_dh3_rx" class="defaultstyle"><caption><span class="tablecap">Tabla 3. Tareas relacionadas con contenedor que requieren la GUI de <span class="keyword">Bluemix</span>, la CLI de <span class="keyword">IBM
+Bluemix Container Service</span> o la API REST</span></caption><thead><tr><th style="width: 25%" id="d67479e1410" class="thleft">Tarea</th>
+<th style="width: 25%" id="d67479e1412" class="thleft">interfaz gráfica de usuario (GUI)</th>
+<th style="width: 25%" id="d67479e1414" class="thleft">CLI</th>
+<th style="width: 25%" id="d67479e1416" class="thleft">API</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 25%" headers="d67479e1410 ">Revisar vulnerabilidades de imagen</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Enviar imágenes al registro</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Extraer imágenes del registro</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Copiar imágenes de Docker Hub</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Cambiar asignación de cuota</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Recuperar organización y cuota específica de espacio</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Ver información de registro detallada</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Especificar más registros</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Personalizar registros</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Iniciar sesión en contenedor en ejecución</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Usar Docker Compose</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Listar volúmenes de un espacio</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Escribir archivos en un volumen</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Suprimir un volumen</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67479e1410 ">Recuperar mensajes de sistema</td>
+<td style="width: 25%" headers="d67479e1412 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1414 "><img src="images/close.png" style="width: 1" alt="Icono no soportado"></td>
+<td style="width: 25%" headers="d67479e1416 "><img src="images/healthy.png" style="width: 3" alt="Icono soportado"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e1557" id="install"><h4 class="topictitle4" id="d67479e1557">Instalación de la CLI</h4>
+<div class="body taskbody"><p class="shortdesc">Instale y configure la CLI de <span class="keyword">IBM
+Bluemix Container Service</span> para gestionar sus contenedores desde la CLI. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Instale la <a href="container_cli_cfic_install.html#container_cli_cfic_install" title="Instale el plug-in de IBM Bluemix Container Service (bx ic) para ejecutar mandatos de la CLI de Docker nativa y gestionar así sus contenedores.">CLI de <span class="keyword">IBM
+Bluemix Container Service</span></a> y sus requisitos previos. </span> Para trabajar con <span class="keyword">IBM
+Bluemix Container Service</span> desde la
+CLI, debe instalar la CLI de Cloud Foundry (<samp class="ph codeph">cf</samp>), la CLI de Bluemix
+(<samp class="ph codeph">bx</samp>) y el plug-in de <span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>).</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Instale <a href="container_cli_cfic_install.html#container_cli_compose_install" title="Para iniciar y detener varios contenedores únicos simultáneamente, puede instalar la CLI de Docker Compose.">Docker
+Compose</a>.</span> Si desea ejecutar mandatos de Docker Compose con <span class="keyword">IBM
+Bluemix Container Service</span>, son necesarios paquetes de software adicionales.</li>
+<li class="step stepexpand"><span class="cmd">Inicie sesión en la CLI de <span class="keyword">IBM
+Bluemix Container Service</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Elija ejecutar <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) o los mandatos nativos de Docker.</span> <ul><li><span class="ph uicontrol">Opción 1</span> (Valor predeterminado)<p>Un shell simple para derivadores Docker de <span class="keyword">IBM
+Bluemix Container Service</span>. El daemon Docker local
+no se ve afectado por <span class="keyword">IBM
+Bluemix Container Service</span>. Los mandatos de <span class="ph"><samp class="ph codeph">bx ic</samp></span> se utilizan para gestionar contenedores en el espacio de
+<span class="keyword">Bluemix</span> y los mandatos
+<samp class="ph codeph">docker</samp> se utilizan para gestionar contenedores de forma local. Los mandatos <samp class="ph codeph">docker</samp>
+son siempre necesarios para el desarrollo de imágenes local. </p>
+<p>Por ejemplo, con la Opción 1,
+el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> crea un contenedor
+en el espacio de <span class="keyword">Bluemix</span> y
+<samp class="ph codeph">docker run</samp> crea un contenedor de forma local. Es posible que prefiera esta opción si no está familiarizado
+con Docker ni <span class="keyword">IBM
+Bluemix Container Service</span> o si desea
+probar los contenedores de forma local.</p>
+</li>
+<li><span class="ph uicontrol">Opción 2</span><p>Redirija el daemon Docker local para la sesión de CLI actual para
+<span class="keyword">IBM
+Bluemix Container Service</span>, de modo que los mandatos <samp class="ph codeph">docker</samp>
+se puedan utilizar en lugar de los mandatos <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+siempre que estén disponibles para gestionar contenedores en su espacio de <span class="keyword">Bluemix</span>. </p>
+<p>Por ejemplo, con la opción 2, tanto el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> como el mandato <samp class="ph codeph">docker run</samp> se pueden utilizar para crear un contenedor en su espacio. Es posible que prefiera esta opción si es un usuario
+familiarizado con Docker que está más cómodo con los mandatos <samp class="ph codeph">docker</samp>
+o si está adaptando los scripts automatizados para trabajar con <span class="keyword">IBM
+Bluemix Container Service</span>.</p>
+<p>Hay algunas excepciones que todavía requieren el uso
+de los mandatos <span class="ph"><samp class="ph codeph">bx ic</samp></span> para efectuar tareas específicas
+de <span class="keyword">IBM
+Bluemix Container Service</span>. Por ejemplo, para establecer un espacio
+de nombres, debe utilizar el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set namespace-set</samp>. <samp class="ph codeph">docker namespace-set</samp> no es un mandato válido. Para obtener una
+lista de mandatos <samp class="ph codeph">docker</samp> a los que se da soporte con esta configuración, consulte <a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="Con el plug-in de IBM Bluemix Container Service (bx ic), algunos mandatos de docker se pueden usar en lugar de los mandatos bx ic. Cuando inicie sesión en el plug-in, configure las variables de entorno para utilizar mandatos de la CLI de Docker. A continuación puede ejecutar mandatos docker en lugar de mandatos bx ic siempre que sea posible. Por ejemplo, en lugar de utilizar imágenes de bx ic para ver las imágenes del registro Bluemix privado, ejecute docker images.">Mandatos de Docker admitidos para el plug-in de IBM Bluemix Container Service (bx ic)</a>.</p>
+<div class="p">Para configurar
+esta opción, copie y pegue las variables de entorno que se proporcionan en el terminal durante el inicio de sesión.<ul><li><samp class="ph codeph">DOCKER_HOST</samp> establece el host de Docker en <span class="keyword">IBM
+Bluemix Container Service</span>.</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp> establece la ubicación de las claves de autenticación del plug-in de <span class="keyword">IBM
+Bluemix Container Service</span> para Cloud Foundry.</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp> utiliza TLS y verifica el servidor remoto.</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">Consejo:</span> Cuando complete las tareas en la documentación de <span class="keyword">IBM
+Bluemix Container Service</span>, podrá ejecutar
+los mandatos <samp class="ph codeph">docker</samp> en todos los pasos marcados con un asterisco (*).</div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e1907" id="use_api"><h4 class="topictitle4" id="d67479e1907">Gestión de contenedores a través de la API REST</h4>
+<div class="body taskbody"><p class="shortdesc">Utilice la API de <span class="keyword">IBM
+Bluemix Container Service</span> para trabajar
+con contenedores únicos y grupos de contenedores utilizando REST.</p>
+<div class="section context"> Para iniciar sesión en el servicio de <span class="keyword">IBM
+Bluemix Container Service</span>,
+debe iniciar sesión en <span class="keyword">Bluemix</span>
+en primer lugar. Siga estos pasos para recuperar la señal de acceso de <span class="keyword">Bluemix</span> y para obtener el ID del espacio
+en el que desea trabajar con sus contenedores. </div><ol class="steps"><li class="step stepexpand"><span class="cmd">Ejecute una solicitud GET HTTP en la API de <span class="keyword">Bluemix</span> para recuperar la información de punto final de autenticación actual. </span> <pre class="codeblock"><code>GET <samp class="ph codeph">http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/info</samp></code></pre>
+La
+salida es parecida a la siguiente.
+
+<pre class="pre screen"><code>{
+  "name": "Bluemix",
+  "build": "235011",
+  "support": "http://ibm.biz/bluemix-supportinfo",
+  "version": 0,
+  "description": "IBM Bluemix",
+  "authorization_endpoint": "https://login.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/UAALoginServerWAR",
+  "token_endpoint": "https://uaa.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>",
+  "allow_debug": true
+}</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Autentíquese con el punto final de autorización para recuperar la señal de acceso de <span class="keyword">Bluemix</span>.</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Localice el <span class="ph uicontrol">authorization_endpoint</span> en la salida de la API del paso anterior.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Añada <span class="ph uicontrol">/oauth/token</span> al final del URL del punto final de autorización.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Envíe una solicitud <samp class="ph codeph">POST</samp> al punto final de autorización para recuperar la señal de acceso de <span class="keyword">Bluemix</span>.</span> <pre class="codeblock"><code>POST <samp class="ph codeph">https://login.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/UAALoginServerWAR/oauth/token</samp> </code></pre>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_u5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">Tabla 4. Parámetros de entrada de solicitud para autenticarse con <span class="keyword">Bluemix</span></span></caption><thead><tr><th id="d67479e2037" class="thleft">Parámetro de entrada de solicitud</th>
+<th id="d67479e2039" class="thleft">Valores</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67479e2037 ">Cabecera</td>
+<td headers="d67479e2039 "><ul><li>Accept: <samp class="ph codeph">application/json;charset=utf-8</samp></li>
+<li>Authorization: <samp class="ph codeph">Basic Y2Y6</samp></li>
+<li>Content-Type: <samp class="ph codeph">application/x-www-form-urlencoded;charset=utf</samp></li>
+</ul>
+</td>
+</tr>
+<tr><td headers="d67479e2037 ">Cuerpo</td>
+<td headers="d67479e2039 "><samp class="ph codeph">grant_type=password&amp;username=<var class="keyword varname">&lt;nombre_usuario&gt;</var>
+&amp;password=<var class="keyword varname">&lt;contraseña&gt;</var></samp><div class="p"><div class="steps note"><span class="notetitle">Nota:</span> Sustituya <var class="keyword varname">&lt;nombre_usuario&gt;</var> y <var class="keyword varname">&lt;contraseña&gt;</var> por el nombre de usuario y la contraseña de
+<span class="keyword">Bluemix</span>. </div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+La salida es parecida a la siguiente.
+
+<pre class="pre screen"><code>{
+  "access_token": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMzhlZGZiZS0wOTJiLTQ4MmYtOTBhYi05ZGMyNzhlNGYyMmQiLCJzdWIiOiIyNjRmNjI1ZS0xNzliLTQ0NzYtYTJjNi1jZWZmMGM4YTFkNDUiLCJzY29wZSI6WyJvcGVuaWQiLCJjbG91ZF9jb250cm9sbGVyLnJlYWQiLCJwYXNzd29yZC53cml0ZSIsImNsb3VkX2NvbnRyb2xsZXIud3JpdGUiXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6IjI2NGY2MjVlLTE3OWItNDQ3Ni1hMmM2LWNlZmYwYzhhMWQ0NSIsIm9yaWdpbiI6InVhYSIsInVzZXJfbmFtZSI6Im5zcGllc0B1cy5pYm0uY29tIiwiZW1haWwiOiJuc3BpZXNAdXMuaWJtLmNvbSIsImF1dGhfdGltZSI6MTQ3MjU4NTUwNiwicmV2X3NpZyI6Ijc0MDA2OGI3IiwiaWF0IjoxNDcyNTg1NTA2LCJleHAiOjE0NzM3OTUxMDYsImlzcyI6Imh0dHBzOi8vdWFhLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiYXVkIjpbImNmIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIl19.B0jSzjrglzCv4EfAPmKCH-ZKsLOTXpsk5qrYTTL-GPI",
+  "token_type": "bearer",
+  "refresh_token": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4YWE3MmI0Yy02MGE4LTQwZmEtOGIxZi04NTllYWE1ZDBmMWUtciIsInN1YiI6IjI2NGY2MjVlLTE3OWItNDQ3Ni1hMmM2LWNlZmYwYzhhMWQ0NSIsInNjb3BlIjpbIm9wZW5pZCIsImNsb3VkX2NvbnRyb2xsZXIucmVhZCIsInBhc3N3b3JkLndyaXRlIiwiY2xvdWRfY29udHJvbGxlci53cml0ZSJdLCJpYXQiOjE0NzI1ODU1MDYsImV4cCI6MTQ3NTE3NzUwNiwiY2lkIjoiY2YiLCJjbGllbnRfaWQiOiJjZiIsImlzcyI6Imh0dHBzOi8vdWFhLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoibnNwaWVzQHVzLmlibS5jb20iLCJvcmlnaW4iOiJ1YWEiLCJ1c2VyX2lkIjoiMjY0ZjYyNWUtMTc5Yi00NDc2LWEyYzYtY2VmZjBjOGExZDQ1IiwicmV2X3NpZyI6Ijc0MDA2OGI3IiwiYXVkIjpbImNmIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIl19.9TOrq_sg2CFIktjVLBNTc-yfnCRrSQyNV-lZt7N9FrM",
+  "expires_in": 1209599,
+  "scope": "openid cloud_controller.read password.write cloud_controller.write",
+  "jti": "d38edfbe-092b-482f-90ab-9dc278e4f22d"
+}</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Anote la <span class="ph uicontrol">access_token</span> desde la respuesta CLI para utilizarla en el paso siguiente.</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Recupere el ID del espacio de <span class="keyword">Bluemix</span>. </span> Para autenticarse con el servicio de <span class="keyword">IBM
+Bluemix Container Service</span>,
+debe tener la señal de acceso <span class="keyword">Bluemix</span>
+que se ha obtenido en el paso anterior así como el ID de espacio de la organización, en
+la que desea trabajar con sus contenedores. 
+<p>Si tiene su ID de espacio, puede saltarse este
+paso e ir al siguiente. Si no está seguro de qué ID de espacio es, siga estos pasos para
+recuperarlo. </p>
+<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Recupere el ID de la organización de <span class="keyword">Bluemix</span>. </span> <pre class="codeblock"><code>GET http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v2/organizations</code></pre>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_v5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">Tabla 5. Parámetros de entrada de solicitud para recuperar una organización y espacio de <span class="keyword">Bluemix</span></span></caption><thead><tr><th id="d67479e2141" class="thleft">Parámetro de entrada de solicitud</th>
+<th id="d67479e2143" class="thleft">Valores</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67479e2141 ">Cabecera</td>
+<td headers="d67479e2143 "><ul><li>Accept: <samp class="ph codeph">application/json;charset=utf-8</samp></li>
+<li>Authorization: <samp class="ph codeph">bearer <var class="keyword varname">&lt;access_token&gt;</var></samp></li>
+<li>Content-Type: <samp class="ph codeph">application/x-www-form-urlencoded;charset=utf</samp></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+La salida es parecida a la siguiente. El ID para su organización se puede encontrar como
+<span class="ph uicontrol">guid</span> en la sección <span class="ph uicontrol">metadatos</span>.
+
+<pre class="pre screen"><code>"metadata": {
+        "guid": "31eb6110-5935-446f-ac94-f97f5852b19b",
+        "url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b",
+        "created_at": "2016-01-07T18:55:19Z",
+        "updated_at": "2016-02-09T15:56:22Z"
+      },
+      "entity": {
+        "name": "org@us.ibm.com",
+        "billing_enabled": false,
+        "quota_definition_guid": "7f66aaf3-9e9b-49f4-83d9-40d92d318ff3",
+        "status": "active",
+        "quota_definition_url": "/v2/quota_definitions/7f66aaf3-9e9b-49f4-83d9-40d92d318ff3",
+        "spaces_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/spaces",
+        "domains_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/domains",
+        "private_domains_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/private_domains",
+        "users_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/users",
+        "managers_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/managers",
+        "billing_managers_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/billing_managers",
+        "auditors_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/auditors",
+        "app_events_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/app_events",
+        "space_quota_definitions_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/space_quota_definitions"
+      }</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Localice el campo <span class="ph uicontrol">url_espacios</span> en la sección <span class="ph uicontrol">entidad</span>
+de la salida de la API del paso anterior. Recupere una lista de todos los espacios de dicha organización ejecutando
+una llamada de API GET en la <span class="ph uicontrol">url_espacios</span>.</span> Para ejecutar la llamada a la API, utilice la misma información de cabecera tal como ha hecho en el paso anterior.
+
+<pre class="codeblock"><code>GET http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/spaces</code></pre>
+La salida es parecida a la siguiente. El ID para el espacio se puede encontrar como
+<span class="ph uicontrol">guid</span> en la sección <span class="ph uicontrol">metadatos</span>.
+
+<pre class="pre screen"><code>"metadata": {
+        "guid": "0e65c436-9413-46e2-8b42-ff06aa74ac21",
+        "url": "/v2/spaces/0e65c436-9413-46e2-8b42-ff06aa74ac21",
+        "created_at": "2016-01-07T18:55:22Z",
+        "updated_at": null
+      },
+      "entity": {
+        "name": "dev",
+...</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Trabaje con sus contenedores en <span class="keyword">IBM
+Bluemix Container Service</span> utilizando REST.</span> Busque todas las llamadas de API de <span class="keyword">IBM
+Bluemix Container Service</span> soportadas
+en la <a href="http://ccsapi-doc.mybluemix.net/" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">documentación de la API.</a>
+
+<p>Cada llamada de API requiere la señal de acceso y el ID de espacio para que formen parte de la información de cabecera, como se muestra
+en la tabla siguiente. </p>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_w5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">Tabla 6. Parámetros de entrada de solicitud para trabajar con la API de <span class="keyword">IBM
+Bluemix Container Service</span></span></caption><thead><tr><th id="d67479e2244" class="thleft">Parámetro de entrada de solicitud</th>
+<th id="d67479e2246" class="thleft">Valores</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67479e2244 ">URL base de <span class="keyword">IBM
+Bluemix Container Service</span></td>
+<td headers="d67479e2246 "><span class="ph filepath">https://containers-api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v3</span></td>
+</tr>
+<tr><td headers="d67479e2244 ">Cabecera</td>
+<td headers="d67479e2246 "><ul><li>X-Auth-Token: <samp class="ph codeph">bearer <var class="keyword varname">&lt;señal_acceso&gt;</var></samp></li>
+<li>X-Auth-Project-Id: <samp class="ph codeph"><var class="keyword varname">&lt;ID_espacio&gt;</var></samp></li>
+<li>Content-Type: <samp class="ph codeph">application/json</samp></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e2286" id="container_planning_images"><h3 class="topictitle3" id="d67479e2286">Imágenes públicas de IBM, de Docker Hub y privadas</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" data-hd-otherprops="registry_check" id="image_def">Una imagen de contenedor es la base para cada contenedor que pueda crear. Se crea una imagen a partir de Dockerfile, que es un archivo que contiene instrucciones para crear la imagen y crear artefactos, como una app, la configuración de la app y sus dependencias. Piense en una imagen de contenedor como un archivo ejecutable
+(<span class="ph filepath">.exe</span> o <span class="ph filepath">.bin</span>). Tan pronto se ejecuta el archivo de app ejecutable, se crea una instancia de la app. Al ejecutar un contenedor, cree una instancia de contenedor a partir de la imagen. </span><span class="ph" data-hd-otherprops="registry_check">Las imágenes de contenedor se almacenan en el
+registro de <span class="keyword">Bluemix</span> privado
+y pueden añadirse únicamente desde la CLI. Cada imagen de contenedor que desea utilizar debe estar en un registro
+para poder crear un contenedor a partir de la misma.</span></p>
+<div class="section context">Al planificar trabajar con <span class="keyword">IBM
+Bluemix Container Service</span>, deberá decidir sobre la imagen del contenedor que desea utilizar. Hay varias formas de crear, compilar y utilizar imágenes
+en el registro de <span class="keyword">Bluemix</span>
+privado. <div class="note important" id="container_planning_images__max_size"><span class="importanttitle">Importante:</span> Cada imagen tiene un tamaño máximo de 10 GB para que se ejecute como contenedor único o como grupos de contenedores escalables en <span class="keyword">IBM
+Bluemix Container Service</span>. </div>
+<dl id="container_planning_images__available_images"><dt class="dlterm">Imágenes públicas de IBM</dt>
+<dd>Empiece con una de las <a href="container_images.html#images" title="Puede crear contenedores a partir de imágenes de IBM. Las imágenes se pueden desplegar como un contenedor único o como grupos de contenedores escalables.">imágenes públicas de IBM</a> suministradas por <span class="keyword">IBM
+Bluemix Container Service</span>, como, por ejemplo, las imágenes de IBM Liberty e IBM Node para probar las características de <span class="keyword">IBM
+Bluemix Container Service</span>. A continuación, puede utilizar una de estas imágenes como imagen padre, modificar el Dockerfile y crear su propia imagen con el código de app en la misma.</dd>
+<dt class="dlterm">Imágenes de Docker Hub</dt>
+<dd><a href="container_images_adding_ov.html#container_images_copying" title="Puede copiar una imagen en el registro de Bluemix privado de la organización desde una de las siguientes ubicaciones.">Copie imágenes directamente de Docker
+Hub</a> en el registro de <span class="keyword">Bluemix</span>
+privado o <a href="container_images_adding_ov.html#container_images_pulling" title="Puede obtener una imagen de Docker Hub, o de su registro privado, modificarla localmente y enviarla por push al registro de Bluemix privado de la organización.">extraiga una imagen de Docker
+Hub</a>, modifíquela localmente y, a continuación, compílela directamente en el registro. </dd>
+<dt class="dlterm">Crear su propia imagen</dt>
+<dd>Si tiene imágenes de contenedor que ya utiliza en el entorno de Docker local, puede
+<a href="container_images_adding_ov.html#container_images_pulling" title="Puede obtener una imagen de Docker Hub, o de su registro privado, modificarla localmente y enviarla por push al registro de Bluemix privado de la organización.">enviarlas por push al registro de <span class="keyword">Bluemix</span> privado</a> para utilizarlas en <span class="keyword">IBM
+Bluemix Container Service</span>. También puede crear su propio
+Dockerfile, compilarlo, probarlo localmente y, a continuación, enviarlo por push al registro de imágenes privado. </dd>
+</dl>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e2458" id="viewing_images"><h4 class="topictitle4" id="d67479e2458">Visualización de imágenes en el registro de imágenes privado </h4>
+<div class="body taskbody"><p class="shortdesc">Puede ver todas las imágenes de contenedor que están disponibles en el registro de imágenes de <span class="keyword">Bluemix</span> privado utilizando la GUI o la CLI de <span class="keyword">Bluemix</span>. </p>
+<div class="step"><span class="cmd">Vea imágenes suministradas por IBM e imágenes previamente enviadas a su registro privado.</span> <ul class="ul choices"><li class="li choice">Desde la GUI de <span class="keyword">Bluemix</span>, seleccione el catálogo y, a continuación, <span class="ph uicontrol">Contenedores</span>. Puede ver imágenes suministradas por IBM e imágenes previamente enviadas al registro de <span class="keyword">Bluemix</span> privado. </li>
+<li class="li choice">Desde la CLI, ejecute las <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>imágenes</samp>.</li>
+</ul>
+</div>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e2517" id="vulnerability_advisor"><h4 class="topictitle4" id="d67479e2517">Revisión de vulnerabilidades de imágenes</h4>
+<div class="body taskbody"><p class="shortdesc">Cuando se añaden imágenes al registro de <span class="keyword">Bluemix</span> privado, Vulnerability Advisor las explora automáticamente frente a las políticas estándar establecidas por el gestor de la organización y una base de datos de problemas de Ubuntu conocidos. Vulnerability Advisor comprueba los paquetes de inventario, las configuraciones, los puertos abiertos y los metadatos de
+Docker. Una vez finalizada la exploración, puede revisar una lista de posibles vulnerabilidades y corregirlas según sea necesario antes de utilizar la imagen en un contenedor.
+En función de las políticas establecidas por el gestor de organización, el despliegue de un contenedor desde dicha imagen puede bloquearse, o se muestra un aviso al usuario.</p>
+<div class="section context"><div class="p"><ul><li>Para ver las vulnerabilidades de una imagen, consulte <a href="va/va_index.html#va_reviewing">Revisión de un informe de imagen</a>.</li>
+<li>Para configurar políticas personalizadas en su organización, consulte <a href="va/va_index.html#va_managing_policy">Revisión de las políticas de la organización</a>. </li>
+</ul>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e2557" id="tips"><h4 class="topictitle4" id="d67479e2557">Sugerencias de Dockerfile para impedir que un contenedor se apague</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> ofrece muchas características para mantener los contenedores seguros y gestionar los recursos de nube del usuario. Dependiendo de su app, podría ser necesario añadir configuraciones extra al Dockerfile para garantizar que sus contenedores locales puedan ejecutarse satisfactoriamente en <span class="keyword">Bluemix</span>. </p>
+<div class="section context"><dl><dt class="dlterm">Prepararse para los retrasos de red</dt>
+<dd>Cuando se inicia un contenedor, <span class="keyword">IBM
+Bluemix Container Service</span> configura la red de contenedor privado y asigna una dirección IP privada al contenedor. Este proceso puede tardar unos segundos. Si la app requiere una conexión de red activa al iniciarse la app, <a href="container_planning.html#network_delay" title="Cuando se inicia un contenedor, IBM Bluemix Container Service configura la red de contenedor privada, expone puertos de contenedor y asigna una dirección IP privada al contenedor. Este proceso puede tardar unos segundos. Si la app requiere una conexión de red activa en el momento en que se inicia la app, es posible que la red privada de contenedor todavía no esté configurada, lo que puede causar que la app se bloquee. Para garantizar que la interconexión de IBM Bluemix Container Service haya finalizado antes de que se inicie la app, plantéese implementar una de las siguientes soluciones para gestionar los retrasos.">garantiza que la interconexión de <span class="keyword">IBM
+Bluemix Container Service</span> haya finalizado</a>
+antes añadiendo un mandato sleep al Dockerfile. </dd>
+<dt class="dlterm">Usar mandatos de larga ejecución</dt>
+<dd>Para mantener un contenedor en ejecución, es necesario incluir al menos un proceso de larga ejecución en la imagen del contenedor. Por ejemplo, <samp class="ph codeph">echo "Hello world"</samp> es un proceso de corta ejecución.
+Si no se especifica otro mandato en la imagen, el contenedor concluye una vez que se ha ejecutado el mandato. Por ejemplo, para transformar el mandato <samp class="ph codeph">echo "Hello world"</samp> en un proceso de larga ejecución, puede crear un bucle del mismo varias veces o incluir el mandato
+<samp class="ph codeph">echo</samp> en otro proceso de larga ejecución dentro de la app. </dd>
+</dl>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e2648" id="container_planning_private_network"><h3 class="topictitle3" id="d67479e2648">Valores de red de contenedor privado en <span class="keyword">IBM
+Bluemix Container Service</span></h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="private_network_def">Una red privada de contenedor crea un entorno aislado y seguro para los contenedores únicos y los grupos de contenedores que se ejecutan en un espacio. Los contenedores que están conectados a la misma red privada pueden enviar y recibir datos de otros contenedores en la red
+privada, utilizando las direcciones IP privadas. Los contenedores no están públicamente disponibles hasta que se enlazan un
+puerto público y una dirección IP pública para contenedores únicos o una ruta pública para grupos de contenedores. </span></p>
+<div class="section context">Puede optar por utilizar la configuración de red privada predeterminada de <span class="keyword">IBM
+Bluemix Container Service</span> o conectar los contenedores a un centro de datos corporativo a través de VPN. <dl><dt class="dlterm">Valores de red privada predeterminada de <span class="keyword">IBM
+Bluemix Container Service</span></dt>
+<dd><span class="ph">En <span class="keyword">Bluemix</span>, cada espacio ya se proporciona con una red privada de contenedor que se aplica a los valores de red predeterminados de <span class="keyword">IBM
+Bluemix Container Service</span>. Estos valores incluyen la configuración automática de un Grupo de seguridad de red privada predeterminado que permite la comunicación de red privada entre contenedores y grupos de contenedores utilizando direcciones IP privadas. Al crear
+un contenedor o un grupo de contenedores en un espacio, se conectan automáticamente a la red privada de
+<span class="keyword">IBM
+Bluemix Container Service</span> predeterminada
+y se les asigna una dirección IP privada dese la subred 172.31.0.0/16. Después de asignar una dirección IP privada, todos los contenedores de la misma red pueden comunicarse de forma segura en todos los puertos de contenedor utilizando la dirección IP privada del contenedor único, o si se utiliza un grupo de contenedores, la dirección IP privada del equilibrador de carga del grupo. No es necesaria ninguna correlación de puertos de contenedor con un puerto de host.</span></dd>
+<dt class="dlterm">Red privada virtual para conectar los contenedores a un centro de datos corporativo</dt>
+<dd><span class="ph" id="container_planning_private_network__vpn_def">Conectar de forma segura los contenedores únicos y los grupos de contenedores en una red de contenedores privada en <span class="keyword">Bluemix</span> con un centro de datos corporativo utilizando el servicio IBM® Virtual Private Network (VPN). <span class="keyword">IBM
+VPN</span> proporciona un canal de comunicaciones de extremo a extremo seguro sobre internet que está basado en la suite de protocolos
+Internet Protocol Security (IPsec) estándar del sector. El protocolo IPsec ofrece la autenticación de iguales a nivel de red, la integridad de datos y la confidencialidad de datos cifrando los paquetes que se intercambian entre los puntos finales VPN. Para configurar una conexión segura entre los contenedores en <span class="keyword">Bluemix</span> y un centro de datos corporativo, debe tener instalados una pasarela VPN IPsec o un servidor SoftLayer en el centro de datos local. Con el servicio de
+<span class="keyword">IBM
+VPN</span>, puede configurar una pasarela VPN por espacio y definir hasta 16 conexiones en distintos destinos.</span><p>Para configurar una conexión VPN segura en los contenedores de <span class="keyword">Bluemix</span>, consulte <a href="container_security.html#container_vpn" title="Conectar de forma segura los contenedores únicos y los grupos de contenedores en una red de contenedores privada en Bluemix con un centro de datos corporativo utilizando el servicio IBM® Virtual Private Network (VPN). IBM VPN proporciona un canal de comunicaciones de extremo a extremo seguro sobre internet que está basado en la suite de protocolos Internet Protocol Security (IPsec) estándar del sector. El protocolo IPsec ofrece la autenticación de iguales a nivel de red, la integridad de datos y la confidencialidad de datos cifrando los paquetes que se intercambian entre los puntos finales VPN. Para configurar una conexión segura entre los contenedores en Bluemix y un centro de datos corporativo, debe tener instalados una pasarela VPN IPsec o un servidor SoftLayer en el centro de datos local. Con el servicio de IBM VPN, puede configurar una pasarela VPN por espacio y definir hasta 16 conexiones en distintos destinos."><span class="keyword">IBM
+VPN</span></a>.</p>
+</dd>
+</dl>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e2811" id="network_delay"><h4 class="topictitle4" id="d67479e2811">Consejos para gestionar los retrasos de red al iniciar un contenedor</h4>
+<div class="body taskbody"><p class="shortdesc">Cuando se inicia un contenedor, <span class="keyword">IBM
+Bluemix Container Service</span> configura la red de contenedor privada, expone puertos de contenedor y asigna una dirección IP privada al contenedor. Este proceso puede tardar unos segundos. Si la app requiere una conexión de red activa en el momento en que se inicia la app, es posible que la red privada de contenedor todavía no esté configurada, lo que puede causar que la app se bloquee. Para garantizar que la interconexión de <span class="keyword">IBM
+Bluemix Container Service</span> haya finalizado antes de que se inicie la app, plantéese implementar una de las siguientes soluciones para gestionar los retrasos. </p>
+<div class="step"><span class="cmd">Seleccione entre las siguientes opciones para gestionar los retrasos de red.</span> <ul class="ul choices"><li class="li choice">Añada un mandato sleep al Dockerfile que se ejecute al iniciar el contenedor.<p>En el siguiente ejemplo de Dockerfile, el contenedor espera 60 segundos antes de iniciar la app.</p>
+<pre class="codeblock"><code>FROM sdelements/lets-chat:latest
+CMD (sleep 60; npm start)</code></pre>
+</li>
+<li class="li choice">Ajuste el código de app para comprobar si hay una conectividad de red activa, por ejemplo, haciendo ping a una dirección IP pública antes de que se inicie la app. Si no puede hacer ping a una dirección IP, suspenda la ejecución durante unos pocos segundos e inténtelo de nuevo. Si la dirección IP puede resolverse, inicie la app. </li>
+</ul>
+</div>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e2869" id="container_planning_public_network"><h3 class="topictitle3" id="d67479e2869">Determinación de los valores de la red pública</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">De forma predeterminada, cada contenedor único y grupo de contenedores en
+<span class="keyword">IBM
+Bluemix Container Service</span> está disponible para la red privada. Sin embargo, la app puede requerir accesibilidad desde Internet, o desea acceder a contenedores en otros espacios de la organización. En estos casos, debe exponer el contenedor al
+público.</span> En función del tipo de contenedor que elija, existen distintas formas de hacer que un contenedor esté disponible para el público. </p>
+<div class="section context"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e2934" id="public_single_compose"><h4 class="topictitle4" id="d67479e2934">Contenedores únicos y valores de la red pública de Docker Compose</h4>
+<div class="body taskbody"><p class="shortdesc">A todos los contenedores únicos que cree en su espacio se les asigna una dirección IP privada que puede utilizar para acceder a los contenedores únicamente desde la red privada. La comunicación de red privada está protegida por el grupo de seguridad de red privada predeterminada que no permite ningún tráfico de red a o desde una red pública. Si desea hacer que la app esté disponible para la red pública, debe exponer un puerto público y enlazar una dirección IP pública a su contenedor.</p>
+<div class="section context"><p>Deben solicitarse direcciones IP públicas para que un espacio esté enlazado con un contenedor. Al solicitar una dirección IP pública, se asigna al espacio una aleatoria de la agrupación de direcciones IP públicas. Mientras se asigna a un espacio, la dirección IP no cambia. Para enlazar una dirección IP pública a un contenedor, también debe exponer un puerto HTTP usando la opción <samp class="ph codeph">-p</samp> en el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp>. Al exponer un puerto, se crea un grupo de seguridad de red pública para el contenedor que le permite enviar y recibir datos públicos únicamente en el puerto expuesto. Los demás puertos públicos están cerrados y no pueden utilizarse para acceder a la app desde Internet. </p>
+
+<div class="steps note"><span class="notetitle">Nota:</span> El enlace de una dirección IP pública no incluye un certificado SSL que cifra los datos que se envían a un contenedor único o desde el mismo. Si la app requiere el cifrado SSL, puede implementar su propia solución SSL o utilizar un grupo de contenedores en lugar de un contenedor único. Los grupos de contenedores están enlazados a una ruta pública que ya incluye un certificado SSL, por lo que puede acceder al grupo de contenedores con HTTPS sin ninguna configuración adicional. </div>
+
+<p>El número de direcciones IP públicas que están disponibles para un espacio dependerá de la <a href="container_planning.html#container_planning_quota" title="Cada organización de Bluemix tiene un valor preestablecido para la memoria de contenedor, direcciones IP públicas, comparticiones de archivos y el número de servicios que se comparten entre todos los espacios de una organización. Estos valores prestablecidos se denominan cuota.">cuota</a> de su organización.</p>
+
+<div class="p">Para revisar la lista de direcciones IP públicas disponibles en el espacio, ejecute el siguiente mandato.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+La lista que se devuelve puede que muestre ninguna dirección IP pública disponible, las direcciones IP públicas que están enlazadas a un contenedor, o las direcciones IP públicas sin enlazar. </div>
+
+<div class="p"><dl><dt class="dlterm">No hay disponible ninguna dirección IP pública en el espacio</dt>
+<dd><ul><li>Salida de CLI:<pre class="codeblock"><code>Dirección IP    ID de contenedor</code></pre>
+</li>
+<li>Mis opciones:<div class="p">Solicite una nueva dirección IP pública y enlácela al contenedor.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt class="dlterm">Hay una dirección IP pública disponible en el espacio y no está enlazada a un contenedor</dt>
+<dd><ul><li>Salida de CLI:<pre class="codeblock"><code>Dirección IP    ID de contenedor   
+192.0.2.56</code></pre>
+</li>
+<li>Mis opciones:<div class="p">Enlace la dirección IP pública al contenedor.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt class="dlterm">Hay una dirección IP pública disponible en el espacio pero ya está enlazada a un contenedor</dt>
+<dd><ul><li>Salida de CLI:<pre class="codeblock"><code>Dirección IP    ID de contenedor   
+192.0.2.56   d7b4a167-8e51-4b16-b591-1a17cb7ee41f </code></pre>
+</li>
+<li>Mis opciones:<ul><li>Elimine el enlace de una dirección IP ya enlazada de un contenedor y enlácela a un nuevo contenedor.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</li>
+<li><div class="p">Solicite una nueva dirección IP pública y enlácela al contenedor.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e3110" id="public_container_groups"><h4 class="topictitle4" id="d67479e3110">Valores de la red pública del grupo de contenedores</h4>
+<div class="body taskbody"><p class="shortdesc">Para que su grupo de contenedores sea accesible desde Internet, debe exponer un puerto y enlazar una ruta o dirección IP públicas a él. </p>
+<div class="section context"><div class="p"><dl><dt class="dlterm">Ruta pública con dominio predeterminado</dt>
+<dd>Una ruta pública consta de un host y un nombre de dominio, y compone todo el URL público que se escribe en el navegador web para acceder al grupo de contenedores. Cada ruta debe ser exclusiva en
+<span class="keyword">Bluemix</span>. <p>Puede elegir un nombre de host para su ruta, como por ejemplo <var class="keyword varname">mycontainerhost</var> durante la creación del contenedor. El dominio del sistema predeterminado es <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> y ya proporciona un certificado SSL, de modo que puede acceder al grupo de contenedores con HTTPS sin ninguna configuración adicional.</p>
+<p>Ejemplo:  <span class="ph filepath">https://<var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span></p>
+<div class="steps note"><span class="notetitle">Nota:</span> Para utilizar una ruta pública, debe exponer un puerto HTTP para el grupo de contenedores durante la creación. Los puertos no HTTP no pueden exponerse públicamente. Puede exponer solamente un puerto público por grupo de contenedores. No se da soporte a varios puertos públicos para un grupo de contenedores. </div>
+</dd>
+<dt class="dlterm">Ruta pública con dominio personalizado</dt>
+<dd>Si desea utilizar su propio dominio personalizado en lugar del dominio predeterminado <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span>, debe registrar el dominio personalizado en un servidor DNS público, configurar el dominio personalizado en Bluemix y, a continuación, correlacionar el dominio público con el dominio del sistema
+Bluemix en el servidor DNS público. Después de que el dominio personalizado se correlacione con el dominio del sistema Bluemix, las solicitudes para este dominio personalizado se direccionan a su aplicación en Bluemix. Cuando cree un dominio personalizado, no incluya caracteres de subrayado (_) en el nombre de dominio. <p>Para crear un dominio personalizado, consulte <a href="../manageapps/updapps.html#domain">Creación y uso de un dominio personalizado</a>. </p>
+<p>Para que el dominio personalizado sea seguro, <a href="../manageapps/secapps.html#ssl_certificate">cargue un certificado SSL</a> para poder acceder al grupo de contenedores con HTTPS. </p>
+</dd>
+<dt class="dlterm">Dirección IP pública</dt>
+<dd>También puede enlazar una dirección IP al crear un grupo de contenedores con la línea de mandatos. Solamente puede enlazar una ruta pública o una dirección IP flotante a un contenedor, no las dos. Para eliminar una dirección IP de un grupo de contenedores, debe eliminar el grupo de contenedores y volver a crear el grupo.<div class="p">Ejemplo de crear un grupo de contenedores con una dirección IP pública:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p <var class="keyword varname">9080</var> --ip <var class="keyword varname">192.0.2.56</var>  --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</div>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e3216" id="container_planning_bmx_service"><h3 class="topictitle3" id="d67479e3216">Integración de servicios de <span class="keyword">Bluemix</span> para utilizarlos con contenedores</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="service_def"><span class="keyword">Bluemix</span> ofrece varios servicios que puede utilizar con
+<span class="keyword">IBM
+Bluemix Container Service</span> para ofrecer prestaciones adicionales a la app o para simplificar la implementación de la app y la gestión del contenedor.</span></p>
+<div class="section context"><div class="p">Puede ver todos los servicios disponibles en <span class="keyword">Bluemix</span> de las maneras siguientes: <ul><li>En la interfaz de usuario de <span class="keyword">Bluemix</span>, seleccione el <span class="keyword wintitle">Catálogo</span> de <span class="keyword">Bluemix</span>.</li>
+<li>En la CLI, ejecute el mandato <samp class="ph codeph">cf marketplace</samp>.</li>
+</ul>
+</div>
+Para usar un servicio de <span class="keyword">Bluemix</span> con <span class="keyword">IBM
+Bluemix Container Service</span>, debe <a href="../services/reqnsi.html#req_instance">crear una instancia de este servicio</a> en su espacio antes de poder crear un contenedor. Después de haber creado una instancia de servicio en su espacio, deberá <a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix tiene una lista de servicios y los gestiona en nombre de los desarrolladores de apps. Para añadir un servicio de Bluemix para utilizar el contenedor, debe solicitar una instancia de este servicio y enlazarlo al contenedor.">enlazar el servicio con su contenedor</a> para que el contenedor pueda acceder a las variables de entorno que definen el servicio. Estas variables de entorno se denominan VCAP_SERVICES. Cuando se enlaza un servicio a un contenedor, el servicio inyecta VCAP_SERVICES como variables de entorno en el contenedor. De esta forma, el contenedor puede utilizar VCAP_SERVICES para buscar información desde el servicio, como el punto final, el usuario, el nombre y la contraseña. <p>Para encontrar información sobre servicios que puedan ayudarle a gestionar los contenedores, consulte <a href="container_integrations.html#container_integrations" title="Puede utilizar varios servicios en el Catálogo de Bluemix con IBM Bluemix Container Service. Muchos de los servicios de Bluemix le ayudan a ofrecer prestaciones adicionales a las apps que puede desplegar en los contenedores. Además, se pueden usar algunos servicios de Bluemix para ayudarle a gestionar los contenedores.">Integración de servicios con contenedores únicos y escalables</a>.</p>
+</div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d67479e3382" id="container_planning_volumes"><h3 class="topictitle3" id="d67479e3382">Opciones de almacén de datos permanentes</h3>
+<div class="body taskbody"><p class="shortdesc">Decide dónde almacenar los datos que la app crea o los archivos que la app requiere ejecutar. </p>
+<div class="section context">Un único contenedor es, por diseño, efímero. Sin embargo, hay varias opciones que puede elegir
+para persistir datos entre reinicios de contenedor, para compartir datos entre contenedores en un
+espacio, y para compartir datos entre instancias de contenedor en un grupo. <p><a href="../api/content/containers/images/data_options.png" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)"><img src="images/data_options.png" width="400" alt="Opciones sobre dónde guardar datos o archivos."></a></p>
+<div class="tablenoborder"><table summary="Opciones para almacenar archivos de app" id="container_planning_volumes__table_pvn_fks_bw" class="defaultstyle"><caption><span class="tablecap">Tabla 7. Opciones para almacenar archivos de app</span></caption><thead><tr><th style="width: 33.33333333333333%" id="d67479e3451" class="thleft">Opciones de almacenamiento de datos</th>
+<th style="width: 33.33333333333333%" id="d67479e3453" class="thleft">Descripción</th>
+<th style="width: 33.33333333333333%" id="d67479e3455" class="thleft">Cantidad de datos que pueden almacenarse está limitada por</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 33.33333333333333%" headers="d67479e3451 ">Opción 1: Almacenar los datos dentro de un contenedor durante el tiempo de ejecución</td>
+<td style="width: 33.33333333333333%" headers="d67479e3453 ">Con esta opción, los datos de app no persisten. Los datos están disponibles para el contenedor solamente durante el tiempo de ejecución. Cuando se vuelve a crear un contenedor, todos los datos se pierden.</td>
+<td style="width: 33.33333333333333%" headers="d67479e3455 ">Tamaño del contenedor</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67479e3451 ">Opción 2: Almacenar los datos en un volumen de contenedor</td>
+<td style="width: 33.33333333333333%" headers="d67479e3453 ">Cuando monte un volumen en Docker, este se montará en el sistema de archivos local. En <span class="keyword">IBM
+Bluemix Container Service</span>, el acceso al
+host de cálculo está restringido, por lo que no puede montar directorios de host en un contenedor. En su lugar,
+los volúmenes de ámbito de la organización
+se utilizan para la persistencia de datos entre los reinicios del contenedor. Los volúmenes se alojan en comparticiones de archivos aisladas que almacenan de forma segura datos de apps y gestionan el acceso y el permiso a los archivos. Debido a este aislamiento, se debe otorgar a los usuarios que no sean root del contenedor <a href="container_planning.html#nonroot_image">permiso de grabación sobre el volumen montado</a>. <p>Con esta opción, puede persistir y acceder a datos entre reinicios de contenedor, y compartir datos entre contenedores en un espacio. Cuando se suprime un contenedor, no se elimina el volumen asociado.</p>
+<div class="steps note"><span class="notetitle">Nota:</span> Para montar un volumen en un contenedor, debe crear uno primero; consulte <a href="container_volumes_ov.html#container_volumes_ui" title="Un volumen una ubicación de almacenamiento persistente para los datos que una app crea o los archivos que la app necesita para ejecutarse. Puede crear un volumen para el contenedor desde la interfaz gráfica de usuario (GUI) de Bluemix.">Crear un volumen con la GUI de <span class="keyword">Bluemix</span></a>.</div>
+</td>
+<td style="width: 33.33333333333333%" headers="d67479e3455 ">Tamaño de la compartición de archivos que aloja el volumen</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67479e3451 ">Opción 3: Conecte el contenedor a una base de datos local</td>
+<td style="width: 33.33333333333333%" headers="d67479e3453 ">Con esta opción, puede persistir y acceder a los datos de una base de datos in situ existente usando una <a href="container_security.html#container_vpn" title="Conectar de forma segura los contenedores únicos y los grupos de contenedores en una red de contenedores privada en Bluemix con un centro de datos corporativo utilizando el servicio IBM® Virtual Private Network (VPN). IBM VPN proporciona un canal de comunicaciones de extremo a extremo seguro sobre internet que está basado en la suite de protocolos Internet Protocol Security (IPsec) estándar del sector. El protocolo IPsec ofrece la autenticación de iguales a nivel de red, la integridad de datos y la confidencialidad de datos cifrando los paquetes que se intercambian entre los puntos finales VPN. Para configurar una conexión segura entre los contenedores en Bluemix y un centro de datos corporativo, debe tener instalados una pasarela VPN IPsec o un servidor SoftLayer en el centro de datos local. Con el servicio de IBM VPN, puede configurar una pasarela VPN por espacio y definir hasta 16 conexiones en distintos destinos.">conexión VPN segura</a> entre los contenedores de la nube y su entorno local. </td>
+<td style="width: 33.33333333333333%" headers="d67479e3455 ">El espacio en disco que está disponible para la base de datos local</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67479e3451 ">Opción 4: Enlazar un servicio de base de datos de <span class="keyword">Bluemix</span>
+con el contenedor.</td>
+<td style="width: 33.33333333333333%" headers="d67479e3453 ">Con esta opción, puede persistir y acceder a datos utilizando un servicio de base de datos que está enlazado al contenedor en la nube. La mayoría de servicios de base de datos de <span class="keyword">Bluemix</span> proporcionan espacio en disco para una cantidad de datos pequeña sin coste, para así poder probar sus características.</td>
+<td style="width: 33.33333333333333%" headers="d67479e3455 ">Servicio de base de datos y plan que elija</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e3549" id="nonroot_image"><h4 class="topictitle4" id="d67479e3549">Acceso de un usuario no root a volúmenes de contenedor de <span class="keyword">Bluemix</span></h4>
+<div class="body taskbody"><div class="section context">Si decide utilizar volúmenes de contenedor del ámbito de la organización para conservar datos de la app, asegúrese de que el usuario interno del contenedor tenga acceso de grabación sobre los archivos y carpetas de la vía de acceso de montaje del volumen. <p>Para <span class="keyword">IBM
+Bluemix Container Service</span>, la característica de espacio de nombres de usuario está habilitada para Docker Engine. Los espacios de nombres de usuario proporcionan aislamiento de modo que el usuario root del contenedor obtenga acceso a otros contenedores o al host de cálculo. Sin embargo, los volúmenes están en comparticiones de archivos
+NFS que son externas para los hosts de cálculo del contenedor. Los volúmenes están configurados para reconocer el usuario root en el contenedor, pero debido a que los volúmenes son externos con relación al contenedor, no reconocen los espacios de nombres de usuario.</p>
+<p>Para algunas aplicaciones, el único usuario dentro de un contenedor es el usuario root. Sin embargo, muchas aplicaciones especifican un usuario no root que escribe en la vía de acceso de montaje del contenedor. Si está diseñando una aplicación con un usuario no root que requiere permiso de escritura para el volumen, debe añadir los siguientes procesos al script de punto de entrada y al archivo Docker:</p>
+<ul><li>Cree un usuario no root.</li>
+<li>Añada temporalmente el usuario al grupo raíz.</li>
+<li>Cree un directorio en la vía de acceso de montaje con los permisos de usuario correctos.</li>
+</ul>
+<p></p>
+<p>Para obtener más información, consulte <a href="container_volumes_ov.html#container_volumes_write" title="Los usuarios no root no tiene permiso de escritura en la vía de acceso de montaje de volumen. Para otorgar permiso de escritura, debe editar el Dockerfile de la imagen para crear un directorio en la vía de acceso de montaje con el permiso correcto.">creación de su propio archivo Docker con los permisos adecuados para usuarios no root</a>.</p>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67479e3585" id="container_planning_types"><h3 class="topictitle3" id="d67479e3585">Tipos de contenedor</h3>
+<div class="body taskbody"><p class="shortdesc">Antes de crear un contenedor con <span class="keyword">IBM
+Bluemix Container Service</span>, decida sobre el tipo de contenedor que necesita. <span class="keyword">IBM
+Bluemix Container Service</span> ofrece distintos enfoques para crear contenedores en la nube. El enfoque que elija dependerá de los requisitos y dependencias de la app que se ejecuta en el contenedor.</p>
+<div class="section context"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67479e3656" id="single_container_type"><h4 class="topictitle4" id="d67479e3656">Contenedor único</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Un contenedor único en <span class="keyword">IBM
+Bluemix Container Service</span> es parecido a un contenedor que se crea en el entorno de Docker local. Los contenedores únicos es una buena forma de empezar con <span class="keyword">IBM
+Bluemix Container Service</span> y obtener información sobre cómo funcionan los contenedores en IBM Cloud y las características que <span class="keyword">IBM
+Bluemix Container Service</span> proporciona. También puede utilizar contenedores únicos para ejecutar pruebas de app simples o durante el proceso de desarrollo de una app. Puesto que un contenedor único se puede reiniciar y no está pensado para alojar un programa de larga ejecución, debe utilizar un grupo de contenedores para cualquier aplicación que requiera alta disponibilidad.</span></p>
+<div class="section context"><div class="p">Consideraciones sobre la velocidad de despliegue para contenedores únicos:<ul><li>El tamaño de la imagen tiene un impacto significativo. Cuando más pequeña sea la imagen, más rápido será el despliegue.</li>
+<li>Tras unas pocas primeras veces en las que se despliega una imagen, las velocidades de despliegue mejoran. Al principio, la imagen debe descargarse en el registro en el host. Los despliegues subsiguientes son más rápidos. </li>
+<li>La configuración de red puede tardar unos minutos.</li>
+<li>Un contenedor único se despliega más rápidamente que un grupo de contenedores debido a la configuración del direccionamiento de los grupos. </li>
+<li>Los despliegues con contenedores enlazados pueden no ser tan rápidos como otros despliegues debido a las conexiones que deben realizarse.</li>
+</ul>
+</div>
+
+<p>Para crear un contenedor único desde la interfaz gráfica de usuario de <span class="keyword">Bluemix</span>, consulte <a href="container_single_ui.html#container_single_ui" title="Utilice un contenedor para ejecutar pruebas simples a medida que desarrolla una app o servicio o para procesos a corto plazo que no requieren una alta disponibilidad. Para utilizar su propio frontal de red, puede asignar una dirección IP pública al contenedor.">Ejecución de tareas a corto plazo como contenedores únicos</a>. </p>
+
+<p>Para crear un contenedor único desde la CLI, consulte <a href="container_single_ui.html#container_single_cli" title="Crear un contenedor utilizando el mandato run. Un contenedor debe incluir una imagen. Si aún no tiene una, puede utilizar una de las imágenes predeterminadas certificadas por IBM disponibles de forma predeterminada en el registro de imágenes privado de la organización.">Ejecución de tareas a corto plazo como contenedores únicos con la interfaz de línea de mandatos (CLI)</a>. </p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67479e3747" id="container_groups_type"><h4 class="topictitle4" id="d67479e3747">Grupos de contenedores</h4>
+<div class="body taskbody"><p class="shortdesc">Un grupo de contenedores consta de varios contenedores únicos que se crean a partir de la misma imagen de contenedor y como consecuencia están configurados de la misma forma.</p>
+<div class="section context"><span class="ph">El número de instancias de grupos de contenedores que la app requiere dependerá de la carga de trabajo esperada y del tiempo en el que la app puede procesar una solicitud. Por ejemplo, la multitarea o la conectividad de red afecta a cuántas instancias pueden ser necesarias para la app.</span>
+<span class="ph">Para determinar el número de instancias deseadas, despliegue un contenedor único en Bluemix que se ejecuta en la app y lleve a cabo una prueba de carga en este contenedor. Si la app puede manejar, por ejemplo, 100 solicitudes por segundo, pero tiene previsto una carga de trabajo media de 300 solicitudes por segundo, el número deseado de instancias para el grupo de contenedor es 3.</span>
+<span class="ph">Para que el grupo de contenedores esté altamente disponible y más resistente a fallos, considere incluir más instancias que el mínimo para manejar la carga de trabajo esperada.
+Las instancias adicionales pueden manejar la carga de trabajo en el caso de que se bloque otra instancia. Para asegurarse la recuperación automática de una instancia fallida sin afectar la carga de trabajo, incluya una instancia adicional. Para la protección frente a dos anomalías simultáneas, incluya dos instancias adicionales. Esta configuración es un patrón
+<var class="keyword varname">N+2</var>, donde <var class="keyword varname">N</var> es el número de instancias para manejar las solicitudes y <var class="keyword varname">+2</var> son dos instancias adicionales.</span><p>Un grupo de contenedores ofrece más opciones sin ningún coste para que su app esté altamente disponible. </p>
+<ul><li><a href="container_planning.html#group_loadbalancing" title="Los grupos de contenedores proporcionan equilibrio de carga incorporado que direcciona el tráfico entrante uniformemente (rotativa) a las instancias de contenedor en el grupo. Cuando se crea un grupo de contenedores o se añaden instancias a un grupo existente, el equilibrio de carga de habilita tanto si se añaden instancias manualmente o se vuelve a crear una instancia durante el proceso de recuperación automática.">Equilibrio de carga incorporado</a></li>
+<li><a href="container_planning.html#group_anti-affinity" title="Puede elegir si desea habilitar la característica de antiafinidad cuando crea un grupo de contenedores utilizando la opción --anti en el mandato bx ic group-create.">Antiafinidad</a> para dispersar instancias de grupos de contenedores entre varios nodos de cálculo físicos</li>
+<li><a href="container_planning.html#group_autorecovery" title="Puede elegir si desea habilitar la recuperación automática al crear un grupo de contenedores utilizando la opción --auto en el mandato bx ic group-create.">Recuperación automática</a> de instancias de grupos de contenedores erróneas</li>
+<li><a href="container_planning.html#group_autoscaling" title="Los grupos de contenedores ofrecen la posibilidad de escalar automáticamente instancias de grupos de contenedores en función de la CPU y de la memoria que utiliza la app.">Escalado automático</a> de instancias de grupos de contenedor basado en el uso de la CPU y de la memoria</li>
+</ul>
+Para aumentar la disponibilidad de un grupo de contenedores todavía más, puede crear otro grupo de contenedores que se base en la misma imagen y que está correlacionada con la misma ruta. Cuando el primer grupo de contenedores, el segundo puede encargarse de toda la carga de trabajo. Elija entre las siguientes opciones para dispersar el segundo grupo de contenedores entre la arquitectura de <span class="keyword">IBM
+Bluemix Container Service</span>. <ul><li><a href="container_ha.html#container_ha_space" title="Puede crear dos grupos de contenedores a partir de la misma imagen en el mismo espacio de Bluemix y correlacionar la misma ruta a los dos grupos. Con esta configuración, si un grupo de contenedores o el equilibrador de carga para un grupo pasa a estar inactivo, el tráfico se direcciona al otro grupo de contenedores.">Cree un segundo grupo de contenedores dentro del mismo espacio</a>. </li>
+<li><a href="container_ha_org.html">Disperse grupos de contenedores por varios espacios utilizando zonas de disponibilidad de <span class="keyword">IBM
+Bluemix Container Service</span></a>.</li>
+<li><a href="container_ha.html#container_ha_regions" title="Si configura el nombre de dominio de la app con un Sistema de nombres de dominio (DNS) que proporciona equilibrio de carga global, puede crear dos grupos de contenedores a partir de la misma imagen en distintas regiones Bluemix que utilizan el mismo nombre de host en la ruta. Con esta configuración, puede permitir que se produzca el equilibrio de carga basándose en la región en la que se encuentra el usuario. Si el grupo de contenedores, o el hardware, o incluso todo el centro de datos de una región pasa a estar inactivo, el tráfico se redirecciona al grupo de contenedores que se despliega en otra región.">Disperse grupos de contenedores por varias
+regiones de <span class="keyword">Bluemix</span></a>. </li>
+</ul>
+<div class="p">Consideraciones sobre la velocidad de despliegue para grupos de contenedores:<ul><li>El tamaño de la imagen tiene un impacto significativo. Cuando más pequeña sea la imagen, más rápido será el despliegue.</li>
+<li>Tras unas pocas primeras veces en las que se despliega una imagen, las velocidades de despliegue mejoran. Al principio, la imagen debe descargarse en el registro en el host. Los despliegues subsiguientes son más rápidos. </li>
+<li>La configuración de red puede tardar unos minutos.</li>
+<li>Un contenedor único se despliega más rápidamente que un grupo de contenedores debido a la configuración.</li>
+<li>Un grupo de contenedores que no está asociado a una ruta se despliega más rápidamente que uno con una ruta.</li>
+<li>Los grupos de contenedores que no tienen habilitado la antiafinidad son más rápidos que los grupos de contenedores con antiafinidad. Con antiafinidad, los números de host que se especifican deben descargar cada uno las capas de imágenes.</li>
+</ul>
+</div>
+<p>Para crear un grupo de contenedores desde la interfaz gráfica de usuario de <span class="keyword">Bluemix</span>, revise el tema <a href="container_ha.html#container_group_ui" title="Cree y despliegue un grupo de contenedores escalable desde la interfaz gráfica de usuario (GUI) de Bluemix. Un grupo de contenedores incluye dos o más contenedores que se ejecutan en la misma imagen. Utilice grupos de contenedores para servicios a largo plazo en ejecución con cargas de trabajo que requieren escalabilidad y fiabilidad, o para realizar pruebas a la escala necesaria.">Ejecutar un grupo de contenedores desde la interfaz gráfica de usuario de <span class="keyword">Bluemix</span></a>. </p>
+<p>Para crear un grupo de contenedores desde la CLI, consulte <a href="container_ha.html#container_group_cli" title="Cree y despliegue un grupo de contenedores escalable desde la CLI de IBM Bluemix Container Service. Un grupo de contenedores incluye dos o más contenedores que se ejecutan en la misma imagen. Utilice grupos de contenedores para servicios a largo plazo en ejecución con cargas de trabajo que requieren escalabilidad y fiabilidad, o para realizar pruebas a la escala necesaria.">Ejecutar un grupo de contenedores desde la CLI</a>. </p>
+</div></div>
+<article class="topic task nested4" role="article" aria-labelledby="d67479e3929" id="group_loadbalancing"><h5 class="topictitle5" id="d67479e3929">Equilibrio de carga para un grupo de contenedores</h5>
+<div class="body taskbody"><p class="shortdesc">Los grupos de contenedores proporcionan equilibrio de carga incorporado que direcciona el tráfico entrante uniformemente (rotativa) a las instancias de contenedor en el grupo. Cuando se crea un grupo de contenedores o se añaden instancias a un grupo existente, el equilibrio de carga de habilita tanto si se añaden instancias manualmente o se vuelve a crear una instancia durante el proceso de recuperación automática. </p>
+<div class="section context"><div class="p"><img id="group_loadbalancing__loadbalancing_gif" src="images/container_group_loadbalancing.gif" longdesc="transcript_loadbalancing.html" alt="Los usuarios se direccionan a instancias de grupo para distribuir de forma equitativa la carga de trabajo.">
+<a href="../api/content/containers/images/container_group_loadbalancing_infinite.gif" rel="external" target="_blank" title="¿Desea verlo de nuevo? Vuelva a cargar esta animación en un nuevo separador para volverla a ver. (Abre en una nueva sesión o ventana)"><img src="images/refresh.png" alt="icono Recargar"></a><ul><li><span class="keyword calloutlabel">&nbsp;A&nbsp;</span>: Grupo de contenedores con tres instancias</li>
+<li><span class="keyword calloutlabel">&nbsp;B&nbsp;</span>: Equilibrador de carga para el grupo de contenedores</li>
+<li><span class="keyword calloutlabel">&nbsp;1, 2, 3&nbsp;</span>: Instancias en el grupo de contenedores</li>
+</ul>
+</div>
+
+<p>Después de haber añadido una instancia nueva al grupo de contenedores, el equilibrador de carga realiza la conexión de zócalo TCP para determinar cuándo empezar a enviar tráfico a la nueva instancia del contenedor. Tan pronto como la instancia de contenedor empieza a escuchar en su puerto definido, el equilibrador de carga empieza a enviar tráfico a dicha instancia. El equilibrador de carga asigna al grupo una dirección IP privada para que otros contenedores o servicios del mismo espacio puedan acceder al grupo. </p>
+
+<p>Puesto que la dirección IP privada se asigna al grupo y no a instancias individuales, esta dirección no cambia cuando se añaden instancias al grupo o cuando se vuelve a crear una instancia durante el proceso de recuperación automática. Para encontrar esta dirección IP privada, ejecute <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp>.</p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67479e3989" id="group_anti-affinity"><h5 class="topictitle5" id="d67479e3989">Antiafinidad para un grupo de contenedores</h5>
+<div class="body taskbody"><p class="shortdesc">Puede elegir si desea habilitar la característica de antiafinidad cuando crea un grupo de contenedores utilizando la opción <samp class="ph codeph">--anti</samp> en el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>.</p>
+<div class="section context"><p><span class="ph">Cuando la antiafinidad está habilitada, las instancias de contenedor se dispersan por los distintos nodos de cálculo físicos, lo que reduce la posibilidad de que los contenedores se bloqueen debido a anomalías en el hardware.</span></p>
+
+<p>Para utilizar la opción
+<samp class="ph codeph">--anti</samp> de la CLI, debe tener instalado el plug-in de <span class="keyword">IBM
+Bluemix Container Service</span> (<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) versión 0.8.934 o posterior. Es posible que no pueda utilizar esta opción con tamaños de grupos más grandes porque cada organización y región de <span class="keyword">Bluemix</span> tiene un conjunto limitado de nodos de cálculo disponibles para el despliegue. Si el despliegue no se ejecuta de forma satisfactoria, reduzca el número de instancias de contenedor en el grupo o elimine la opción <samp class="ph codeph">--anti</samp>.</p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67479e4055" id="group_autorecovery"><h5 class="topictitle5" id="d67479e4055">Recuperación automática para un grupo de contenedores</h5>
+<div class="body taskbody"><p class="shortdesc">Puede elegir si desea habilitar la recuperación automática al crear un grupo de contenedores utilizando la opción
+<samp class="ph codeph">--auto</samp> en el mandato <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>. </p>
+<div class="section context"><p><img id="group_autorecovery__autorecovery_gif" src="images/container_group_autorecovery.gif" longdesc="transcript_autorecovery.html" alt="Cuando falla una instancia de un grupo, se elimina y se inicia una nueva instancia. A continuación hay un enlace a una descripción de texto.">
+<a href="../api/content/containers/images/container_group_autorecovery_infinite.gif" rel="external" target="_blank" title="¿Desea verlo de nuevo? Vuelva a cargar esta animación en un nuevo separador para volverla a ver. (Abre en una nueva sesión o ventana)"><img src="images/refresh.png" alt="icono Recargar"></a></p>
+
+<p><span class="ph" id="group_autorecovery__auto-recovery">Cuando se habilite la recuperación automática para un grupo de contenedores y el
+grupo se haya estado ejecutando 10 minutos, el equilibrador de carga del grupo comenzará a comprobar de forma regular el
+estado de cada instancia de contenedor en el grupo mediante solicitudes HTTP. Si una instancia de contenedor no responde
+en el espacio de 100 segundos, se marcará como inactiva. Las instancias de contenedor inactivas se eliminarán del grupo
+y las volverá a crear la recuperación automática. La recuperación automática intentará recuperar instancias de contenedor en
+un grupo 3 veces. Tras el tercer intento, la recuperación automática no recuperará ninguna instancia de contenedor en
+el grupo durante 60 minutos. Tras 60 minutos, el proceso de recuperación automática empezará de nuevo.</span></p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67479e4107" id="group_autoscaling"><h5 class="topictitle5" id="d67479e4107">Escalado automático para un grupo de contenedores</h5>
+<div class="body taskbody"><p class="shortdesc">Los grupos de contenedores ofrecen la posibilidad de escalar automáticamente instancias de grupos de contenedores en función de la CPU y de la memoria que utiliza la app.</p>
+<div class="section context">Puede definir políticas de escalado automático que determinen cuándo se debe añadir o eliminar una instancia del grupo. De este modo, puede escalar automáticamente el grupo de contenedores en función de la carga de trabajo de la app. Actualmente, la versión beta de la función de escalado automático está disponible para la región de Londres de la nueva consola de Bluemix. Las opciones de escalado automático aparecen cuando se crea el grupo de contenedores.<p>Para obtener más información sobre el escalado automático de instancias de grupos de contenedores, consulte <a href="container_ha.html#container_group_ui_as" title="La función de escalado automático para contenedores ha quedado en desuso. Puede sustituir las funciones utilizando IBM Bluemix Container Service. Para ver detalles, consulte el apartado sobre Retirada de la función de escalado automático.">Escalado automático de grupos de contenedores (en desuso)</a>.</p>
+</div></div>
+</article></article><article class="topic task nested3" role="article" aria-labelledby="d67479e4159" id="docker_compose_type"><h4 class="topictitle4" id="d67479e4159">Docker Compose</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">Algunas apps constan de varios componentes, tales como base de datos, servicios y memorias caché, donde cada componente debe ejecutarse en su propio contenedor. Como coordinar todos los contenedores para iniciar sesión, enlazar y concluirlos todos juntos puede ser difícil, puede utilizar Docker Compose para configurar
+el despliegue de multicontenedor y ejecutarlo solamente con un mandato. Piense en Docker Compose como una recopilación de instancias de contenedor único donde cada contenedor está basado en su propia imagen y configuración.</span> Configure el
+despliegue de multicontenedor una vez y despliéguelo en <span class="keyword">Bluemix</span>. </p>
+<div class="section context"><div class="steps note"><span class="notetitle">Nota:</span> Docker Compose no da soporte al concepto de grupo de <span class="keyword">IBM
+Bluemix Container Service</span>, por lo que debe utilizar sus propias herramientas para abordar el equilibrio de carga, la recuperación automática y el escalado automático de su app. </div>
+
+<div class="p">Consideraciones sobre la velocidad de despliegue para Docker Compose:<ul><li>Un despliegue de Docker Compose puede no ser tan rápido como otros despliegues porque se tienen que configurar despliegues coordinados.</li>
+<li>El tamaño de la imagen tiene un impacto significativo. Cuando más pequeña sea la imagen, más rápido será el despliegue.</li>
+<li>Tras unas pocas primeras veces en las que se despliega una imagen, las velocidades de despliegue mejoran. Al principio, la imagen debe descargarse en el registro en el host. Los despliegues subsiguientes son más rápidos. </li>
+<li>La configuración de red puede tardar unos minutos.</li>
+</ul>
+</div>
+
+<p>Para configurar un despliegue de multicontenedor con Docker Compose, consulte <a href="container_single_ui.html#container_compose_intro" title="Si tiene apps con varios componentes, tales como bases de datos, servicios y memorias caché, coordinar todos los contenedores para iniciarlos y concluirlos juntos puede ser un trabajo difícil. En esta guía de aprendizaje, aprenderá a desplegar y ejecutar la app como un despliegue de multicontenedor en una arquitectura de microservicios utilizando un único mandato de Docker Compose. Cada contenedor que forma parte de este sistema se basa en una definición de servicio de Docker Compose y se ejecuta en su propio entorno aislado.">Guía de aprendizaje: Creación de un despliegue de multicontenedor con Docker Compose y IBM Bluemix Container Service</a>. </p>
+</div></div>
+</article></article><article class="topic concept nested2" role="article" aria-labelledby="d67479e4222" lang="es-es" id="container_planning_monlog"><h3 class="topictitle3" id="d67479e4222">Supervisión y registro</h3>
+<div class="body conbody"><p class="shortdesc">En <span class="keyword">Bluemix</span>, los contenedores incorporan
+supervisión y registro, lo que permite seguir muy de cerca el estado de los contenedores.</p>
+<div class="note important"><span class="importanttitle">Importante:</span> Este servicio no está pensado para procesar datos confidenciales.</div>
+<p><span class="keyword">IBM
+Bluemix</span> ofrece prestaciones de supervisión y registro basadas en la plataforma. Los datos de métricas y registros pueden recopilarse desde instancias de cálculo, como contenedores, que se están ejecutando en la nube o desde otros orígenes. Los datos agregados desde varios orígenes podrán visualizarse para su análisis, conocimiento y acción.</p>
+<figure class="fignone" id="container_planning_monlog__fig_architecture"><figcaption>Figura 1. Arquitectura de los servicios de supervisión y registro</figcaption><div class="image"><object data="images/architecture_logmet.svg"><img src="images/architecture_logmet.jpg" alt="Arquitectura de los servicios de supervisión y registro"></object></div></figure>
+<dl><dt class="dlterm">Supervisión</dt>
+<dd><span class="ph" id="container_planning_monlog__monitoring">Las medidas de los contenedores se recopilan desde fuera, sin tener que instalar ni mantener agentes dentro del contenedor. Los agentes que están dentro del contenedor pueden sufrir importantes sobrecargas y tiempos de configuración para instancias en la nube ligeras y breves y grupos de escalado automático, en los que los contenedores
+pueden crearse y destruirse rápidamente. Este método de recopilación de datos fuera de banda se deshace de estos retos
+y elimina la carga de supervisión de los usuarios.</span></dd>
+<dd class="ddexpand" id="container_planning_monlog__default_metrics"><p>Un proceso que se ejecuta en el host efectúa una supervisión sin agentes para obtener las medidas. Este proceso, que se denomina <dfn class="term">rastreador</dfn>, recopila constantemente la información siguiente de todos los contenedores.</p>
+
+<div class="p"><ul><li>CPU</li>
+<li>Memoria </li>
+<li>Información de red</li>
+</ul>
+</div>
+
+<p>Estos datos de medida se recopilan en Graphite y se visualizan en la interfaz de usuario de <span class="keyword">Bluemix</span> y en la vista de supervisión Avanzado. La información de contabilidad de grupos y las convenciones de Docker sirven como mecanismo básico para recopilar datos de supervisión.</p>
+
+<p>Puede ver una lista de plug-ins que se instalan para recopilar los datos en <span class="ph filepath">/etc/collectd/collectd.conf</span>. Para obtener más información sobre la funcionalidad de estos plug-ins, consulte la <a href="https://collectd.org/documentation/manpages/collectd.conf.5.shtml" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">documentación collectd</a>.</p>
+</dd>
+</dl>
+<dl><dt class="dlterm">Registro</dt>
+<dd><span class="ph" id="container_planning_monlog__logging">De forma similar a las métricas, los registros de contenedor se supervisan y se reenvían desde fuera del contenedor utilizando rastreadores. Los datos se envían mediante los rastreadores a un <a href="https://www.elastic.co/products/elasticsearch" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">Elasticsearch</a> multiarrendatario en Bluemix, igual que los registros recopilados por otros agentes que están dentro del contenedor, pero sin la dificultad de tener que instalar los agentes dentro del contenedor.</span></dd>
+<dd class="ddexpand"><p>Los rastreadores recuperan información de estas ubicaciones de forma predeterminada.</p>
+<ul id="container_planning_monlog__default_logs"><li><span class="ph filepath">/var/log/messages</span>: mensajes del sistema.</li>
+<li><span class="ph filepath">/docker.log</span>: los registros de Docker. <p>El archivo de registro de Docker no se almacena como archivo dentro del contenedor, pero se recopila igualmente. Este archivo de registro se recopila de forma predeterminada, ya que se trata de la convención estándar de Docker para exponer la información
+<samp class="ph codeph">stdout</samp> (salida estándar) y <samp class="ph codeph">stderr</samp> (error estándar) del contenedor. Si un proceso del contenedor se registra en <samp class="ph codeph">stdout</samp> o <samp class="ph codeph">stderr</samp>, se recopilará dicha información.</p>
+</li>
+</ul>
+Para recopilar registros adicionales, añada la variable de entorno <samp class="ph codeph">LOG_LOCATIONS</samp> con una
+vía de acceso al archivo de registro al crear el contenedor en la <a href="container_single_ui.html#gui__env_keys_group">GUI</a> o en la <a href="container_single_ui.html#container_single_cli" title="Crear un contenedor utilizando el mandato run. Un contenedor debe incluir una imagen. Si aún no tiene una, puede utilizar una de las imágenes predeterminadas certificadas por IBM disponibles de forma predeterminada en el registro de imágenes privado de la organización.">CLI</a>.</dd>
+</dl>
+<p>Para obtener más información sobre cómo recopilar registros y métricas, así como la forma de crear paneles de control personalizados, consulte <a href="../services/cloud-monitoring/containers/analyzing_metrics_bmx_ui.html#analyzing_metrics_bmx_ui">Supervisión y registro de contenedores</a></p>
+</div>
+<aside role="complementary" aria-labelledby="d67479e4222"></aside></article></article></article></div></main></body></html>

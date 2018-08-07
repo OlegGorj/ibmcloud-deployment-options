@@ -1,0 +1,1162 @@
+<!DOCTYPE html><html lang="pt-br">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="Contêineres altamente disponíveis significa menos tempo de inatividade para seu app. Quanto mais amplamente você distribuir a configuração do contêiner, menos provável que os usuários tenham que experimentar tempo de inatividade com o app. É possível obter maior disponibilidade usando recursos integrados do IBM Bluemix Container Service para aumentar a resiliência contra potenciais condições de falha, como falhas de host, de rede ou de software de aplicativo.">
+<meta name="keywords" content="grupo de contêineres, contêineres, IBM Containers, alta disponibilidade, painel, gui, CLI, bx ic, group-create, autoscaling, ajuste de escala automático, auto-scaling, ajuste de escala, balanceamento de carga, rota, Compartilhar, atualizando, regiões, grupos de contêineres, endereço ip, privada, equilibrador de carga, remover, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "pt-br",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Executando processos altamente disponíveis como grupos de contêineres com o IBM Bluemix Container Service</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d49584e6" id="container_ha"><h1 class="topictitle1" id="d49584e6">Executando processos altamente disponíveis como grupos de contêineres</h1>
+<div class="abstract"><div class="shortdesc">Contêineres altamente disponíveis significa menos tempo de inatividade para seu app. Quanto mais amplamente você distribuir a configuração do contêiner, menos provável que os usuários
+tenham que experimentar tempo de inatividade com o app. É possível obter maior
+disponibilidade usando recursos integrados do
+<span class="keyword">IBM®
+Bluemix Container Service</span> para
+aumentar a resiliência contra potenciais condições de falha, como falhas de host, de rede
+ou de software de aplicativo.</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Atenção:</span> <span class="ph">Avaliações grátis para o <span class="ph">contêineres únicos e escaláveis</span>
+não estão disponíveis. <a href="cs_ov.html" title="O IBM Bluemix Container Service combina o Docker e o Kubernetes para entregar ferramentas poderosas, uma experiência intuitiva do usuário e a segurança e o isolamento integrados para automatizar a implementação, operação, ajuste de escala e monitoramento de apps conteinerizados por um cluster de hosts de cálculo independente usando as APIs do Kubernetes.">Saiba mais sobre gerenciamento de
+cluster e migração para o Kubernetes no <span class="keyword">IBM
+Bluemix Container Service</span> no <span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Nesta página:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#ha_groups">Opções para configurar grupos de contêineres</a> por disponibilidade<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Executando serviços de longo prazo como grupos de contêineres por meio da <a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">GUI</a> ou da <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Automaticamente <a href="container_ha.html#container_group_ui_as" title="O recurso Auto-scaling for Containers está sendo descontinuado. É possível substituir as funções usando o IBM Bluemix Container Service. Para obter detalhes, veja Aposentadoria do Auto-scaling.">ajustando a escala de grupos</a> (descontinuado)<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_migrate" title="Se precisar que mover um grupo de contêiner para outro espaço na mesma organização, será possível criar um segundo grupo de contêiner com a mesma rota. Em seguida, será possível remover o primeiro grupo sem causar tempo de inatividade para seu app.">Movendo grupos</a> para outro espaço<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Atualizando um app que é executado em seu grupo de contêiner usando a <a href="container_ha.html#container_group_update_ui" title="Para atualizar um app que está em execução em um grupo de contêiner, deve-se atualizar a imagem e implementar um novo grupo de contêiner a partir dela. Durante o processo de atualização, você não precisa parar o grupo de contêiner em execução antigo. É possível criar um novo grupo de contêiner, mapear as informações de rota existentes para ele e, em seguida, remover o mapeamento da rota do grupo de contêiner desatualizado. Seu novo app é implementado sem qualquer tempo de inatividade.">GUI</a> ou a<br>
+<a href="container_ha.html#container_group_update_cli" title="Para atualizar um app que está em execução em um grupo de contêiner, deve-se atualizar a imagem e implementar um novo grupo de contêiner a partir dela. Durante o processo de atualização, você não precisa parar o grupo de contêiner em execução antigo. É possível criar um novo grupo de contêiner, mapear as informações de rota existentes para ele e, em seguida, remover o mapeamento da rota do grupo de contêiner desatualizado. Seu novo app é implementado sem qualquer tempo de inatividade.">CLI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Executando grupos altamente disponíveis <a href="container_ha.html#container_ha_space" title="É possível criar dois grupos de contêineres a partir da mesma imagem no mesmo espaço do Bluemix e mapear a mesma rota para ambos os grupos. Com essa configuração, se um grupo de contêiner ou o balanceador de carga para um grupo ficar inativo, o tráfego será roteado para o outro grupo de contêiner.">no mesmo espaço</a>,<br>
+<a href="container_ha_org.html">em espaços<br>
+diferentes</a> ou <a href="container_ha.html#container_ha_regions" title="Se você configurar o nome de domínio de seu app com um Sistema de Nomes de Domínio (DNS) que fornece balanceamento de carga global, será possível criar dois grupos de contêineres a partir da mesma imagem em diferentes regiões do Bluemix que usam o mesmo nome de host na rota. Com essa configuração, é possível permitir que o balanceamento de carga ocorra com base na região em que o usuário está. Se o grupo de contêiner ou o hardware ou mesmo um datacenter inteiro em uma região ficar inativo, o tráfego será roteado para o grupo de contêiner que estiver implementado em outra região.">em diferentes regiões</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • Conectando a um <a href="container_ha.html#container_group_private_ip" title="Identifique o endereço IP do balanceador de carga de um grupo de contêiner para acessar o grupo sem expor o grupo ao público.">grupo privado</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_ha.html#container_group_remove" title="Para maximizar o uso de sua cota, remova os grupos de contêineres que não estão em uso ocasionalmente.">Removendo</a> grupos</div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d49584e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d49584e197" id="ha_groups"><h2 class="topictitle2" id="d49584e197">Opções para configurar grupos de contêineres por disponibilidade</h2>
+<div class="body taskbody"><div class="section context" id="ha_groups__context_nwq_pf1_4z"><p>Revise estas configurações de grupos de contêineres em potencial que são ordenadas com grau crescente de disponibilidade:</p>
+
+<div class="image"><img id="ha_groups__image_owq_pf1_4z" src="images/container_ha_roadmap.png" alt="Roteiro de alta disponibilidade"></div>
+<ol id="ha_groups__ol_pwq_pf1_4z"><li>Um grupo de contêiner com recuperação automática e n+1 instâncias padrão</li>
+<li>Um grupo de contêiner com recuperação automática, n+2 instâncias padrão e antiafinidade</li>
+<li>Dois grupos de contêineres com recuperação automática, n+2 instâncias padrão e antiafinidade executados no
+mesmo espaço e que compartilham a mesma rota</li>
+<li>Dois grupos de contêineres com recuperação automática, n+2 instâncias padrão e antiafinidade executados em
+espaços diferentes e que compartilham a mesma rota</li>
+<li>Dois grupos de contêineres com recuperação automática, n+2 instâncias padrão e antiafinidade executados em
+zonas de disponibilidade diferentes do <span class="keyword">IBM
+Bluemix Container Service</span>
+e que compartilham a mesma rota</li>
+<li>Dois grupos de contêineres com recuperação automática, n+2 instâncias padrão e antiafinidade executados em
+regiões diferentes e que compartilham a mesma rota</li>
+</ol>
+
+<div class="p">Saiba mais sobre como é possível usar essas técnicas para aumentar a disponibilidade de seu app:<dl><dt class="dlterm">Implementar apps em grupos de contêineres em vez de em contêineres únicos</dt>
+<dd><span class="ph">Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma
+imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade
+e confiabilidade ou para testar na escala necessária.</span>É possível criar grupos de contêineres a partir
+da <a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">GUI do <span class="keyword">Bluemix</span></a> ou da <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">Ativar a recuperação automática no grupo de contêiner</dt>
+<dd><span class="ph">Quando a recuperação automática é ativada para um grupo de contêiner e
+o grupo fica em execução durante 10 minutos, o balanceador de carga do grupo inicia a verificação regular do
+funcionamento de cada instância do contêiner no grupo por meio de solicitações de HTTP. Se uma instância do contêiner não
+responder dentro de 100 segundos, ela será marcada como inativa. As instâncias de contêiner inativas são removidas do
+grupo e recriadas pela recuperação automática. A recuperação automática tenta recuperar instâncias do contêiner em
+um grupo 3 vezes. Após a terceira tentativa, a recuperação automática não recuperará nenhuma instância de contêiner no
+grupo durante 60 minutos. Depois de 60 minutos, o processo de recuperação automática inicia novamente.</span> É possível
+criar grupos de contêiner com recuperação automática na
+<a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">GUI do
+<span class="keyword">Bluemix</span></a> ou
+na <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">Incluir instâncias suficientes para a carga de trabalho de seu app, mais duas</dt>
+<dd><span class="ph">Para tornar seu grupo de contêiner altamente disponível e mais resiliente
+à falha, considere a inclusão de instâncias extras, além do mínimo, para manipular a carga de trabalho esperada.
+Instâncias extras podem manipular a carga de trabalho no caso de travamento de outra instância. Para assegurar a recuperação
+automática de uma instância com falha sem afetar a carga de trabalho, inclua uma instância extra. Para
+proteção contra duas falhas simultâneas, inclua duas instâncias extras. Essa configuração é um
+padrão <var class="keyword varname">N+2</var>, em que <var class="keyword varname">N</var> é o número de instâncias para manipular as
+solicitações e <var class="keyword varname">+2</var> são duas instâncias extras.</span> É possível especificar
+quantas instâncias incluir ao criar um grupo de contêiner na
+<a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">GUI
+do <span class="keyword">Bluemix</span></a>
+ou na <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">Difundir instâncias de contêiner pelos nós de cálculo</dt>
+<dd>Ao criar um grupo de contêiner, cada instância no grupo pode ser implementada no mesmo
+nó de cálculo físico. Essa configuração na qual as instâncias de contêiner existem no mesmo nó de cálculo é conhecida
+como afinidade ou colocação. Ao criar o grupo de contêiner na
+<a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a>, é possível
+difundir as instâncias de contêiner entre diferentes nós de cálculo físicos para
+aumentar a disponibilidade de seu app usando a opção de antiafinidade
+(<samp class="ph codeph">--anti</samp>). <div class="p"><div class="steps note"><span class="notetitle">Nota:</span> Para usar a opção <samp class="ph codeph">--anti</samp> na CLI, deve-se ter instalado o plug-in do
+<span class="keyword">IBM
+Bluemix Container Service</span>
+(<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) versão
+0.8.934 ou mais recente.</div>
+</div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">Criar múltiplos grupos de contêineres que usam a mesma rota</dt>
+<dd>É possível criar dois grupos de contêineres a partir da mesma imagem no mesmo espaço do <span class="keyword">Bluemix</span> que usa a mesma rota. Se ocorrer um erro em que as instâncias em um grupo de
+contêiner não sejam acessíveis, o tráfego do usuário será roteado automaticamente para o segundo grupo de contêiner. Para obter mais informações
+sobre como compartilhar uma rota entre os grupos de contêineres, consulte <a href="container_ha.html#container_ha_space" title="É possível criar dois grupos de contêineres a partir da mesma imagem no mesmo espaço do Bluemix e mapear a mesma rota para ambos os grupos. Com essa configuração, se um grupo de contêiner ou o balanceador de carga para um grupo ficar inativo, o tráfego será roteado para o outro grupo de contêiner.">Executando grupos de contêineres altamente disponíveis no mesmo espaço</a>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</dd>
+<dt class="dlterm">Difundir grupos de contêineres pelas zonas de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span></dt>
+<dd><span class="ph">Uma zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span>
+é um local dentro de uma região em que o <span class="keyword">IBM
+Bluemix Container Service</span> é executado. Quando o <span class="keyword">IBM
+Bluemix Container Service</span> é usado pela primeira vez em um espaço do <span class="keyword">Bluemix</span>, contêineres são criados na
+zona de disponibilidade padrão do <span class="keyword">IBM
+Bluemix Container Service</span>
+dessa região.</span>
+<div class="tablenoborder"><table summary="Zonas de disponibilidade do IBM Bluemix Container Service" id="ha_groups__table_qwq_pf1_4z" class="defaultstyle"><caption><span class="tablecap">Tabela 1. Zonas de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span></span></caption><thead><tr><th id="d49584e623" class="thleft">Região</th>
+<th id="d49584e625" class="thleft">Local do datacenter</th>
+<th id="d49584e627" class="thleft">Nomes da zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span></th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49584e623 ">SUL dos EUA</td>
+<td headers="d49584e625 ">Dallas 1</td>
+<td headers="d49584e627 ">dal09-01</td>
+</tr>
+<tr><td headers="d49584e623 ">SUL dos EUA</td>
+<td headers="d49584e625 ">Dallas 2</td>
+<td headers="d49584e627 ">dal09-02</td>
+</tr>
+<tr><td headers="d49584e623 ">SUL dos EUA</td>
+<td headers="d49584e625 ">Dallas 3</td>
+<td headers="d49584e627 ">dal10-03</td>
+</tr>
+<tr><td headers="d49584e623 ">United Kingdom</td>
+<td headers="d49584e625 ">Londres</td>
+<td headers="d49584e627 ">lon02-01</td>
+</tr>
+<tr><td headers="d49584e623 ">United Kingdom</td>
+<td headers="d49584e625 ">Amsterdã</td>
+<td headers="d49584e627 ">ams03-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Para migrar um espaço para outra zona de
+disponibilidade do
+<span class="keyword">IBM
+Bluemix Container Service</span>, consulte
+<a href="container_ha_org.html">container_ha_org.html</a>.</p>
+<div class="p"><div class="note important"><span class="importanttitle">Importante:</span> Depois de
+configurar seus espaços com diferentes zonas de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span>, é possível usar estes
+comandos para criar os grupos de contêineres.</div>
+Zona de disponibilidade 1 do <span class="keyword">IBM
+Bluemix Container Service</span>:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+<div class="p">Zona de disponibilidade 2 do
+<span class="keyword">IBM
+Bluemix Container Service</span>:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+</dd>
+<dt class="dlterm">Difundir grupos de contêineres pelas regiões</dt>
+<dd>Ao difundir grupos de contêineres pelas regiões do <span class="keyword">Bluemix</span>, é possível permitir que o balanceamento de carga
+ocorra com base na região em que o usuário está. Se o grupo de
+contêiner, hardware ou mesmo um datacenter
+inteiro em uma região ficar inativo, o tráfego será roteado para o grupo de contêiner que estiver implementado em
+outra região. <p>Para implementar grupos de contêiner em diversas regiões, consulte
+<a href="container_ha.html#container_ha_regions" title="Se você configurar o nome de domínio de seu app com um Sistema de Nomes de Domínio (DNS) que fornece balanceamento de carga global, será possível criar dois grupos de contêineres a partir da mesma imagem em diferentes regiões do Bluemix que usam o mesmo nome de host na rota. Com essa configuração, é possível permitir que o balanceamento de carga ocorra com base na região em que o usuário está. Se o grupo de contêiner ou o hardware ou mesmo um datacenter inteiro em uma região ficar inativo, o tráfego será roteado para o grupo de contêiner que estiver implementado em outra região.">Executando grupos de contêineres altamente disponíveis em regiões diferentes do Bluemix</a>.</p>
+<div class="p"><div class="note important"><span class="importanttitle">Importante:</span> Depois
+de configurar seu domínio customizado, você poderá usar esses comandos para criar grupos de contêiner.</div>
+
+Região 1:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d mydomain.net --name <var class="keyword varname">mylibertyimage1</var> --volume myvolume:/mydata/path registry.ng.bluemix.net/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+<div class="p">Região 2:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 --anti --desired 5 --auto -n <var class="keyword varname">mylibertyhost</var> -d eu-gb.mydomain.net --name <var class="keyword varname">mylibertyimage2</var> --volume myvolume:/mydata/path registry.eu-gb.bluemix.net/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">mylibertyimage</var></code></pre>
+</div>
+</dd>
+</dl>
+</div>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d49584e821" lang="pt-br" id="container_group_ui"><h2 class="topictitle2" id="d49584e821">Executando serviços de longo prazo como grupos de contêineres a partir da GUI do <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc">Crie e implemente um contêiner de grupo escalável a partir da GUI do <span class="keyword">Bluemix</span>. <span class="ph">Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma
+imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade
+e confiabilidade ou para testar na escala necessária.</span></p>
+<div class="section prereq"><div class="p">Antes de iniciar, considere os pré-requisitos a seguir. <ul><li>Você deve ter uma função de Desenvolvedor para o espaço do <span class="keyword">Bluemix</span> para criar um contêiner nele. Para
+obter mais informações sobre as permissões de cada função e como editar funções,
+consulte <span class="ph"><a href="../iam/users_roles.html">Usuários e
+funções</a></span>.</li>
+<li>Por meio da <span class="keyword">Bluemix</span>
+GUI, você cria um contêiner por meio de imagens públicas fornecidas pela IBM ou por meio de uma imagem existente em
+seu registro privado do <span class="keyword">Bluemix</span> de suas
+organizações. Para obter mais
+informações sobre como incluir uma imagem em seu <span class="keyword wintitle">Catálogo</span>, consulte <a href="container_images_adding_ov.html#container_images_adding_ov" title="Uma imagem de contêiner é a base para cada contêiner criado. Uma imagem é criada a partir de um Dockerfile, que é um arquivo que contém instruções para construir a imagem e construir artefatos, como um app, a configuração do app e suas dependências. Pense em uma imagem de contêiner como um arquivo executável (.exe ou .bin). Assim que você executa o arquivo de app executável, você cria uma instância de seu app. Ao executar um contêiner, você cria uma instância de contêiner da imagem.">Incluindo imagens do Docker no registro de imagens privadas do Bluemix de sua organização</a>.</li>
+<li>Se você souber que deseja ligar um serviço do
+<span class="keyword">Bluemix</span> ao
+contêiner, inclua o serviço do
+<span class="keyword">Bluemix</span> em seu
+espaço. Para obter mais informações, consulte <a href="container_integrations.html#container_integrations_binding" title="O IBM Bluemix possui uma lista de serviços e gerencia-os em nome dos desenvolvedores de apps. Para incluir um serviço do Bluemix para uso do contêiner, deve-se solicitar uma instância desse serviço e ligar o serviço ao contêiner.">Ligando um serviço a partir da GUI do Bluemix</a>.</li>
+<li>(Opcional) Se você souber que deseja um disco compartilhado que permita que os arquivos sejam acessíveis a partir de
+dentro de um grupo de contêiner, crie um volume antes de criar o grupo de contêiner. Para obter informações adicionais, consulte <a href="container_volumes_ov.html#container_volumes_cli" title="Um volume é um local de armazenamento persistente para os dados que um app cria ou os arquivos que o app requer para executar. É possível criar um volume para seu contêiner a partir da linha de comandos.">Criando volumes com a linha de comandos (CLI)</a>.</li>
+</ul>
+</div>
+</div><div class="section context"></div><p class="li stepsection">Para criar e implementar um grupo de contêineres:</p><ol class="steps"><li class="step stepexpand" data-hd-audience="yellow"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">No catálogo, selecione
+<span class="ph uicontrol">Contêineres</span> e escolha uma imagem.</span></span> Ambas as imagens que são fornecidas pela IBM e as imagens que estão armazenadas em seu registro privado do <span class="keyword">Bluemix</span> são exibidas. </li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">Se já houver um namespace configurado para sua organização, você não será solicitado a criar um e poderá
+continuar na próxima etapa. </span> Se ainda não houver um namespace especificado para sua organização, você será solicitado a configurar um para o
+registro de imagem.  Um namespace é um nome exclusivo para identificar seu registro privado no <span class="keyword">Bluemix</span>. O namespace é designado uma
+vez para uma organização e não pode ser mudado após sua criação. Caso você queira usar o <span class="keyword">IBM
+Bluemix Container Service</span> em múltiplas regiões do <span class="keyword">Bluemix</span>, deve-se configurar um namespace para
+cada região. 
+<div class="note tip" id="container_group_ui__d30993e138"><span class="tiptitle">Dica:</span> Observe as regras a seguir para o namespace:
+<ul id="container_group_ui__d30993e140"><li>Ele pode conter somente letras minúsculas, números ou sublinhados (_).</li>
+<li>Pode ter entre 4 e 30 caracteres. Se planeja gerenciar contêineres a partir da linha de comandos,
+é possível que prefira ter um namespace curto que possa ser digitado rapidamente.</li>
+<li>O seu nome deve ser exclusivo no <span class="keyword">Bluemix</span>.</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">Selecione um dos espaços do <span class="keyword">Bluemix</span>
+em sua organização.</span></li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__group_not_single"><span class="cmd">Em seguida, comece a definir seu grupo de contêineres.</span> A janela é aberta na guia <span class="ph uicontrol">Único</span>, por padrão, portanto, selecione a
+guia <span class="ph uicontrol">Escalável</span> para criar um grupo de contêiner.</li>
+<li class="step stepexpand" data-hd-audience="yellow">Opcional: <span class="cmd">Sob o nome da imagem, selecione a tag ou a versão da imagem a ser usada.</span></li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__enter_name"><span class="cmd">No campo <span class="ph uicontrol">Nome do grupo de contêineres</span>, insira um nome para o contêiner.</span> <div class="note tip"><span class="tiptitle">Dica:</span> O nome do contêiner
+deve iniciar com uma letra e, em seguida, pode incluir letras maiúsculas, letras minúsculas, números,
+pontos (.), sublinhados (_) ou hifens (-).</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__enter_instances"><span class="cmd">No campo <span class="ph uicontrol">Instâncias</span>, especifique o número de instâncias no grupo.</span> O padrão é <span class="ph uicontrol">2</span>. Cada instância é do mesmo tamanho e deve usar
+a mesma imagem. <span class="ph">O número de instâncias do grupo de contêiner que seu app requer depende
+da carga de trabalho esperada e do tempo em que uma solicitação pode ser processada pelo app. Por exemplo,
+a conectividade de multitarefas ou de rede afeta quantas instâncias podem ser necessárias para seu app.</span>
+
+<p><span class="ph">Para determinar o número de instâncias desejadas, implemente um contêiner
+único no Bluemix que execute seu app e execute um teste de carga neste contêiner. Se o app puder
+manipular, por exemplo, 100 solicitações por segundo, mas você estiver esperando uma carga de trabalho média de 300
+solicitações por segundo, o número desejado de instâncias para o grupo de contêiner será
+3.</span></p>
+
+<p><span class="ph">Para tornar seu grupo de contêiner altamente disponível e mais resiliente
+à falha, considere a inclusão de instâncias extras, além do mínimo, para manipular a carga de trabalho esperada.
+Instâncias extras podem manipular a carga de trabalho no caso de travamento de outra instância. Para assegurar a recuperação
+automática de uma instância com falha sem afetar a carga de trabalho, inclua uma instância extra. Para
+proteção contra duas falhas simultâneas, inclua duas instâncias extras. Essa configuração é um
+padrão <var class="keyword varname">N+2</var>, em que <var class="keyword varname">N</var> é o número de instâncias para manipular as
+solicitações e <var class="keyword varname">+2</var> são duas instâncias extras.</span> Se você achar que precisa
+de mais instâncias após o grupo ser implementado, será possível incluir mais instâncias
+sem ter de recriar o grupo.</p>
+
+<div class="note important"><span class="importanttitle">Importante:</span> Um grupo de contêiner deve incluir pelo menos 2 instâncias de
+contêiner. Se você incluir somente 1 instância no grupo e essa instância se tornar indisponível, seus
+usuários poderão experimentar tempo de inatividade para o app.</div>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">No campo <span class="ph uicontrol">Tamanho</span>, selecione um tamanho de contêiner.</span> O tamanho padrão é <span class="ph uicontrol" data-hd-audience="yellow">Micro (256 MB de memória, 16 GB
+de armazenamento)</span>. O tamanho
+escolhido afeta a quantia de memória e o espaço em disco que o contêiner obtém no host de cálculo durante o
+tempo de execução e não pode ser mudado após a criação do contêiner. Outros tamanhos disponíveis são
+<ul data-hd-audience="yellow" id="container_group_ui__d30993e184"><li>Pico (64 MB de memória, 4 GB de espaço em disco)</li>
+<li>Nano (128 MB de memória, 8 GB de espaço em disco)</li>
+<li>Minúsculo (512 MB de memória, 32 GB de espaço em disco)</li>
+<li>Pequeno (1 GB de memória, 64 GB de espaço em disco)</li>
+<li>Médio (2 GB de memória, 128 GB de espaço em disco)</li>
+<li>Grande (4 GB de memória, 256 GB de espaço em disco)</li>
+<li>Extra grande (8 GB de memória, 512 GB de espaço em disco)</li>
+<li>Duplamente grande (16 GB de memória, 1 TB de espaço em disco)</li>
+</ul>
+
+</li>
+<li class="step stepexpand" data-hd-audience="yellow" id="container_group_ui__route"><span class="cmd">Selecione a URL pública completa.</span> Essa URL também é chamada de rota. Ao usar um host e um domínio para o grupo de contêiner em vez
+de um endereço IP para uma instância de contêiner única, você está fornecendo balanceamento de carga para seu app.
+Seu grupo de contêiner pode não estar imediatamente disponível na URL pública após a construção, pois
+a conectividade de rede pode demorar até 5 minutos para ser resolvida.<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">No campo <span class="ph uicontrol">Host</span>, especifique o nome do host, como
+<span class="ph filepath"><var class="keyword varname">mycontainerhost</var></span>.</span> Não inclua sublinhados (_) no nome do host. </li>
+<li class="li substep substepexpand"><span class="cmd">Para o <span class="ph uicontrol">Domínio</span> do sistema, selecione
+<samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>.</span> O domínio do sistema já fornece um certificado SSL, portanto, é possível acessar seu grupo de contêiner
+com HTTPS sem nenhuma configuração adicional. Também é possível
+selecionar um domínio customizado que você tenha criado para sua organização. Para criar
+um domínio customizado, deve-se registrá-lo em um servidor DNS
+público, configurá-lo no
+<span class="keyword">Bluemix</span> e, em
+seguida, mapeá-lo para o domínio do sistema do
+<span class="keyword">Bluemix</span> no servidor
+DNS público. Depois que seu domínio customizado estiver mapeado para o domínio do sistema do
+<span class="keyword">Bluemix</span>, as
+solicitações de seu domínio customizado serão roteadas para seu aplicativo no
+<span class="keyword">Bluemix</span>. Ao criar
+um domínio customizado, não inclua sublinhados (_) no nome do domínio. Para obter mais
+informações sobre domínios customizados, consulte
+<a href="../manageapps/updapps.html#domain">Criando e
+usando um domínio customizado</a>. Para tornar seu domínio customizado seguro,
+<a href="../manageapps/secapps.html#ssl_certificate">faça
+upload de um certificado SSL</a>, para que seus grupos de contêiner possam ser
+acessados via HTTPS.  <p>O domínio da rota e o host combinados formam a URL completa da rota pública, como
+<samp class="ph codeph">http://<var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>,
+e devem ser exclusivos no
+<span class="keyword">Bluemix</span>.</p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" data-hd-audience="yellow"><span class="cmd">No campo <span class="ph uicontrol">porta HTTP</span>, especifique uma porta pública para publicar. </span> É possível digitar uma porta ou selecionar uma porta na lista
+suspensa. Ao digitar uma porta, é possível escolher entre UDP e TCP para indicar o
+protocolo IP que você deseja usar. Se você não especificar um protocolo, a porta será
+automaticamente exposta para tráfego TCP. A lista suspensa foi preenchida antecipadamente
+com as portas que foram especificadas no Dockerfile da imagem quando ela foi criada. Para os grupos de contêiner, você não pode incluir várias
+portas. <span class="ph">Quando você ligar uma rota, os contêineres em seu grupo deverão
+receber o tráfego HTTP na porta exposta do grupo. As portas não HTTP não podem ser expostas publicamente. Quando o tráfego HTTPS chega na
+porta exposta, o (Go)Router conclui a finalização do HTTPS. Em seguida, o protocolo HTTP é usado na
+rede virtual privada entre o (Go)Router e os contêineres. </span> <div class="p" id="container_group_ui__d30993e230">Se uma porta for especificada no Dockerfile para a
+imagem que você está usando, inclua essa porta.<div class="note tip"><span class="tiptitle">Dica:</span> <ul id="container_group_ui__d30993e233"><li>Para a imagem do Liberty Server certificada pela IBM ou uma versão
+modificada dessa imagem, insira a porta <kbd class="ph userinput">9080</kbd>.</li>
+<li>Para a imagem do Node.js certificada pela IBM ou uma versão modificada
+dessa imagem, insira qualquer porta, como a porta <kbd class="ph userinput">8000</kbd>.</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_group_ui__auto-recovery">Opcional: <span class="cmd">Ative a recuperação automática. Selecione <span class="ph uicontrol">Ativar a recuperação automática</span>.</span> A recuperação automática remove instâncias indisponíveis do contêiner e substitui-as por novas
+instâncias de contêiner.  <p><span class="ph">Quando a recuperação automática é ativada para um grupo de contêiner e
+o grupo fica em execução durante 10 minutos, o balanceador de carga do grupo inicia a verificação regular do
+funcionamento de cada instância do contêiner no grupo por meio de solicitações de HTTP. Se uma instância do contêiner não
+responder dentro de 100 segundos, ela será marcada como inativa. As instâncias de contêiner inativas são removidas do
+grupo e recriadas pela recuperação automática. A recuperação automática tenta recuperar instâncias do contêiner em
+um grupo 3 vezes. Após a terceira tentativa, a recuperação automática não recuperará nenhuma instância de contêiner no
+grupo durante 60 minutos. Depois de 60 minutos, o processo de recuperação automática inicia novamente.</span></p>
+</li>
+<li class="step stepexpand" id="container_group_ui__volume">Opcional: <span class="cmd">Defina o armazenamento de dados ou arquivos. Associe um volume existente a um
+contêiner ou grupo de contêiner.</span> Um volume é
+um disco compartilhado que permite que os arquivos sejam acessíveis a partir de um contêiner. O caminho no contêiner indica onde no sistema de arquivos do
+contêiner o volume está montado. 
+<div class="note restriction"><span class="restrictiontitle">Restrição:</span> É possível excluir volumes de seu espaço do <span class="keyword">Bluemix</span> usando somente a
+linha de comandos.</div>
+<ol type="a" class="ol substeps" id="container_group_ui__d30993e268"><li class="li substep"><span class="cmd">Clique em <span class="ph uicontrol">Designar um volume existente</span>.</span></li>
+<li class="li substep"><span class="cmd">Selecione o volume na lista suspensa.</span></li>
+<li class="li substep"><span class="cmd">No próximo campo, especifique um caminho no contêiner para mapear o volume. </span> Por exemplo, <span class="ph filepath">/var/lib/my_volume</span></li>
+<li class="li substep"><span class="cmd">Para especificar que um volume é somente leitura, selecione <span class="ph uicontrol">Somente leitura</span>.</span> Por padrão, os volumes são de leitura/gravação.</li>
+<li class="li substep"><span class="cmd">Para incluir vários volumes, clique em <span class="ph uicontrol">Designar um volume existente</span> e repita
+estas etapas.</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_group_ui__env_var">Opcional: <span class="cmd">Defina as variáveis de ambiente. </span> <ol type="a" class="ol substeps" id="container_group_ui__d30993e302"><li class="li substep substepexpand"><span class="cmd">Clique em <span class="ph uicontrol">Incluir uma nova variável de ambiente</span>.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Insira um nome para a variável de ambiente.</span></li>
+<li class="li substep substepexpand"><span class="cmd">No próximo campo, especifique um valor para a variável de ambiente.</span></li>
+<li class="li substep substepexpand"><span class="cmd">Para incluir diversas variáveis de ambiente, clique em <span class="ph uicontrol">Incluir uma nova
+variável de ambiente</span> e repita estas etapas.</span> <div class="tablenoborder"><table summary="" id="container_group_ui__d30993e322" class="defaultstyle"><caption><span class="tablecap">Tabela 2. Variáveis de ambiente sugeridas</span></caption><thead><tr><th id="d49584e1301" class="thleft">Variável de Ambiente</th>
+<th id="d49584e1303" class="thleft">Descrição</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49584e1301 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d49584e1303 ">Alguns serviços do
+<span class="keyword">Bluemix</span> não
+suportam a ligação direta com um contêiner. Nesse caso, é preciso criar um app Cloud
+Foundry e ligar o serviço do
+<span class="keyword">Bluemix</span> a ele. Em
+seguida, você liga o app ao contêiner usando <samp class="ph codeph">CCS_BIND_APP</samp>. O app Cloud
+Foundry age como ponte e permite que o
+<span class="keyword">Bluemix</span> injete as
+informações de VCAP_SERVICES do seu app ponte na instância do contêiner em execução. </td>
+</tr>
+<tr><td headers="d49584e1301 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">Nota:</span>  Quando um serviço não suportar o uso da variável de ambiente <samp class="ph codeph">CCS_BIND_SRV=</samp>,
+use <samp class="ph codeph">CCS_BIND_APP=</samp>.</div>
+</td>
+<td headers="d49584e1303 ">Para ligar um serviço do
+<span class="keyword">Bluemix</span> diretamente
+a um contêiner sem usar um app ponte, use <samp class="ph codeph">CCS_BIND_SRV</samp>. Essa ligação permite que o <span class="keyword">Bluemix</span> injete as informações de VCAP_SERVICES
+na instância de contêiner em execução. Para listar vários serviços do
+<span class="keyword">Bluemix</span>, inclua-os
+como parte da mesma variável de ambiente.</td>
+</tr>
+<tr><td headers="d49584e1301 "><div class="lines">(Descontinuado) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d49584e1303 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">Essa variável de ambiente foi descontinuada:</span> Em
+seu lugar, use <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> ou
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp>
+para acesso externo aos contêineres. Para obter mais informações, consulte
+<a href="container_security.html#container_cli_login_exec" title="Se você tiver que efetuar login no contêiner em execução, será possível usar bx ic exec.">Efetuando login em um contêiner com exec</a>.</div>
+<span class="ph">Para
+incluir uma chave SSH em um contêiner quando criá-lo, é possível usar <samp class="ph codeph">CCS_API_KEY</samp>.</span></td>
+</tr>
+<tr><td headers="d49584e1301 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d49584e1303 "><span class="ph" id="container_group_ui__d31074e1433">Para incluir um arquivo de log para que seja monitorado no contêiner, inclua a
+variável de ambiente <samp class="ph codeph">LOG_LOCATIONS</samp> com um caminho no arquivo de log.</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_group_ui__service">Opcional: <span class="cmd">Defina outros serviços para o app. Ligue um serviço do
+<span class="keyword">Bluemix</span> do
+espaço do <span class="keyword">Bluemix</span>
+para o contêiner. Na seção <span class="ph uicontrol">Ligação de serviços</span>, selecione uma
+instância de serviço do
+<span class="keyword">Bluemix</span> e clique em
+<span class="ph uicontrol">Incluir</span> para ligar o serviço ao contêiner.</span> Se você não tiver nenhum serviço do
+<span class="keyword">Bluemix</span> incluído no
+espaço ainda, nenhum dos serviços será exibido no menu.</li>
+<li class="step stepexpand" id="container_group_ui__create"><span class="cmd">Implemente o contêiner e aguarde sua conclusão. Clique em <span class="ph uicontrol">CRIAR</span>.</span> Conforme o contêiner é criado, que pode demorar alguns minutos, o contêiner também é
+iniciado no <span class="keyword">Bluemix</span>. Procure
+a seção <span class="ph uicontrol">FUNCIONAMENTO DO CONTÊINER</span> para o status do contêiner. Quando a criação for
+concluída, o status será <span class="ph uicontrol">Em execução</span>.</li>
+</ol>
+<div class="section result"><p id="container_group_ui__wait"><span class="ph" id="container_group_ui__buildroute">Se você estiver se conectando a um aplicativo externo a partir do
+contêiner, existe uma espera de até 5 minutos após a execução do processo do contêiner antes que ele possa se conectar
+à rota especificada. Em seguida, é possível verificar se o app está em execução no grupo de contêiner
+abrindo <span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> em um navegador.</span></p>
+</div><div class="section postreq"><div class="p" id="container_group_ui__ha_setup">Quanto mais amplamente você distribuir a configuração do contêiner, menos provável que os usuários
+tenham que experimentar tempo de inatividade com o app. Depois de criar um grupo de contêiner, crie outro com a
+mesma imagem no mesmo espaço, outro espaço na mesma organização ou em outra região para tornar
+seu app mais amplamente distribuído. Para obter mais informações,
+consulte os tópicos a seguir.<ul><li><a href="container_ha.html#container_ha" title="Contêineres altamente disponíveis significa menos tempo de inatividade para seu app. Quanto mais amplamente você distribuir a configuração do contêiner, menos provável que os usuários tenham que experimentar tempo de inatividade com o app. É possível obter maior disponibilidade usando recursos integrados do IBM Bluemix Container Service para aumentar a resiliência contra potenciais condições de falha, como falhas de host, de rede ou de software de aplicativo.">Executando processos altamente disponíveis como grupos de contêineres</a></li>
+<li><a href="container_ha_org.html">container_ha_org.html</a></li>
+<li><a href="container_ha.html#container_ha_regions" title="Se você configurar o nome de domínio de seu app com um Sistema de Nomes de Domínio (DNS) que fornece balanceamento de carga global, será possível criar dois grupos de contêineres a partir da mesma imagem em diferentes regiões do Bluemix que usam o mesmo nome de host na rota. Com essa configuração, é possível permitir que o balanceamento de carga ocorra com base na região em que o usuário está. Se o grupo de contêiner ou o hardware ou mesmo um datacenter inteiro em uma região ficar inativo, o tráfego será roteado para o grupo de contêiner que estiver implementado em outra região.">Executando grupos de contêineres altamente disponíveis em regiões diferentes do Bluemix</a></li>
+</ul>
+</div>
+
+<p>Para aumentar ou diminuir o número de instâncias de contêiner que são executadas em
+seu grupo de contêiner, abra o grupo de contêiner na GUI do
+<span class="keyword">Bluemix</span>.
+Para
+aumentar o número de instâncias, clique no botão <span class="ph uicontrol">+</span>; para diminuir
+o número, clique no botão <span class="ph uicontrol">-</span>. Em seguida, clique em <span class="ph uicontrol">Salvar</span>.</p>
+</div></div>
+<aside role="complementary" aria-labelledby="d49584e821"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e1537" lang="pt-br" id="container_group_cli"><h2 class="topictitle2" id="d49584e1537">Executando serviços de longo prazo como grupos de contêineres com a interface da linha de comandos (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">Crie e implemente um contêiner de grupo escalável a partir da CLI do <span class="keyword">IBM
+Bluemix Container Service</span>. <span class="ph">Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma
+imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade
+e confiabilidade ou para testar na escala necessária.</span></p>
+<div class="section prereq"><div class="p" id="container_group_cli__prereq">Antes de iniciar, considere as etapas a seguir. <ul><li>Você deve ter uma função de Desenvolvedor para o espaço do <span class="keyword">Bluemix</span> para criar um contêiner nele. Para
+obter mais informações sobre as permissões de cada função e como editar funções,
+consulte <span class="ph"><a href="../iam/users_roles.html">Usuários e
+funções</a></span>.</li>
+<li>Identifique uma imagem existente no registro de imagens privadas de sua organização
+para usar no contêiner, executando o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp>. Para incluir uma imagem
+no registro, consulte <a href="container_images_adding_ov.html#container_images_adding_ov" title="Uma imagem de contêiner é a base para cada contêiner criado. Uma imagem é criada a partir de um Dockerfile, que é um arquivo que contém instruções para construir a imagem e construir artefatos, como um app, a configuração do app e suas dependências. Pense em uma imagem de contêiner como um arquivo executável (.exe ou .bin). Assim que você executa o arquivo de app executável, você cria uma instância de seu app. Ao executar um contêiner, você cria uma instância de contêiner da imagem.">Incluindo imagens do Docker no registro de imagens privadas do Bluemix de sua organização</a>.</li>
+<li>Se você souber que deseja ligar um serviço do
+<span class="keyword">Bluemix</span> ao
+contêiner, inclua o serviço do
+<span class="keyword">Bluemix</span> em seu
+espaço. Para obter mais informações, consulte <a href="container_integrations.html#container_integrations_binding" title="O IBM Bluemix possui uma lista de serviços e gerencia-os em nome dos desenvolvedores de apps. Para incluir um serviço do Bluemix para uso do contêiner, deve-se solicitar uma instância desse serviço e ligar o serviço ao contêiner.">Ligando um serviço a partir da GUI do Bluemix</a>.</li>
+<li>Se você souber que deseja um disco compartilhado que permita que os arquivos estejam acessíveis
+a partir de vários contêineres, crie um volume antes de criar o contêiner. Para obter informações adicionais, consulte <a href="container_volumes_ov.html#container_volumes_cli" title="Um volume é um local de armazenamento persistente para os dados que um app cria ou os arquivos que o app requer para executar. É possível criar um volume para seu contêiner a partir da linha de comandos.">Criando volumes com a linha de comandos (CLI)</a>.</li>
+</ul>
+</div>
+</div><div class="section context"></div><p class="li stepsection">Crie um grupo de contêiner
+escalável.</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Crie um grupo de contêiner com uma imagem existente no registro de imagens privadas da sua organização
+executando um dos comandos <samp class="ph codeph">group-create</samp> a seguir. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --anti --auto --desired <var class="keyword varname">&lt;instances&gt;</var> -e "LOG_LOCATIONS=<var class="keyword varname">&lt;file_path&gt;</var>" -m <var class="keyword varname">&lt;size&gt;</var> --name <var class="keyword varname">&lt;name&gt;</var> -p <var class="keyword varname">&lt;public_port&gt;</var> -n <var class="keyword varname">&lt;hostname&gt;</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --volume <var class="keyword varname">&lt;volume_name&gt;:&lt;mount_path&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;namespace&gt;</var>/<var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+Exemplo
+<p>O
+exemplo a seguir cria um grupo de contêiner com 3 instâncias chamadas
+<var class="keyword varname">my_group</var> da imagem <span class="ph uicontrol">ibmliberty</span>. O recurso
+antiafinidade e recuperação automática é ativado para o grupo a fim de assegurar
+disponibilidade mais alta para o app. Para acessar o grupo da internet, a porta pública
+9080 é exposta e a rota
+<span class="ph filepath">myhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>
+é mapeada para o grupo. O volume <var class="keyword varname">myvol</var> é montado no grupo para
+persistir dados do contêiner e o arquivo de log padrão do Ubuntu é incluído como um local
+de arquivo de log customizado. Os logs dos locais de arquivo de log customizado podem ser
+visualizados no Kibana após o grupo ser criado.</p>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --anti --auto --desired 3 -e <span class="q">"LOG_LOCATIONS=/var/log/dpkg.log"</span> -m 64 --name my_group -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --volume myvol:/var/tmp registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+
+Conforme o grupo de contêineres é criado, ele também é iniciado. O grupo de contêineres é implementado quando o
+ID para o grupo é exibido.</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Liste seus grupos de contêineres em execução.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span> </code></pre>
+
+
+<p><span class="ph" id="container_group_cli__d29440e201">Se você estiver se conectando a um aplicativo externo a partir do
+contêiner, existe uma espera de até 5 minutos após a execução do processo do contêiner antes que ele possa se conectar
+à rota especificada. Em seguida, é possível verificar se o app está em execução no grupo de contêiner
+abrindo <span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> em um navegador.</span></p>
+</li>
+</ol>
+<div class="section postreq"><div class="p">Quanto mais amplamente você distribuir a configuração do contêiner, menos provável que os usuários
+tenham que experimentar tempo de inatividade com o app. Depois de criar um grupo de contêiner, crie outro com a
+mesma imagem no mesmo espaço, outro espaço na mesma organização ou em outra região para tornar
+seu app mais amplamente distribuído. Para obter mais informações,
+consulte os tópicos a seguir.<ul><li><a href="container_ha.html#container_ha" title="Contêineres altamente disponíveis significa menos tempo de inatividade para seu app. Quanto mais amplamente você distribuir a configuração do contêiner, menos provável que os usuários tenham que experimentar tempo de inatividade com o app. É possível obter maior disponibilidade usando recursos integrados do IBM Bluemix Container Service para aumentar a resiliência contra potenciais condições de falha, como falhas de host, de rede ou de software de aplicativo.">Executando processos altamente disponíveis como grupos de contêineres</a></li>
+<li><a href="container_ha_org.html">container_ha_org.html</a></li>
+<li><a href="container_ha.html#container_ha_regions" title="Se você configurar o nome de domínio de seu app com um Sistema de Nomes de Domínio (DNS) que fornece balanceamento de carga global, será possível criar dois grupos de contêineres a partir da mesma imagem em diferentes regiões do Bluemix que usam o mesmo nome de host na rota. Com essa configuração, é possível permitir que o balanceamento de carga ocorra com base na região em que o usuário está. Se o grupo de contêiner ou o hardware ou mesmo um datacenter inteiro em uma região ficar inativo, o tráfego será roteado para o grupo de contêiner que estiver implementado em outra região.">Executando grupos de contêineres altamente disponíveis em regiões diferentes do Bluemix</a></li>
+</ul>
+</div>
+
+<p>Após a criação do grupo de contêiner, é possível aumentar e diminuir o número de instâncias
+executadas no grupo de contêiner, bem como incluir variáveis de ambiente adicionais. Para obter informações adicionais,
+revise o comando <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__group_update"><samp class="ph codeph"><span class="ph">bx ic</span> group-update</samp></a>.</p>
+</div></div>
+<aside role="complementary" aria-labelledby="d49584e1537"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e1823" lang="pt-br" id="container_group_ui_as"><h2 class="topictitle2" id="d49584e1823">Ajustando automaticamente a escala de grupos de contêineres (descontinuado)</h2>
+<div class="body taskbody"><p class="shortdesc">O recurso Auto-scaling for Containers está sendo descontinuado. É possível substituir
+as funções usando o <span class="keyword">IBM
+Bluemix Container Service</span>. <span class="ph">Para
+obter detalhes, veja
+<a href="https://www.ibm.com/blogs/bluemix/2017/03/retirement-ibm-container-autoscaling-beta-capability" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Aposentadoria do
+Auto-scaling</a>.</span></p>
+<div class="section context">Você está procurando informações sobre ajuste de escala de aplicativos Cloud Foundry? Verifique
+<a href="https://www.ng.bluemix.net/docs/services/Auto-Scaling/index.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)"><span class="keyword">IBM Auto-Scaling for Bluemix</span></a>.</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d49584e1906" id="migrating_autoscaling"><h3 class="topictitle3" id="d49584e1906">Migrando para o Kubernetes Autoscaling</h3>
+<div class="body taskbody"><p class="li stepsection"><p>Com o <a href="cs_ov.html" title="O IBM Bluemix Container Service combina o Docker e o Kubernetes para entregar ferramentas poderosas, uma experiência intuitiva do usuário e a segurança e o isolamento integrados para automatizar a implementação, operação, ajuste de escala e monitoramento de apps conteinerizados por um cluster de hosts de cálculo independente usando as APIs do Kubernetes.">Kubernetes</a>, é possível ativar <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Ajuste automático de escala de pod horizontal</a> para escalar os apps com base na CPU. </p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Instale as <a href="cs_cli_install.html" title="É possível usar a CLI ou API do IBM Bluemix Container Service para criar e gerenciar seus clusters do Kubernetes.">CLIs</a> necessárias.</span></li>
+<li class="step stepexpand"><span class="cmd">Crie um cluster seguindo as etapas em <a href="container_index.html#clusters" title="Kubernetes é uma ferramenta de orquestração para planejar contêineres de app em um cluster de máquinas de cálculo. Com o Kubernetes, os desenvolvedores podem desenvolver rapidamente aplicativos altamente disponíveis, alavancando o poder e a flexibilidade de contêineres.">Introdução aos
+clusters do Kubernetes no Bluemix</a>. Certifique-se de configurar o cluster para replicar seu grupo
+de contêiner atual, incluindo a criação de log, monitoramento, consultor de vulnerabilidade e quaisquer outras customizações
+que você tenha em vigor.</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_cli_configure.html" title="É possível usar os comandos que são fornecidos com a CLI do Kubernetes para gerenciar clusters no Bluemix. Após criar um cluster, configure o contexto para a sua CLI local para esse cluster com uma variável de ambiente. Então, é possível executar os comandos kubectl do Kubernetes para trabalhar com o seu cluster no Bluemix.">Configure o contexto</a> para seu
+cluster.</span></li>
+<li class="step stepexpand"><span class="cmd">Implemente o app existente em seu cluster <a href="cs_apps_cli.html" title="Após um cluster ser criado, é possível implementar um app nesse cluster usando a CLI do Kubernetes.">a partir da
+CLI</a>.</span> Ao implementar seu app, deve-se solicitar a CPU.
+
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__table_px1_qsx_yy" class="defaultstyle"><thead><tr><th colspan="2" id="d49584e1990" class="thleft"><span class="ph"><img src="images/idea.png" alt="Este ícone indica que há mais informações a serem conhecidas sobre esta etapa da tarefa."></span>
+Entendendo os componentes deste comando</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d49584e1990 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d49584e1990 ">O aplicativo que você deseja implementar.</td>
+</tr>
+<tr><td style="width: 50%" headers="d49584e1990 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d49584e1990 ">A CPU necessária para seu contêiner, que é especificada em milinúcleos. Como um exemplo,
+<samp class="ph codeph">--requests=200m</samp>.</td>
+</tr>
+<tr><td style="width: 50%" headers="d49584e1990 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d49584e1990 ">Quando true, cria um serviço externo.</td>
+</tr>
+<tr><td style="width: 50%" headers="d49584e1990 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d49584e1990 ">A porta em que seu app está disponível externamente.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">Nota:</span> Para implementações mais complexas, pode ser necessário criar um <a href="cs_apps_cli.html" title="Após um cluster ser criado, é possível implementar um app nesse cluster usando a CLI do Kubernetes.">script de implementação</a>.</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie um Escalador automático de ajuste de pod horizontal e defina sua política.</span>  Para obter mais informações sobre como trabalhar com o comando <samp class="ph codeph">kubetcl autoscale</samp>, veja
+<a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">a documentação do Kubernetes</a>.
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__table_pgd_btx_yy" class="defaultstyle"><thead><tr><th colspan="2" id="d49584e2050" class="thleft"><span class="ph"><img src="images/idea.png" alt="Este ícone indica que há mais informações a serem conhecidas sobre esta etapa da tarefa."></span>
+Entendendo os componentes deste comando</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d49584e2050 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d49584e2050 ">A utilização média da CPU que é mantida pelo Escalador automático de ajuste de pod horizontal, que é
+especificada em porcentagem.</td>
+</tr>
+<tr><td style="width: 50%" headers="d49584e2050 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d49584e2050 ">O número mínimo de pods implementados que são usados para manter a porcentagem de utilização da CPU
+especificada.</td>
+</tr>
+<tr><td style="width: 50%" headers="d49584e2050 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d49584e2050 ">O número máximo de pods implementados que são usados para manter a porcentagem de utilização da CPU
+especificada.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se o aplicativo está funcionando corretamente.</span> <ul><li>Verifique o painel de serviço para assegurar que o app esteja em execução.</li>
+<li>Verifique o app para ter certeza de que as mudanças chave foram implementadas.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_ha.html#container_group_remove" title="Para maximizar o uso de sua cota, remova os grupos de contêineres que não estão em uso ocasionalmente.">Desprovenha e remova</a>
+sua instância original de Contêineres.</span></li>
+</ol>
+</div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d49584e2090" lang="pt-br" id="container_group_migrate"><h2 class="topictitle2" id="d49584e2090">Movendo grupos de contêineres para outros espaços do <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc">Se precisar que mover um grupo de contêiner para outro
+espaço na mesma organização, será possível
+criar um segundo grupo de contêiner com a mesma rota. Em seguida, será possível remover o primeiro grupo sem
+causar tempo de inatividade para seu app. </p>
+<div class="section context"> Quando você mapear uma rota existente para um novo grupo de contêiner, as referências das instâncias de
+contêiner serão incluídas no balanceador de carga do espaço. Como consequência, o balanceador de carga
+considerará o novo grupo de contêiner ao rotear o tráfego recebido. Se você excluir um grupo de contêineres, o balanceador de carga
+automaticamente removerá as referências da instância de contêiner relacionadas.</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Efetue login no Cloud Foundry CLI. Insira seu nome de usuário e senha do
+<span class="keyword">Bluemix</span> quando
+solicitado.</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+
+<p><span class="ph">O parâmetro de conexão única <span class="keyword option">--sso</span> é necessário quando você efetua login
+com um ID federado. Se essa opção for usada, abra
+<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>
+para obter uma senha descartável. Se
+você não incluir a opção <span class="keyword option">--sso</span>, conclua estas subetapas.</span></p>
+<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Para <span class="ph uicontrol">E-mail</span>, insira seu
+IBMId para o
+<span class="keyword">Bluemix</span>.</span></li>
+<li class="li substep"><span class="cmd">Para <span class="ph uicontrol">Senha</span>, insira a senha para o IBMId.</span> Suas organizações e espaços Bluemix são recuperados.</li>
+<li class="li substep"><span class="cmd">Insira o número que representa uma de suas organizações do <span class="keyword">Bluemix</span>. </span></li>
+<li class="li substep"><span class="cmd">Insira o número que representa um de seus espaços existentes do <span class="keyword">Bluemix</span>. </span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Inicialize o <span class="keyword">IBM
+Bluemix Container Service</span>. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie um grupo de contêiner e mapeie uma rota para ele. </span> O comando a seguir cria um grupo de contêiner que é chamado
+<var class="keyword varname">my_group_1</var> a partir da imagem <span class="ph uicontrol">ibmliberty</span>. O grupo de contêiner é acessível usando a
+rota pública <span class="ph filepath">myhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span>. 
+<div class="steps note"><span class="notetitle">Nota:</span> O nome do host, neste exemplo
+<var class="keyword varname">myhost</var>, precisa ser exclusivo entre todas as organizações no
+<span class="keyword">Bluemix</span>. Como
+consequência, é necessário selecionar um novo nome para <var class="keyword varname">myhost</var> para
+prosseguir.</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">my_group_1</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se o seu grupo de contêiner foi criado. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Mude seu espaço de organização. Substitua <var class="keyword varname">SPACE</var> pelo nome do espaço
+para o qual você deseja mover seu grupo de contêiner. </span> <pre class="codeblock"><code>cf target -s <var class="keyword varname">SPACE</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Reinicialize o <span class="keyword">IBM
+Bluemix Container Service</span> para apontar para o novo espaço. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie outro grupo de contêiner no novo espaço e mapeie a rota existente para ele. </span> O comando a seguir cria um grupo de contêiner que é chamado
+<var class="keyword varname">my_group_2</var> a partir da imagem <span class="ph uicontrol">ibmliberty</span>. Ele é
+mapeado para a mesma rota pública do primeiro grupo de contêiner que você
+criou. 
+<div class="steps note"><span class="notetitle">Nota:</span> O nome de um grupo de contêiner precisa ser exclusivo dentro de um espaço de
+organização. É possível reutilizar o nome quando você cria um novo grupo de contêiner em
+outro espaço de sua organização.</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p 9080 -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> --name <var class="keyword varname">my_group_2</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se o seu grupo de contêiner foi criado. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+Agora
+que você criou um novo grupo de contêiner em seu novo espaço e mapeou a rota existente
+para ele, é possível prosseguir e remover o primeiro grupo de contêiner.</li>
+<li class="step stepexpand"><span class="cmd">Mude para o espaço da organização no qual você criou o
+primeiro grupo de contêiner. Substitua
+<var class="keyword varname">SPACE</var> pelo nome de seu espaço. </span> <pre class="codeblock"><code>cf target -s <var class="keyword varname">SPACE</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Reinicialize o <span class="keyword">IBM
+Bluemix Container Service</span> para apontar para o espaço selecionado. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Remova o mapeamento da rota do grupo de contêiner. Substitua
+<var class="keyword varname">myhost</var> pelo nome do host selecionado. </span> Quando você remover o mapeamento da rota de seu grupo de contêiner, todas as referências de contêiner serão excluídas do
+balanceador de carga e não serão consideradas quando o tráfego recebido for roteado.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">myhost</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> <var class="keyword varname">my_group_1</var>  </code></pre>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Remova o grupo de contêiner. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove <var class="keyword varname">my_group_1</var></code></pre>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Verifique se o seu grupo de contêiner foi removido. </span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49584e2090"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e2434" lang="pt-br" id="container_group_update_ui"><h2 class="topictitle2" id="d49584e2434">Atualizando um app executado em seu grupo de contêiner usando a GUI do <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc">Para atualizar um app que está em execução em um grupo de contêiner, deve-se
+atualizar a imagem e implementar um novo grupo de contêiner a partir dela. Durante o
+processo de atualização, você não precisa parar o grupo de contêiner em execução antigo. É possível criar um novo grupo de contêiner, mapear as informações de rota existentes
+para ele e, em seguida, remover o mapeamento da rota do grupo de contêiner desatualizado. Seu novo app é implementado sem qualquer tempo de inatividade. </p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_group_update_ui__update_options_ui" class="defaultstyle"><caption><span class="tablecap">Tabela 3. Ferramentas opcionais para atualizar um app</span></caption><thead><tr><th id="d49584e2505" class="thleft">Ferramentas de Atualização</th>
+<th id="d49584e2507" class="thleft">Descrição</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49584e2505 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d49584e2507 ">Automatize as construções de seu app e as implementações do contêiner para o <span class="keyword">Bluemix</span> usando o <span class="keyword">Delivery Pipeline</span>, que é um serviço do <span class="keyword">Bluemix</span> disponível para você. Para obter informações adicionais, consulte <a href="container_integrations.html#container_group_pipeline_ov" title="Automatize a construção e a implementação de seus grupos de contêineres usando o Delivery Pipeline.">Criando grupos de contêineres usando o Delivery Pipeline</a>.</td>
+</tr>
+<tr><td headers="d49584e2505 ">O <span class="keyword">Active Deploy</span> a partir
+da GUI do <span class="keyword">Bluemix</span> </td>
+<td headers="d49584e2507 ">Coordene a implementação de novos contêineres para substituir os desatualizados. Com o Active Deploy,
+o grupo de contêiner desatualizado é retido para que você possa retroceder se localizar um problema. Para obter mais
+informações, consulte <a href="../services/ActiveDeploy/updatingapps.html#updatingappsgui" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Atualizando apps ou grupos de contêineres com o serviço Active Deploy
+(GUI)</a>.</td>
+</tr>
+<tr><td headers="d49584e2505 ">UrbanCode Deploy</td>
+<td headers="d49584e2507 ">Automatize as construções de seu app e as implementações do contêiner para o <span class="keyword">Bluemix</span> usando o UrbanCode Deploy. Para obter mais
+informações sobre como comprar o UrbanCode Deploy, consulte a página do produto <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">IBM UrbanCode
+Deploy</a>.</td>
+</tr>
+<tr><td headers="d49584e2505 ">Atualize você mesmo o app usando uma combinação da CLI do <span class="keyword">IBM
+Bluemix Container Service</span> e da GUI do <span class="keyword">Bluemix</span></td>
+<td headers="d49584e2507 ">Conclua as etapas nesta tarefa para atualizar você mesmo o app.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">Para você mesmo atualizar o app usando a CLI do <span class="keyword">IBM
+Bluemix Container Service</span> e a GUI do <span class="keyword">Bluemix</span>:</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Mude para o diretório em que seu Dockerfile e código de app são salvos.</span></li>
+<li class="step stepexpand"><span class="cmd">Atualize o app localmente.</span></li>
+<li class="step stepexpand"><span class="cmd">Escolha construir a imagem diretamente no <span class="keyword">Bluemix</span> ou construir e testar a imagem localmente
+antes de enviá-la por push para o <span class="keyword">Bluemix</span>. </span> <ul><li>Para construir a imagem diretamente no <span class="keyword">Bluemix</span>, execute o comando a seguir.*<div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+Exemplo<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_group_update_ui__d32453e179">*Nesse comando, será possível substituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> por <samp class="ph codeph">docker</samp>
+ao <a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">efetuar login no <span class="keyword">IBM
+Bluemix Container Service</span></a> e configurar suas variáveis de
+ambiente para usar comandos nativos do Docker.</span><span class="ph" id="container_group_update_ui__d32453e191">Será possível usar comandos nativos do
+Docker em todas as etapas marcadas com um asterisco (*) neste tópico. </span></div>
+</li>
+<li>Para construir a imagem localmente e, seguida, enviá-la por push para o <span class="keyword">Bluemix</span>, siga estas etapas.<div class="p"><ol type="a"><li>Se você estiver usando o plug-in para o <span class="keyword">IBM
+Bluemix Container Service</span>, efetue login novamente. Não configure as
+variáveis de ambiente para a opção 2 para que os comandos <samp class="ph codeph">docker</samp> sejam enviados para o
+mecanismo do Docker na máquina local.<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Construa a imagem localmente por meio do Dockerfile.<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>Execute um contêiner a partir da imagem para testar se seu novo app é executado localmente usando o comando
+a seguir, em que <var class="keyword varname">Port</var> é a porta para o tráfego HTTP.<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>Se
+o app estiver sendo executado corretamente, o ID do contêiner será exibido na saída da CLI. Para revisar os logs
+do contêiner, execute <samp class="ph codeph">docker logs
+<var class="keyword varname">&lt;container_name_or_id&gt;</var>.</samp></p>
+</li>
+<li id="container_group_update_ui__d32436e258">Identifique a imagem local com seu registro privado do <span class="keyword">Bluemix</span> e um novo nome. <span class="ph">Use caracteres alfanuméricos minúsculos ou
+sublinhados (_) somente no nome da imagem. Outros símbolos, como hifens (-) ou barras
+(/), podem impedir que a imagem seja publicada no registro de imagem.</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>Exemplo</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>Envie por push a imagem para seu registro privado do <span class="keyword">Bluemix</span>, usando o comando
+a seguir.<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">Importante:</span> <span class="ph">Ao enviar por push uma imagem para seu registro privado do <span class="keyword">Bluemix</span>, o tamanho relatado para a
+imagem é menor do que o tamanho da mesma imagem em seu mecanismo local do Docker. A diferença entre
+os tamanhos não indica que ocorreu um problema quando a imagem foi enviada por push. O tamanho compactado da
+imagem é relatado no <span class="keyword">IBM
+Bluemix Container Service</span>.</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se a imagem foi enviada por push para seu registro do <span class="keyword">Bluemix</span>.*</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Revise as vulnerabilidades da imagem. </span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Na GUI do <span class="keyword">Bluemix</span>, acesse o
+catálogo e selecione <span class="ph uicontrol">Contêineres</span>. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Clique na imagem que você incluiu. </span></li>
+<li class="li substep substepexpand"><span class="cmd">Na seção <span class="ph uicontrol">Avaliação de Vulnerabilidade</span>, revise o status de
+sua avaliação de vulnerabilidade.</span> O status é exibido como uma das condições a seguir:
+<ul><li><span class="keyword wintitle">Seguro para implementação</span> - Nenhuma vulnerabilidade significativa
+foi localizada.</li>
+<li><span class="keyword wintitle">Implementar com cuidado</span> - Vulnerabilidades significativas foram localizadas para serem
+tratadas.</li>
+<li><span class="keyword wintitle">Implementação bloqueada</span> - Vulnerabilidades significativas foram localizadas e devem ser
+tratadas para que a imagem possa ser implementada.</li>
+<li><span class="keyword wintitle">Incompleto</span> - A varredura não está completa. A varredura ainda pode estar em execução ou o sistema operacional da imagem pode não ser compatível. Aguarde e tente a varredura novamente. Se a varredura ainda não tiver sido concluída, envie a imagem por push novamente para iniciar uma nova varredura. As
+imagens com varreduras incompletas não são bloqueadas para implementação.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Observe as informações da rota que são mapeadas para o grupo de contêiner em
+execução. </span> <ol type="a"><li>Na GUI do <span class="keyword">Bluemix</span>, selecione o
+grupo de contêiner. </li>
+<li>Observe a rota. O host e o domínio
+são combinados para formar a URL da rota pública, como <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>.</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie outro grupo de contêiner escalável e inclua a rota.</span> <ol type="a"><li><span class="ph" data-hd-otherprops="registry_check">No catálogo, selecione
+<span class="ph uicontrol">Contêineres</span> e escolha uma imagem.</span></li>
+<li>Em seguida, comece a definir seu grupo de contêineres. Por padrão, a janela é aberta na
+guia <span class="ph uicontrol">Único</span>. Portanto, selecione a guia <span class="ph uicontrol">Escalável</span> para criar um
+grupo de contêiner. À
+medida que você definir seu grupo de contêiner, insira o nome do host e o domínio
+recuperado da etapa anterior nos campos <kbd class="ph userinput">Host</kbd> e
+<kbd class="ph userinput">Domínio</kbd>. <p>Revise o tópico
+<a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">Executando serviços de longo prazo como grupos de contêineres a partir da GUI do Bluemix</a>
+para obter mais informações sobre como criar um grupo de contêiner. </p>
+</li>
+<li>Clique em <span class="ph uicontrol">CRIAR</span> para implementar o grupo de
+contêiner a partir da imagem atualizada.
+Durante o processo de implementação, o grupo de contêiner também é iniciado. <p><span class="ph" id="container_group_update_ui__d32582e605">Se você estiver se conectando a um aplicativo externo a partir do
+contêiner, existe uma espera de até 5 minutos após a execução do processo do contêiner antes que ele possa se conectar
+à rota especificada. Em seguida, é possível verificar se o app está em execução no grupo de contêiner
+abrindo <span class="ph filepath">https://<var class="keyword varname">&lt;host&gt;</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span> em um navegador.</span></p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Remova o mapeamento da rota do grupo de contêiner desatualizado. </span> <ol type="a"><li>Na GUI do <span class="keyword">Bluemix</span>, selecione o
+grupo de contêiner desatualizado. </li>
+<li>Na seção <span class="ph uicontrol">Detalhes do grupo</span>, edite a rota.</li>
+<li>Altere o nome do host. Se você tiver múltiplos nomes de domínio, também será possível selecionar um novo nome de domínio
+para seu grupo de contêiner.  </li>
+<li>Clique em <span class="ph uicontrol">SALVAR</span> para salvar suas mudanças.<div class="steps note"><span class="notetitle">Nota:</span> A remoção de
+mapeamento da rota pode levar até cinco minutos para ocorrer.</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Exclua o grupo de contêiner desatualizado.</span> <ol type="a"><li>Na GUI do <span class="keyword">Bluemix</span>, selecione o
+grupo de contêiner desatualizado. </li>
+<li>No menu <span class="ph uicontrol">Mais ações...</span>, clique em
+<span class="ph uicontrol">Excluir</span> para remover o grupo de contêiner.</li>
+</ol>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49584e2434"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e3036" lang="pt-br" id="container_group_update_cli"><h2 class="topictitle2" id="d49584e3036">Atualizando um app que é executado em seu grupo de contêiner usando a linha de comandos</h2>
+<div class="body taskbody"><p class="shortdesc">Para atualizar um app que está em execução em um grupo de contêiner, deve-se
+atualizar a imagem e implementar um novo grupo de contêiner a partir dela. Durante o
+processo de atualização, você não precisa parar o grupo de contêiner em execução antigo. É possível criar um novo grupo de contêiner, mapear as informações de rota existentes
+para ele e, em seguida, remover o mapeamento da rota do grupo de contêiner desatualizado. Seu novo app é implementado sem qualquer tempo de inatividade. </p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_group_update_cli__updating_group_cli_table" class="defaultstyle"><caption><span class="tablecap">Tabela 4. Ferramentas opcionais para atualizar um app</span></caption><thead><tr><th id="d49584e3095" class="thleft">Ferramentas de Atualização</th>
+<th id="d49584e3097" class="thleft">Descrição</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d49584e3095 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d49584e3097 ">Automatize as construções de seu app e as implementações do contêiner para o <span class="keyword">Bluemix</span> usando o <span class="keyword">Delivery Pipeline</span>, que é um serviço do <span class="keyword">Bluemix</span> disponível para você. Para obter informações adicionais, consulte <a href="container_integrations.html#container_group_pipeline_ov" title="Automatize a construção e a implementação de seus grupos de contêineres usando o Delivery Pipeline.">Criando grupos de contêineres usando o Delivery Pipeline</a>.</td>
+</tr>
+<tr><td headers="d49584e3095 "><span class="keyword">Active Deploy</span> por meio da CLI </td>
+<td headers="d49584e3097 ">Coordene a implementação de novos grupos de contêineres para substituir um desatualizado. Com o Active Deploy,
+o grupo de contêiner desatualizado é retido para que você possa retroceder se localizar um problema.
+Para obter mais
+informações, consulte <a href="../services/ActiveDeploy/updatingapps.html#updatingappscli" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Atualizando apps ou grupos de contêineres com o serviço Active Deploy
+(CLI)</a>.</td>
+</tr>
+<tr><td headers="d49584e3095 ">UrbanCode Deploy</td>
+<td headers="d49584e3097 ">Automatize as construções de seu app e as implementações do contêiner para o <span class="keyword">Bluemix</span> usando o UrbanCode Deploy. Para obter mais
+informações sobre como comprar o UrbanCode Deploy, consulte a página do produto <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">IBM UrbanCode
+Deploy</a>.</td>
+</tr>
+<tr><td headers="d49584e3095 ">Atualize você mesmo o app usando a CLI do <span class="keyword">IBM
+Bluemix Container Service</span></td>
+<td headers="d49584e3097 ">Conclua as etapas nesta tarefa para atualizar você mesmo o app.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">Para você mesmo atualizar o app usando a CLI do <span class="keyword">IBM
+Bluemix Container Service</span>:</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Atualize o app localmente.</span></li>
+<li class="step stepexpand"><span class="cmd">Escolha construir a imagem diretamente no <span class="keyword">Bluemix</span> ou construir e testar a imagem localmente
+antes de enviá-la por push para o <span class="keyword">Bluemix</span>. </span> <ul><li>Para construir a imagem diretamente no <span class="keyword">Bluemix</span>, execute o comando a seguir.*<div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+Exemplo<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">Nota:</span> <span class="ph" id="container_group_update_cli__d31884e179">*Nesse comando, será possível substituir <samp class="ph codeph"><span class="ph">bx ic</span></samp> por <samp class="ph codeph">docker</samp>
+ao <a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">efetuar login no <span class="keyword">IBM
+Bluemix Container Service</span></a> e configurar suas variáveis de
+ambiente para usar comandos nativos do Docker.</span><span class="ph" id="container_group_update_cli__d31884e191">Será possível usar comandos nativos do
+Docker em todas as etapas marcadas com um asterisco (*) neste tópico. </span></div>
+</li>
+<li>Para construir a imagem localmente e, seguida, enviá-la por push para o <span class="keyword">Bluemix</span>, siga estas etapas.<div class="p"><ol type="a"><li>Se você estiver usando o plug-in para o <span class="keyword">IBM
+Bluemix Container Service</span>, efetue login novamente. Não configure as
+variáveis de ambiente para a opção 2 para que os comandos <samp class="ph codeph">docker</samp> sejam enviados para o
+mecanismo do Docker na máquina local.<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Construa a imagem localmente por meio do Dockerfile.<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>Execute um contêiner a partir da imagem para testar se seu novo app é executado localmente usando o comando
+a seguir, em que <var class="keyword varname">Port</var> é a porta para o tráfego HTTP.<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>Se
+o app estiver sendo executado corretamente, o ID do contêiner será exibido na saída da CLI. Para revisar os logs
+do contêiner, execute <samp class="ph codeph">docker logs
+<var class="keyword varname">&lt;container_name_or_id&gt;</var>.</samp></p>
+</li>
+<li id="container_group_update_cli__d31867e258">Identifique a imagem local com seu registro privado do <span class="keyword">Bluemix</span> e um novo nome. <span class="ph">Use caracteres alfanuméricos minúsculos ou
+sublinhados (_) somente no nome da imagem. Outros símbolos, como hifens (-) ou barras
+(/), podem impedir que a imagem seja publicada no registro de imagem.</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>Exemplo</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>Envie por push a imagem para seu registro privado do <span class="keyword">Bluemix</span>, usando o comando
+a seguir.<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">Exemplo<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">Importante:</span> <span class="ph">Ao enviar por push uma imagem para seu registro privado do <span class="keyword">Bluemix</span>, o tamanho relatado para a
+imagem é menor do que o tamanho da mesma imagem em seu mecanismo local do Docker. A diferença entre
+os tamanhos não indica que ocorreu um problema quando a imagem foi enviada por push. O tamanho compactado da
+imagem é relatado no <span class="keyword">IBM
+Bluemix Container Service</span>.</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Observe as informações da rota que são mapeadas para o grupo de contêiner em
+execução. </span> <ol type="a"><li>Execute o comando a seguir para obter o nome ou ID do grupo de contêiner.<div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</div>
+</li>
+<li>Execute o comando a seguir com o ID do grupo ou nome para recuperar a rota. <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP </span></code></pre>
+</div>
+ A
+rota pode ser localizada na seção <samp class="ph codeph">"Routes"</samp>. O host e o domínio
+são combinados para formar a URL da rota pública, como <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>.</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie outro grupo de contêiner escalável e inclua a rota. </span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create [--anti] [--auto] [-d DOMAIN] [--desired DESIRED] [-e ENV] [--env-file
+ENVFILE]<span class="ph"> [--http_monitor_enabled] [--http_monitor_path] [--http_monitor_rc_list] [--ip
+IP_ADDRESS]</span> [-m MEMORY] [--max MAX] [--min MIN] [-n HOST] --name NAME [-p PORT] [--session-affinity] [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD] </span></code></pre>
+Inclua
+o nome do host e o domínio para mapear o novo grupo de contêiner para a rota. 
+<p>Para obter mais
+informações sobre como criar grupos de contêineres, consulte <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">Executando serviços de longo prazo como grupos de contêineres com a interface da linha de comandos (CLI)</a>.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Remova o mapeamento do grupo de contêiner antigo.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap [-d DOMAIN] [-n HOST] GROUP </span></code></pre>
+ <div class="steps note"><span class="notetitle">Nota:</span> A remoção de mapeamento da rota pode levar até cinco minutos para ocorrer.</div>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Exclua o grupo de contêiner antigo.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Liste todos os seus grupos de contêineres para verificar se o grupo de contêiner foi removido.</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49584e3036"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e3533" lang="pt-br" id="container_ha_space"><h2 class="topictitle2" id="d49584e3533">Executando grupos de contêineres altamente disponíveis no mesmo espaço</h2>
+<div class="body taskbody"><p class="shortdesc">É possível criar dois grupos de contêineres a partir da mesma imagem no mesmo espaço do <span class="keyword">Bluemix</span> e mapear a mesma rota para ambos
+os grupos. Com essa configuração, se um grupo de contêiner ou o balanceador de carga para um grupo ficar inativo, o tráfego será roteado
+para o outro grupo de contêiner.</p>
+<div class="section prereq">
+<p><object data="images/container_ha_space.svg"><img src="images/container_ha_space.jpg" alt="Criando grupos de contêineres altamente disponíveis no mesmo espaço"></object></p>
+
+<p><span class="ph" id="container_ha_space__create_intro">Antes de iniciar, se forem necessárias informações detalhadas sobre a criação de grupos de
+contêineres, revise as informações sobre como criá-los usando a <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a> ou a <a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">GUI do <span class="keyword">Bluemix</span></a>.</span></p>
+</div><p class="li stepsection">Para criar grupos de contêineres altamente disponíveis no mesmo espaço do <span class="keyword">Bluemix</span>:</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Crie um grupo de contêiner que atenda aos requisitos a seguir.</span> <ul><li id="container_ha_space__at_least_2">O número de instâncias no grupo de contêiner deve suportar a carga de trabalho
+esperada em seu app. <span class="ph">Para determinar o número de instâncias desejadas, implemente um contêiner
+único no Bluemix que execute seu app e execute um teste de carga neste contêiner. Se o app puder
+manipular, por exemplo, 100 solicitações por segundo, mas você estiver esperando uma carga de trabalho média de 300
+solicitações por segundo, o número desejado de instâncias para o grupo de contêiner será
+3.</span>
+<span class="ph">Para tornar seu grupo de contêiner altamente disponível e mais resiliente
+à falha, considere a inclusão de instâncias extras, além do mínimo, para manipular a carga de trabalho esperada.
+Instâncias extras podem manipular a carga de trabalho no caso de travamento de outra instância. Para assegurar a recuperação
+automática de uma instância com falha sem afetar a carga de trabalho, inclua uma instância extra. Para
+proteção contra duas falhas simultâneas, inclua duas instâncias extras. Essa configuração é um
+padrão <var class="keyword varname">N+2</var>, em que <var class="keyword varname">N</var> é o número de instâncias para manipular as
+solicitações e <var class="keyword varname">+2</var> são duas instâncias extras.</span></li>
+<li id="container_ha_space__ha_autorecovery">Ative a recuperação automática para o grupo de contêiner para assegurar-se de que os contêineres
+travados sejam recuperados automaticamente.</li>
+<li id="container_ha_space__ha_antiaffinity">Ative a antiafinidade. <span class="ph">Quando a antiafinidade é ativada, as instâncias do contêiner são
+difundidas em nós de cálculo físico separados, reduzindo a probabilidade de travamento de contêineres
+em razão de falhas no hardware.</span> A antiafinidade requer o uso da
+<a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a> e a inclusão da opção
+<samp class="ph codeph">--anti</samp> no comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>. Para usar a
+opção <samp class="ph codeph">--anti</samp> a partir da CLI, deve-se ter instalado o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) versão 0.8.934 ou mais recente. <span class="ph">Você poderá não ser capaz de usar essa opção com
+tamanhos de grupo maiores porque cada região e organização do <span class="keyword">Bluemix</span>
+têm um conjunto limitado de nós de cálculo disponíveis para implementação. Se
+sua implementação não for bem-sucedida, reduza o número de instâncias de contêiner no grupo ou
+remova a opção <samp class="ph codeph">--anti</samp>.</span></li>
+<li>É possível armazenar arquivos em um volume e montar o volume no contêiner ou, de preferência, armazenar os
+dados fora em um armazenamento de dados externo, como um banco de dados
+Cloudant. Não inclua arquivos persistentes no sistema de arquivos de contêiner local. Os volumes devem ser
+criados antes de criar um grupo de contêiner.</li>
+<li id="container_ha_space__single">Não crie um contêiner único em vez de um grupo de contêiner. Em geral, os contêineres
+únicos devem ser usados para processos de curto prazo e não possuem recursos de alta disponibilidade
+integrados, como os grupos de contêineres.</li>
+</ul>
+Exemplo de comando da CLI que inclui estas
+sugestões.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --min 3 --max 5 --desired 3 --auto --anti --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory</var>/<var class="keyword varname">path</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie um segundo grupo que atenda aos requisitos a seguir no mesmo espaço do primeiro
+grupo de contêiner.</span> <ul><li>O grupo de contêiner deve ter um nome diferente, mas usar o mesmo nome do host que o grupo de
+contêiner anterior que foi criado.</li>
+<li id="container_ha_space__at_least_2_abbrev">Para suportar a carga de trabalho esperada do app, use o
+padrão <var class="keyword varname">N+2</var>, conforme descrito para determinar o número de instâncias para o grupo de
+contêiner.</li>
+<li>Ative a recuperação automática para o grupo de contêiner para assegurar-se de que os contêineres
+travados sejam recuperados automaticamente.</li>
+<li id="container_ha_space__ha_antiaffinity_abbrev">Ative a afinidade para difundir as instâncias do contêiner em
+nós de cálculo físico separados.</li>
+<li>O grupo de contêiner deve ser mapeado para a mesma rota do primeiro grupo de contêiner criado na
+etapa anterior.</li>
+<li>Não inclua arquivos persistentes no contêiner. É possível montar o mesmo volume para esse
+contêiner que foi montado para o primeiro contêiner ou é possível usar o mesmo banco de dados Cloudant.</li>
+</ul>
+</li>
+</ol>
+<div class="section postreq">Para distribuir seu app mais amplamente, consulte <a href="container_ha_org.html">container_ha_org.html</a>.</div></div>
+<aside role="complementary" aria-labelledby="d49584e3533"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e3771" id="container_ha_regions"><h2 class="topictitle2" id="d49584e3771">Executando grupos de contêineres altamente disponíveis em regiões diferentes do <span class="keyword">Bluemix</span></h2>
+<div class="body taskbody"><p class="shortdesc">Se você configurar o nome de domínio de seu app com um Sistema de Nomes de Domínio (DNS) que fornece
+balanceamento de carga global, será possível criar dois grupos de contêineres a partir da mesma imagem em diferentes regiões do <span class="keyword">Bluemix</span> que usam o mesmo nome de host
+na rota. Com essa configuração, é possível permitir que o balanceamento de carga
+ocorra com base na região em que o usuário está. Se o grupo de contêiner ou o hardware ou mesmo um datacenter
+inteiro em uma região ficar inativo, o tráfego será roteado para o grupo de contêiner que estiver
+implementado em outra região.</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">Importante:</span> Deve-se ter um domínio customizado. Não é possível usar <span class="ph filepath">mybluemix.net</span>.</div>
+
+<p><object data="images/container_ha_region.svg"><img src="images/container_ha_region.jpg" alt="Criando grupos de contêineres altamente disponíveis em múltiplas regiões"></object></p>
+
+<p><span class="ph">Antes de iniciar, se forem necessárias informações detalhadas sobre a criação de grupos de
+contêineres, revise as informações sobre como criá-los usando a <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a> ou a <a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">GUI do <span class="keyword">Bluemix</span></a>.</span></p>
+</div><p class="li stepsection">Para criar grupos de contêineres altamente disponíveis em regiões diferentes do <span class="keyword">Bluemix</span>:</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Registre seu domínio customizado com qualquer registrador de domínio certificado que seja compatível com balanceamento de
+carga de DNS global.</span></li>
+<li class="step stepexpand"><span class="cmd">No <span class="keyword">Bluemix</span>, repita as etapas a
+seguir em todas as regiões que você deseja usar.</span> <div class="note remember"><span class="remembertitle">Lembre-se:</span> Se quaisquer restrições existentes impedirem você de hospedar dados
+em um país específico, não selecione uma região nesse país.</div>
+<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph">Nos detalhes de sua conta, em
+Gerenciar organizações, selecione uma organização.</span></span></li>
+<li class="li substep"><span class="cmd">Na seção <span class="ph uicontrol">DOMÍNIO</span>, clique em <span class="ph uicontrol">INCLUIR DOMÍNIO</span> e insira
+um nome para seu domínio customizado.</span></li>
+<li class="li substep"><span class="cmd">Para permitir ambos os tráfegos, HTTPS e HTTP, em vez de somente o tráfego HTTP, faça upload de um certificado SSL
+para o <span class="keyword">Bluemix</span>.</span> Para obter mais informações, consulte <a href="../manageapps/secapps.html">Assegurando apps</a>.</li>
+<li class="li substep"><span class="cmd">Clique em <span class="ph uicontrol">SALVAR</span>.</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie um grupo de contêiner que atenda aos requisitos a seguir.</span> <ul><li>O número de instâncias no grupo de contêiner deve suportar a carga de trabalho
+esperada em seu app. <span class="ph">Para determinar o número de instâncias desejadas, implemente um contêiner
+único no Bluemix que execute seu app e execute um teste de carga neste contêiner. Se o app puder
+manipular, por exemplo, 100 solicitações por segundo, mas você estiver esperando uma carga de trabalho média de 300
+solicitações por segundo, o número desejado de instâncias para o grupo de contêiner será
+3.</span>
+<span class="ph">Para tornar seu grupo de contêiner altamente disponível e mais resiliente
+à falha, considere a inclusão de instâncias extras, além do mínimo, para manipular a carga de trabalho esperada.
+Instâncias extras podem manipular a carga de trabalho no caso de travamento de outra instância. Para assegurar a recuperação
+automática de uma instância com falha sem afetar a carga de trabalho, inclua uma instância extra. Para
+proteção contra duas falhas simultâneas, inclua duas instâncias extras. Essa configuração é um
+padrão <var class="keyword varname">N+2</var>, em que <var class="keyword varname">N</var> é o número de instâncias para manipular as
+solicitações e <var class="keyword varname">+2</var> são duas instâncias extras.</span></li>
+<li>Ative a recuperação automática para o grupo de contêiner para assegurar-se de que os contêineres
+travados sejam recuperados automaticamente.</li>
+<li>Ative a antiafinidade. <span class="ph">Quando a antiafinidade é ativada, as instâncias do contêiner são
+difundidas em nós de cálculo físico separados, reduzindo a probabilidade de travamento de contêineres
+em razão de falhas no hardware.</span> A antiafinidade requer o uso da
+<a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">CLI</a> e a inclusão da opção
+<samp class="ph codeph">--anti</samp> no comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>. Para usar a
+opção <samp class="ph codeph">--anti</samp> a partir da CLI, deve-se ter instalado o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) versão 0.8.934 ou mais recente. <span class="ph">Você poderá não ser capaz de usar essa opção com
+tamanhos de grupo maiores porque cada região e organização do <span class="keyword">Bluemix</span>
+têm um conjunto limitado de nós de cálculo disponíveis para implementação. Se
+sua implementação não for bem-sucedida, reduza o número de instâncias de contêiner no grupo ou
+remova a opção <samp class="ph codeph">--anti</samp>.</span></li>
+<li>Não inclua arquivos persistentes no contêiner. É possível armazenar arquivos em um banco de dados Cloudant que seja replicado pelas regiões. É possível
+automatizar a configuração da replicação de banco de dados usando o <a href="https://github.com/ibmjstart/bluemix-cloudant-replicator" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">utilitário de linha de comandos</a> que foi criado pela equipe IBM
+jStart.</li>
+<li>Não crie um contêiner único em vez de um grupo de contêiner. Em geral, os contêineres
+únicos devem ser usados para processos de curto prazo e não possuem recursos de alta disponibilidade
+integrados, como os grupos de contêineres.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Crie um segundo grupo em uma região diferente.</span> Repita para quaisquer regiões adicionais. <ul><li>Para suportar a carga de trabalho esperada do app, use o
+padrão <var class="keyword varname">N+2</var>, conforme descrito para determinar o número de instâncias para o grupo de
+contêiner.</li>
+<li>Ative a recuperação automática para o grupo de contêiner para assegurar-se de que os contêineres
+travados sejam recuperados automaticamente.</li>
+<li>Ative a afinidade para difundir as instâncias do contêiner em
+nós de cálculo físico separados.</li>
+<li>O grupo de contêiner deve ser mapeado para a mesma rota do primeiro grupo de contêiner criado na
+etapa anterior.</li>
+<li>Não inclua arquivos persistentes no contêiner. É possível armazenar arquivos em outra instância de um
+banco de dados Cloudant.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Configure o DNS para resolver a rota para o <span class="keyword">Bluemix</span>. </span>  <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Observe os servidores de nomes que foram designados a você pelo registrador de DNS. Deve-se incluir esses
+servidores como registros de NS no registrador de DNS.</span></li>
+<li class="li substep"><span class="cmd">No registrador de DNS, delegue o domínio fornecendo os servidores de nomes.</span></li>
+<li class="li substep"><span class="cmd">Configure o balanceamento de carga e o failover para seu nó.</span></li>
+</ol>
+</li>
+</ol>
+<div class="section postreq">Para obter um exemplo detalhado de configuração de apps CF altamente disponíveis, consulte <a href="http://www.ibm.com/developerworks/cloud/library/cl-multi-region-bluemix-apps-with-cloudant-and-dyn-trs/index.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Configurar e executar um aplicativo <span class="keyword">Bluemix</span> multiregion com o IBM
+Cloudant e Dyn</a>. As seções que descrevem como
+usar Dyn também se aplicam aos grupos de contêineres. </div></div>
+<aside role="complementary" aria-labelledby="d49584e3771"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e4078" lang="pt-br" id="container_group_private_ip"><h2 class="topictitle2" id="d49584e4078">Conectando a um grupo de contêiner privado</h2>
+<div class="body taskbody"><p class="shortdesc">Identifique o endereço IP do balanceador de carga de um grupo de contêiner para acessar o grupo
+sem expor o grupo ao público.</p>
+<div class="section context">Todo grupo de contêiner é implementado com um <a href="container_planning.html#group_loadbalancing" title="Os grupos de contêineres fornecem balanceamento de carga integrado que roteia o tráfego recebido uniformemente (round-robin) para as instâncias de contêiner no grupo. Quando um grupo de contêiner é criado ou instâncias são incluídas em um grupo existente, se você mesmo incluir instâncias, ou uma instância for recriada durante a recuperação automática, o balanceamento de carga será ativado.">balanceador de
+carga</a> integrado que equilibra solicitações para os contêineres individuais dentro de um grupo. Frequentemente, o
+grupo de contêiner é exposto publicamente com uma URL que é mapeada para o grupo. Em situações em que o
+grupo não é público, o grupo de contêiner pode ser acessado por um endereço IP privado que é
+designado automaticamente ao balanceador de carga. Esse endereço IP privado também permite que os apps que
+se comunicam por meio de TCP, bem como de HTTPS, acessem o grupo de contêiner. Para determinar o
+endereço IP privado do balanceador de carga, conclua as etapas a seguir.</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Liste os grupos de contêineres que estão em execução no espaço.</span> Observe a porta exposta para o grupo de contêiner, neste caso, <var class="keyword varname">9080</var>. Se o grupo de contêiner não tiver uma porta exposta, deve-se criar um novo grupo de contêiner e expor uma porta. O balanceador de carga do grupo de contêiner está acessível apenas na porta exposta.  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+
+
+<pre class="pre screen"><code>Group ID                               Name                      Status            Created                         Updated   Port   
+cb628ddd-a1e7-4944-9a42-02abc80ea6ee   container_group_example   CREATE_COMPLETE   2016-09-26 15:43:00 -0400 EDT             9080   </code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Inspecione o grupo de contêiner.</span>  Substitua <var class="keyword varname">container_group_example</var> pelo nome do grupo de contêiner.
+Revise o campo <span class="ph uicontrol">private_ip_address</span> na
+seção <span class="ph uicontrol">Balanceador de carga</span>. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">container_group_example</var></code></pre>
+
+
+<pre class="pre screen"><code>    "Loadbalancer": {
+        "intermediate_ip_address": "192.0.2.1", 
+        "private_ip_address": "198.51.100.27"
+    }, </code></pre>
+
+
+<div class="note important"><span class="importanttitle">Importante:</span> O <span class="ph uicontrol">intermediate_ip_address</span> é usado pelo
+GoRouter para rotear com segurança o tráfego da rede pública para o grupo de contêiner
+quando o grupo de contêiner é exposto ao público. Não use o
+<span class="ph uicontrol">intermediate_ip_address</span> do balanceador de carga para acessar seu
+grupo de contêiner na rede privada porque ele requer consultas adicionais na tabela de
+roteamento e pode causar latência de rede. </div>
+</li>
+<li class="step stepexpand"><span class="cmd">Identifique o endereço IP privado do balanceador de carga.</span> Um app no mesmo espaço pode usar esse endereço IP privado para se comunicar de forma privada com o
+grupo de contêiner. Deve-se incluir a porta exposta no formato a seguir para acessar o balanceador
+de carga: <samp class="ph codeph">198.51.100.27:9080</samp>.</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49584e4078"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d49584e4200" lang="pt-br" id="container_group_remove"><h2 class="topictitle2" id="d49584e4200">Removendo grupos de contêineres</h2>
+<div class="body taskbody"><p class="shortdesc">Para maximizar o uso de sua cota, remova os grupos de contêineres que não estão em uso
+ocasionalmente.</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">Importante:</span>  Remova a rota do grupo de contêineres executando um dos comandos a seguir
+antes de remover um grupo de contêineres ou antes de excluir uma rota usando o comando
+<samp class="ph codeph">cf delete-route</samp>.
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">host</var> -d <var class="keyword varname">domain</var> <var class="keyword varname">group_name_or_ID</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Remova um grupo de contêiner usando um dos métodos a seguir.</span> <ul class="ul choices"><li class="li choice">Na GUI do
+<span class="keyword">Bluemix</span>, selecione
+seu grupo de contêiner e clique em <span class="ph uicontrol">Excluir</span> no menu <span class="ph uicontrol">Mais
+ações...</span>. </li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Verifique se o grupo de contêineres foi removido executando o comando a seguir e confirmando
+que o grupo de contêineres não aparece na lista.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d49584e4200"></aside></article></article></div></main></body></html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2015, 2016">
+
+<meta name="description" content="查看漏洞报告后，了解如何修订报告的漏洞。">
+<meta name="keywords" content="漏洞顾问程序, 漏洞, 容器安全性, 映像安全性">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>解决容器或映像中的漏洞</title>
+</head>
+<body id="va_report"><main role="main"><article role="article" aria-labelledby="d246e2"><h1 class="topictitle1" id="d246e2">解决容器或映像中的漏洞</h1>
+<div class="body taskbody"><p class="shortdesc">查看漏洞报告后，了解如何修订报告的漏洞。</p>
+<div class="section context"><p>漏洞顾问程序对报告的漏洞提供纠正措施。其中一些报告的漏洞可通过更新 Dockerfile 进行修复。要帮助您更快速地解决常见漏洞，请使用以下代码示例，在 Dockerfile 中实施解决方案。</p>
+
+<div class="p" id="va_report__common_vulnerabilities">
+
+<dl><dt class="dlterm">最长密码寿命</dt>
+<dd>漏洞：
+<pre class="pre screen"><code>最长密码寿命必须设置为 90 天。:
+PASS_MAX_DAYS 在 /etc/login.defs 中未设置为 90。当前是 99999。
+最小密码长度必须为 8。在 /etc/pam.d/common-password 中
+未指定最小密码长度。缺省值为 6。建议至少为 8。</code></pre>
+</dd>
+<dd class="ddexpand">修订：通过向 Dockerfile 添加以下代码，设置密码合规性。<pre class="codeblock"><code># Set password length and expiry for compliance with vulnerability advisor
+RUN sed -i 's/ˆPASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs
+RUN sed -i 's/sha512/sha512 minlen=8/' /etc/pam.d/common-password</code></pre>
+</dd>
+<dt class="dlterm">SSH 漏洞</dt>
+<dd>漏洞：<pre class="pre screen"><code>不应安装 SSH 服务器。</code></pre>
+</dd>
+<dd class="ddexpand">修订：<p>使用 <samp class="ph codeph">docker attach</samp> 或 <samp class="ph codeph">docker exec</samp> 而非使用 SSH 来访问容器。
+通过向 Dockerfile 添加以下代码，从容器中除去 SSH 服务器：</p>
+<pre class="codeblock"><code># Remove SSH for compliance with vulnerability advisor
+RUN apt-get purge -y openssh-server
+RUN apt-get remove -y openssh-sftp-server
+RUN apt-get -y autoremove</code></pre>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></main></body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="イメージをデプロイする前に、その Vulnerability Advisor レポートを検討することができます。 このレポートには、脆弱なパッケージ、セキュアでないコンテナーやアプリケーションの設定、イメージが組織のポリシーに準拠しているかどうかの詳細が示されます。">
+<meta name="keywords" content="Vulnerability Advisor, 脆弱性, コンテナーのセキュリティー, イメージのセキュリティー">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Vulnerability Advisor イメージ・レポートの検討</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d351e2"><h1 class="topictitle1" id="d351e2">イメージ VA レポートの検討</h1>
+<div class="body taskbody"><p class="shortdesc">イメージをデプロイする前に、その Vulnerability Advisor レポートを検討することができます。
+このレポートには、脆弱なパッケージ、セキュアでないコンテナーやアプリケーションの設定、イメージが組織のポリシーに準拠しているかどうかの詳細が示されます。</p>
+<div class="section context"><p>コンテナー・イメージは、IBM によって提供されます。あるいは、組織が追加することもできます。場合によっては、
+イメージをデプロイする前に、組織のポリシーによって設定された要件を満たすようにイメージを構成する必要があります。
+組織管理者だけが脆弱性のあるイメージがデプロイされるようにポリシーを変更できます。組織ポリシーを表示および変更する手順については、<a href="va_managing_policy.html" title="Bluemix 組織の管理者は、セキュリティーと構成に関する特定の問題を持つイメージからのコンテナーのデプロイメントを、ユーザーに警告するかまたはブロックするポリシーを設定できます。">組織ポリシーの検討</a>を参照してください。</p>
+
+<p>以下の手順を実行して、イメージにセキュリティーと構成の問題がないかどうかを確認します。</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span> にログインします。</span> <span class="ph">Vulnerability Advisor</span>は、ログインしている間のみ、ユーザー・インターフェースで使用できます。</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">脆弱性評価</span> セクションで、脆弱性評価の状況を確認します。</span> 状況は、以下のいずれかの条件で示されます。
+<ul><li><span class="keyword wintitle">安全にデプロイ可能</span> - セキュリティー問題は検出されませんでした。</li>
+<li><span class="keyword wintitle">デプロイに注意が必要</span> - 対処が必要なセキュリティーまたは構成の問題が検出されました。
+組織のポリシーは脆弱なイメージのデプロイを許可しています。
+このイメージをデプロイすると、警告が出されます。
+</li>
+<li><span class="keyword wintitle">デプロイメントはブロックされました</span> - セキュリティーまたは構成の問題が検出されました。組織のポリシーは脆弱なイメージのデプロイを許可していないので、イメージをデプロイする前に対処が必要です。</li>
+<li><span class="keyword wintitle">不完全</span> - スキャンは完了していません。
+スキャンはまだ実行中であるか、イメージのオペレーティング・システムに互換性がない可能性があります。
+待機してからスキャンを再試行してください。
+それでもスキャンが完了しない場合は、再度イメージをプッシュして、新規スキャンを開始します。
+スキャンが不完全なイメージは、デプロイメントについてブロックされません。</li>
+</ul>
+
+<p>Vulnerability Advisor セキュリティー評価を形成する詳細レポートを確認します。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">イメージを選択し、「<span class="ph uicontrol">脆弱性評価</span>」セクションで、「<span class="ph uicontrol">レポートの表示</span>」をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd">各セクションを確認して、イメージ内の各パッケージにセキュリティーと構成の問題がないかどうかを調べます。</span> <div class="p"><ul id="va_reviewing__report"><li><span class="ph uicontrol">組織ポリシー</span><p>組織管理者が設定したポリシーにイメージが従っているかどうかがリストされます。</p>
+</li>
+<li><span class="ph uicontrol">リスク分析</span><p>イメージに 1 つ以上の脆弱性がある場合、Vulnerability Advisor によって計算されたリスク評価がこのセクションに表示されます。
+リスクは <a href="https://www.first.org/cvss" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">CVSS</a> 計算器、および <a href="https://exchange.xforce.ibmcloud.com/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><span class="keyword">IBM® X-Force® Exchange</span></a> テクノロジーを使用して計算されます。</p>
+</li>
+<li><span class="ph uicontrol">脆弱パッケージ</span><p>脆弱性に関する既知の問題が含まれるパッケージがリストされます。既知の問題は、<a href="va_index.html" title="Vulnerability Advisor は、デプロイメントの前にコンテナー・イメージのセキュリティー状況を検査するほか、実行中のコンテナーの状況も検査します。">Vulnerability Advisor によるコンテナーとイメージのセキュリティーの管理</a> にリストされている Docker イメージ・タイプの公開セキュリティー通知に基づいて、毎日更新されます。
+脆弱パッケージがスキャンに合格するようにするには通常、脆弱性の修正が反映された新しいバージョンのパッケージが必要です。同じパッケージに複数の脆弱性がリストされることがあり、その場合は、1 回のパッケージのアップグレードで複数の問題が修正されることがあります。セキュリティー通知コードをクリックして、パッケージに関する詳細情報と、パッケージを更新するための手順を確認してください。</p>
+</li>
+<li><span class="ph uicontrol">コンテナー設定</span><p>イメージのセキュリティーを向上させるために取り得る対処方法がリストされます。<span class="keyword wintitle">「修正アクション (Corrective Action)」</span>列に、セキュリティーを向上させる方法についての説明があります。</p>
+</li>
+<li><span class="ph uicontrol">アプリケーション構成</span><p>非セキュアなイメージのアプリケーションの設定がリストされます。<span class="keyword wintitle">「修正アクション (Corrective Action)」</span>列に、セキュリティーを向上させる方法についての説明があります。</p>
+</li>
+<li><span class="ph uicontrol">コンテナー・インスタンス</span><p>組織で既に実行されている、このイメージを使用するコンテナーをリストします。</p>
+</li>
+</ul>
+</div>
+
+
+<p>リストされた項目ごとに、修正アクションまたは提案事項が示されます。</p>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">脆弱性評価</span>レポートに記載されている問題を修正し、イメージを再作成します。</span> Dockerfile の一部の問題は、<a href="va_report.html" title="脆弱性レポートを確認した後の、報告された脆弱性を修正する方法について説明します。">コンテナーまたはイメージの脆弱性の解決</a>に記載されているコードを使用して解決することができます。</li>
+</ol>
+<div class="section result"></div><div class="section postreq">イメージをデプロイした後に、Vulnerability Advisor はコンテナー内にあるセキュリティーと構成の問題を見つけるスキャンを続行します。
+見つかった問題は、<a href="va_reviewing_container.html" title="ダッシュボードでコンテナーの状況を調べて、そのセキュリティーが組織のポリシーに準拠しているかどうかを判別できます。 コンテナーの脆弱性レポートを精査することもできます。このレポートには、脆弱なパッケージと、セキュアでないコンテナーやアプリケーションの設定の詳細が示されます。">コンテナーの脆弱性の確認</a>に記載されている手順に従うことによって解決できます。</div></div>
+<aside role="complementary" aria-labelledby="d351e2"></aside></article></main></body></html>

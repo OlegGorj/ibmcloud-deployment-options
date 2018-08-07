@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="在儀表板中，您可以查看容器的狀態，來判斷其安全是否符合組織的原則。您也可以檢閱容器的漏洞報告，此漏洞報告詳述所有有漏洞的套件及不安全的容器或應用程式設定。">
+<meta name="keywords" content="漏洞警告器, 漏洞, 容器安全">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>檢閱容器漏洞</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d665e2"><h1 class="topictitle1" id="d665e2">檢閱容器漏洞</h1>
+<div class="body taskbody"><p class="shortdesc">在儀表板中，您可以查看容器的狀態，來判斷其安全是否符合組織的原則。您也可以檢閱容器的漏洞報告，此漏洞報告詳述所有有漏洞的套件及不安全的容器或應用程式設定。</p>
+<div class="section context"><div class="p">檢閱 <span class="ph uicontrol">POLICY STATUS</span> 欄位，以確認空間中所執行的容器持續符合組織原則。即會以下列其中一種狀況顯示狀態：
+<ul><li><span class="keyword wintitle">通過</span> - 未發現漏洞。</li>
+<li><span class="keyword wintitle">警告</span> -「漏洞警告器」發現容器中有導致容器不符合原則的潛在漏洞。如果您的組織原則允許部署有漏洞的映像檔，則可能已在這個狀態中部署映像檔（<span class="keyword wintitle">小心部署</span>），並將警告傳送給已部署它的使用者。</li>
+<li><span class="keyword wintitle">原則違規</span> -「漏洞警告器」發現容器中有導致容器不符合原則的潛在漏洞。您的組織原則設定為不允許部署有漏洞的映像檔。</li>
+<li><span class="keyword wintitle">未完成</span> - 掃描未完成。掃描可能仍在執行中，或該容器實例的作業系統可能不相容。</li>
+</ul>
+</div>
+
+<p>如果<span class="ph uicontrol">原則狀態</span>不是「<span class="keyword wintitle">通過</span>」，請檢視其漏洞報告來確認容器具有最大安全，並完成下列步驟來處理任何報告的漏洞：</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">在 Bluemix 儀表板中，選取您要檢閱的容器。</span></li>
+<li class="step stepexpand"><span class="cmd">在「<span class="keyword wintitle">漏洞警告器</span>」窗格中，按一下<span class="ph uicontrol">檢視報告</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">檢閱各區段，以查看映像檔中每一個套件的潛在漏洞：</span> <ul id="va_reviewing__report"><li><span class="ph uicontrol">組織原則</span><p>列出容器是否遵守組織管理員所設定的原則。</p>
+</li>
+<li><span class="ph uicontrol">有漏洞的套件</span><p>列出具有已知漏洞問題的套件，每日會從<a href="index.html" title="當您將映像檔新增至專用 Bluemix 映像檔登錄時，「漏洞警告器」會自動檢查映像檔中的每一個套件以尋找可能的漏洞。">使用漏洞警告器檢查映像檔漏洞</a>中所列作業系統的已發佈安全注意事項進行更新。一般而言，為了讓有漏洞的套件通過掃描，需要有包含漏洞修正程式的更新版本套件。相同的套件可能會列出多個漏洞，而在此情況下，單一套件升級可能會更正多個問題。按一下安全注意事項代碼，以檢閱套件的相關資訊，以及更新套件的步驟。</p>
+</li>
+<li><span class="ph uicontrol">容器設定</span><p>列出可針對增加容器安全所採取的建議。「<span class="keyword wintitle">更正動作</span>」直欄說明如何改善安全。</p>
+</li>
+<li><span class="ph uicontrol">應用程式配置</span><p>列出不安全容器的應用程式設定。「<span class="keyword wintitle">更正動作</span>」直欄說明如何改善安全。</p>
+</li>
+<li><span class="ph uicontrol">Docker 映像檔來源</span><p>顯示用來建立此容器的映像檔。</p>
+</li>
+</ul>
+
+
+<p>會針對每一個列出的項目，提供更正動作或建議。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">決定如何更新容器，以解決問題。</span> 請確定您已充分瞭解容器架構，以選擇更新容器的適當方法。例如：<ul><li>如果已將您的容器與它所計算的資料取消連結，您可以停止容器，並對映像檔進行必要變更，然後重新部署。</li>
+<li>您可以使用 <a href="https://console.bluemix.net/docs/services/ActiveDeploy/index.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Active Deploy</a> 來更新有漏洞的容器實例，而不需要停止容器。</li>
+<li>在容器群組中具有多個容器的 HA 配置中，您可以在修正漏洞時，將資料流量遞送至另一個容器實例。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">修正<span class="ph uicontrol">漏洞評量</span>報告中所述的問題，然後重建映像檔，或根據您選擇的方法來重新部署容器。</span> 使用<a href="va_report.html" title="檢視漏洞報告之後，請瞭解如何修正報告的漏洞。">解決容器或映像檔中的漏洞</a>中所提供的程式碼，可以解決 Dockerfile 中的一些問題。</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d665e2"></aside></article></main></body></html>

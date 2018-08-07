@@ -1,0 +1,1906 @@
+<!DOCTYPE html><html lang="ko-kr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Bluemix용 IBM Bluemix Container Service 플러그인을 사용하여 명령행에서 이미지 또는 단일 및 확장 가능 컨테이너 관련 작업을 수행합니다.">
+<meta name="keywords" content="컨테이너, cli, 플러그인, cf, bx ic, IBM Containers, Cloud Foundry, 설치, 로그인, 업그레이드, 설치 제거">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ko-kr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>단일 및 확장 가능 컨테이너 관리를 위한 IBM Bluemix Container Service CLI 플러그인(bx ic)</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d72e6" id="container_cli_cfic"><h1 class="topictitle1" id="d72e6"><span class="ph">단일 및 확장 가능 컨테이너</span> 관리를 위한 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h1>
+<div class="body conbody"><p class="shortdesc"><span class="keyword">Bluemix®</span>용 <span class="keyword">IBM®
+Bluemix Container Service</span>
+플러그인을 사용하여 명령행에서 이미지 또는 <span class="ph">단일 및 확장 가능 컨테이너</span> 관련 작업을 수행합니다. </p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d72e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d72e108" lang="ko-kr" id="container_cli_cfic_install"><h2 class="topictitle2" id="d72e108"><span class="ph">단일 및 확장 가능 컨테이너</span>에 기본 Docker CLI를 사용하도록
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 설정</h2>
+<div class="abstract"><div class="shortdesc">기본 Docker CLI 명령을 실행하여 컨테이너를 관리할 수 있도록 <span class="keyword">IBM
+Bluemix Container Service</span>
+플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)을 설치합니다. </div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">주의:</span> <span class="ph"><span class="ph">단일 및 확장 가능 컨테이너</span>의 무료 평가판은 사용할 수 없습니다. 
+<a href="cs_ov.html" title="IBM Bluemix Container Service는 Kubernetes API를 사용하여 독립적인 컴퓨팅 호스트의 클러스터에서 컨테이너화된 앱의 배치, 오퍼레이션, 스케일링 및 모니터링을 자동화하는 강력한 도구, 직관적인 사용자 경험, 기본 제공 보안 및 격리를 제공할 수 있도록 Docker 및 Kubernetes를 결합합니다.">클러스터 관리에 대해 알아보고
+<span class="keyword">Bluemix</span> 퍼블릭에서
+<span class="keyword">IBM
+Bluemix Container Service</span>의 Kubernetes로 마이그레이션하십시오. </a></span></div>
+</div>
+
+
+<div class="p">이 페이지의
+내용:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#install_plugin">IBM Bluemix Container Service 플러그인(bx ic) 설치</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_login" title="CLI를 설치한 후 CLI를 사용하기 위해 로그인합니다.">IBM Bluemix Container Service CLI 플러그인(bx ic)에 로그인</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_upgrade" title="새 기능을 사용하기 위해 플러그인의 주기적 업데이트를 원할 수 있습니다.">IBM Bluemix Container Service 플러그인(bx ic) 업그레이드</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_uninstall" title="더 이상 IBM Bluemix Container Service 플러그인이 필요하지 않은 경우 bx 명령을 사용하여 플러그인을 설치 제거할 수 있습니다.">IBM Bluemix Container Service 플러그인(bx ic) 설치 제거</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_install" title="한 번에 여러 단일 컨테이너를 시작하고 중지하기 위해 Docker Compose CLI를 설치할 수 있습니다.">Docker Compose 및 해당 종속 항목 설치</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="최신 기능을 사용하도록 Docker Compose 패키지의 버전을 업그레이드해야 합니다.">Docker Compose 업그레이드</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_uninstall" title="Docker Compose 소프트웨어 패키지가 더 이상 필요하지 않으면 다음 명령으로 이를 설치 제거할 수 있습니다.">Docker Compose 설치 제거</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d72e108"></aside><article class="topic task nested2" role="article" aria-labelledby="d72e307" id="install_plugin"><h3 class="topictitle3" id="d72e307">IBM Bluemix Container Service 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 설치</h3>
+<div class="body taskbody"><div class="section context" id="install_plugin__context_e5s_szz_nz"><p>명령을 실행하려면 운영 체제가 다음 요구사항을 충족해야 합니다. 이 태스크에는
+이 요구사항의 설치에 대한 정보가 포함되어 있습니다. 이 도구의 이전 버전은
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)에서 사용할 수 없습니다. </p>
+
+<div class="p"><ul id="install_plugin__ul_f5s_szz_nz"><li><span class="ph">Docker 버전 1.8 - <span class="ph" id="install_plugin__d1152e253">1.12</span></span></li>
+<li><span class="ph">Cloud Foundry CLI 버전
+<span class="ph" id="install_plugin__d1152e298">6.14.0</span> - 6.22.0</span><div class="steps note"><span class="notetitle">참고:</span> MacOS Sierra 사용자는 Cloud Foundry CLI 버전 6.22.0 이상을 설치해야 합니다. </div>
+</li>
+<li><span class="keyword">Bluemix</span> CLI </li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</li>
+</ul>
+</div>
+</div><p class="li stepsection">CLI를 설치하려면 다음을 수행하십시오. </p><ol class="steps" id="install_plugin__steps_g5s_szz_nz"><li class="step stepexpand" id="install_plugin__docker_install"><span class="cmd">Docker <span class="ph">1.12</span>를 설치하십시오. </span> Windows 및 OS X 운영 체제의 경우 Docker는 Docker Toolbox와 함께 설치되며
+여기에는 Docker Machine, Docker Engine 및 Kitematic이 포함됩니다. Linux 운영 체제의 경우
+설치 메커니즘은 사용하는 Linux 배포판의 유형에 따라 다릅니다.
+다음의 링크를 참조하여 Docker <span class="ph">1.12</span>를
+설치하십시오(Docker를 이미 설치한 경우에는 이 버전으로 업그레이드하십시오).
+<div class="steps note"><span class="notetitle">참고:</span> 컴퓨터에 이미 Docker를 설치했지만 현재 버전을 업그레이드하지 않으려는 경우에는
+이 단계를 건너뛰고 Cloud Foundry CLI를 계속 설치할 수 있습니다. </div>
+
+<ul id="install_plugin__ul_h5s_szz_nz"><li>OS X<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.pkg" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">https://github.com/docker/toolbox/releases/download/v<span class="ph">1.12</span>/DockerToolbox-<span class="ph">1.12</span>.pkg</a></p>
+</li>
+<li>Windows<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.exe" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">https://github.com/docker/toolbox/releases/download/v<span class="ph">1.12</span>/DockerToolbox-<span class="ph">1.12</span>.exe</a></p>
+</li>
+<li>Linux<p>사용하는 Linux 배포판에 Docker 버전 <span class="ph">1.12</span>를
+설치하는 방법에 대한 지시사항을 찾으려면 <a href="https://docs.docker.com/engine/installation/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Docker 설치 문서</a>를 참조하십시오. </p>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Docker를 시작하십시오.</span> <ul class="ul choices" id="install_plugin__choices_i5s_szz_nz"><li class="li choice" id="install_plugin__start_qst">OS X 및 Windows의 경우 <span class="ph uicontrol">Docker Quickstart
+Terminal</span> 아이콘을 두 번 클릭하십시오. Docker 디먼이 시작되고 환경 변수가
+설정됩니다.</li>
+<li class="li choice">Linux의 경우 명령행 유틸리티에서 Docker 디먼이 실행 중인지 확인하십시오. 또한
+Docker 디먼이 자동으로 다시 시작되도록 설정하십시오. 자세한 정보는 <a href="https://docs.docker.com/installation/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">운영 체제별 Docker 문서를 참조하십시오</a>.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">터미널에서 <samp class="ph codeph">docker run hello-word</samp>를 실행하여 Docker 설치가 올바르게
+설정되었는지 확인하십시오. </span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ Docker에서 컨테이너를 실행할 <samp class="ph codeph">hello-world</samp> 이미지를
+로컬에서 검색하므로, 명령을 처음 실행하는 경우 다음 메시지가 표시됩니다.
+
+<pre class="codeblock"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+이미지를
+Docker Hub, 이미지의 공용 저장소에서 가져오고 명령이 완료된 후에 사용자의 출력은 다음과 같이 표시됩니다.
+<pre class="codeblock"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ 명령이 적절하게 완료되지 않으면 <samp class="ph codeph">docker version</samp>을 실행하여 Docker가
+올바르게 설치되었는지 확인하십시오. </li>
+<li class="step stepexpand" id="install_plugin__install_cf"><span class="cmd"><a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">GitHub 저장소</a>에서 Cloud Foundry CLI 버전 <span class="ph">Cloud Foundry CLI 버전
+<span class="ph" id="install_plugin__d1152e298-d1138e285a1310">6.14.0</span> - 6.22.0</span>을 설치하십시오. </span> 운영 체제의 기본 위치에 Cloud Foundry CLI를 설치해야 합니다. 그렇지 않으면
+PATH 환경 변수가 설치 디렉토리와 일치하지 않습니다.  <div class="steps note"><span class="notetitle">참고:</span> MacOS Sierra 사용자는 Cloud Foundry CLI 버전 6.22.0 이상을 설치해야 합니다. </div>
+
+
+<div class="p">Cloud Foundry CLI가 제대로 설치되었는지 확인하거나, Cloud Foundry CLI를 이미
+설치한 경우 설치된 버전을 확인하려면 다음 명령을
+실행하십시오.<pre class="codeblock"><code>cf -v </code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="install_plugin__install_bx"><span class="cmd"><a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)"><span class="keyword">Bluemix</span> CLI</a>를 설치하십시오.</span></li>
+<li class="step stepexpand" id="install_plugin__bx_login"><span class="cmd"><span class="keyword">Bluemix</span> CLI에 로그인하십시오.</span> <pre class="codeblock"><code><span class="ph">bx</span> login -a https://api.ng.bluemix.net</code></pre>
+</li>
+<li class="step stepexpand" id="install_plugin__install"><span class="cmd" id="install_plugin__install_bx_ic"><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인을 설치하십시오. </span> <pre class="codeblock" id="install_plugin__bx_cs_install"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">플러그인이 올바르게 설치되었는지 확인하려면 다음 명령을 실행하십시오. <pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>플러그인이 IBM-Containers로 결과에 표시됩니다. </p>
+</li>
+</ol>
+<div class="section result" id="install_plugin__result_j5s_szz_nz"><p>이제 로그인하고 컨테이너 관리를 시작할 준비가 되었습니다. </p>
+</div></div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d72e519" lang="ko-kr" id="container_cli_login"><h2 class="topictitle2" id="d72e519"><span class="keyword">IBM
+Bluemix Container Service</span> CLI
+플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)에 로그인 </h2>
+<div class="body taskbody"><p class="shortdesc">CLI를 설치한 후 CLI를 사용하기 위해 로그인합니다.</p>
+<div class="section prereq"><div class="p">시작하기 전에 다음 태스크를 완료하십시오.<ul><li><a href="container_cli_cfic_install.html#install_plugin"><span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 플러그인을 설치하십시오.</a></li>
+<li>Cloud Foundry에 로그인할 때 사용할 <span class="keyword">Bluemix</span> 조직과
+영역을 결정하십시오. 조직 및 영역에 대한 자세한 정보는 <span class="ph"><a href="../admin/orgs_spaces.html">조직 및 영역</a></span>의 내용을 참조하십시오. </li>
+<li>Cloud Foundry <samp class="ph codeph">login</samp> 명령을 사용하여 지정할 수 있는 옵션에 대한
+자세한 정보는 Cloud Foundry 문서에서 <a href="https://docs.cloudfoundry.org/devguide/installcf/whats-new-v6.html#login" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Login
+명령</a>을 참조하십시오. </li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">명령행 유틸리티를 여십시오. </span> <ul class="ul choices"><li class="li choice">OS X 및 Windows의 경우 <span class="ph uicontrol">Docker Quickstart
+Terminal</span> 아이콘을 두 번 클릭하십시오. Docker 디먼이 시작되고 환경 변수가
+설정됩니다.</li>
+<li class="li choice">Linux의 경우 명령행 유틸리티를 여십시오.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Cloud Foundry CLI를 통해 <span class="keyword">Bluemix</span>에 로그인하십시오.</span> 특정한 지역을 지정하려면 해당 지역의 API 엔드포인트와 함께 <samp class="ph codeph">-a</samp> 옵션을
+포함시키십시오. CLI를 처음으로 사용할 때 이 옵션을 포함시키지 않으면, API 엔드포인트를 입력하라는
+프롬프트가 표시됩니다. API 엔드포인트가 지정되면, 이후의 로그인 시에
+API 엔드포인트를 입력할 필요가 없습니다. <div class="p"><pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+</div>
+ <div class="p">특정 지역에 로그인하려면 Cloud Foundry CLI에 로그인할 때 해당 지역에 대한 API 엔드포인트를 포함하십시오. <ul><li>미국 남부<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>영국<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+
+<span class="ph">싱글 사인온 매개변수 <span class="keyword option">-sso</span>는 연합 ID로 로그인할 때 필요합니다. 이 옵션이 사용되면 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>를 열고 일회성 패스코드를 얻으십시오. <span class="keyword option">--sso</span> 옵션을 포함하지 않는 경우에는 다음의 하위 단계를 완료하십시오.</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">이메일</span>에 대해 <span class="keyword">Bluemix</span>의 IBM ID를 입력하십시오. </span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">비밀번호</span>에 대해 IBM ID의 비밀번호를 입력하십시오. </span> 사용자의 Bluemix 조직과 영역이 검색됩니다. </li>
+<li class="li substep"><span class="cmd"><span class="keyword">Bluemix</span> 조직 중 하나를 표시하는 번호를 입력하십시오. </span></li>
+<li class="li substep"><span class="cmd">기존 <span class="keyword">Bluemix</span> 영역 중 하나를 표시하는 번호를 입력하십시오. </span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_cli_login__namespace"><span class="cmd"><span class="ph">조직에 대한 <dfn class="term">네임스페이스</dfn>를 설정하십시오. </span></span> 네임스페이스는 개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리를 식별하는 고유 이름입니다. 컨테이너를 작성할 때 이미지 이름이 있는 네임스페이스를 포함하여 이미지의 위치를 지정해야 합니다. <div class="p"><div class="steps note" id="container_cli_login__namespace_warning"><span class="notetitle">참고:</span> 네임스페이스를
+작성하는 경우 작성된 후에는 변경할 수 없으며 삭제만 가능합니다. <span class="keyword">Bluemix</span> 조직의 사용자가
+이미 컨테이너를 배치하고 <dfn class="term">네임스페이스</dfn>를 설정한 경우 조직에 대한 네임스페이스를 표시하는 메시지가
+나타납니다. 이 경우 다음 단계를 계속할 수 있습니다. </div>
+</div>
+
+
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">팁:</span> 네임스페이스에 대한 다음 규칙을 준수하십시오.
+<ul id="container_cli_login__d9179e136"><li>소문자, 숫자, 밑줄(_)만 포함할 수 있습니다.</li>
+<li>길이는 4 - 30자까지 가능합니다. 명령행에서 컨테이너를 관리할 계획이면 빨리 입력할 수 있는 짧은 네임스페이스 이름을 선호할 것입니다.</li>
+<li>해당 이름은 <span class="keyword">Bluemix</span>에서 고유해야 합니다. </li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_cli_login__login"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span>를 초기화하십시오. </span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph"><samp class="ph codeph">bx ic</samp></span> 또는 기본 Docker 명령을 실행할 것인지 결정하십시오. </span> 플러그인에 로그인할 때마다 이 옵션들 중 하나를 선택할 수도 있고, <samp class="ph codeph">shellinit</samp>
+명령을 사용하여 항상 옵션 2를 선택할 수도 있습니다. <div class="p"><ul><li id="container_cli_login__option1_li"><span class="ph uicontrol">옵션 1</span>(기본값)<p><span class="keyword">IBM
+Bluemix Container Service</span> 랩퍼 Docker에 대한 단순한 쉘입니다. 로컬 Docker 디먼이
+<span class="keyword">IBM
+Bluemix Container Service</span>의 영향을 받지 않습니다. <span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령이
+<span class="keyword">Bluemix</span> 영역에서 컨테이너를 관리하는 데 사용되고
+<samp class="ph codeph">docker</samp> 명령이 로컬로 컨테이너를 관리하는 데 사용됩니다. <samp class="ph codeph">docker</samp>
+명령은 로컬 이미지 개발에 항상 필요합니다. </p>
+<p>예를 들어, 옵션 1을 통해
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 명령으로
+<span class="keyword">Bluemix</span> 영역에 컨테이너가 작성되고
+<samp class="ph codeph">docker run</samp>으로 컨테이너가 로컬로 작성됩니다. Docker 및
+<span class="keyword">IBM
+Bluemix Container Service</span> 둘 다의 새 사용자이거나
+로컬로 컨테이너를 테스트하려는 경우 이 옵션을 선호할 수 있습니다.</p>
+</li>
+<li id="container_cli_login__option2_li"><span class="ph uicontrol">옵션 2</span><p>현재 CLI 세션의 로컬 Docker 디먼의 경로를
+<span class="keyword">IBM
+Bluemix Container Service</span>에
+재지정하여
+<span class="keyword">Bluemix</span> 영역에서 컨테이너를 관리하는 데 사용 가능한 경우 항상 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령의 자리에 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령을 사용할 수 있도록 할 수 있습니다. </p>
+<p>예를 들어,
+옵션 2를 통해 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 또는
+<samp class="ph codeph">docker run</samp> 명령을 사용자의 영역에서 컨테이너를 작성하는 데 사용할 수 있습니다. 
+<samp class="ph codeph">docker</samp> 명령에 익숙한 Docker 사용자인 경우 또는
+<span class="keyword">IBM
+Bluemix Container Service</span>에 대해 작업하는 데 자동화된 스크립트를 조정하는 경우 이 옵션을 선호할 수 있습니다.</p>
+<p>일부 예외에서는
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령을 사용하여
+<span class="keyword">IBM
+Bluemix Container Service</span>에 특정한 태스크를 수행해야 합니다. 예를 들어,
+네임스페이스를 설정하려면 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp> 명령을
+사용해야 합니다. <samp class="ph codeph">docker namespace-set</samp>은 올바른 명령이 아닙니다. 이 구성으로 지원되는
+<samp class="ph codeph">docker</samp> 명령의 목록은 <a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="IBM Bluemix Container Service 플러그인(bx ic)을 사용하면 일부 docker 명령이 bx ic 명령 대신 사용하도록 지원됩니다. 플러그인에 로그인할 때 Docker CLI 명령을 사용하는 환경 변수를 구성합니다. 그런 다음 가능할 때마다 docker 명령을 bx ic 명령 대신 실행할 수 있습니다. 예를 들면, bx ic images를 사용하여 개인용 Bluemix 레지스트리에 있는 이미지를 보는 대신 docker images를 실행하십시오.">IBM Bluemix Container Service 플러그인에 지원되는 Docker 명령(bx ic)</a>의 내용을 참조하십시오.</p>
+<div class="p">이 옵션을 구성하려면
+로그인 중 터미널에서 제공되는 환경 변수를 복사하여 붙여넣으십시오.<ul><li><samp class="ph codeph">DOCKER_HOST</samp>는 Docker 호스트를 <span class="keyword">IBM
+Bluemix Container Service</span>로 설정합니다.</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp>는 Cloud Foundry용 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인의 인증 키 위치를 설정합니다.</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp>는 TLS를 사용하고 원격 서버를 확인합니다.</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">팁:</span> <span class="keyword">IBM
+Bluemix Container Service</span> 문서의 태스크를 완료할 때,
+별표(*)로 표시된 모든 단계에서 <samp class="ph codeph">docker</samp> 명령을 실행할 수 있습니다.</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e519"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d72e1040" lang="ko-kr" id="container_cli_cfic_upgrade"><h2 class="topictitle2" id="d72e1040"><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 업그레이드</h2>
+<div class="body taskbody"><p class="shortdesc">새 기능을 사용하기 위해 플러그인의 주기적 업데이트를 원할 수 있습니다.</p>
+<div class="section context"><div class="tablenoborder"><table summary="IBM Bluemix Container Service 플러그인의 현재 버전" id="container_cli_cfic_upgrade__version_history" class="defaultstyle"><caption><span class="tablecap">표 1. <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인의 현재 버전</span></caption><thead><tr><th id="d72e1161" class="thleft thbot">릴리스 날짜</th>
+<th id="d72e1163" class="thleft thbot">버전</th>
+<th id="d72e1165" class="thleft thbot">업데이트 사항</th>
+</tr>
+</thead>
+<tbody><tr id="container_cli_cfic_upgrade__current"><td headers="d72e1161 ">2016년 11월 16일</td>
+<td headers="d72e1163 ">0.8.964</td>
+<td headers="d72e1165 "><ul><li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 명령의
+<samp class="ph codeph">--http_monitor_enabled</samp>, <samp class="ph codeph">--http_monitor_path</samp>, <samp class="ph codeph">--http_monitor_rs_list</samp> 옵션을 통한 컨테이너 그룹의 상태 검사
+관리에 대한 지원 추가</li>
+<li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --session_affinity</samp> 옵션에 대한 지원 추가</li>
+<li>결함 수정</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">플러그인을 업데이트하려면 다음 단계를 따르십시오.</p><ol class="steps"><li class="step stepexpand"><span class="cmd">처음 플러그인을 설치할 때 구성한 플러그인 저장소에서 업데이트를 설치하십시오. </span> <pre class="codeblock"><code><span class="ph">bx</span> plugin update IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">다음 명령을 실행하고 설치된 플러그인의 목록을 확인하여 플러그인 설치를 확인하십시오. </span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>플러그인이 IBM-Containers로 결과에 표시됩니다. </p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e1040"></aside></article><article class="topic reference nested1" role="article" aria-labelledby="d72e1229" lang="ko-kr" id="container_cli_reference_cfic"><h2 class="topictitle2" id="d72e1229"><span class="ph"><span class="ph">단일 및 확장 가능 컨테이너</span> 관리를 위한
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 명령</span></h2>
+<div class="body refbody"><div class="abstract"><span class="shortdesc"><span class="ph"><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인이 있는 경우
+이러한 명령을 참조하여 컨테이너를 작성 및 관리합니다. </span></span>
+</div>
+<div id="container_cli_reference_cfic__d1504e97"><div class="note note" data-hd-status="deprecated"><span class="notetitle">cf ic CLI는 더 이상 사용되지 않습니다. :</span> Cloud Foundry용
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<samp class="ph codeph">cf ic</samp>)을 사용하는 대신,
+<span class="keyword">Bluemix</span>용 <span class="keyword">IBM
+Bluemix Container Service</span>
+플러그인을 사용하십시오. 2018년 1월 1일까지 <samp class="ph codeph">cf ic</samp> CLI를 계속 사용할 수 있습니다.
+<div class="p">대신 <span class="keyword">Bluemix</span>용 <span class="keyword">IBM
+Bluemix Container Service</span>
+플러그인을 사용하려면 다음 주제를 참조하십시오. <ul><li><a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Bluemix CLI 설치</a></li>
+<li><a href="container_cli_cfic_install.html"><span class="ph">bx ic</span> 플러그인 설치</a></li>
+<li><a href="container_cli_reference_cfic.html"><span class="ph">bx ic</span> 플러그인 참조</a></li>
+</ul>
+</div>
+</div>
+옵션 없이 다음 명령을 실행하면 도움말 정보를 볼 수 있습니다.<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> --help</samp>를 실행하여
+이 명령의 목록도 볼 수 있습니다. </div><div id="container_cli_reference_cfic__d1504e104"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e106" class="defaultstyle"><caption><span class="tablecap">표 2. <span class="keyword">Bluemix</span>에서 CLI 및 서비스를 관리하는 명령</span></caption><thead><tr><th colspan="4" id="d72e1377" class="thleft"><span class="keyword">Bluemix</span>에서 CLI 및 서비스를 관리하는 명령</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1813"><span class="ph">bx ic</span> info</a></td>
+<td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1849"><span class="ph">bx ic</span> init</a></td>
+<td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2248"><span class="ph">bx ic</span> namespace</a></td>
+<td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2546"><span class="ph">bx ic</span> reprovision</a></td>
+</tr>
+<tr><td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3711"><span class="ph">bx ic</span> unprovision</a></td>
+<td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3760">bx ic update</a></td>
+<td headers="d72e1377 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3780">bx ic version</a></td>
+<td headers="d72e1377 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e148"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e150" class="defaultstyle"><caption><span class="tablecap">표 3. 컨테이너를 작성하고 관리하는 명령</span></caption><thead><tr><th colspan="5" id="d72e1432" class="thleft"><span class="keyword">Bluemix</span>에서 컨테이너를 작성하고 관리하는 명령</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e418"><span class="ph">bx ic</span> attach</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e564"><span class="ph">bx ic</span> cp</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e737"><span class="ph">bx ic</span> exec</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e828"><span class="ph">bx ic</span> group-create</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1488"><span class="ph">bx ic</span> group-inspect</a></td>
+</tr>
+<tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1523"><span class="ph">bx ic</span> group-instances</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1558"><span class="ph">bx ic</span> group-remove</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1600"><span class="ph">bx ic</span> group-update</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1724"><span class="ph">bx ic</span> groups</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1884"><span class="ph">bx ic</span> inspect</a></td>
+</tr>
+<tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1941"><span class="ph">bx ic</span> ip-bind</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1995"><span class="ph">bx ic</span> ip-release</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2028"><span class="ph">bx ic</span> ip-request</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2057"><span class="ph">bx ic</span> ip-unbind</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2103"><span class="ph">bx ic</span> ips</a></td>
+</tr>
+<tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2138"><span class="ph">bx ic</span> kill</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2182"><span class="ph">bx ic</span> logs</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2290"><span class="ph">bx ic</span> pause</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2332"><span class="ph">bx ic</span> port</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2413"><span class="ph">bx ic</span> ps</a></td>
+</tr>
+<tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2497"><span class="ph">bx ic</span> rename</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2617"><span class="ph">bx ic</span> restart</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2666"><span class="ph">bx ic</span> rm</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2782"><span class="ph">bx ic</span> route-map</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2862"><span class="ph">bx ic</span> route-unmap</a></td>
+</tr>
+<tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2929"><span class="ph">bx ic</span> run</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3356"><span class="ph">bx ic</span> service-bind</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3407"><span class="ph">bx ic</span> service-unbind</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3456"><span class="ph">bx ic</span> start</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3496"><span class="ph">bx ic</span> stats</a></td>
+</tr>
+<tr><td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3538"><span class="ph">bx ic</span> stop</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3589"><span class="ph">bx ic</span> top</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3671"><span class="ph">bx ic</span> unpause</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4114"><span class="ph">bx ic</span> wait</a></td>
+<td headers="d72e1432 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4151"><span class="ph">bx ic</span> wait-status</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e312"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e314" class="defaultstyle"><caption><span class="tablecap">표 4. <span class="keyword">Bluemix</span>에서 이미지를 관리하는 명령</span></caption><thead><tr><th colspan="5" id="d72e1636" class="thleft"><span class="keyword">Bluemix</span>에서 이미지를 관리하는 명령</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e474"><span class="ph">bx ic</span> build</a></td>
+<td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e644"><span class="ph">bx ic</span> cpi</a></td>
+<td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1752"><span class="ph">bx ic</span> images</a></td>
+<td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1884"><span class="ph">bx ic</span> inspect</a></td>
+<td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2248"><span class="ph">bx ic</span> namespace-get</a></td>
+</tr>
+<tr><td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2248"><span class="ph">bx ic</span> namespace-set</a></td>
+<td headers="d72e1636 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2713"><span class="ph">bx ic</span> rmi</a></td>
+<td headers="d72e1636 ">&nbsp;</td>
+<td headers="d72e1636 ">&nbsp;</td>
+<td headers="d72e1636 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e363"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e365" class="defaultstyle"><caption><span class="tablecap">표 5. <span class="keyword">Bluemix</span>의 컨테이너 스토리지 명령</span></caption><thead><tr><th colspan="5" id="d72e1698" class="thleft"><span class="keyword">Bluemix</span>의 컨테이너 스토리지 명령</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3811"><span class="ph">bx ic</span> volume-create</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3857"><span class="ph">bx ic</span> volume-fs-create</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3912"><span class="ph">bx ic</span> volume-fs-flavors</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3930"><span class="ph">bx ic</span> volume-fs-inspect</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3962">bx ic volume-fs</a></td>
+</tr>
+<tr><td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3980"><span class="ph">bx ic</span> volume-fs-remove</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4013"><span class="ph">bx ic</span> volume-inspect</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4049"><span class="ph">bx ic</span> volume-remove</a></td>
+<td headers="d72e1698 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4085"><span class="ph">bx ic</span> volumes</a></td>
+<td headers="d72e1698 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><section role="region" aria-labelledby="d72e1752" id="container_cli_reference_cfic__d1504e418"><h3 class="sectiontitle" id="d72e1752"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach [--no-stdin] [--sig-proxy]</samp> CONTAINER </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>실행 중인 컨테이너를 제어하거나 해당 출력을 표시합니다. 컨테이너를 종료하고 중지하려면
+CTRL+C를 사용하십시오. 자세한
+정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/attach/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">attach</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">--no-stdin</dt>
+<dd class="pd">(선택사항) 표준 입력이 포함되지 않습니다. </dd>
+<dt class="pt dlterm">--sig-proxy</dt>
+<dd class="pd">(선택사항) 기본값은 <span class="keyword option">true</span>입니다. </dd>
+<dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 <var class="keyword varname">my_container</var> 컨테이너에 연결하도록 요청하는
+예입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e1813" id="container_cli_reference_cfic__d1504e474"><h3 class="sectiontitle" id="d72e1813"><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t
+TAG [--no-cache] [--pull] [-q] DOCKERFILE_LOCATION </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e484">Docker 이미지를 로컬로 또는 개인용 <span class="keyword">Bluemix</span> 이미지
+레지스트리에서 빌드합니다.</span> 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/build/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">build</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e496"><!-- --></a><var class="keyword varname">DOCKERFILE_LOCATION</var></dt>
+<dd class="pd">(필수) 로컬 호스트의 컨텍스트 및 <span class="ph filepath">Dockerfile</span>에 대한 경로입니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e505"><!-- --></a>--no-cache</dt>
+<dd class="pd">(선택사항) 이미지가 처음으로 빌드되면 이미지의 계층이 전체 조직에 대해 캐시됩니다. 이미지의 후속 버전을 빌드할 때
+빌드 프로세스의 속도를 높이는 데 이러한 캐시된 버전의 이미지가 사용됩니다. 이미지의 새 버전을 빌드할 때 <samp class="ph codeph">--no-cache</samp> 옵션을
+포함시킴으로써 이미지의 각 계층도 다시 빌드되었음을 확인할 수 있습니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e513"><!-- --></a>--pull</dt>
+<dd class="pd">(선택사항) 기본적으로 기본 이미지가 조직의 이미지 캐시에 아직 없는 경우에만 레지스트리에서
+가져옵니다. 이 옵션을 포함시킴으로써 새 이미지를 빌드하기 위해 기본 이미지의 최신 버전이 사용되었음을 확인할 수 있습니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e518"><!-- --></a>-q, --quiet</dt>
+<dd class="pd">(선택사항) 컨테이너에서 생성하는 상세 출력을 억제합니다. 기본값은 <span class="keyword option">false</span>입니다.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e526"><!-- --></a>-t <var class="keyword varname">TAG</var>, --tag <var class="keyword varname">TAG</var></dt>
+<dd class="pd">(필수) 작성된 이미지에 적용할 개인용 이미지 레지스트리의 경로입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e540">다음은 이름이 <samp class="ph codeph">myimage</samp>인 이미지의 빌드를
+요청하는 예입니다. 빌드에 사용할 <span class="ph filepath">Dockerfile</span> 및 기타 아티팩트는
+명령이 실행되는 디렉토리와 동일한 디렉토리에 있습니다. 레지스트리와 네임스페이스가 이미지 이름과 함께 포함되므로
+이미지는 조직의 개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에서 빌드됩니다. </span>
+<div class="note tip"><span class="tiptitle">팁:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>을 실행하여
+네임스페이스를 검색하고 <var class="keyword varname">&lt;my_namespace&gt;</var>를 자신의 네임스페이스 정보로 대체하십시오. </span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">myimage</var>.</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e1921" id="container_cli_reference_cfic__d1504e564"><h3 class="sectiontitle" id="d72e1921"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp SRC_PATH CONTAINER:DEST_PATH | <span class="ph"><samp class="ph codeph">bx ic</samp></span> cp CONTAINER:SRC_PATH DEST_PATH </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph">실행 중이거나 중지된 단일 컨테이너에서 로컬 시스템으로 또는 반대로
+파일 또는 폴더를 복사하십시오. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/cp/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">cp</a> 명령을 참조하십시오.</span><div class="steps note"><span class="notetitle">참고:</span> 이 명령은 단일 컨테이너와만 사용하도록
+지원됩니다. 컨테이너 그룹에/에서 파일을 복사하려는 경우 그룹의 각 컨테이너 인스턴스에/에서
+파일을 복사해야 합니다. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">DEST_PATH</dt>
+<dd class="pd">(필수) 소스 경로에서 정보를 복사하려는 로컬 시스템 또는 컨테이너의
+파일 또는 폴더 경로입니다. 복사를 시작하려면 파일 또는 폴더가 로컬 시스템 또는 컨테이너에
+있어야 합니다. 로컬 시스템에 복사하려는 경우
+절대 또는 상대 경로를 사용할 수 있습니다. 단일 컨테이너에 복사하려는 경우 <span class="ph" id="container_cli_reference_cfic__d1504e592">컨테이너의 이름, 구분 기호 <span class="q">":"</span> 및
+대상 파일 또는 폴더의 경로를 포함해야 합니다. 경로는
+컨테이너의 루트 디렉토리에 상대적이어야 합니다. </span></dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">SRC_PATH</dt>
+<dd class="pd">(필수) 복사하려는 파일 또는 폴더의 경로입니다. 파일 또는 폴더가 로컬 시스템에 있는 경우
+절대 또는 상대 경로를 사용할 수 있습니다. 파일 또는 폴더가 단일 컨테이너에 있는 경우
+컨테이너의 이름, 구분 기호 <span class="q">":"</span> 및 복사하려는 파일 또는 폴더의 경로를
+포함해야 합니다. 경로는
+컨테이너의 루트 디렉토리에 상대적이어야 합니다. <div class="steps note"><span class="notetitle">참고:</span> 컨테이너의 <span class="ph filepath">/dev</span>,
+<span class="ph filepath">/etc</span>, <span class="ph filepath">/proc</span> 및 <span class="ph filepath">/sys</span> 폴더에 저장된
+특정한 시스템 파일을 복사할 수 없습니다.</div>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이 예제 명령은 이름이 <span class="ph filepath">config.txt</span>인 파일을
+로컬 시스템의 현재 디렉토리에서 이름이 <var class="keyword varname">my_container</var>인
+단일 컨테이너의 <span class="ph filepath">config</span> 디렉토리로 복사합니다.</dd>
+<dd class="ddexpand"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath">./config.txt</span> <span class="ph filepath">my_container:/config</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2008" id="container_cli_reference_cfic__d1504e644"><h3 class="sectiontitle" id="d72e2008"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi SRC DST </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e654">로컬 레지스트리의 이미지 또는 Docker Hub 이미지에 액세스하여
+이미지를 개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에
+복사합니다. </span><div class="steps note"><span class="notetitle">참고:</span>  이 명령은 <span class="keyword">Bluemix</span> 이미지 레지스트리에
+이미지를 추가하기 위해 <samp class="ph codeph">docker pull</samp>과 <samp class="ph codeph">docker push</samp>를 함께 사용하는 방법의 대체입니다. 
+<samp class="ph codeph">docker pull</samp> 및 <samp class="ph codeph">docker push</samp> 사용을 선호하는 경우 <a href="container_images_adding_ov.html#container_images_pulling" title="Docker Hub 또는 개인용 레지스트리에서 이미지를 가져와 로컬로 수정한 후 조직의 개인용 Bluemix 레지스트리에 푸시할 수 있습니다.">명령행에서 개인용 Bluemix 레지스트리에 로컬 이미지 푸시</a>의 내용을 참조하십시오.</div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e680"><dl class="parml"><dt class="pt dlterm">DST</dt>
+<dd class="pd">(필수) 개인용 <span class="keyword">Bluemix</span> 이미지
+레지스트리 URL이며 여기에는 네임스페이스와 대상 이미지 이름이 포함됩니다. 이미지에 대한 태그는 선택사항입니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">SRC</dt>
+<dd class="pd">(필수) 소스 저장소 및 이미지 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">source_repository</var>/<var class="keyword varname">source_image_name</var> <var class="keyword varname">private_registry_URL</var>/<var class="keyword varname">destination_image_name</var>:<var class="keyword varname">tag</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">팁:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>을 실행하여
+네임스페이스를 검색하고 <var class="keyword varname">&lt;my_namespace&gt;</var>를 자신의 네임스페이스 정보로 대체하십시오. </span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">mysinatra</var>:<var class="keyword varname">v1</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2130" id="container_cli_reference_cfic__d1504e737"><h3 class="sectiontitle" id="d72e2130"><span class="ph" id="container_cli_reference_cfic__d1504e739"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec [-d] [-it ] [-u USER] CONTAINER CMD </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>컨테이너 내에서 명령을 실행합니다. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/exec/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">exec</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd">(필수) 지정된 컨테이너에서 실행할 명령입니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID입니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-d , --detach </dt>
+<dd class="pd">(선택사항) 지정된 명령을 백그라운드에서 실행합니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-it</dt>
+<dd class="pd">(선택사항) 대화식 모드입니다. 표준 입력 표시를 유지합니다. 종료하려면
+<kbd class="ph userinput">exit</kbd>를 입력하십시오. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-u <var class="keyword varname">USER</var>, --user <var class="keyword varname">USER</var></dt>
+<dd class="pd">(선택사항) 사용자 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e803">이 예제 명령은 컨테이너 <var class="keyword varname">my_container</var>에서
+대화식 bash 터미널을 실행합니다. </span></dd>
+<dd class="ddexpand"><pre class="codeblock" id="container_cli_reference_cfic__d1504e809"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</dd>
+<dd class="ddexpand"><span class="ph" id="container_cli_reference_cfic__d1504e816">이 예제 명령은 컨테이너 <var class="keyword varname">my_container</var>에서
+date 명령을 실행합니다. </span></dd>
+<dd class="ddexpand"><pre class="codeblock" id="container_cli_reference_cfic__d1504e822"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec <var class="keyword varname">my_container</var> date</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2228" id="container_cli_reference_cfic__d1504e828"><h3 class="sectiontitle" id="d72e2228"><span class="ph" id="container_cli_reference_cfic__d1504e830"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create [--anti] [--auto] [-d DOMAIN] [--desired DESIRED] [-e ENV] [--env-file
+ENVFILE]<span class="ph"> [--http_monitor_enabled] [--http_monitor_path] [--http_monitor_rc_list] [--ip
+IP_ADDRESS]</span> [-m MEMORY] [--max MAX] [--min MIN] [-n HOST] --name NAME [-p PORT] [--session-affinity] [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD] </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e842">스케일링 그룹을 작성합니다.</span> 기본적으로 <span class="keyword">Bluemix</span>의 컨테이너는
+분리 모드로 실행됩니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e850"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e852"><!-- --></a>--anti</dt>
+<dd class="pd">(선택사항) 연관관계 방지를 사용하면 컨테이너 그룹의 가용성을 더욱 높입니다. <samp class="ph codeph">--anti</samp>
+옵션을 사용하면 그룹의 모든 컨테이너 인스턴스를 각각의 실제 컴퓨팅
+노드에 두므로, 하드웨어 실패로 인해 그룹에 있는 모든 컨테이너가
+충돌할 가능성을 줄입니다. <span class="ph" id="container_cli_reference_cfic__d1504e860">각 <span class="keyword">Bluemix</span> 지역 및 조직에는
+배치에 사용할 수 있는 컴퓨팅 노드 세트가 제한되어 있으므로, 보다 큰 그룹 크기에서는 이 옵션을 사용하지 못할 수 있습니다. 배치에 성공하지 못하면
+그룹의 컨테이너 인스턴스 수를 줄이거나 <samp class="ph codeph">--anti</samp> 옵션을
+제거하십시오.</span></dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e867"><!-- --></a>--auto</dt>
+<dd class="pd">(선택사항) <span class="ph">컨테이너 그룹에 자동 복구를 사용하고
+그룹이 10분 동안 실행된 경우, 그룹의 로드 밸런서가 HTTP 요청을 통해 그룹에 있는 각 컨테이너
+인스턴스의 상태를 정기적으로 확인하기 시작합니다. 컨테이너 인스턴스가 100초 내에
+응답하지 않으면 비활성으로 표시됩니다. 비활성 컨테이너 인스턴스가
+그룹에서 제거되고 자동 복구를 통해 다시 작성됩니다. 자동 복구는 그룹에 있는 컨테이너 인스턴스의
+복구를 3번 시도합니다. 자동 복구는 3번의 시도 후에 그룹에 있는 컨테이너
+인스턴스를 60분 동안 복구하지 않습니다. 60분 후에 자동 복구 프로세스가 다시 시작됩니다.</span>상태 검사에 대한 자세한 정보는 <samp class="ph codeph">--http_monitor_enabled</samp> 옵션을 참조하십시오.</dd>
+<dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e882">(선택사항) 실행할 컨테이너 그룹으로 명령 및 인수가
+전달됩니다. 이 명령은 오래 실행되는 명령이어야 합니다. 오래 실행되지 않는 명령(예:
+<span class="keyword cmdname">/bin/date</span>)은 컨테이너에 충돌을 일으킬 수 있으므로 사용하지 마십시오.</span><div class="p">다음은 <span class="keyword">IBM
+Bluemix Container Service</span>에서 제공하는
+<span class="keyword option">ibmnode</span> 이미지를 사용하는 오래 실행되는 명령의 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> ping localhost</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- tail -f /dev/null</code></pre>
+<div class="steps note"><span class="notetitle">참고:</span> CMD 및
+해당 인수는 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 명령행의 끝에 있어야 합니다. </div>
+</div>
+</dd>
+<dt class="pt dlterm">-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">(선택사항) 기본 시스템 도메인은 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>이며 이미 SSL 인증서를 제공해서 추가적인 구성 없이 HTTPS로
+컨테이너 그룹에 액세스할 수 있습니다. 사용자 정의 도메인을 사용하려면 공용 DNS 서버에서 사용자 정의 도메인을 등록하고, <span class="keyword">Bluemix</span>에서
+사용자 정의 도메인을 구성한 후에 사용자 정의 도메인을 공용 DNS 서버의 <span class="keyword">Bluemix</span>
+시스템 도메인에 맵핑해야 합니다. 사용자 정의 도메인이 <span class="keyword">Bluemix</span>
+시스템 도메인에 맵핑된 후에 사용자 정의 도메인에 대한 요청이 <span class="keyword">Bluemix</span>에 있는
+사용자의 애플리케이션으로 라우팅됩니다. 사용자 정의 도메인을 작성할 때는 도메인 이름에 밑줄(_)을 포함하지 마십시오. 사용자 정의 도메인에 대한 자세한 정보는
+<a href="../manageapps/updapps.html#domain">사용자 정의 도메인 작성 및 사용</a>을 참조하십시오. 사용자 정의 도메인의 보안을 유지하려면 컨테이너 그룹에 HTTPS로 액세스할 수 있도록 <a href="../manageapps/secapps.html#ssl_certificate">SSL
+인증서를 업로드</a>하십시오. <p>호스트와 도메인이 결합되어 전체 공용 라우트 URL(예:
+<samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>)을 구성하며
+<span class="keyword">Bluemix</span> 내에서 고유해야 합니다. <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp>
+명령을 사용하여 컨테이너 그룹의 세부사항을 검토할 때 호스트 및 도메인이 함께 라우트로 나열됩니다. </p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e962"><!-- --></a>--desired <var class="keyword varname">DESIRED</var></dt>
+<dd class="pd">(선택사항) 그룹의 인스턴스 수입니다. 기본값은 <span class="keyword option">2</span>입니다. <span class="ph">앱에 필요한 컨테이너 그룹 인스턴스 수는 앱에서 요청을
+처리할 수 있는 시간 및 예상 워크로드에 따라 달라집니다. 예를 들어,
+멀티태스킹 또는 네트워크 연결은 앱에 필요한 인스턴스 수에 영향을 미칩니다. </span>
+<span class="ph">원하는 인스턴스 수를 판별하려면 앱을 실행하는 Bluemix에 단일 컨테이너를
+배치하고 이 컨테이너에서 로드 테스트를 수행하십시오. 예를 들어, 앱이 초당 100개의 요청을 처리할 수 있지만
+사용자가 초당 300개 요청의 평균 워크로드를 예상하는 경우에 컨테이너 그룹에 대한 적정 인스턴스 수는 3개입니다. </span>
+<span class="ph">컨테이너 그룹에 고가용성을 부여하고 실패에 더 탄력적이게 하려면 예상된 워크로드를 다루기 위한 최소 수보다 많은 추가 인스턴스를 포함하는 것을 고려하십시오. 추가 인스턴스는 다른 인스턴스가 충돌하는 경우 워크로드를 처리할 수 있습니다. 워크로드에 영향을 주지 않고 실패한 인스턴스의 자동 복구를 보장하려면 하나의 추가 인스턴스를 포함하십시오. 두 개의 동시 실패로부터 보호하려면 두 개의 추가 인스턴스를 포함하십시오. 이 설정은 <var class="keyword varname">N+2</var> 패턴이며 여기서 <var class="keyword varname">N</var>은 요청을 다루기 위한 인스턴스의 수이고 <var class="keyword varname">+2</var>는 두 개의 추가 인스턴스입니다. </span><div class="note important"><span class="importanttitle">중요사항:</span> 컨테이너 그룹에는 최소 두 개의 컨테이너 인스턴스가
+있어야 합니다. 그룹에 인스턴스가 하나뿐이며 해당 인스턴스를 사용할 수 없게 되면
+앱의 가동이 중단될 수 있습니다.</div>
+</dd>
+<dt class="pt dlterm">-e <var class="keyword varname">ENV</var>, --env <var class="keyword varname">ENV</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e987">(선택사항)<span class="ph" id="container_cli_reference_cfic__d1504e989"><span class="keyword option">ENV</span>가
+<samp class="ph codeph">key=value</samp> 쌍인 환경 변수를 설정하십시오. 
+여러 개의 키를 독립적으로 나열하거나 따옴표를 포함시킬 경우 환경 변수 이름과 값을 따옴표로 묶으십시오. 예: <samp class="ph codeph">-e
+<span class="q">"<var class="keyword varname">key1</var>=<var class="keyword varname">value1</var>"</span> -e
+<span class="q">"<var class="keyword varname">key2</var>=<var class="keyword varname">value2a</var>,<var class="keyword varname">value2b</var>"</span> -e
+<span class="q">"<var class="keyword varname">key3</var>=<var class="keyword varname">value3</var>"</span></samp></span></span><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e1022" class="defaultstyle"><caption><span class="tablecap">표 6. 제안된 환경 변수</span></caption><thead><tr><th id="d72e2477" class="thleft">환경 변수</th>
+<th id="d72e2479" class="thleft">설명</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e2477 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d72e2479 ">일부 <span class="keyword">Bluemix</span> 서비스는 컨테이너에 대한 직접 바인딩을 지원하지 않습니다. 
+이 경우에는 Cloud Foundry 앱을 작성하고 <span class="keyword">Bluemix</span> 서비스를
+이에 바인드해야 합니다. 그리고 <samp class="ph codeph">CCS_BIND_APP</samp>를 사용하여 앱을 컨테이너에 바인드하십시오. 
+Cloud Foundry 앱은 브릿지 역할을 하며, <span class="keyword">Bluemix</span>에서
+브릿지 앱의 VCAP_SERVICES 정보를 실행 중인 컨테이너 인스턴스에 삽입할 수 있도록 허용합니다. </td>
+</tr>
+<tr><td headers="d72e2477 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">참고:</span>  서비스가 <samp class="ph codeph">CCS_BIND_SRV=</samp> 환경 변수 사용을 지원하지 않는 경우에는
+<samp class="ph codeph">CCS_BIND_APP=</samp>를 대신 사용하십시오. </div>
+</td>
+<td headers="d72e2479 ">브릿지 앱을 사용하지 않고 <span class="keyword">Bluemix</span> 서비스를
+컨테이너에 직접 바인드하려면 <samp class="ph codeph">CCS_BIND_SRV</samp>를 사용하십시오. 이 바인딩을 사용하면
+<span class="keyword">Bluemix</span>에서 VCAP_SERVICES 정보를
+실행 중인 컨테이너 인스턴스에 삽입할 수 있습니다. 다수의 <span class="keyword">Bluemix</span>
+서비스를 나열하려면 동일한 환경 변수의 일부로서 이를 포함하십시오. </td>
+</tr>
+<tr><td headers="d72e2477 "><div class="lines">(더 이상 사용되지 않음) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d72e2479 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">이 환경 변수는 더 이상 사용되지 않습니다. :</span> 대신 사용자 컨테이너에 대한 외부 액세스에는 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> 또는 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">attach</samp>를 사용하십시오. 자세한 정보는
+<a href="container_security.html#container_cli_login_exec" title="실행 중인 컨테이너에 로그인해야 하는 경우 bx ic exec를 사용할 수 있습니다.">exec를 사용하여 컨테이너에 로그인</a>의 내용을 참조하십시오.</div>
+
+<span class="ph">컨테이너를 작성할 때 이에 SSH 키를 추가하기 위해 <samp class="ph codeph">CCS_API_KEY</samp>를 사용할 수 있습니다.</span></td>
+</tr>
+<tr><td headers="d72e2477 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d72e2479 "><span class="ph" id="container_cli_reference_cfic__d1504e1129">컨테이너에서 모니터링할 로그 파일을 추가하려면 <samp class="ph codeph">LOG_LOCATIONS</samp>
+환경 변수를 로그 파일의 경로와 함께 포함시키십시오.</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+예:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -e CCS_BIND_SRV=<var class="keyword varname">&lt;service_instance_name&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+</dd>
+<dt class="pt dlterm">--env-file <var class="keyword varname">ENVFILE</var></dt>
+<dd class="pd">(선택사항) 파일에서 환경 변수를 가져옵니다. 여기서 <var class="keyword varname">ENVFILE</var>은 로컬 디렉토리의 파일에 대한 경로입니다. 
+파일의 모든 행은 하나의 <samp class="ph codeph">key=value</samp> 쌍을 표시합니다. <p>예</p>
+<pre class="codeblock"><code>KEY1=VALUE1
+KEY2=VALUE2</code></pre>
+</dd>
+<dt class="pt dlterm">--http_monitor_enabled</dt>
+<dd class="pd">(선택사항) 기본값은 <samp class="ph codeph">true</samp>입니다. <span class="ph">컨테이너 그룹에 자동 복구를 사용하고
+그룹이 10분 동안 실행된 경우, 그룹의 로드 밸런서가 HTTP 요청을 통해 그룹에 있는 각 컨테이너
+인스턴스의 상태를 정기적으로 확인하기 시작합니다. 컨테이너 인스턴스가 100초 내에
+응답하지 않으면 비활성으로 표시됩니다. 비활성 컨테이너 인스턴스가
+그룹에서 제거되고 자동 복구를 통해 다시 작성됩니다. 자동 복구는 그룹에 있는 컨테이너 인스턴스의
+복구를 3번 시도합니다. 자동 복구는 3번의 시도 후에 그룹에 있는 컨테이너
+인스턴스를 60분 동안 복구하지 않습니다. 60분 후에 자동 복구 프로세스가 다시 시작됩니다.</span> 일부 앱은 HTTP 대신 통신을 위해 TCP를 사용하는 앱과 같이 HTTP 상태 검사를 요구하지 않을 수도 있습니다. HTTP 모니터를 사용하지 않으려면 옵션을 <samp class="ph codeph">false</samp>로 설정하십시오. 예제:
+<samp class="ph codeph">--http_monitor_enabled=false</samp></dd>
+<dt class="pt dlterm">--http_monitor_path</dt>
+<dd class="pd">(선택사항) 기본값은 <samp class="ph codeph">/</samp>입니다. <samp class="ph codeph">--http_monitor_enabled</samp>가 사용으로 설정되면 <samp class="ph codeph">--http_monitor_path=<span class="q">"/health/path"</span></samp>와 같이 상태 검사를 위한 사용자 정의 경로를 설정하기 위해 이 옵션을 사용할 수 있습니다. </dd>
+<dt class="pt dlterm">--http_monitor_rc_list</dt>
+<dd class="pd">(선택사항) <samp class="ph codeph">--http_monitor_enabled</samp>가 사용으로 설정되면 상태 검사에 대한 응답 코드 목록을 지정할 수 있습니다. 
+기본값에는 <samp class="ph codeph">200, 201, 202, 204, 300, 301, 302, 401, 403</samp> 및 <samp class="ph codeph">404</samp> 코드가 포함됩니다. 응답이 올바른
+응답 목록에 없으면 로드 밸런서가 컨테이너 인스턴스의 상태를
+<samp class="ph codeph">INACTIVE</samp>로 변경합니다. 
+비활성 컨테이너는 로드를 수신하지 않으며, 컨테이너 그룹의 상태는 HAS_INACTIVE_INSTANCES로 변경됩니다. 
+<samp class="ph codeph">ACTIVE</samp>인 컨테이너가 없으면 컨테이너 그룹의 상태가 <samp class="ph codeph">NO_ACTIVE_INSTANCES</samp>로 변경됩니다. 상태에 대해 자세히 알아보려면
+<a href="container_cli_reference_cfic.html#container_cli_reference_cfic_states" title="bx ic inspect 명령을 실행하고 상태 필드를 찾아 현재 컨테이너 상태를 볼 수 있습니다. 컨테이너 상태는 컨테이너 인스턴스의 가용성과 발생했을 수도 있는 문제에 대한 추가 정보를 제공할 수 있습니다.">IBM Bluemix Container Service의 컨테이너 상태</a>의 내용을 참조하십시오. </dd>
+<dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e1230">(필수) 컨테이너 그룹의 각 컨테이너 인스턴스에 포함할
+이미지입니다. 이미지 다음에 명령을 나열할 수 있지만 이미지 다음에 옵션은 입력하지 마십시오.
+이미지를 지정하기 전에 모든 옵션을 포함하십시오. </span><p>조직의 개인용
+<span class="keyword">Bluemix</span> 이미지 레지스트리를 사용 중인
+경우 다음 형식으로 이미지를 지정하십시오. <samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">NAMESPACE</var>/<var class="keyword varname">IMAGE</var></samp></p>
+<p><span class="keyword">IBM
+Bluemix Container Service</span>에서
+제공하는 이미지를 사용하는 경우에는 조직의 네임스페이스를
+포함하지 마십시오. 다음 형식으로 이미지를 지정하십시오:
+<samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">IMAGE</var></samp></p>
+</dd>
+<dt class="pt dlterm"> --ip <var class="keyword varname">IP_ADDRESS</var></dt>
+<dd class="pd">(선택사항) 사용 가능한 IP 주소가 있는 경우 공인 IP 주소를 컨테이너 그룹에 바인딩하십시오. 또한 <samp class="ph codeph">-p</samp> 플래그로 포트를 노출시켜야 합니다. 컨테이너 그룹은 공용 라우트 또는
+공인 IP 중 하나를 가질 수 있지만 둘 다 가질 수는 없습니다. IP 주소를 바인드 해제하고 IP를 영역의 할당량으로 되돌리려면 컨테이너 그룹을 제거하고 IP 주소 없이 그룹을 다시 작성하십시오. 컨테이너 그룹을
+작성하기 전에 IP 주소를 요청하려면 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp>를 실행하십시오. <div class="steps note"><span class="notetitle">참고:</span> 공인 IP 주소 바인딩은 컨테이너 그룹으로(부터) 전송되는 데이터를 암호화하는 SSL 인증서를 포함하지 않습니다. 앱에서 SSL 암호화를 요구하는 경우 자체 SSL 솔루션을 구현하거나, 공인 IP 주소를 바인딩하는 대신 컨테이너 그룹에 공용 라우트를 맵핑할 수 있습니다. 공용 라우트는 이미 SSL 인증서를 포함하므로 추가 구성 없이 HTTPS로 컨테이너 그룹에 액세스할 수 있습니다. </div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1271"><!-- --></a>-m <var class="keyword varname">MEMORY</var>, --memory <var class="keyword varname">MEMORY</var></dt>
+<dd class="pd">(선택사항) <span class="ph" id="container_cli_reference_cfic__d1504e1281">컨테이너의 메모리 한계(MB)를 입력하십시오. 메모리 한계는
+런타임 중에 컨테이너가 컴퓨팅 호스트에서 얻는 메모리와 디스크 공간의 최대 크기를
+정의하는 컨테이너 크기의 일부입니다. 컨테이너 크기가 지정된 후에는 값을 변경할 수 없습니다.</span> <span class="keyword">IBM
+Bluemix Container Service</span>에서
+사용할 수 있는 크기는 다음과 같습니다.<ul data-hd-audience="yellow" id="container_cli_reference_cfic__d1504e1286"><li>Pico(64MB 메모리, 4GB 디스크 공간)</li>
+<li>Nano(128 MB 메모리, 8GB 디스크 공간)</li>
+<li>Micro(256MB 메모리, 16GB 디스크 공간)</li>
+<li>Tiny(512MB 메모리, 32GB 디스크 공간)</li>
+<li>Small(1024MB 메모리, 64GB 디스크 공간)</li>
+<li>Medium(2048MB 메모리, 128GB 디스크 공간)</li>
+<li>Large(4096MB 메모리, 256GB 디스크 공간)</li>
+<li>X-Large(8192MB 메모리, 512GB 디스크 공간)</li>
+<li>2X-Large(16384MB 메모리, 1TB 디스크 공간)</li>
+</ul>
+
+컨테이너의 크기를 설정하지 않으면 각 컨테이너 인스턴스가 <span class="keyword option">256</span>MB로 작성됩니다. <div class="note important"><span class="importanttitle">중요사항:</span> 단위 레이블 없이 컨테이너 메모리(MB)를 입력하십시오. 
+예를 들어, Pico 컨테이너를 작성하려는 경우에는 <samp class="ph codeph">-m 64</samp>를 입력하십시오. </div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1314"><!-- --></a>--max <var class="keyword varname">MAX</var></dt>
+<dd class="pd">(선택사항) 최대 인스턴스 수입니다. 기본값은 <span class="keyword option">2</span>입니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1324"><!-- --></a>--min <var class="keyword varname">MIN</var></dt>
+<dd class="pd">(선택사항) 최소 인스턴스 수입니다. 기본값은 <span class="keyword option">1</span>입니다.</dd>
+<dt class="pt dlterm"> -n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">(선택사항) 호스트 이름(예: <var class="keyword varname">mycontainerhost</var>)입니다. 
+호스트 이름에는 밑줄(_)을 포함하지 마십시오. 호스트와 도메인이 결합되어
+전체 공용 라우트 URL(예: <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>)을 구성합니다. <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp>
+명령을 사용하여 컨테이너 그룹의 세부사항을 검토할 때 호스트 및 도메인이 함께 라우트로 나열됩니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1355"><!-- --></a>--name <var class="keyword varname">NAME</var></dt>
+<dd class="pd">(필수) 그룹에 이름을 지정합니다.<samp class="ph codeph">-n</samp>은 더 이상 사용되지 않습니다.<div class="note tip" id="container_cli_reference_cfic__d1504e1365"><span class="tiptitle">팁:</span> 컨테이너 이름은 문자로 시작해야 하며 대문자, 소문자, 숫자, 마침표(.), 밑줄(_)
+또는 하이픈(-)을 포함할 수 있습니다.</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1367"><!-- --></a>-p <var class="keyword varname">PORT</var>, --publish <var class="keyword varname">PORT</var></dt>
+<dd class="pd"><p>(필수사항) HTTP 및 사설 네트워크 트래픽에 대한 포트를 노출합니다. 포트를 노출하지 않는 경우,
+컨테이너 그룹은 실행되지만 공용 네트워크 또는 사설 네트워크 중 하나의 그룹 로드 밸런서를 통해
+컨테이너 그룹에 액세스할 수 없습니다. </p>
+<p>컨테이너 그룹의 경우 여러 개의 포트를 포함할 수 없습니다. 여러 포트가 나열된 경우 마지막으로 나열된 포트만 노출됩니다. 기타 포트는
+명령으로 무시됩니다. </p>
+<span class="ph" id="container_cli_reference_cfic__d1504e1380">라우트를 바인드할 때 그룹의 컨테이너는 그룹의 노출된
+포트에서 HTTP 트래픽을 청취해야 합니다. 비HTTP 포트는 공개적으로 노출할 수 없습니다. HTTPS 트래픽이 노출된 포트에 도착하면 (Go)라우터가 HTTPS 종료를 완료합니다. 그런 다음 (Go)라우터와 컨테이너 사이의 가상 사설 네트워크(VPN)에 HTTP 프로토콜이 사용됩니다. </span><span class="ph">IP 주소를 바인드할 때 그룹에 있는 컨테이너가 HTTP 또는 HTTPs 트래픽을 청취하지만,
+여전히 한 포트에서만 노출할 수 있습니다.</span><div class="p">사용 중인 이미지의 Dockerfile에 포트가 지정된 경우 해당 포트를 포함하십시오.<div class="note tip"><span class="tiptitle">팁:</span> <ul id="container_cli_reference_cfic__d2114e225"><li>IBM 인증 Liberty Server 이미지 또는 이 이미지의 수정된 버전에 대해서는 포트 <kbd class="ph userinput">9080</kbd>을 입력하십시오.</li>
+<li>IBM 인증 Node.js 이미지 또는 이 이미지의 수정된 버전에 대해서는
+임의의 포트(예: <kbd class="ph userinput">8000</kbd>)를 입력하십시오. </li>
+</ul>
+</div>
+</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1385"><!-- --></a>--session_affinity</dt>
+<dd class="pd"><p>(선택사항) 기본값은 <samp class="ph codeph">false</samp>입니다. <samp class="ph codeph">--http_monitor_enabled</samp>가
+<kbd class="ph userinput">true</kbd>로 설정되면 <samp class="ph codeph">--session_affinity</samp> 옵션을 <kbd class="ph userinput">true</kbd>로 설정하여
+<span class="keyword">IBM
+Bluemix Container Service</span>가 앱을 위해 세션 쿠키를 작성하고
+관리하게 할 수 있습니다. 이 옵션은 <samp class="ph codeph">--http_monitor_enabled</samp>가
+<kbd class="ph userinput">false</kbd>로 설정되거나 HTTP가 아닌 TCP를 통신에 사용하는 경우에는 이용할 수 없습니다. </p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1415"><!-- --></a>--volume <var class="keyword varname">VOLUME</var>:<var class="keyword varname">/DIRECTORY_PATH</var>[:ro]</dt>
+<dd class="pd">(선택사항) <samp class="ph codeph">VOLUME:/DIRECTORY_PATH[:ro]</samp> 형식으로 세부사항을 지정하여
+컨테이너에 볼륨을 연결합니다. <ul id="container_cli_reference_cfic__d1504e1429"><li><var class="keyword varname">VOLUME</var>: 볼륨 ID 또는 이름입니다. </li>
+<li><var class="keyword varname">DIRECTORY_PATH</var>: 컨테이너에 있는 디렉토리의 절대 경로입니다. </li>
+<li><samp class="ph codeph">ro</samp>: 선택사항입니다. <samp class="ph codeph">ro</samp>를 지정하면 볼륨을 기본 읽기/쓰기 대신 읽기 전용으로 만듭니다.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 공용 라우트로 스케일링 그룹을 작성하도록 요청하는 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --auto -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">mycontainerhost</var>  --name <var class="keyword varname">my_container_group</var> -p <var class="keyword varname">9080</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</dd>
+<dd class="ddexpand">다음은 공인 IP 주소로 스케일링 그룹을 작성하도록 요청하는 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --auto --ip <var class="keyword varname">198.51.100.27</var>  --name <var class="keyword varname">my_container_group</var> -p <var class="keyword varname">9080</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3029" id="container_cli_reference_cfic__d1504e1488"><h3 class="sectiontitle" id="d72e3029"><span class="ph" id="container_cli_reference_cfic__d1504e1490"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd id="container_cli_reference_cfic__d1504e1498">컨테이너 그룹이 생성될 때 해당 컨테이너 그룹에 지정된 자세한 정보(예:
+환경 변수, 포트 또는 메모리)를 확인합니다. 또한 이 명령을 실행하여 그룹에 지정된 공용 라우트를 볼 수도 있습니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1505"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(필수) 그룹 ID 또는 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><var class="keyword varname">my_container_group</var> 그룹을 검사하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3068" id="container_cli_reference_cfic__d1504e1523"><h3 class="sectiontitle" id="d72e3068"><span class="ph" id="container_cli_reference_cfic__d1504e1525"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances GROUP </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd id="container_cli_reference_cfic__d1504e1533">컨테이너 그룹의 일부인 컨테이너의 ID, 이름, IP 주소 및 공용 포트와 함께
+모든 컨테이너를 나열합니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(필수) 그룹 ID 또는 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><var class="keyword varname">my_container_group</var> 그룹의 모든 컨테이너를 검색하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3107" id="container_cli_reference_cfic__d1504e1558"><h3 class="sectiontitle" id="d72e3107"><span class="ph" id="container_cli_reference_cfic__d1504e1560"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd id="container_cli_reference_cfic__d1504e1568">영역에서 하나 이상의 컨테이너 그룹을 제거합니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1575"><!-- --></a>-f, --force</dt>
+<dd class="pd">(선택사항) 실행 중이거나 실패한 컨테이너의 제거를 강제 실행합니다.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1582"><!-- --></a>GROUP</dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 그룹 ID 또는 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>컨테이너 그룹을 제거하도록 요청하는 예는 다음과 같습니다. 여기서 <var class="keyword varname">my_container_group</var>은 그룹의 이름입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3153" id="container_cli_reference_cfic__d1504e1600"><h3 class="sectiontitle" id="d72e3153"><span class="ph" id="container_cli_reference_cfic__d1504e1602"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update [--desired DESIRED] [-e
+<span class="q">"<var class="keyword varname">KEY</var>=<var class="keyword varname">VALUE</var>"</span>]<span class="ph"> [--max MAX] [--min
+MIN]</span> GROUP </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd id="container_cli_reference_cfic__d1504e1620"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update</samp>
+명령을 사용하여 그룹에서 다음 업데이트를 수행하십시오. <ul id="container_cli_reference_cfic__d1504e1625"><li>컨테이너 그룹에서 실행될 원하는 인스턴스 수로 업데이트합니다.</li>
+<li>그룹에 새 환경 변수를 추가합니다.</li>
+<li>기존 환경 변수의 값을 업데이트합니다.</li>
+</ul>
+<div class="steps note"><span class="notetitle">참고:</span> 한 번에 하나의 업데이트만 수행할 수 있습니다.</div>
+</dd>
+<dd class="ddexpand"><div class="note tip"><span class="tiptitle">팁:</span> 컨테이너 그룹의 호스트 이름이나 도메인을 업데이트하려면
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2782">bx ic route-map [-d DOMAIN] [-n HOST] GROUP</a> 명령을 사용하십시오. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml" id="container_cli_reference_cfic__d1504e1643"><dt class="pt dlterm">--desired <var class="keyword varname">DESIRED</var></dt>
+<dd class="pd">(선택사항) 필요한 인스턴스의 수입니다. 기본값은 <span class="keyword option">2</span>입니다. </dd>
+<dt class="pt dlterm">-e <span class="q">"<var class="keyword varname">KEY</var>=<var class="keyword varname">VALUE</var>"</span></dt>
+<dd class="pd">(선택사항) 컨테이너 그룹에 새 환경 변수를 추가하거나 기존 환경 변수의 값을
+변경하십시오. </dd>
+<dt class="pt dlterm">--max <var class="keyword varname">MAX</var></dt>
+<dd class="pd">(선택사항) 최대 인스턴스 수입니다. 기본값은 <span class="keyword option">2</span>입니다. </dd>
+<dt class="pt dlterm">--min <var class="keyword varname">MIN</var></dt>
+<dd class="pd">(선택사항) 최소 인스턴스 수입니다. 기본값은 <span class="keyword option">1</span>입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 이름이 <var class="keyword varname">my_container_group</var>인 컨테이너 그룹에서 원하는 수의 컨테이너 인스턴스를
+업데이트하도록 요청하는 예입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update --desired <var class="keyword varname">5</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+<dd class="ddexpand">다음 예는 <var class="keyword varname">my_container_group</var>이라는 컨테이너 그룹에
+값이 <var class="keyword varname">Linux</var>인 새 환경 변수 <var class="keyword varname">environment</var>를
+추가하는
+요청입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update -e <span class="q">"<var class="keyword varname">environment</var>=<var class="keyword varname">Linux</var>"</span> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3287" id="container_cli_reference_cfic__d1504e1724"><h3 class="sectiontitle" id="d72e3287"><span class="ph" id="container_cli_reference_cfic__d1504e1726"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd id="container_cli_reference_cfic__d1504e1734">영역에 컨테이너 그룹을 나열합니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">(선택사항) 각 컨테이너 그룹의 컨테이너 그룹 ID만 나열합니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3321" id="container_cli_reference_cfic__d1504e1752"><h3 class="sectiontitle" id="d72e3321"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images [-a] [-f CONDITION] [--no-trunc] [q]</h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>조직의 개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에서 사용 가능한 모든 이미지의 목록을 표시합니다. 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/images" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">images</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-a, --all</dt>
+<dd class="pd">(선택사항) 최근 계층뿐 아니라 조직의 레지스트리에 있는 각 이미지의 모든 이미지 계층이
+포함됩니다. </dd>
+</dl>
+
+
+<dl class="parml"><dt class="pt dlterm">-f, --filter <var class="keyword varname">CONDITION</var></dt>
+<dd class="pd">(선택사항) 제공된 조건에 따라 이미지 목록을 필터링합니다.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">--no-trunc</dt>
+<dd class="pd">(선택사항) 출력을 자르지 않습니다.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-q, --quiet</dt>
+<dd class="pd">(선택사항) 숫자 ID만 표시합니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1800"><!-- --></a>응답</dt>
+<dd>이미지 ID, 작성한 날짜 및 이미지 이름이 포함된 이미지의 목록을
+수신합니다.</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 조직에 사용할 수 있는 이미지의 목록을 수신하는 요청의
+예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+images</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3389" id="container_cli_reference_cfic__d1504e1813"><h3 class="sectiontitle" id="d72e3389"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> info [--json]</samp></h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1820"><!-- --></a>용도</dt>
+<dd>컨테이너 클라우드 서비스 인스턴스의 상태를 설명하는 정보 세트를 수신합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">--json</var></dt>
+<dd class="pd">(선택사항) 명령의 출력을 JSON 형식으로 구조화합니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1836"><!-- --></a>응답</dt>
+<dd>컨테이너 한계, 컨테이너 사용량, 실행 중인 컨테이너, 메모리 한계, 메모리 사용량,
+유동 IP 한계, 유동 IP 사용량, CCS 호스트 URL, 레지스트리 호스트 URL, 디버그 모드 상태에 대한
+정보가 포함된 판독 자료를 수신합니다.</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 컨테이너 클라우드 서비스 인스턴스에 대한 정보를 수신하도록 요청하는 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> info</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3429" id="container_cli_reference_cfic__d1504e1849"><h3 class="sectiontitle" id="d72e3429"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> CLI를 초기화하십시오. <div class="steps note" id="container_cli_reference_cfic__d1504e1862"><span class="notetitle">참고:</span> 로그인하기 전에, Cloud Foundry 명령 도구(cf)와 Docker CLI(docker)가
+설치되어 있는지, 두 도구가 모두 사용자의 환경 경로에 구성되어 있는지
+확인해야 합니다.</div>
+<div class="note tip" id="container_cli_reference_cfic__d1504e1864"><span class="tiptitle">팁:</span> 다른
+지역으로 전환하려면, <span class="keyword">IBM
+Bluemix Container Service</span>
+CLI가 아니라 Cloud Foundry CLI에 로그인할 때 해당 지역의 API 엔드포인트를 지정하십시오.
+<ul id="container_cli_reference_cfic__d1504e1868"><li>미국 남부:<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>영국:<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3480" id="container_cli_reference_cfic__d1504e1884"><h3 class="sectiontitle" id="d72e3480"><span class="ph" id="container_cli_reference_cfic__d1504e1886"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect [IMAGE | images | CONTAINER] </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e1895">하나 이상의 컨테이너 또는 컨테이너 이미지에 대한 정보를 검색하십시오.</span> IMAGE, images, 또는 CONTAINER 옵션 중 하나만 한 번에 지정될 수 있습니다. 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/inspect" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">inspect</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1905"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID를 지정하여 특정 컨테이너에 대한 자세한 정보를 가져옵니다.사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너에 대한 정보를 검색할 수 있습니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">(필수) 이미지에 대한 전체 개인용 <span class="keyword">Bluemix</span>
+레지스트리 경로를 지정하여 특정 이미지에 대한 자세한 정보를 가져옵니다.
+명령의 각 레지스트리 경로를 공백으로 구분해서 나열하여 여러 이미지에 대한 정보를
+검색할 수 있습니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">images</dt>
+<dd class="pd">(필수) 레지스트리의 모든 이미지에 대한 자세한 정보를 가져옵니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <kbd class="ph userinput">my_container</kbd>인 컨테이너를 검사하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3544" id="container_cli_reference_cfic__d1504e1941"><h3 class="sectiontitle" id="d72e3544"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind ADDRESS CONTAINER </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1947"><!-- --></a>용도</dt>
+<dd>사용 가능한 유동 IP 주소를 단일 컨테이너에 바인드합니다. <div class="steps note"><span class="notetitle">참고:</span> 유동 IP 주소를 컨테이너 그룹에 바인드하려면
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e828"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp></a>
+명령에 <samp class="ph codeph">--ip</samp> 플래그를 사용하십시오. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1967"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">(필수) 단일 컨테이너에 바인딩할 IP 주소입니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1973"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) IP 주소에 바인딩할 컨테이너 ID 또는 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 IP 주소 192.0.2.23을 이름이 <var class="keyword varname">my_container</var>인 컨테이너에 바인드하도록 요청하는 예입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">192.0.2.23</var> <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3604" id="container_cli_reference_cfic__d1504e1995"><h3 class="sectiontitle" id="d72e3604"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release ADDRESS </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2001"><!-- --></a>용도</dt>
+<dd>유동 IP 주소를 릴리스합니다. 유동 IP 주소가 릴리스되고 나면
+영역의 단일 컨테이너 또는 컨테이너 그룹에 바인드할 수 없습니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2011"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">(필수) 릴리스할 IP 주소입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 IP 주소 192.0.2.23의 릴리스를 요청하는 예입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release <var class="keyword varname">192.0.2.23</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3641" id="container_cli_reference_cfic__d1504e2028"><h3 class="sectiontitle" id="d72e3641"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request [-q]</h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2034"><!-- --></a>용도</dt>
+<dd>새 유동 IP를 요청합니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">(선택사항) IP 주소만 명령 출력에 표시됩니다. 메시지 텍스트는 포함되지
+않습니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 새 유동 IP 주소를 요청하는 예입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3674" id="container_cli_reference_cfic__d1504e2057"><h3 class="sectiontitle" id="d72e3674"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind ADDRESS CONTAINER </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2063"><!-- --></a>용도</dt>
+<dd>단일 컨테이너에서 유동 IP 주소를 바인드 해제합니다. <div class="steps note"><span class="notetitle">참고:</span> 컨테이너 그룹에서 IP 주소를
+바인드 해제하려면 컨테이너 그룹을 제거하고 IP 주소 없이 그룹을 다시 작성하십시오. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2075"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">(필수) 바인드 해제 중인 IP 주소입니다.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2081"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 바인드 해제 중인 컨테이너 ID 또는 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 IP 주소 192.0.2.23을 이름이 <var class="keyword varname">my_container</var>인 컨테이너에서 바인드 해제하도록 요청하는 예입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">192.0.2.23</var> <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3724" id="container_cli_reference_cfic__d1504e2103"><h3 class="sectiontitle" id="d72e3724"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips [-q] </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2109"><!-- --></a>용도</dt>
+<dd>조직에 사용 가능한 유동 IP 주소와 해당 IP 주소에 바인드되는 단일 컨테이너
+또는 그룹의 ID를 나열합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">(선택사항) IP 주소에 바인드되는 단일 컨테이너에 대한 ID를 제외하고 IP 주소만 나열합니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2124"><!-- --></a>응답</dt>
+<dd>IP 주소의 목록 및 이에 링크된 단일 컨테이너의 ID를 받습니다. 해당
+IP 주소가 사용되지 않는 경우에는 컨테이너 ID가 표시되지 않습니다.</dd>
+<dt class="dlterm">예</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2133">다음은 조직에 대한 모든 IP 주소의 목록을
+수신하는 요청의 예입니다(사용 가능 여부와는
+무관함).</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-list -q</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3763" id="container_cli_reference_cfic__d1504e2138"><h3 class="sectiontitle" id="d72e3763"><span class="ph"><samp class="ph codeph">bx ic</samp></span> kill [-s
+CMD] CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>컨테이너를 중지하지 않고 하나 이상의 컨테이너에서 실행 중인 프로세스를 중지합니다. 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/kill/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">kill</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 ID 또는 이름입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+<dt class="pt dlterm">-s, --signal <var class="keyword varname">CMD</var></dt>
+<dd class="pd">(선택사항) 컨테이너에서 실행 중인 프로세스로 명령을 보냅니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너에서 프로세스를 강제 종료하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> kill <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3812" id="container_cli_reference_cfic__d1504e2182"><h3 class="sectiontitle" id="d72e3812"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs [-f | --since TIMESTAMP  | --tail
+STRING | -t] CONTAINER </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2192">실행 중인 컨테이너에 대한 출력 또는 오류 로그를 표시합니다.</span> 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/logs" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">logs</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2202"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID입니다. </dd>
+<dt class="pt dlterm">-f, --follow</dt>
+<dd class="pd"><p>(선택사항) 컨테이너에 대한 <samp class="ph codeph">STDOUT</samp> 및 <samp class="ph codeph">STDERR</samp> 로그 파일의 새 출력을
+포함합니다. </p>
+</dd>
+<dt class="pt dlterm">--since TIMESTAMP</dt>
+<dd class="pd">(선택사항) 시간소인 이후의 모든 로그를 표시합니다. </dd>
+<dt class="pt dlterm">--tail STRING</dt>
+<dd class="pd">(선택사항) 표시할 최신 로그 행의 수를 지정합니다. 기본값은 모든 로그를
+표시하는 것입니다.</dd>
+<dt class="pt dlterm">-t, --timestamps</dt>
+<dd class="pd">(선택사항) 로그에 시간소인을 표시합니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너에 대한 출력 로그를 가져오도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs -o <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3883" id="container_cli_reference_cfic__d1504e2248"><h3 class="sectiontitle" id="d72e3883"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-[get | set] NAME</h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2254"><!-- --></a>용도</dt>
+<dd>사용자가 로그인할 때 사용한 조직의 개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리의 이름을
+설정하거나 검색합니다. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2266"><!-- --></a>get</dt>
+<dd class="pd">(선택사항) 조직의 개인용 이미지 레지스트리에 사용할 네임스페이스를 요청합니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2271"><!-- --></a>set <var class="keyword varname">NAME</var></dt>
+<dd class="pd">(선택사항) 조직의 개인용 이미지 레지스트리에 사용할 네임스페이스가 아직 설정되지 않은 경우
+이를 설정하는 일회성 기능입니다. 네임스페이스를 설정한 후 계속하기 전에 <span class="keyword">IBM
+Bluemix Container Service</span> CLI에서 로그아웃했다가 로그인하십시오. <div class="note restriction"><span class="restrictiontitle">제한사항:</span> 레지스트리 네임스페이스의 이름에 하이픈(-)을
+사용할 수 없습니다. </div>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 사용자가 로그인한 조직의 네임스페이스 조회를 요청하는
+예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3937" id="container_cli_reference_cfic__d1504e2290"><h3 class="sectiontitle" id="d72e3937"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pause CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2300">하나 이상의 실행 중인 컨테이너 내의 모든 프로세스를 일시정지합니다.</span> 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/pause" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">pause</a> 명령을 참조하십시오. 컨테이너를 다시 시작하려면 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3671">unpause</a> 명령을
+실행하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2313"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 이름 또는 ID입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너를 일시정지하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> pause <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3984" id="container_cli_reference_cfic__d1504e2332"><h3 class="sectiontitle" id="d72e3984"><span class="ph" id="container_cli_reference_cfic__d1504e2334"><span class="ph"><samp class="ph codeph">bx ic</samp></span> port
+CONTAINER</span> [PRIVATE_PORT[/PROTOCOL]]</h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2344">컨테이너를 위한 모든 포트 맵핑을 나열하거나 사설 포트에 맵핑된
+공용 포트 및 IP 주소를 검색합니다. </span>자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/port" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">port</a> 명령을 참조하십시오. </dd>
+</dl>
+
+<dl><dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e2354"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 ID 또는 이름입니다. </dd>
+<dt class="pt dlterm"><var class="keyword varname">PRIVATE PORT</var></dt>
+<dd class="pd">(선택사항) 지정된 공용 포트 및 IP 주소를 검색할 사설 포트입니다. </dd>
+<dt class="pt dlterm"><var class="keyword varname">PROTOCOL</var></dt>
+<dd class="pd">(선택사항) 사설 포트에 지정된 프로토콜입니다. <var class="keyword varname">tcp</var>와 <var class="keyword varname">udp</var> 중 하나입니다. </dd>
+</dl>
+</dd>
+</dl>
+
+<dl><dt class="dlterm">예</dt>
+<dd id="container_cli_reference_cfic__d1504e2385">이름이 <var class="keyword varname">my_container</var>인 컨테이너를 위한 모든 포트 및 IP 맵핑을 나열하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> port <var class="keyword varname">my_container</var></code></pre>
+</dd>
+<dt class="dlterm">시스템 출력</dt>
+<dd><pre class="codeblock"><code><samp class="ph systemoutput">9080/tcp -&gt; 192.0.2.25:9080</samp></code></pre>
+</dd>
+<dd class="ddexpand">이 예에서 <samp class="ph systemoutput">9080/tcp</samp>는 TCP/IP 프로토콜을 사용 중인 사설 포트입니다.
+이는 공인 IP 주소 <samp class="ph systemoutput">192.0.2.25</samp> 및 공용 포트 <samp class="ph systemoutput">9080</samp>에 맵핑됩니다. </dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4070" id="container_cli_reference_cfic__d1504e2413"><h3 class="sectiontitle" id="d72e4070"><span class="ph" id="container_cli_reference_cfic__d1504e2415"><span class="ph"><samp class="ph codeph">bx ic</samp></span> <span class="ph" id="container_cli_reference_cfic__d1504e2418">ps [-a] [--filter
+env=<var class="keyword varname">SEARCH_CRITERIA</var>] [-l <var class="keyword varname">NUM</var>] [-q] [-s]</span></span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2432">해당 영역에서 실행 중인 컨테이너의 목록을 검색합니다. 기본적으로는
+실행 중인 컨테이너만 표시됩니다.</span>  자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/ps" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">ps</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e2440"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2442"><!-- --></a>-a, --all</dt>
+<dd class="pd">(선택사항) 해당 영역 내의 모든 컨테이너(실행 중인 컨테이너 및 중지된 컨테이너 모두)를 표시합니다. </dd>
+<dt class="pt dlterm">--filter env=<var class="keyword varname">SEARCH_CRITERIA</var></dt>
+<dd class="pd">(선택사항) 특정 환경 변수 값이 있는 컨테이너를 검색합니다. 컨테이너를 검사할 때 사용자의 CLI 응답의 <var class="keyword varname">Env</var> 섹션에 나열된 환경 변수 키 또는 값으로
+사용자의 컨테이너를 필터링할 수 있습니다. 찾고 있는 값 또는 키로
+<var class="keyword varname">SEARCH_CRITERIA</var>를 대체하십시오. 검색 기준이 완전한 일치일 필요는 없습니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2460"><!-- --></a>-l <var class="keyword varname">NUM</var>, --limit <var class="keyword varname">NUM</var></dt>
+<dd class="pd">(선택사항) 가장 최근에 작성된 컨테이너를 나열합니다.
+여기서 <var class="keyword varname">NUM</var>은 리턴하고자 하는 가장 최근에 작성된 컨테이너의 번호입니다. <p>예를 들어,
+컨테이너 node1에서 node5까지를 순차적으로 작성한 경우에 <samp class="ph codeph">--limit 2</samp> 옵션은 node4 및 node5를 리턴합니다.
+이 둘이 마지막으로 작성된 두 개의 컨테이너이기 때문입니다.</p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2478"><!-- --></a>-q, --quiet</dt>
+<dd class="pd">(선택사항) 컨테이너 ID만 표시합니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2483"><!-- --></a>-s, --size</dt>
+<dd class="pd">(선택사항) 컨테이너의 크기를 나열합니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><div class="p">다음은 실행 중인 컨테이너 및 중지된 컨테이너 모두 보기를 요청하는 예입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</div>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4159" id="container_cli_reference_cfic__d1504e2497"><h3 class="sectiontitle" id="d72e4159"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rename OLD_NAME NEW_NAME </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>컨테이너의 이름을 바꿉니다. 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/rename" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">rename</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">NEW_NAME</var></dt>
+<dd class="pd">(필수) 컨테이너의 새 이름입니다. </dd>
+<dt class="pt dlterm"><var class="keyword varname">OLD_NAME</var></dt>
+<dd class="pd">(필수) 컨테이너의 이전 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>현재 이름이 <var class="keyword varname">my_container</var>인 컨테이너의 이름을 <var class="keyword varname">container_renamed</var>로 바꾸도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rename <var class="keyword varname">my_container</var> <var class="keyword varname">container_renamed</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4213" id="container_cli_reference_cfic__d1504e2546"><h3 class="sectiontitle" id="d72e4213"><span class="ph"><samp class="ph codeph">bx ic</samp></span> reprovision [-f]
+[AVAILABILITY_ZONE]</h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>영역에 대한 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역을 변경합니다. 
+영역의 원래 할당량은 유지됩니다. 여러 가용성 구역의 다중 컨테이너 그룹에 앱을 배치하여 하드웨어 고장 시 앱의 고가용성을 보장할 수 있습니다. <div class="note attention"><span class="attentiontitle">주의:</span> 이 명령을
+실행하는 경우 이 영역의 모든 단일 컨테이너 및 그룹, 공인 IP 주소 및 볼륨이 새 가용성 구역으로 마이그레이션되지 않으며
+마이그레이션 프로세스 중에 제거됩니다. 이미지에는 영향이 없습니다. 새 가용성 구역으로 마이그레이션한 후
+데이터를 복원할 수 있도록 <a href="container_volumes_ov.html#container_volume_different_dc" title="현재 Bluemix 영역을 새로운 데이터 센터로 이동할 계획인 경우, 새로운 데이터 센터에서 데이터를 복원하여 사용할 수 있도록 볼륨이 백업되었는지 확인하십시오.">볼륨을 백업</a>하십시오. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">AVAILABILITY_ZONE</dt>
+<dd class="pd">(선택사항) 컨테이너가 배치되는 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역의 이름입니다. <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역이 지정되지 않으면 지역에 설정된 기본 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역이 사용됩니다. <div class="note important"><span class="importanttitle">중요사항:</span> <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역이 포함되면 <samp class="ph codeph">-f</samp> 옵션도 포함되어야 합니다. </div>
+<div class="tablenoborder"><table summary="IBM Bluemix Container Service 가용성 구역" id="container_cli_reference_cfic__d1504e2586" class="defaultstyle"><caption><span class="tablecap">표 7. <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역</span></caption><thead><tr><th id="d72e4316" class="thleft">지역</th>
+<th id="d72e4318" class="thleft">데이터 센터 위치</th>
+<th id="d72e4320" class="thleft"><span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역 이름</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e4316 ">미국 남부</td>
+<td headers="d72e4318 ">댈러스 1</td>
+<td headers="d72e4320 ">dal09-01</td>
+</tr>
+<tr><td headers="d72e4316 ">미국 남부</td>
+<td headers="d72e4318 ">댈러스 2</td>
+<td headers="d72e4320 ">dal09-02</td>
+</tr>
+<tr><td headers="d72e4316 ">미국 남부</td>
+<td headers="d72e4318 ">댈러스 3</td>
+<td headers="d72e4320 ">dal10-03</td>
+</tr>
+<tr><td headers="d72e4316 ">영국</td>
+<td headers="d72e4318 ">런던</td>
+<td headers="d72e4320 ">lon02-01</td>
+</tr>
+<tr><td headers="d72e4316 ">영국</td>
+<td headers="d72e4318 ">암스테르담</td>
+<td headers="d72e4320 ">ams03-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-f, --force</dt>
+<dd class="pd">(선택사항) <span class="keyword">Bluemix</span> 영역에서 <span class="keyword">IBM
+Bluemix Container Service</span>의 재작성을 강제 실행합니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 현재 영역에 대한 <span class="keyword">IBM
+Bluemix Container Service</span> 가용성 구역을 <kbd class="ph userinput">dal09-02</kbd>로 변경하기 위한 요청의 예입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> reprovision -f dal09-02</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4407" id="container_cli_reference_cfic__d1504e2617"><h3 class="sectiontitle" id="d72e4407"><span class="ph"><samp class="ph codeph">bx ic</samp></span> restart CONTAINER [CONTAINER] [-t SECS] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2627">하나 이상의 컨테이너를 다시 시작합니다.</span> 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/restart" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">restart</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2637"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 이름 또는 ID입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2643"><!-- --></a>-t <var class="keyword varname">SECS</var>, --time <var class="keyword varname">SECS</var></dt>
+<dd class="pd">컨테이너가 다시 시작될 때까지 대기하는 시간(초)입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너를 다시 시작하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> restart <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4461" id="container_cli_reference_cfic__d1504e2666"><h3 class="sectiontitle" id="d72e4461"><span class="ph" id="container_cli_reference_cfic__d1504e2668"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2677">하나 이상의 컨테이너를 제거하십시오.</span> 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/rm" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">rm</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e2685"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2687"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 이름 또는 ID입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2695"><!-- --></a>-f, --force</dt>
+<dd class="pd">(선택사항) 실행 중이거나 실패한 컨테이너의 제거를 강제 실행합니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너를 제거하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4513" id="container_cli_reference_cfic__d1504e2713"><h3 class="sectiontitle" id="d72e4513"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi [-R REGISTRY] IMAGE [IMAGE] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2723">로그인한 조직의 개인용 <span class="keyword">Bluemix</span>
+이미지 레지스트리에서 하나 이상의 이미지를 제거합니다.</span> 자세한 정보는
+Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/rmi" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">rmi</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2735"><!-- --></a><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">(필수) 제거하려는 이미지의 전체 개인용 <span class="keyword">Bluemix</span>
+레지스트리 경로입니다. 이미지 경로에 태그가 지정되어 있지 않으면
+<samp class="ph codeph">latest</samp>로 태그가 지정된 이미지가 기본적으로 삭제됩니다. 명령의 각
+개인용 <span class="keyword">Bluemix</span> 레지스트리 경로를 공백으로 구분해서
+나열하여 여러 이미지를 사용해 이 명령을 실행할 수 있습니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2748"><!-- --></a>-R <var class="keyword varname">REGISTRY</var>, --registry <var class="keyword varname">REGISTRY</var></dt>
+<dd class="pd">(선택사항) 레지스트리 호스트를 변경합니다. 기본값은 <span class="keyword cmdname">init</span> 명령과 함께 사용한
+레지스트리를 사용하는 것입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 <samp class="ph codeph">mynamespace/myimage:latest</samp>
+이미지를 제거하는 요청의 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">myimage</var>:<var class="keyword varname">latest</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4594" id="container_cli_reference_cfic__d1504e2782"><h3 class="sectiontitle" id="d72e4594"><span class="ph" id="container_cli_reference_cfic__d1504e2784"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-map [-d DOMAIN] [-n HOST] GROUP </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2793">컨테이너 그룹에 액세스하기 위해 사용할 인터넷 트래픽의 라우트를
+설정합니다. 새 라우트를 설정하거나 기존 라우트를 업데이트할 때 이 명령을 사용할 수 있습니다. </span></dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e2798"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2800"><!-- --></a>-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">(선택사항) 라우트의 도메인 이름으로서 전체 공용 라우트 URL의 두 번째 파트입니다. 대부분의 경우 도메인은 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>입니다. 
+이 매개변수를 사용하여 사용자 정의 도메인을 지정할 수도 있습니다. 사용자 정의 도메인을 사용하는 경우에는 도메인 이름에 밑줄(_)을 포함하지 마십시오. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2813"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(필수) 그룹 ID 또는 이름입니다.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2819"><!-- --></a>-n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">(선택사항) 라우트의 호스트 이름입니다. 호스트 이름에는 밑줄(_)을 포함하지 마십시오. 호스트 이름은 전체 공용 라우트 URL의 첫 번째 파트입니다(예: URL <samp class="ph codeph"><var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>에서
+<var class="keyword varname">mycontainerhost</var>). </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <samp class="ph codeph">my_container_group</samp>인 컨테이너 그룹에 대한 라우트를 맵핑하도록 요청하는 예는 다음과 같습니다.
+호스트 이름은 <samp class="ph codeph">my_host</samp>이고 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>은 도메인입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-map -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">my_host</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4682" id="container_cli_reference_cfic__d1504e2862"><h3 class="sectiontitle" id="d72e4682"><span class="ph" id="container_cli_reference_cfic__d1504e2864"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap [-d DOMAIN] [-n HOST] GROUP </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2873">컨테이너 그룹에서 라우팅의 맵핑을 해제합니다. 라우트가 없는 그룹은
+인터넷에서 액세스할 수 없습니다.</span></dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2880"><!-- --></a>-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">(선택사항) 라우트의 도메인 이름입니다. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2890"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(필수) 그룹 ID 또는 이름입니다.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2896"><!-- --></a>-n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">(선택사항) 라우트의 호스트 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><samp class="ph codeph">my_container_group</samp>이라는 그룹에 대한 라우트를 맵핑 해제하도록 요청하는 예는 다음과 같습니다.
+여기서 <samp class="ph codeph">my_host</samp>는 호스트 이름이고 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>은 도메인입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">my_host</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4755" id="container_cli_reference_cfic__d1504e2929"><h3 class="sectiontitle" id="d72e4755"><span class="ph" id="container_cli_reference_cfic__d1504e2931"><span class="ph"><samp class="ph codeph">bx ic</samp></span><span class="ph" id="container_cli_reference_cfic__d1504e2933"> run [-p PORT] [-P] [-d] [-e ENV] [--env-file
+ENVFILE] [-it] [--link NAME:ALIAS] [-m MEMORY] --name NAME [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD [CMD ...]] </span></span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2941">이미지 이름으로부터 컨테이너 클라우드 서비스에서 새 컨테이너를
+시작합니다.</span> 기본적으로 <span class="keyword">Bluemix</span>의 컨테이너는 분리 모드로 실행됩니다. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/run" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">run</a> 명령을 참조하십시오.<div class="steps note"><span class="notetitle">참고:</span> 반드시 Cloud Foundry 명령 도구가 설치되어 있어야 하며, Cloud Foundry 토큰이 있어야 합니다. <samp class="ph codeph">bx login</samp> 및
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp>을 사용하여 로그인에 성공하면
+필수 토큰이 생성됩니다. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e2960"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd">(선택사항) 실행할 컨테이너로 명령과 인수가 전달됩니다. 이 명령은 오래 실행되는 명령이어야 합니다. 
+오래 실행되지 않는 명령(예: <span class="keyword cmdname">/bin/date</span>)은 컨테이너에 충돌을 일으킬 수 있으므로 사용하지 마십시오.<div class="p">다음은
+사용자가 <span class="keyword">IBM
+Bluemix Container Service</span> 레지스트리에서 제공되는 <span class="keyword option">ibmnode</span> 이미지를
+사용하고 있다고 가정할 경우 오래 실행되는 명령의 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> ping localhost</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- tail -f /dev/null</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- sh -c <span class="q">"while true; do date; sleep 20; done"</span></code></pre>
+<div class="steps note"><span class="notetitle">참고:</span> CMD 및
+해당 인수는 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+group-create</samp> 명령행의 끝에 있어야 합니다. </div>
+</div>
+</dd>
+<dt class="pt dlterm">-d</dt>
+<dd class="pd">(선택사항) 컨테이너를 분리 모드로 실행합니다. <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp>을
+실행할 때 컨테이너는 기본적으로 분리 모드로 실행됩니다. 분리 모드에서
+컨테이너의 루트 프로세스가 종료되면 컨테이너도 종료됩니다. 예를 들어,
+ibmnode 이미지에서 컨테이너를 배치하면 장기 실행 프로세스가 존재하지 않기 때문에 빌드된 후에
+즉시 컨테이너가 종료됩니다. <div class="note tip"><span class="tiptitle">팁:</span> <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp>이 아니라
+<samp class="ph codeph">docker run</samp>을 사용하도록 선택하면
+<samp class="ph codeph">-d</samp> 옵션이 필요합니다.</div>
+</dd>
+<dt class="pt dlterm">-e <var class="keyword varname">ENV</var>, --env <var class="keyword varname">ENV</var></dt>
+<dd class="pd">(선택사항) <span class="keyword option">ENV</span>가 <samp class="ph codeph">key=value</samp> 쌍인 곳에 여러 개의 환경 변수를 설정합니다. 
+여러 개의 키를 독립적으로 나열하거나 따옴표를 포함시킬 경우 환경 변수 이름과 값을 따옴표로 묶으십시오. <p>예</p>
+<samp class="ph codeph">-e
+<span class="q">"<var class="keyword varname">key1</var>=<var class="keyword varname">value1</var>"</span> -e
+<span class="q">"<var class="keyword varname">key2</var>=<var class="keyword varname">value2</var>"</span> -e
+<span class="q">"<var class="keyword varname">key3</var>=<var class="keyword varname">value3</var>"</span></samp><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e3080" class="defaultstyle"><caption><span class="tablecap">표 8. 제안된 환경 변수</span></caption><thead><tr><th id="d72e4941" class="thleft">환경 변수</th>
+<th id="d72e4943" class="thleft">설명</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e4941 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d72e4943 ">일부 <span class="keyword">Bluemix</span> 서비스는 컨테이너에 대한 직접 바인딩을 지원하지 않습니다. 
+이 경우에는 Cloud Foundry 앱을 작성하고 <span class="keyword">Bluemix</span> 서비스를
+이에 바인드해야 합니다. 그리고 <samp class="ph codeph">CCS_BIND_APP</samp>를 사용하여 앱을 컨테이너에 바인드하십시오. 
+Cloud Foundry 앱은 브릿지 역할을 하며, <span class="keyword">Bluemix</span>에서
+브릿지 앱의 VCAP_SERVICES 정보를 실행 중인 컨테이너 인스턴스에 삽입할 수 있도록 허용합니다. </td>
+</tr>
+<tr><td headers="d72e4941 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">참고:</span>  서비스가 <samp class="ph codeph">CCS_BIND_SRV=</samp> 환경 변수 사용을 지원하지 않는 경우에는
+<samp class="ph codeph">CCS_BIND_APP=</samp>를 대신 사용하십시오. </div>
+</td>
+<td headers="d72e4943 ">브릿지 앱을 사용하지 않고 <span class="keyword">Bluemix</span> 서비스를
+컨테이너에 직접 바인드하려면 <samp class="ph codeph">CCS_BIND_SRV</samp>를 사용하십시오. 이 바인딩을 사용하면
+<span class="keyword">Bluemix</span>에서 VCAP_SERVICES 정보를
+실행 중인 컨테이너 인스턴스에 삽입할 수 있습니다. 다수의 <span class="keyword">Bluemix</span>
+서비스를 나열하려면 동일한 환경 변수의 일부로서 이를 포함하십시오. </td>
+</tr>
+<tr><td headers="d72e4941 "><div class="lines">(더 이상 사용되지 않음) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d72e4943 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">이 환경 변수는 더 이상 사용되지 않습니다. :</span> 대신 사용자 컨테이너에 대한 외부 액세스에는 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> 또는 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">attach</samp>를 사용하십시오. 자세한 정보는
+<a href="container_security.html#container_cli_login_exec" title="실행 중인 컨테이너에 로그인해야 하는 경우 bx ic exec를 사용할 수 있습니다.">exec를 사용하여 컨테이너에 로그인</a>의 내용을 참조하십시오.</div>
+
+<span class="ph">컨테이너를 작성할 때 이에 SSH 키를 추가하기 위해 <samp class="ph codeph">CCS_API_KEY</samp>를 사용할 수 있습니다.</span></td>
+</tr>
+<tr><td headers="d72e4941 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d72e4943 "><span class="ph" id="container_cli_reference_cfic__d1504e1129-d1500e3775a1310">컨테이너에서 모니터링할 로그 파일을 추가하려면 <samp class="ph codeph">LOG_LOCATIONS</samp>
+환경 변수를 로그 파일의 경로와 함께 포함시키십시오.</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</dd>
+<dt class="pt dlterm">--env-file <var class="keyword varname">ENVFILE</var></dt>
+<dd class="pd">(선택사항) 파일에서 환경 변수를 가져옵니다. 여기서 <var class="keyword varname">ENVFILE</var>은 로컬 디렉토리의 파일에 대한 경로입니다. 
+파일의 모든 행은 하나의 <samp class="ph codeph">key=value</samp> 쌍을 표시합니다. <p>예</p>
+<pre class="codeblock"><code>KEY1=VALUE1
+KEY2=VALUE2</code></pre>
+</dd>
+<dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">(필수) 컨테이너에 포함할 이미지입니다. 이미지 다음에 명령을 나열할 수 있지만 이미지 다음에 옵션은 입력하지 마십시오.
+이미지를 지정하기 전에 모든 옵션을 포함하십시오. <p>조직의 개인용
+<span class="keyword">Bluemix</span> 레지스트리에 있는 이미지를 사용할 경우 다음 형식으로
+이미지를 지정하십시오. <samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">NAMESPACE</var>/<var class="keyword varname">IMAGE</var></samp></p>
+<p><span class="keyword">IBM
+Bluemix Container Service</span>가
+제공하는 이미지를 사용할 경우 다음 형식으로 이미지를 지정하십시오: <samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">IMAGE</var></samp></p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e3130"><!-- --></a>-it</dt>
+<dd class="pd">(선택사항) 컨테이너를 대화식 모드로 실행합니다. 컨테이너가 작성된 후 표준 입력을 계속 표시하십시오. 종료하려면
+<kbd class="ph userinput">exit</kbd>를 입력하십시오. </dd>
+<dt class="pt dlterm">--link <var class="keyword varname">NAME</var>:<var class="keyword varname">ALIAS</var></dt>
+<dd class="pd">(선택사항) 실행 중인 다른 컨테이너와 컨테이너가 통신하게 하려고 할 때마다 호스트 이름의 별명을 사용하여 컨테이너를 처리할 수 있습니다. 자세한 정보는
+<a href="container_single_ui.html#container_linking" title="컨테이너가 동일한 영역의 다른 컨테이너에 링크되는 경우, IBM Bluemix Container Service는 소스 컨테이너의 수신 컨테이너에 호스트 항목을 작성합니다. 자주 변경될 수 있는 특정 IP 주소 대신에 별명을 사용하여 소스 컨테이너를 참조할 수 있습니다.">명령행 인터페이스(CLI)를 사용하여 단일 컨테이너 링크</a>의 내용을 참조하십시오.</dd>
+<dt class="pt dlterm">-m <var class="keyword varname">MEMORY</var>, --memory <var class="keyword varname">MEMORY</var></dt>
+<dd class="pd">(선택사항) <span class="ph" id="container_cli_reference_cfic__d1504e1281-d1500e3867a1310">컨테이너의 메모리 한계(MB)를 입력하십시오. 메모리 한계는
+런타임 중에 컨테이너가 컴퓨팅 호스트에서 얻는 메모리와 디스크 공간의 최대 크기를
+정의하는 컨테이너 크기의 일부입니다. 컨테이너 크기가 지정된 후에는 값을 변경할 수 없습니다.</span> <span class="keyword">IBM
+Bluemix Container Service</span>에서
+사용할 수 있는 크기는 다음과 같습니다.<ul data-hd-audience="yellow" id="container_cli_reference_cfic__d1504e1286-d1500e3878a1310"><li>Pico(64MB 메모리, 4GB 디스크 공간)</li>
+<li>Nano(128 MB 메모리, 8GB 디스크 공간)</li>
+<li>Micro(256MB 메모리, 16GB 디스크 공간)</li>
+<li>Tiny(512MB 메모리, 32GB 디스크 공간)</li>
+<li>Small(1024MB 메모리, 64GB 디스크 공간)</li>
+<li>Medium(2048MB 메모리, 128GB 디스크 공간)</li>
+<li>Large(4096MB 메모리, 256GB 디스크 공간)</li>
+<li>X-Large(8192MB 메모리, 512GB 디스크 공간)</li>
+<li>2X-Large(16384MB 메모리, 1TB 디스크 공간)</li>
+</ul>
+
+컨테이너의 크기를 설정하지 않으면 각 컨테이너 인스턴스가 <span class="keyword option">256</span>MB로 작성됩니다. <div class="note important"><span class="importanttitle">중요사항:</span> 단위 레이블 없이 컨테이너 메모리(MB)를 입력하십시오. 
+예를 들어, Pico 컨테이너를 작성하려는 경우에는 <samp class="ph codeph">-m 64</samp>를 입력하십시오. </div>
+</dd>
+<dt class="pt dlterm">--name <var class="keyword varname">NAME</var></dt>
+<dd class="pd">(필수) 컨테이너에 이름을 지정합니다.<div class="note tip"><span class="tiptitle">팁:</span> 컨테이너 이름은 문자로 시작해야 하며 대문자, 소문자, 숫자, 마침표(.), 밑줄(_)
+또는 하이픈(-)을 포함할 수 있습니다.</div>
+</dd>
+<dt class="pt dlterm">-p <var class="keyword varname">PORT</var>, --publish <var class="keyword varname">PORT</var></dt>
+<dd class="pd"><p>(선택사항) <span class="ph" id="container_cli_reference_cfic__d1504e3174">인터넷에서 앱에 액세스할 수 있게 하려면 공용 포트를 노출시켜야 합니다.
+공용 포트를 노출할 때 노출된 포트에서만 공개 데이터를 전송 및 수신할 수 있게 하는 컨테이너에 대한 공용 네트워크 보안 그룹을 작성합니다. 기타 공용 포트는 닫히고 인터넷에서 앱에 액세스하는 데 사용할 수 없습니다. 여러 번
+<span class="keyword option">-p</span> 옵션을 사용하여 여러 포트를 포함할 수 있습니다. 포트는 맵핑되거나
+전달될 수 없습니다.포트를 노출시키지 않으면, 컨테이너는 사설 컨테이너 네트워크에서만 액세스 가능합니다. 지정된 사설 IP 주소를 사용하여
+사설 네트워크에 있는 컨테이너와 통신할 수 있습니다. </span></p>
+
+<div class="p">사용 중인 이미지의 Dockerfile에 포트가 지정된 경우 해당 포트를 포함하십시오.<div class="note tip"><span class="tiptitle">팁:</span> <ul id="container_cli_reference_cfic__d2114e225-d1500e3935a1310"><li>IBM 인증 Liberty Server 이미지 또는 이 이미지의 수정된 버전에 대해서는 포트 <kbd class="ph userinput">9080</kbd>을 입력하십시오.</li>
+<li>IBM 인증 Node.js 이미지 또는 이 이미지의 수정된 버전에 대해서는
+임의의 포트(예: <kbd class="ph userinput">8000</kbd>)를 입력하십시오. </li>
+</ul>
+</div>
+</div>
+
+<p>사용하려는 IP 프로토콜을 표시하기 위해 UDP와 TCP 사이에서 선택할 수 있습니다. 프로토콜을 지정하지 않으면
+포트가 자동으로 TCP 트래픽에 대해 노출됩니다. </p>
+
+<div class="p">예<ul id="container_cli_reference_cfic__d1504e3187"><li><samp class="ph codeph">-p 9080</samp></li>
+<li><samp class="ph codeph">-p 9080/udp</samp></li>
+<li><samp class="ph codeph">-p 9080/udp -o 8000/tcp</samp></li>
+</ul>
+</div>
+
+<p>컨테이너에 바인드할 기존 IP 주소가 영역에 있는 경우 포트 정보를 사용하여
+IP 주소를 지정할 수 있습니다. IP 주소, 포트 또는 IP 주소 및 컨테이너 포트 번호(예:
+<var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;port_on_IP&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var>)를 포함하십시오.
+IP 주소의 포트는 Dockerfile에서 노출된 컨테이너 포트와 일치해야 합니다. </p>
+
+<div class="p">예<pre class="codeblock"><code>-p 192.0.2.23:9080:9080</code></pre>
+</div>
+
+<div class="steps note" id="container_cli_reference_cfic__d1504e3216"><span class="notetitle">참고:</span> 공인 IP 주소 바인딩은 단일 컨테이너로(부터) 전송되는 데이터를 암호화하는 SSL 인증서를 포함하지 않습니다. 앱에서 SSL 암호화를 요구하는 경우 자체 SSL 솔루션을 구현하거나 단일 컨테이너 대신 컨테이너 그룹을 사용할 수 있습니다. 컨테이너 그룹은 이미 SSL 인증서를 포함하는 공용 라우트에 바인드되므로 추가 구성 없이 HTTPS로 컨테이너 그룹에 액세스할 수 있습니다. 자세한 정보는 <a href="container_ha.html#container_group_ui" title="Bluemix GUI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">Bluemix GUI로 컨테이너 그룹 작성</a>을 참조하십시오. </div>
+</dd>
+<dt class="pt dlterm">-P</dt>
+<dd class="pd">(선택사항) HTTP 트래픽의 경우 이미지의 Dockerfile에 지정된 포트를 자동으로 노출합니다.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e3227"><!-- --></a>--volume <var class="keyword varname">VOLUME</var>:<var class="keyword varname">/DIRECTORY_PATH</var>[:ro]</dt>
+<dd class="pd">(선택사항) <samp class="ph codeph">VOLUME:/DIRECTORY_PATH[:ro]</samp> 형식으로 세부사항을 지정하여
+컨테이너에 볼륨을 연결합니다. <ul id="container_cli_reference_cfic__d1504e3241"><li><var class="keyword varname">VOLUME</var>: 볼륨 ID 또는 이름입니다. </li>
+<li><var class="keyword varname">DIRECTORY_PATH</var>: 컨테이너에 있는 디렉토리의 절대 경로입니다. </li>
+<li><samp class="ph codeph">ro</samp>: 선택사항입니다. <samp class="ph codeph">ro</samp>를 지정하면 볼륨을 기본 읽기/쓰기 대신 읽기 전용으로 만듭니다.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><span class="ph filepath"><var class="keyword varname">my_namespace</var>/nginx</span> 이미지를 사용하여 이름이 <var class="keyword varname">my_container</var>이고 메모리 한계가 1024MB인
+새 컨테이너를 작성하고 시작하도록 올바르게 요청하는 예는 다음과 같습니다. 여기서 <var class="keyword varname">my_namespace</var>는 로그인한 사용자와 연관된 네임스페이스입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m <var class="keyword varname">1024</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">nginx</var></code></pre>
+<div class="p">다음은 <span class="ph filepath">my_namespace/blog</span> 이미지를 사용한 새 컨테이너의
+작성 및 시작을 올바르게 요청하는 예입니다(일부 신임 정보를 환경 변수로 전달함).
+여기서 <var class="keyword varname">my_namespace</var>는 로그인한 사용자와 연관된 네임스페이스입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -e <var class="keyword varname">USER</var>=<var class="keyword varname">johnsmith</var> -e <var class="keyword varname">PASS</var>=<var class="keyword varname">password</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">blog</var></code></pre>
+</div>
+<div class="p">다음은 <span class="ph filepath">my_namespace/blog</span> 이미지를 사용한 컨테이너에 볼륨 추가를 올바르게 요청하는 예입니다.
+여기서 <var class="keyword varname">my_namespace</var>는 로그인한 사용자와 연관된 네임스페이스입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">VolId1</var>:<var class="keyword varname">/first/path</var> --volume <var class="keyword varname">VolId2</var>:<var class="keyword varname">/second/path</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">blog</var></code></pre>
+</div>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5445" id="container_cli_reference_cfic__d1504e3356"><h3 class="sectiontitle" id="d72e5445"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind</samp> GROUP SERVICE_INSTANCE </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>실행 중인 컨테이너 그룹에 서비스를 추가하십시오. 이 명령은 컨테이너 그룹에만 사용 가능합니다.
+단일 컨테이너가 <span class="ph">bx ic</span> run 명령의 파트로 서비스를 바인드해야 합니다. 서비스를 바인드 해제하려면
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3407">service-unbind</a> 명령을 참조하십시오. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(필수) 그룹 ID 또는 이름입니다.</dd>
+<dt class="pt dlterm"><var class="keyword varname">SERVICE_INSTANCE</var></dt>
+<dd class="pd">(필수) 컨테이너 그룹에 추가될 서비스 인스턴스의 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음 예제는 이름이
+MyDataCache인 데이터 캐시 서비스의 인스턴스를
+<var class="keyword varname">my_container_group</var> 컨테이너에 바인드하기 위한 요청입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind <var class="keyword varname">my_container_group</var> <var class="keyword varname">MyDataCache</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5501" id="container_cli_reference_cfic__d1504e3407"><h3 class="sectiontitle" id="d72e5501"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-unbind</samp> GROUP SERVICE_INSTANCE </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>실행 중인 컨테이너 그룹에서 서비스를 제거하십시오. 이 명령은 컨테이너 그룹에만
+사용 가능합니다. 단일 컨테이너가 컨테이너를 제거해야 하며 서비스 없이 새 컨테이너를 작성해야 합니다.
+서비스를 바인드하려면
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3356">service-bind</a> 명령을 참조하십시오. </dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(필수) 그룹 ID 또는 이름입니다.</dd>
+<dt class="pt dlterm"><var class="keyword varname">SERVICE_INSTANCE</var></dt>
+<dd class="pd">(필수) 컨테이너 그룹에서 제거될 서비스 인스턴스의 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음 예제는
+컨테이너
+<var class="keyword varname">my_container_group</var>에서 이름이 MyDataCache인 데이터 캐시 서비스의 인스턴스를 바인드 해제하기 위한 요청입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-unbind <var class="keyword varname">my_container_group</var> <var class="keyword varname">MyDataCache</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5554" id="container_cli_reference_cfic__d1504e3456"><h3 class="sectiontitle" id="d72e5554"><span class="ph"><samp class="ph codeph">bx ic</samp></span> start CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>하나 이상의 중지된 컨테이너를 시작합니다. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/start">start</a> 명령을 참조하십시오. 컨테이너를 중지하려면 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3538">stop</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 이름 또는 ID입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너를 시작하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> start <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5599" id="container_cli_reference_cfic__d1504e3496"><h3 class="sectiontitle" id="d72e5599"><span class="ph"><samp class="ph codeph">bx ic</samp></span> stats --no-stream CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>하나 이상의 컨테이너에서 컨테이너 리소스의 라이브 사용량 통계를 표시합니다. 데이터는
+생성과 동시에 실시간으로 표시됩니다. 종료하려면
+<kbd class="ph userinput">CTRL+C</kbd>를 사용하십시오. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/stats/">stats</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID입니다. </dd>
+<dt class="pt dlterm">--no-stream</dt>
+<dd class="pd">(필수) 최신 결과를 표시합니다. 명령을 실행한 후 생성된 새 정보는
+표시되지 않습니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 컨테이너에 대한 최신 통계를 요청하는 예입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stats --no-stream <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5646" id="container_cli_reference_cfic__d1504e3538"><h3 class="sectiontitle" id="d72e5646"><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop CONTAINER [CONTAINER] [-t SECS] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>하나 이상의 실행 중인 컨테이너를 중지합니다. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/stop">stop</a> 명령을 참조하십시오. 컨테이너를 시작하려면 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3456">start</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 이름 또는 ID입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름과 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+<dt class="pt dlterm">-t <var class="keyword varname">SECS</var>, --time <var class="keyword varname">SECS</var></dt>
+<dd class="pd">컨테이너가 강제 종료될 때까지 대기하는 시간(초)입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너를 중지하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5702" id="container_cli_reference_cfic__d1504e3589"><h3 class="sectiontitle" id="d72e5702"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top CONTAINER [CONTAINER] [<samp class="ph codeph">ps</samp> options]</h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>컨테이너에서 실행 중인 프로세스를 나열합니다. <p>Linux의 기본 <samp class="ph codeph">top</samp> 명령이 아닌
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top</samp> 명령은
+컨테이너 내에서 실행 중인 기본 프로세스에 대한 Linux <samp class="ph codeph">ps</samp> 명령의 출력을 표시합니다. 
+결과적으로, 메모리 및 CPU 사용량은 프로세스에 대해 변경될 때 CLI 출력에서 업데이트되지 않습니다. </p>
+<div class="steps note"><span class="notetitle">참고:</span> 기본 Linux <samp class="ph codeph">top</samp> 명령의 출력을 확인해야 하는 경우에는 컨테이너에 대해
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e737">exec</a>를 실행하고
+<samp class="ph codeph">top</samp> 명령을 실행하십시오. </div>
+ 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/top/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">top</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID입니다. </dd>
+</dl>
+</dd>
+<dd class="ddexpand"><dl class="parml"><dt class="pt dlterm"><samp class="ph codeph"><var class="keyword varname">ps</var></samp> 옵션</dt>
+<dd class="pd">(선택사항) 기본 Linux <samp class="ph codeph">ps</samp> 명령에서 제공하는 옵션을 사용하여
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top</samp> 명령의 출력을
+추가로 세분화하거나 필터링할 수 있습니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음 예는 이름이 <var class="keyword varname">my_container</var>인 컨테이너 내에서 실행 중인
+모든 현재 프로세스에 대해 세부 정보를 표시하는 요청입니다. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> top <var class="keyword varname">my_container</var> -aux</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5793" id="container_cli_reference_cfic__d1504e3671"><h3 class="sectiontitle" id="d72e5793"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unpause CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>하나 이상의 실행 중인 컨테이너 내의 모든 프로세스의 일시정지를 해제합니다. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/unpause">unpause</a> 명령을 참조하십시오. 컨테이너를 일시정지하려면 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2290">pause</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 최소한 한 개 컨테이너의 컨테이너 이름 또는 ID입니다. 사이에 간격이 있는 상태로 명령에
+해당 이름 또는 ID를 나열하여 다중 컨테이너와 함께 이 명령을 실행할 수 있습니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>이름이 <var class="keyword varname">my_container</var>인 컨테이너를 일시정지 해제하도록 요청하는 예는 다음과 같습니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> unpause <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5838" id="container_cli_reference_cfic__d1504e3711"><h3 class="sectiontitle" id="d72e5838"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unprovision [-f]</h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>로그인한 <span class="keyword">Bluemix</span> 영역에서
+<span class="keyword">IBM
+Bluemix Container Service</span>를 삭제합니다. <div class="note attention"><span class="attentiontitle">주의:</span> 이 명령을 실행하면 모든 단일 컨테이너 및 컨테이너 그룹이 유실됩니다. 
+사용자 영역은 <span class="keyword">Bluemix</span>에서 계속 사용 가능합니다. <span class="keyword">IBM
+Bluemix Container Service</span>를
+다시 사용하려면 <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1849">bx ic init</a>을 실행하여 <span class="keyword">IBM
+Bluemix Container Service</span>를 다시 초기화해야 합니다. </div>
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-f, --force</dt>
+<dd class="pd">(선택사항) <span class="keyword">Bluemix</span> 영역에서 <span class="keyword">IBM
+Bluemix Container Service</span>의 삭제를 강제 실행합니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음 예는 영역에서 <span class="keyword">IBM
+Bluemix Container Service</span>를 삭제하도록 요청합니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> unprovision</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5929" id="container_cli_reference_cfic__d1504e3760"><h3 class="sectiontitle" id="d72e5929"><span class="ph" id="container_cli_reference_cfic__d1504e3762"><span class="ph"><samp class="ph codeph">bx ic</samp></span> update </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>설치된 버전보다 더 최신 버전의 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인이 있는지 확인합니다.</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> update </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5961" id="container_cli_reference_cfic__d1504e3780"><h3 class="sectiontitle" id="d72e5961"><span class="ph" id="container_cli_reference_cfic__d1504e3782"><span class="ph"><samp class="ph codeph">bx ic</samp></span> version</span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>Docker 및 <span class="keyword">IBM
+Bluemix Container Service</span> API의 버전을 표시합니다. <span class="keyword">IBM
+Bluemix Container Service</span>용으로
+설치된 플러그인의 버전을 확인하려면, <samp class="ph codeph">cf plugins</samp> 또는 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> info</samp>를 실행하십시오.
+자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/version/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">version</a> 명령을 참조하십시오. </dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> version</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6013" id="container_cli_reference_cfic__d1504e3811"><h3 class="sectiontitle" id="d72e6013"><span class="ph" id="container_cli_reference_cfic__d1504e3813"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>볼륨을 작성합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e3826"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(선택사항) 파일 공유 이름입니다.사용 가능하거나 이름 지정된 파일 공유가 없는 경우에는 영역의 기본 파일 공유를 기반으로 볼륨이 빌드됩니다. </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(필수) 볼륨 이름입니다.<span class="ph" id="container_cli_reference_cfic__d1504e3842">이름에는 대문자, 소문자, 숫자, 밑줄(_) 및 파이픈(-)이
+포함될 수 있습니다.</span></dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 볼륨을 작성하도록 요청하는 예입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create <var class="keyword varname">my_volume</var> <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6063" id="container_cli_reference_cfic__d1504e3857"><h3 class="sectiontitle" id="d72e6063"><span class="ph" id="container_cli_reference_cfic__d1504e3859"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>파일 공유를 작성합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e3872"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">(필수) 파일 공유 IOPS입니다. 올바른 값은 GB당 0.25IOPS, 2IOPS 또는 4IOPS입니다.</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(필수) 파일 공유 이름입니다. <span class="ph">이름에는 대문자, 소문자, 숫자, 밑줄(_) 및 파이픈(-)이
+포함될 수 있습니다.</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">(필수) 파일 공유 시스템 크기(단위: GB)입니다. Use <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp> to list all valid
+sizes</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create <var class="keyword varname">my_fileshare</var> <var class="keyword varname">20</var> <var class="keyword varname">0.25</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6125" id="container_cli_reference_cfic__d1504e3912"><h3 class="sectiontitle" id="d72e6125"><span class="ph" id="container_cli_reference_cfic__d1504e3914"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>사용할 수 있는 파일 공유 크기를 나열합니다.</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6149" id="container_cli_reference_cfic__d1504e3930"><h3 class="sectiontitle" id="d72e6149"><span class="ph" id="container_cli_reference_cfic__d1504e3932"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>파일 공유를 검사합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(필수) 파일 공유 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6185" id="container_cli_reference_cfic__d1504e3962"><h3 class="sectiontitle" id="d72e6185"><span class="ph" id="container_cli_reference_cfic__d1504e3964"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>조직의 파일 공유를 나열합니다.</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6209" id="container_cli_reference_cfic__d1504e3980"><h3 class="sectiontitle" id="d72e6209"><span class="ph" id="container_cli_reference_cfic__d1504e3982"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>파일 공유를 제거합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(필수) 파일 공유 이름입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6246" id="container_cli_reference_cfic__d1504e4013"><h3 class="sectiontitle" id="d72e6246"><span class="ph" id="container_cli_reference_cfic__d1504e4015"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect VOLNAME </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>볼륨을 검사합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(필수) 볼륨 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>볼륨을 검사하도록 요청하는 예는 다음과 같습니다. 여기서 <var class="keyword varname">my_volume</var>은 볼륨의 이름입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect <var class="keyword varname">my_volume</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6286" id="container_cli_reference_cfic__d1504e4049"><h3 class="sectiontitle" id="d72e6286"><span class="ph" id="container_cli_reference_cfic__d1504e4051"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>볼륨을 제거합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd id="container_cli_reference_cfic__d1504e4064"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(필수) 볼륨 이름입니다.</dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>볼륨을 제거하도록 요청하는 예는 다음과 같습니다. 여기서 <var class="keyword varname">my_volume</var>은 볼륨의 이름입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove <var class="keyword varname">my_volume</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6326" id="container_cli_reference_cfic__d1504e4085"><h3 class="sectiontitle" id="d72e6326"><span class="ph" id="container_cli_reference_cfic__d1504e4087"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>볼륨을 나열합니다.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm">--table</dt>
+<dd class="pd">(선택사항) 테이블 형식으로 목록 출력을 구성합니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 볼륨을 나열하도록 요청하는 예입니다.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6361" id="container_cli_reference_cfic__d1504e4114"><h3 class="sectiontitle" id="d72e6361"><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>컨테이너가 종료할 때까지 대기합니다. 
+이 대기 시간 중에는 명령행이 리턴되지 않으며 사용자가 명령을 입력할 수 없습니다. 
+컨테이너가 종료하거나 중지하는 순간, 종료 코드가 CLI 출력에서 인쇄됩니다. 자세한 정보는 Docker 도움말에서 <a href="https://docs.docker.com/engine/reference/commandline/wait/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">wait</a> 명령을 참조하십시오.</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 이름 또는 ID입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 이름이 <var class="keyword varname">my_container</var>인 컨테이너가 종료할 때까지 대기하도록 요청하는 예입니다. 
+컨테이너가 종료하는 순간, 종료 코드가 CLI 출력에서 인쇄됩니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6403" id="container_cli_reference_cfic__d1504e4151"><h3 class="sectiontitle" id="d72e6403"><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait-status CONTAINER</h3>
+<dl><dt class="dlterm">용도</dt>
+<dd>단일 컨테이너 또는 컨테이너 그룹이 비임시적 상태에 도달할 때까지 대기합니다. 
+이 대기 시간 중에는 명령행이 리턴되지 않으며 사용자가 명령을 입력할 수 없습니다. 
+컨테이너가 비임시적 상태에 도달하는 순간, <span class="ph uicontrol">확인</span> 메시지가 표시됩니다. 
+단일 컨테이너의 경우, 비임시적 상태에는 <samp class="ph codeph">실행 중</samp>, <samp class="ph codeph">종료</samp>, <samp class="ph codeph">충돌</samp>,
+<samp class="ph codeph">일시정지</samp> 또는 <samp class="ph codeph">일시중단</samp> 등이 포함됩니다. 컨테이너 그룹의 경우, 비임시적 상태에는
+<samp class="ph codeph">CREATE_COMPLETE</samp>, <samp class="ph codeph">UPDATE_COMPLETE</samp> 또는 <samp class="ph codeph">FAILED</samp>가 포함됩니다.
+</dd>
+<dt class="dlterm">매개변수</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(필수) 컨테이너 또는 그룹 이름 또는 ID입니다. </dd>
+</dl>
+</dd>
+<dt class="dlterm">예</dt>
+<dd>다음은 이름이 <var class="keyword varname">my_container</var>인 컨테이너가 비임시적 상태에 도달할 때까지 대기하도록 요청하는 예입니다.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait-status <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section></div>
+<aside role="complementary" aria-labelledby="d72e1229"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d72e6474" lang="ko-kr" id="container_cli_cfic_uninstall"><h2 class="topictitle2" id="d72e6474"><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 설치 제거</h2>
+<div class="body taskbody"><p class="shortdesc">더 이상 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인이 필요하지 않은 경우 <span class="ph">bx</span> 명령을 사용하여 플러그인을 설치 제거할 수 있습니다. </p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">참고:</span> <span class="keyword">IBM
+Bluemix Container Service</span> Cloud
+Foundry 플러그인을 설치 제거하려면 다음 명령을 실행하십시오. <pre class="codeblock"><code>cf uninstall-plugin IBM-Containers</code></pre>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span> CLI용
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인을 설치 제거하려면
+다음 명령을 실행하십시오. </span> <pre class="codeblock"><code><span class="ph">bx</span> plugin uninstall IBM-Containers</code></pre>
+</li>
+<li class="step stepexpand" id="container_cli_cfic_uninstall__verify"><span class="cmd">다음 명령을 실행하고 설치된 플러그인의 목록을 확인하여 플러그인이 설치 제거되었는지 확인하십시오. </span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인이
+결과에 표시되지 않습니다. </p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e6474"></aside></article><article class="topic concept nested1" role="article" aria-labelledby="d72e6630" lang="ko-kr" id="container_nav_help"><h2 class="topictitle2" id="d72e6630">나머지 <span class="keyword">IBM
+Bluemix Container Service</span>
+문서가 있는 위치</h2>
+<div class="body conbody"><div class="abstract">
+
+
+<p>이 컨텐츠를 검토한 후에는 기본 <a href="container_index.html" title="IBM 클라우드에서 Kubernetes 클러스터 및 Docker 컨테이너 내부의 고가용성 앱을 관리합니다. 컨테이너는 환경 간에 앱을 이동하고 변경사항 없이 앱을 실행할 수 있도록 앱과 모든 종속 항목을 패키징하는 표준 방법입니다. 가상 머신과 달리 컨테이너는 운영 체제를 함께 제공하지 않습니다. 앱 코드, 런타임, 시스템 도구, 라이브러리 및 설정만 컨테이너 내부에 패키징되며 이를 통해 컨테이너가 가상 머신보다 경량으로 유지되어 이식성이 높아지고 효율적이게 됩니다."><span class="keyword">IBM
+Bluemix Container Service</span> 문서</a>로 돌아가십시오.</p>
+</div>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d72e6630"></aside></article></article></div></main></body></html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html><html lang="zh-cn">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="存储卷用于在组织的 Bluemix 空间中持久存储数据或在容器之间共享数据。">
+<meta name="keywords" content="IBM Containers, 容器, 持久性存储器, 卷, 创建, CLI, 添加文件, 安装, exec, docker cp, 数据备份, 写, 除去, 文件共享, 存储器, 仪表板, GUI, 添加, fs">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-cn",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>在 IBM Bluemix Container Service 中存储单个和可扩展容器的持久数据</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d90275e6" id="container_volumes_ov"><h1 class="topictitle1" id="d90275e6">在卷中存储<span class="ph">单个和可扩展容器</span>的持久数据</h1>
+<div class="abstract"><div class="shortdesc">存储卷用于在组织的 <span class="keyword">Bluemix®</span> 空间中持久存储数据或在容器之间共享数据。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> <span class="ph"><span class="ph">单个和可扩展容器</span> 的免费试用版不可用。
+<a href="cs_ov.html" title="IBM Bluemix Container Service 将 Docker 和 Kubernetes 相组合，以提供功能强大的工具、直观的用户体验以及内置安全性和隔离，可使用 Kubernetes API 通过独立计算主机的集群，自动对容器化应用程序进行部署、操作、扩展和监视。">了解有关集群管理和在 <span class="keyword">Bluemix</span> Public 上迁移至 <span class="keyword">IBM®
+Bluemix Container Service</span> 中的 Kubernetes 的信息。</a></span></div>
+</div>
+
+
+<div class="p">在此页面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#about_volumes">关于卷</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 使用 <a href="container_volumes_ov.html#container_volumes_ui" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以通过 Bluemix GUI 创建容器的卷。">GUI</a> 或 <a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">CLI</a> 创建卷<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_mount" title="创建卷后，可以将卷安装到容器上，然后向其中添加文件。安装了该卷的任何容器都可访问这些文件。">添加文件</a>到卷<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_backup" title="容器卷在持久存储器上进行托管，但没有备份。如果需要备份卷数据，可以使用 bx ic cp 创建手动备份。">备份和复原</a>卷<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • 添加<a href="container_volumes_ov.html#container_volumes_write" title="非 root 用户在卷安装路径上没有写许可权。要授予写许可权，您必须编辑映像的 Dockerfile，以在具有正确许可权的安装路径上创建目录。">非 root 用户访问权</a>到卷<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volume_different_dc" title="如果您计划将当前 Bluemix 空间移动到新的数据中心，请确保已备份卷，以便您可以在新数据中心对数据进行复原和使用。">迁移数据</a>到不同的数据中心<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要卷来存储容器的数据，那么您可以除去卷。">除去卷</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">添加和除去文件共享</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d90275e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d90275e153" id="about_volumes"><h2 class="topictitle2" id="d90275e153">关于卷</h2>
+<div class="body taskbody"><div class="section context" id="about_volumes__context_kjv_lg1_4z"><figure class="fignone" id="about_volumes__file_share"><figcaption>图 1. 组织中的文件共享和卷结构。</figcaption><object id="about_volumes__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="文件共享包含卷，而卷包含文件。"></object></figure>
+
+<p><span class="ph" id="about_volumes__volume_intro">容器是短暂存在的，因此不能在其中持久存储应用程序数据。但是，可以使用卷来持久存储两次容器重新启动之间的数据，在一个空间中的容器之间共享数据，以及在容器不可用时，有权访问应用程序数据。如果删除容器，不会删除存储卷。
+存储卷的生命周期与容器的生命周期无关。由于 <span class="keyword">Bluemix</span> 中的 Docker 容器无权访问本地主机，因此卷会安装在供应的<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">文件共享</a>上。</span></p>
+
+<p>下面是持久存储生命周期中的任务：</p>
+</div><ol class="steps" id="about_volumes__steps_ljv_lg1_4z"><li class="step">可选： <span class="cmd">使用 <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">GUI</a> 或 <a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">CLI</a> 创建用于托管卷的定制文件共享。</span> 必须具有组织管理员角色才可创建文件共享。如果您不是组织管理员，请继续创建卷。对于每个 Bluemix 组织，会提供一个缺省 20 GB 文件共享。</li>
+<li class="step"><span class="cmd">使用 <a href="container_volumes_ov.html#container_volumes_ui" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以通过 Bluemix GUI 创建容器的卷。">GUI</a> 或 <a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">CLI</a> 创建卷。</span></li>
+<li class="step"><span class="cmd">使用 <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html#ibmbackup_restore_starter">ibm-backup-restore 映像</a>创建卷的自动备份。</span></li>
+<li class="step"><span class="cmd">删除<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要卷来存储容器的数据，那么您可以除去卷。">卷</a>。</span></li>
+<li class="step"><span class="cmd">删除<a href="container_volumes_ov.html#container_filestorage_managing" title="组织管理员可以除去现有文件共享，也可以查看文件共享上安装的卷。">文件共享</a>。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d90275e264" lang="zh-cn" id="container_volumes_ui"><h2 class="topictitle2" id="d90275e264">使用 <span class="keyword">Bluemix</span> GUI 创建卷</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。</span>您可以通过 <span class="keyword">Bluemix</span> GUI 创建容器的卷。</p>
+<div class="section prereq"></div><div class="section context"><figure class="fignone" id="container_volumes_ui__file_share"><figcaption>图 2. 组织中的文件共享和卷结构。</figcaption><object id="container_volumes_ui__volume_organization" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="文件共享包含卷，而卷包含文件。"></object></figure>
+
+<p><span class="ph" id="container_volumes_ui__volume_intro">根据设计，单个容器的生命周期很短。但是，可以使用卷在两次容器重新启动之间持久存储数据，在一个空间中的容器之间共享数据，以及在组中的容器实例之间共享数据。在 Docker 中安装卷时，该卷会安装到本地文件系统。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，限制了对计算主机的访问，因此无法将主机目录安装到容器。将改为使用组织范围的卷在两次容器重新启动之间持久存储数据。卷是在隔离的<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">文件共享</a>上进行托管的，这些文件共享用于安全存储应用程序数据，并管理对文件的访问权和许可权。对容器或映像所做的任何更新都不会影响卷。如果删除容器，不会删除存储卷。</span></p>
+</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">在目录中，选择<span class="ph uicontrol">容器</span>，然后选择映像。</span></span></li>
+<li class="step"><span class="cmd">选择<span class="ph uicontrol">高级选项</span>以展开卷创建字段。</span></li>
+<li class="step"><span class="cmd">单击<span class="ph uicontrol">创建卷</span>。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">卷名</span>字段中，输入名称。</span> 在每一个空间中，卷都是唯一的，因此无法在空间内复用卷名。卷名可以包含大写字母、小写字母、数字、下划线 (_) 和连字符 (-)。</li>
+<li class="step"><span class="cmd">如果文件共享存在，请从<span class="ph uicontrol">文件共享</span>下拉菜单中选择现有文件共享。</span> 如果文件共享不存在，那么将自动创建 20 GB 的缺省文件共享。组织管理员可以分配具有特定存储大小和 IOPS 的文件共享。有关更多信息，请参阅<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">添加卷的文件共享</a>。 卷的大小无限制。卷可以扩展到其托管所在的文件共享的大小。</li>
+<li class="step"><span class="cmd">单击<span class="ph uicontrol">创建</span>。</span> 创建卷可能需要几分钟时间。</li>
+</ol>
+<div class="section result">卷已在空间中可用，并且可以通过在<span class="ph uicontrol">高级选项</span>的<span class="ph uicontrol">分配现有卷</span>中的下拉菜单中选择该卷，将其安装到<a href="container_single_ui.html#gui__volume">单个容器</a>或<a href="container_ha.html#container_group_ui__volume">容器组</a>。一旦选择卷后，会在容器内部分配卷要安装到的文件路径，例如 <span class="ph filepath">/var/lib/my_volume</span>。如果需要备份容器，请参阅<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要卷来存储容器的数据，那么您可以除去卷。">备份和复原数据</a>。</div></div>
+<aside role="complementary" aria-labelledby="d90275e264"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e439" lang="zh-cn" id="container_volumes_cli"><h2 class="topictitle2" id="d90275e439">使用命令行 (CLI) 创建卷</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。</span>您可以从命令行创建容器的卷。</p>
+<div class="section prereq"></div><div class="section context"><p><span class="ph">根据设计，单个容器的生命周期很短。但是，可以使用卷在两次容器重新启动之间持久存储数据，在一个空间中的容器之间共享数据，以及在组中的容器实例之间共享数据。在 Docker 中安装卷时，该卷会安装到本地文件系统。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，限制了对计算主机的访问，因此无法将主机目录安装到容器。将改为使用组织范围的卷在两次容器重新启动之间持久存储数据。卷是在隔离的<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">文件共享</a>上进行托管的，这些文件共享用于安全存储应用程序数据，并管理对文件的访问权和许可权。对容器或映像所做的任何更新都不会影响卷。如果删除容器，不会删除存储卷。</span></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">通过运行以下命令来创建卷。</span> 卷可以扩展到其托管所在的文件共享的大小。
+指定文件共享是可选的。您可以通过运行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</samp> 来查看现有文件共享。 如果文件共享不存在，那么将自动创建 20 GB 的缺省文件共享。组织管理员可以分配具有特定存储大小和 IOPS 的文件共享。有关更多信息，请参阅<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">添加卷的文件共享</a>。 <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create</samp> 参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（可选）文件共享名称。如果没有可用的文件共享或未指定任何文件共享，那么将在空间的缺省文件共享上构建卷。</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必需）卷名。<span class="ph" id="container_volumes_cli__d44285e4845">名称可以包含大写字母、小写字母、数字、下划线 (_) 和连字符 (-)。</span></dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">通过运行以下命令来验证是否已正确创建卷。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>接下来，将卷分配给<a href="container_single_ui.html#container_single_cli" title="使用 run 命令来创建容器。容器必须包含映像。如果尚未包含映像，可以使用 IBM 认证的某个缺省映像，此类映像在缺省情况下位于组织的专用映像注册表中。">单个容器</a>或<a href="container_ha.html#container_group_cli" title="通过 IBM Bluemix Container Service CLI 创建和部署可扩展的组容器。容器组包含两个或多个运行相同映像的容器。 如果运行长期服务的工作负载需要可扩展性和可靠性，或者如果在所需规模级别进行测试，请使用容器组。">容器组</a>。卷可分别在 <samp class="ph codeph">run</samp> 命令和 <samp class="ph codeph">group-create</samp> 命令中使用 <samp class="ph codeph">--volume</samp> 选项进行分配。<span class="ph">如果需要备份容器，请参阅<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要卷来存储容器的数据，那么您可以除去卷。">备份和复原数据</a>。</span></p>
+</div></div>
+<aside role="complementary" aria-labelledby="d90275e439"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e637" lang="zh-cn" id="container_volumes_mount"><h2 class="topictitle2" id="d90275e637">使用命令行界面 (CLI) 添加文件到卷</h2>
+<div class="body taskbody"><p class="shortdesc">创建卷后，可以将卷安装到容器上，然后向其中添加文件。安装了该卷的任何容器都可访问这些文件。</p>
+<div class="section prereq">开始之前，<a href="container_volumes_ov.html#container_volumes_ui" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以通过 Bluemix GUI 创建容器的卷。">使用 <span class="keyword">Bluemix</span> GUI</a> 或<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用 CLI</a> 创建卷。</div><div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd">使用已安装的卷创建容器。*</span> 将 <samp class="ph codeph"><var class="keyword varname">my_volume</var></samp> 替换为卷名，<samp class="ph codeph"><var class="keyword varname">container_path</var></samp> 替换为卷的安装路径，<samp class="ph codeph"><var class="keyword varname">my_container</var></samp> 替换为容器的名称，并将 registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var> 替换为映像。 <pre class="codeblock"><code><span class="ph">bx ic</span> run --volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">container_path</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+
+<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> 来检索您的名称空间，并将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为您的名称空间信息。</span></div>
+
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_volumes_mount__d44448e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_mount__d44448e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">使用 <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> 命令，将文件从本地目录复制到卷。*</span> <p>在此示例中，您要将 <var class="keyword varname">config.txt</var> 文件复制到已安装到容器内的 <var class="keyword varname">/src/usr/tmp</var> 路径的卷。将该文件替换为您要复制的自己的文件或目录，然后将容器路径更改为指向您的卷。在该命令中，源文件或路径为第一个，而目标路径为第二个。
+当复制到容器或从容器进行复制时，<span class="ph">那么您必须包括容器的名称、定界符 <span class="q">“:”</span> 和目标文件或文件夹的路径。
+路径必须相对于容器的根目录。</span>请参阅 <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp"><span class="ph">bx ic</span> cp</a> 文档，以获取更多信息。</p>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath"><var class="keyword varname">./config.txt</var></span> <var class="keyword varname">my_container</var>:<span class="ph filepath"><var class="keyword varname">/src/usr/tmp</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">通过使用 <samp class="ph codeph"><span class="ph">bx ic</span> exec</samp> 命令，登录到正在运行的容器，以确认文件已复制到卷上。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">导航至您将卷安装到的目录，并列出文件。</span> 文件会在输出中列出。此卷安装到的任何容器都具有此文件的访问权。
+<pre class="codeblock"><code># cd <var class="keyword varname">container_path</var>
+# ls
+config.txt  </code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90275e637"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e880" lang="zh-cn" id="container_volumes_backup"><h2 class="topictitle2" id="d90275e880">使用命令行界面 (CLI) 备份和复原数据</h2>
+<div class="body taskbody"><p class="shortdesc">容器卷在持久存储器上进行托管，但没有备份。如果需要备份卷数据，可以使用 <samp class="ph codeph"><span class="ph">bx ic</span> cp</samp> 创建手动备份。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">识别运行中或已停止容器上您要备份的卷安装路径。*</span>  <div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">my_container</var></code></pre>
+</div>
+
+
+<p>输出包含类似于此示例（具有卷名和容器安装点）的部分。
+在此示例中，安装点为文件夹 <span class="ph filepath">/mnt/data</span>。</p>
+
+
+<pre class="codeblock"><code>        "Mounts": [
+            {
+                "Destination": "<span class="ph filepath">/mnt/data</span>",
+                "Driver": "",
+                "Mode": "rw",
+                "Name": "",
+                "RW": true,
+                "Source": "/vol/<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>/<var class="keyword varname">example_container_id</var>"
+            }</code></pre>
+
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_volumes_backup__d44064e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_backup__d44064e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">停止写入卷的所有运行中容器。*</span> 通过停止容器，可避免复制正在写入的数据。
+<div class="p"><pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">my_container</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">将文件从单个容器复制到本地计算机。*</span> 当您想要备份容器组的卷时，在组的一个实例上执行此命令就足够了，这是因为所有实例共享卷的相同安装点。
+<p>现在，您已经具有卷数据的本地备份。</p>
+
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">my_container</var>:<var class="keyword varname">/mnt/data</var> <var class="keyword varname">my_local_folder</var></code></pre>
+
+<div class="tablenoborder"><table summary="" id="container_volumes_backup__table_wrq_nbl_nw" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="ph">bx ic</span> cp 命令的元素</span></caption><thead><tr><th colspan="2" id="d90275e1035" class="thleft">了解此命令</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d90275e1035 "><samp class="ph codeph">cp</samp></td>
+<td style="width: 50%" headers="d90275e1035 "><a href="container_cli_reference_cfic.html#container_cli_reference_cfic__cp">复制命令</a>。</td>
+</tr>
+<tr><td style="width: 50%" headers="d90275e1035 "><var class="keyword varname">my_container</var>:<var class="keyword varname">/mnt/data</var></td>
+<td style="width: 50%" headers="d90275e1035 ">第一个是源路径。在本例中，您将容器数据复制到本地目标，因此容器文件路径是源。
+您必须包含容器名称、冒号和容器内的文件路径。
+在此示例中，您从上一步选择卷安装点，以便您可以复制所有内含的文件。</td>
+</tr>
+<tr><td style="width: 50%" headers="d90275e1035 "><var class="keyword varname">my_local_folder</var></td>
+<td style="width: 50%" headers="d90275e1035 ">第二个是目标路径。本地路径可以是绝对或相对路径。在此示例中，您将容器数据复制到相对路径 <var class="keyword varname">my_local_folder</var>。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">将数据从本地文件夹复制到新卷。*</span> 此命令会将数据复原到新容器或新卷。将数据传输到新卷的一个原因是该卷安装在新创建的文件共享上，该文件共享比旧的文件共享具有更多的存储或更高的 IOPS。请参阅<a href="container_volumes_ov.html#container_fileshares_adding_cli" title="使用 bx ic volume-fs-create 命令来创建文件共享。">使用命令行界面 (CLI) 添加文件共享</a>，以了解如何创建新文件共享，以及<a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">使用命令行 (CLI) 创建卷</a>，以了解如何创建新卷。
+<pre class="codeblock"><code><span class="ph">bx ic</span> cp <var class="keyword varname">my_local_folder</var> <var class="keyword varname">my_new_container</var>:<var class="keyword varname">/mnt/data</var> </code></pre>
+</li>
+</ol>
+<div class="section result">现在，您的数据已复制到本地文件夹，您有了手动备份。此外，您已将数据复制到新容器上的某个卷。</div></div>
+<aside role="complementary" aria-labelledby="d90275e880"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e1108" lang="zh-cn" id="container_volumes_write"><h2 class="topictitle2" id="d90275e1108">使用命令行界面 (CLI) 添加卷的非 root 用户访问权</h2>
+<div class="body taskbody"><p class="shortdesc">非 root 用户在卷安装路径上没有写许可权。要授予写许可权，您必须编辑映像的 Dockerfile，以在具有正确许可权的安装路径上创建目录。</p>
+<div class="section context"><p>对于 <span class="keyword">IBM
+Bluemix Container Service</span>，已对 Docker Engine 启用用户名称空间功能。用户名称空间提供隔离，因此容器 root 用户无法获取其他容器或计算主机的访问权。
+但是，卷位于容器计算主机外部的 NFS 文件共享上。卷设置为识别容器中的 root 用户，但是因为卷在容器的外部，所以它们不了解用户名称空间。</p>
+<p>对于某些应用程序，只有容器内部的用户才是 root 用户。但是，许多应用程序指定了写入容器安装路径的非 root 用户。如果您设计的应用程序指定非 root 用户需要卷的写许可权，那么您必须将以下过程添加到 Dockerfile 和入口点脚本中：</p>
+<ul><li>创建非 root 用户。</li>
+<li>临时向 root 组添加用户。</li>
+<li>在具有正确用户许可权的卷安装路径中创建目录。</li>
+</ul>
+
+<p></p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">在本地目录中创建 Dockerfile。</span> 此示例 Dockerfile 创建名为 <var class="keyword varname">myguest</var> 的非 root 用户。 <pre class="codeblock"><code>FROM registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode:latest
+
+#Create group and user with GID &amp; UID <var class="keyword varname">1010</var>.
+#In this case your are creating a group and user named <var class="keyword varname">myguest</var>. 
+#The GUID and UID <var class="keyword varname">1010</var> is unlikely to create a conflict with any existing user GUIDs or UIDs in the image.
+#The GUID and UID must be between 0 and 65536. Otherwise, container creation fails.
+RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">myguest</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">myguest</var>
+
+ENV MY_USER=myguest
+
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
+
+EXPOSE 22
+ENTRYPOINT ["/sbin/entrypoint.sh"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">在与 Dockerfile 相同的本地文件夹中，创建入口点脚本。</span>  此示例入口点脚本将 <span class="ph filepath"><var class="keyword varname">/mnt/myvol</var></span> 指定为卷安装路径。
+<pre class="codeblock"><code>#!/bin/bash
+set -e
+
+#This is the mount point for the shared volume.
+# Use this mount point with the <span class="ph"><samp class="ph codeph">bx ic</samp></span> run command.
+#By default the mount point is owned by the root user.
+MOUNTPATH="/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span>"
+MY_USER=${MY_USER:-"myguest"}
+
+#This function creates a subdirectory that is owned by 
+#the non-root user under the shared volume mount path.
+create_data_dir() {
+  #Add the non-root user to primary group of root user.
+  usermod -aG root $MY_USER
+
+  #Provide read-write-execute permission to the group for the shared volume mount path.
+  chmod 775 $MOUNTPATH
+  #Create a directory under the shared path owned by non-root user <var class="keyword varname">myguest</var>.
+  su -c "mkdir -p ${MOUNTPATH}/mydata" -l $MY_USER
+  su -c "chmod 700 ${MOUNTPATH}/mydata" -l $MY_USER
+  ls -al ${MOUNTPATH}
+
+  #For security, remove the non-root user from root user group.
+  deluser $MY_USER root
+
+  #Change the shared volume mount path back to its original read-write-execute permission.
+  chmod 755 $MOUNTPATH
+  echo "Created Data directory..."
+}
+
+create_data_dir
+
+#This command creates a long-running process for the purpose of this example.
+tail -F /dev/null</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">登录到 <span class="keyword">IBM
+Bluemix</span>。</span> <pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+
+<span class="ph">当您使用联合标识登录时，需要单点登录参数 <span class="keyword option">--sso</span>。如果使用此选项，请打开 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>，以获取一次性密码。如果您未包括 <span class="keyword option">--sso</span> 选项，请完成以下子步骤。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">对于<span class="ph uicontrol">电子邮件</span>，请输入您用于 <span class="keyword">Bluemix</span> 的 IBM 标识。</span></li>
+<li class="li substep"><span class="cmd">对于<span class="ph uicontrol">密码</span>，请输入 IBM 标识的密码。</span> 此时将检索您的 Bluemix 组织和空间。</li>
+<li class="li substep"><span class="cmd">输入代表您某个 <span class="keyword">Bluemix</span> 组织的数字。</span></li>
+<li class="li substep"><span class="cmd">输入代表其中一个现有 <span class="keyword">Bluemix</span> 空间的数字。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">初始化 <span class="keyword">IBM
+Bluemix Container Service</span> CLI。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">向 Bluemix 注册表添加映像。*</span> 记住将 <var class="keyword varname">&lt;my_namespace&gt;</var> 替换为专用映像注册表的名称空间。如果您需要查找名称空间，请运行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>。 <pre class="codeblock"><code><span class="ph">bx ic</span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/&lt;my_namespace&gt;/nonroot .</code></pre>
+
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_volumes_write__d45201e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_write__d45201e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">创建卷。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-create <var class="keyword varname">my_volume</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">安装卷，并通过 <var class="keyword varname">nonroot</var> 映像运行容器。*</span>  卷安装路径 <samp class="ph codeph">/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span></samp> 与 Dockerfile 中指定的安装路径匹配。
+<pre class="codeblock"><code><span class="ph">bx ic</span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">my_volume</var>:/<span class="ph filepath">mnt</span>/<span class="ph filepath">myvol</span> registry.ng.bluemix.net/&lt;my_namespace&gt;/nonroot</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">确认 <var class="keyword varname">my_container</var> 是否在运行。*</span> 如果容器具有 <samp class="ph codeph">BUILDING</samp> 状态，那么您无法登录容器。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>ps</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+d92ee43d-2af        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">nonroot</var>:latest   ""                  41 seconds ago      Running 29 seconds ago               <var class="keyword varname">my_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">容器开始运行之后，登录到该容器。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> /bin/bash</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">查看卷安装路径的许可权。</span> <pre class="codeblock"><code>ls -al <span class="ph filepath">/mnt/myvol/</span></code></pre>
+
+
+<pre class="pre screen"><code>root@instance-006ff76b:/# ls -al /mnt/myvol/                                                                                                                                                             
+total 12
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 .
+drwxr-xr-x 3 root    root    4096 Jul 13 19:03 ..
+drwx------ 2 myguest myguest 4096 Jul 13 19:03 mydata</code></pre>
+
+
+<p>此输出显示 root 用户在卷安装路径 <var class="keyword varname">mnt/myvol/</var> 上具有读、写和执行许可权，但是非 root <var class="keyword varname">myguest</var> 用户对 <var class="keyword varname">mnt/myvol/mydata</var> 文件夹具有读和写许可权。由于这些更新的许可权，非 root 用户现在可以向持久性卷写入数据。</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90275e1108"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e1492" lang="zh-cn" id="container_volume_different_dc"><h2 class="topictitle2" id="d90275e1492">将卷数据迁移到不同的数据中心</h2>
+<div class="body taskbody"><p class="shortdesc">如果您计划将当前 <span class="keyword">Bluemix</span> 空间移动到新的数据中心，请确保已备份卷，以便您可以在新数据中心对数据进行复原和使用。</p>
+<div class="section context"><div class="p"><div class="note attention"><span class="attentiontitle">注意：</span> 当您使用 <samp class="ph codeph"><span class="ph">bx ic</span> reprovision</samp> 命令将空间移动到新数据中心时，将会永久地除去此空间内您所拥有的所有容器、公共 IP 地址和卷，且不会将它们迁移到新数据中心。
+要确保在移动到新数据中心之后数据不会丢失，您必须备份所有卷并在新数据中心内重新供应空间后复原数据。</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">列出您要重新供应的 <span class="keyword">Bluemix</span> 空间中存在的所有卷。</span> <pre class="codeblock"><code><span class="ph">bx ic</span>volumes</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">备份您要在新数据中心中使用的每个卷。在以下选项之间进行选择。</span> <ul class="ul choices"><li class="li choice">使用 <a href="container_volumes_ov.html#container_volumes_backup" title="容器卷在持久存储器上进行托管，但没有备份。如果需要备份卷数据，可以使用 bx ic cp 创建手动备份。"><span class="ph">bx ic</span>cp command</a> 将卷备份到本地计算机。</li>
+<li class="li choice">通过 <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM Backup and Restore 映像</a>备份容器，以在 <span class="keyword">IBM Object
+Storage for Bluemix</span> 实例中保存数据。</li>
+</ul>
+<div class="note attention"><span class="attentiontitle">注意：</span> 如果您未备份卷就将空间重新供应到新数据中心，那么数据将会丢失且无法恢复。</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要卷来存储容器的数据，那么您可以除去卷。">除去空间中的所有卷</a>。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_filestorage_managing" title="组织管理员可以除去现有文件共享，也可以查看文件共享上安装的卷。">除去空间中的所有文件共享</a>。</span></li>
+<li class="step stepexpand"><span class="cmd">将空间重新供应到新数据中心。将 <var class="keyword varname">&lt;data_center&gt;</var> 替换为要在其中创建新空间的<a href="container_cli_reference_cfic.html#container_cli_reference_cfic__reprovision">数据中心</a>。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> reprovision <var class="keyword varname">&lt;data_center&gt;</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="使用 bx ic volume-fs-create 命令来创建文件共享。">在新空间中创建文件共享</a>。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_volumes_ov.html#container_volumes_cli" title="卷是应用程序所创建的数据或运行应用程序所需的文件的持久性存储位置。您可以从命令行创建容器的卷。">创建卷</a>，您可以使用该卷来复原已备份的数据。</span></li>
+<li class="step stepexpand"><span class="cmd">将数据复原到新卷。根据您用于备份卷的方法，在以下选项之间进行选择。</span> <ul class="ul choices"><li class="li choice">使用 <a href="container_volumes_ov.html#container_volumes_backup" title="容器卷在持久存储器上进行托管，但没有备份。如果需要备份卷数据，可以使用 bx ic cp 创建手动备份。"><span class="ph">bx ic</span>cp command</a> 从本地计算机复原数据。</li>
+<li class="li choice">通过 <a href="../images/docker_image_ibmbackup_restore/ibmbackup_restore_starter.html">IBM Backup and Restore 映像</a>复原容器，以从 <span class="keyword">IBM Object
+Storage for Bluemix</span> 实例复原数据。</li>
+</ul>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90275e1492"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e1665" lang="zh-cn" id="container_volumes_remove"><h2 class="topictitle2" id="d90275e1665">使用命令行界面 (CLI) 除去卷</h2>
+<div class="body taskbody"><p class="shortdesc">如果您不再需要卷来存储容器的数据，那么您可以除去卷。</p>
+<div class="section prereq"><ul><li><div class="note important"><span class="importanttitle">要点：</span> 除去卷将永久除去卷上存储的所有持久数据或文件。卷不会自动备份，因此在除去卷之前先<a href="container_volumes_ov.html#container_volumes_backup" title="容器卷在持久存储器上进行托管，但没有备份。如果需要备份卷数据，可以使用 bx ic cp 创建手动备份。">备份卷</a>。</div>
+</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">确定卷名。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">检查卷以复查卷所安装到的容器。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> volume-inspect <var class="keyword varname">example_volume</var></code></pre>
+
+
+<p>输出包含名为 <span class="ph uicontrol">mounted_on_containers</span> 的部分，其中列出卷所安装到的容器。</p>
+
+
+<pre class="codeblock"><code>    "mounted_on_containers": [
+        "<var class="keyword varname">example_container</var>"
+    ],</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">如果卷安装到某个容器，请在删除卷之前，先除去任何保密数据。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand">可选： <span class="cmd">检查容器以查找安装卷的安装路径。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> inspect <var class="keyword varname">example_container</var></code></pre>
+您可以在 CLI 响应的 <span class="ph uicontrol">Volumes</span> 部分找到安装路径。
+<pre class="pre screen"><code>"Volumes": {
+        "/mount_path": "/vol/0e65c452-62413-46f2-8b22-ff06ab74ac21/<var class="keyword varname">example_volume</var>"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">登录到容器。</span> <pre class="codeblock"><code><span class="ph">bx ic</span> exec -it <var class="keyword varname">example_container</var> bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">导航到安装路径。</span> <pre class="codeblock"><code>cd /<var class="keyword varname">mount_path</var></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">从卷除去所有保密数据。</span> <pre class="codeblock"><code>rm -rf *</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">验证是否已除去所有数据。</span> <pre class="codeblock"><code>ls</code></pre>
+如果未显示任何目录或文件，表示已成功从卷安装路径除去数据。</li>
+<li class="li substep substepexpand"><span class="cmd">针对安装到卷且在卷安装路径中包含保密数据的所有容器，重复步骤 a-e。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">停止安装到卷的所有容器，然后再除去卷。*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> stop <var class="keyword varname">example_container</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">注：</span> <span class="ph" id="container_volumes_remove__d44811e180">*您<a href="container_cli_cfic_install.html#container_cli_login" title="安装 CLI 后，需要登录才能使用。">登录到 <span class="keyword">IBM
+Bluemix Container Service</span></a>，并将环境变量设置为使用本机 Docker 命令后，可以将此命令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 替换为 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_volumes_remove__d44811e192">您可以在本主题中标记有星号 (*) 的所有步骤中使用本机 Docker 命令。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">如果不再需要该容器，请将其除去。*</span> <pre class="codeblock"><code><span class="ph">bx ic</span> rm <var class="keyword varname">example_container</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">当具有已安装卷的所有容器都停止时，可除去卷。</span> <div class="p"><pre class="codeblock"><code><samp class="ph codeph"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></samp></code></pre>
+</div>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove</samp> 参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">（必需）卷名。</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">验证是否已除去该卷。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d90275e1665"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d90275e1909" lang="zh-cn" id="container_fileshares_adding_ui"><h2 class="topictitle2" id="d90275e1909">使用 <span class="keyword">Bluemix</span> GUI 添加用于卷的文件共享</h2>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc"><span class="ph">文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 <span class="keyword">Bluemix</span> 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。
+要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。</span></span>
+</div>
+<div class="section prereq"><div class="p"><div class="steps note"><span class="notetitle">注：</span> 如果您已经达到最大配额限制，那么可以通过开具 <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> 支持凭单</a>来请求添加额外配额。</div>
+</div>
+</div><div class="section context"><p>由于 <span class="keyword">Bluemix</span> 中的容器无权访问本地主机，因此卷会安装在供应的 NFS 文件共享上。文件共享上的卷类似于主计算机上的目录。文件共享和卷在每一个空间都是唯一的，因此必须在相同的空间创建容器，才能访问卷上的持久数据。
+有关设置组织和空间的更多信息，请参阅<a href="../admin/orgs_spaces.html">管理 Bluemix Public</a>。在组织中第一次创建卷时，会自动供应 20 GB 和 4 IOPS 的文件共享，以托管卷。
+为了满足数据的性能需求，组织管理员可以创建 20 GB 到 12 TB 范围内的新的<a href="http://knowledgelayer.softlayer.com/learning/introduction-endurance-storage" rel="external" target="_blank" title="（在新的选项卡或窗口中打开）">文件共享大小</a>，且 IOPS/GB 为 0.25、2 或 4。</p>
+
+<figure class="fignone" id="container_fileshares_adding_ui__fig_ac1_lzt_q5"><figcaption>图 3. 组织中的文件共享和卷结构。</figcaption><object id="container_fileshares_adding_ui__d27645e49" width="500" data="images/utd_volumes.svg"><img width="500" src="images/utd_volumes.jpg" alt="文件共享包含卷，而卷包含文件。"></object></figure>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph">在帐户详细信息的“管理组织”中，选择组织。</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">在“配额”部分中，查看容器的详细信息。</span></span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph">创建文件共享。这将在表末尾创建一行。</span></span></li>
+<li class="step stepexpand"><span class="cmd">选择要在其中创建文件共享的现有空间。</span></li>
+<li class="step stepexpand"><span class="cmd">输入文件共享的名称。</span> <span class="ph">名称可以包含大写字母、小写字母、数字、下划线 (_) 和连字符 (-)。</span></li>
+<li class="step stepexpand"><span class="cmd">确定文件共享所需的容量。</span> 文件共享大小和 IOPS/GB（每秒输入/输出操作数）会乘在一起，以创建总 IOPS。
+下表显示文件共享大小与 IOPS 之间的关系。
+<div class="tablenoborder"><table summary="" id="container_fileshares_adding_ui__file_share_ex" class="defaultstyle"><caption><span class="tablecap">表 2. 文件共享大小和 IOPS/GB 的示例</span></caption><thead><tr><th id="d90275e2043" class="thleft"> 文件共享大小</th>
+<th id="d90275e2045" class="thleft">IOPS/GB</th>
+<th id="d90275e2047" class="thleft">总 IOPS</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d90275e2043 ">20 GB</td>
+<td headers="d90275e2045 ">4</td>
+<td headers="d90275e2047 ">80</td>
+</tr>
+<tr><td headers="d90275e2043 ">100 GB</td>
+<td headers="d90275e2045 ">4</td>
+<td headers="d90275e2047 ">400</td>
+</tr>
+<tr><td headers="d90275e2043 ">1,000 GB</td>
+<td headers="d90275e2045 ">4</td>
+<td headers="d90275e2047 ">4,000</td>
+</tr>
+<tr><td headers="d90275e2043 ">4,000 GB</td>
+<td headers="d90275e2045 ">4</td>
+<td headers="d90275e2047 ">16,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+具有较高工作负载的应用程序需要更大的总 IOPS，因此在选择文件共享配置时，请考虑写入卷的应用程序。<ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">对于<span class="ph uicontrol">大小</span>，选择以千兆字节为单位的值。</span></li>
+<li class="li substep"><span class="cmd">对于 <span class="ph uicontrol">IOPS</span>，选择以每千兆字节的 IOPS 为单位的值。</span> 根据<span class="ph uicontrol">大小</span>和 <span class="ph uicontrol">IOPS</span> 的输入值，将计算出每月的价格。继续之前，可以调整<span class="ph uicontrol">大小</span>和 <span class="ph uicontrol">IOPS</span> 的值，以更改每月价格计算。 </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">单击<span class="ph uicontrol">保存</span>。</span></li>
+</ol>
+<div class="section result"><p><span class="ph" id="container_fileshares_adding_ui__fs_results">可能需要几分钟时间才能完成文件共享创建。文件共享完成构建后，“状态”图标将显示复选标记。现在，在组织中的指定空间中有文件共享可用。您可以创建更多文件共享，以托管更多卷，或者您可以在一个文件共享上托管多个卷。
+每一个卷都共享其托管所在的文件共享资源，因此在一个文件共享上托管多个卷可能会降低性能。</span></p>
+</div><div class="section postreq">接下来，如果您是组织管理员，那么可以查看组织的文件共享记帐信息。<div class="p"><ol><li>单击用户头像。</li>
+<li>单击<span class="ph uicontrol">帐户</span>。</li>
+<li>单击 <span class="ph uicontrol">+</span> 按钮以展开组织。</li>
+<li>选择<span class="ph uicontrol">使用情况仪表板</span>并复查使用情况和帐单详细信息。</li>
+</ol>
+<span class="ph">有关更多信息，请转至<span class="ph"><a href="../admin/account.html">管理帐户</a></span>。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90275e1909"></aside><article class="topic task nested2" role="article" aria-labelledby="d90275e2147" lang="zh-cn" id="container_fileshares_adding_cli"><h3 class="topictitle3" id="d90275e2147">使用命令行界面 (CLI) 添加文件共享</h3>
+<div class="body taskbody"><div class="abstract"><p></p>
+
+
+<div class="shortdesc">使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> 命令来创建文件共享。</div>
+</div>
+<div class="section prereq"></div><ol class="steps"><li class="step stepexpand">可选： <span class="cmd">通过运行以下命令来列出有效的文件共享大小。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">通过运行以下命令来创建文件共享。</span> 要在创建文件共享之前查看计算的文件共享成本，请参阅<a href="container_volumes_ov.html#container_fileshares_adding_ui" title="文件共享是基于 NFS（网络文件系统）的持久性存储系统，可在 Bluemix 空间中托管 Docker 卷，并允许用户存储和访问容器和应用程序相关文件。 要在文件共享中存储文件，您必须创建容器卷，并将数据保存到此卷中。">使用 Bluemix GUI 添加用于卷的文件共享</a> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></code></pre>
+
+
+<div class="p"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create</samp> 参数</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">（必需）文件共享 IOPS。有效值为 0.25、2 或 4 IOPS/GB。</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">（必需）文件共享名称。<span class="ph">名称可以包含大写字母、小写字母、数字、下划线 (_) 和连字符 (-)。</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">（必需）文件共享系统大小 (GB)。使用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors</samp> 可列出所有有效大小。</dd>
+</dl>
+</dd>
+</dl>
+</div>
+</li>
+<li class="step stepexpand">可选： <span class="cmd">通过运行以下命令来验证是否已正确创建文件共享。</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+<div class="section result"><span class="ph">可能需要几分钟时间才能完成文件共享创建。文件共享完成构建后，“状态”图标将显示复选标记。现在，在组织中的指定空间中有文件共享可用。您可以创建更多文件共享，以托管更多卷，或者您可以在一个文件共享上托管多个卷。
+每一个卷都共享其托管所在的文件共享资源，因此在一个文件共享上托管多个卷可能会降低性能。</span></div><div class="section postreq">接下来，如果您是组织管理员，那么可以查看组织的文件共享记帐信息。<div class="p"><ol><li>单击用户头像。</li>
+<li>单击<span class="ph uicontrol">帐户</span>。</li>
+<li>单击 <span class="ph uicontrol">+</span> 按钮以展开组织。</li>
+<li>选择<span class="ph uicontrol">使用情况仪表板</span>并复查使用情况和帐单详细信息。</li>
+</ol>
+<span class="ph">有关更多信息，请转至<span class="ph"><a href="../admin/account.html">管理帐户</a></span>。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d90275e2147"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d90275e2326" lang="zh-cn" id="container_filestorage_managing"><h3 class="topictitle3" id="d90275e2326"> 除去文件共享</h3>
+<div class="body taskbody"><p class="shortdesc">组织管理员可以除去现有文件共享，也可以查看文件共享上安装的卷。</p>
+<div class="section context">组织管理员可以使用 <span class="keyword">Bluemix</span> GUI 和 CLI 来查看文件共享，以了解在文件共享上安装的卷，还可以除去文件共享。组织管理员可以选择除去当前未在开发或生产中使用的文件共享。<div class="steps note"><span class="notetitle">注：</span> 月末由于帐单处理周期而无法删除文件共享。如果在月末删除文件共享时收到错误消息，请等到下一个月的第一天再删除该文件共享。</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d90275e2391" id="task_ets_khp_y5"><h4 class="topictitle4" id="d90275e2391">使用 <span class="keyword">Bluemix</span> GUI</h4>
+<div class="body taskbody"><ol class="steps"><li class="step"><span class="cmd"><span class="ph">在帐户详细信息的“管理组织”中，选择组织。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph">在“配额”部分中，查看容器的详细信息。</span></span></li>
+</ol>
+<div class="section result">在“文件存储”表中，可以找到<span class="ph uicontrol">操作</span>列和<span class="ph uicontrol">名称</span>列。<ul><li>单击要查看的文件共享的名称，以查看连接到该文件共享的卷。</li>
+<li>单击<span class="ph uicontrol">删除</span>以删除文件共享。必须首先除去所有连接的卷后，才能删除文件共享。文件共享一旦删除，就会永久从帐户中除去。要除去卷，请参阅<a href="container_volumes_ov.html#container_volumes_remove" title="如果您不再需要卷来存储容器的数据，那么您可以除去卷。">使用命令行界面 (CLI) 除去卷</a>。</li>
+</ul>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d90275e2430" id="task_uvm_chp_y5"><h4 class="topictitle4" id="d90275e2430">使用命令行</h4>
+<div class="body taskbody"><div class="section result">要使用 CLI 来除去文件共享，请发出以下命令。<div class="p"><ol><li>确定文件共享名称。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+<li>检查文件共享以确定其上是否存在任何卷。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></code></pre>
+</li>
+<li>如果需要，请除去现有卷。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></code></pre>
+</li>
+<li>除去现有文件共享。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></code></pre>
+</li>
+<li>列出现有文件共享，以确认是否已除去该文件共享。<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article></article></article></article></div></main></body></html>

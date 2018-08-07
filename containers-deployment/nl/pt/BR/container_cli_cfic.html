@@ -1,0 +1,2107 @@
+<!DOCTYPE html><html lang="pt-br">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="Use o plug-in do IBM Bluemix Container Service para o Bluemix trabalhar com imagens ou contêineres únicos e escaláveis da linha de comandos.">
+<meta name="keywords" content="contêineres, CLI, plug-in, cf, bx ic, IBM Containers, cloud foundry, instalar, efetuar login, upgrade, desinstalar">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "pt-br",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Plug-in da CLI do IBM Bluemix Container Service para gerenciar o contêineres únicos e escaláveis (bx ic)</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d72e6" id="container_cli_cfic"><h1 class="topictitle1" id="d72e6">Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> para gerenciar o <span class="ph">contêineres únicos e escaláveis</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h1>
+<div class="body conbody"><p class="shortdesc">Use o plug-in do <span class="keyword">IBM®
+Bluemix Container Service</span> para o
+<span class="keyword">Bluemix</span> trabalhar com imagens ou <span class="ph">contêineres únicos e escaláveis</span> da
+linha de comandos.</p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d72e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d72e112" lang="pt-br" id="container_cli_cfic_install"><h2 class="topictitle2" id="d72e112">Configurando o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) para usar a CLI nativa do Docker com <span class="ph">contêineres únicos e escaláveis</span></h2>
+<div class="abstract"><div class="shortdesc">Instale o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) para executar comandos nativos do Docker CLI para
+gerenciar seus contêineres.</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Atenção:</span> <span class="ph">Avaliações grátis para o <span class="ph">contêineres únicos e escaláveis</span>
+não estão disponíveis. <a href="cs_ov.html" title="O IBM Bluemix Container Service combina o Docker e o Kubernetes para entregar ferramentas poderosas, uma experiência intuitiva do usuário e a segurança e o isolamento integrados para automatizar a implementação, operação, ajuste de escala e monitoramento de apps conteinerizados por um cluster de hosts de cálculo independente usando as APIs do Kubernetes.">Saiba mais sobre gerenciamento de
+cluster e migração para o Kubernetes no <span class="keyword">IBM
+Bluemix Container Service</span> no <span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Nesta página:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#install_plugin">Instalando o plug-in do IBM Bluemix Container Service (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">Efetuando Login no plug-in do IBM Bluemix Container Service CLI (bx ic) </a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_upgrade" title="Você pode desejar atualizar o plug-in periodicamente para usar novos recursos.">Fazendo upgrade do plug-in do IBM Bluemix Container Service (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_cfic_uninstall" title="Se você não precisar mais do plug-in do IBM Bluemix Container Service, será possível desinstalá-lo com um comando bx.">Desinstalando o plug-in do IBM Bluemix Container Service (bx ic)</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_install" title="Para iniciar e parar diversos contêineres únicos de uma vez, é possível instalar a CLI do Docker Compose.">Instalando o Docker Compose e suas dependências</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="Pode ser necessário fazer upgrade da versão de seu pacote do Docker Compose para usar os recursos mais recentes.">Fazendo upgrade do Docker Compose</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_cli_cfic_install.html#container_cli_compose_uninstall" title="Se você não precisar mais do pacote de software Docker Compose, será possível desinstalá-lo com o comando a seguir.">Desinstalando o Docker Compose</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d72e112"></aside><article class="topic task nested2" role="article" aria-labelledby="d72e312" id="install_plugin"><h3 class="topictitle3" id="d72e312">Instalando o plug-in do IBM Bluemix Container Service (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h3>
+<div class="body taskbody"><div class="section context" id="install_plugin__context_e5s_szz_nz"><p>Para executar comandos, seu sistema operacional deve atender a estes requisitos. Esta tarefa inclui as
+informações para instalar esses requisitos. Versões anteriores dessas ferramentas não são suportadas para
+uso com o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>). </p>
+
+<div class="p"><ul id="install_plugin__ul_f5s_szz_nz"><li><span class="ph">Docker versão
+1.8 para <span class="ph" id="install_plugin__d1147e257">1.12</span></span></li>
+<li><span class="ph">CLI do Cloud Foundry versão <span class="ph" id="install_plugin__d1147e301">6.14.0</span> - 6.22.0</span><div class="steps note"><span class="notetitle">Nota:</span> Os usuários do
+MacOS Sierra devem instalar o Cloud Foundry CLI versão 6.22.0 ou mais recente. </div>
+</li>
+<li>CLI do <span class="keyword">Bluemix</span></li>
+<li>Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span></li>
+</ul>
+</div>
+</div><p class="li stepsection">Para instalar as CLIs:</p><ol class="steps" id="install_plugin__steps_g5s_szz_nz"><li class="step stepexpand" id="install_plugin__docker_install"><span class="cmd">Instalar o Docker <span class="ph">1.12</span>. </span> Para sistemas operacionais Windows e OS X, o Docker é instalado junto com o Docker Toolbox,
+que inclui o Docker Machine, Docker Engine e Kitematic. Para sistemas operacionais Linux,
+os mecanismos de instalação variam dependendo do tipo de distribuição Linux que você usa. Consulte os
+links a seguir para instalar ou, se já tiver instalado o Docker, para fazer upgrade para o Docker <span class="ph">1.12</span>. 
+<div class="steps note"><span class="notetitle">Nota:</span> Caso já tenha instalado o Docker em seu computador e não desejar fazer upgrade da versão
+atual, será possível ignorar esta etapa e continuar com a instalação do Cloud Foundry CLI. </div>
+
+<ul id="install_plugin__ul_h5s_szz_nz"><li>OS X<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.pkg" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">https://github.com/docker/toolbox/releases/download/v<span class="ph">1.12</span>/DockerToolbox-<span class="ph">1.12</span>.pkg</a></p>
+</li>
+<li>Windows<p><a href="https://github.com/docker/toolbox/releases/download/v1.12.0/DockerToolbox-1.12.0.exe" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">https://github.com/docker/toolbox/releases/download/v<span class="ph">1.12</span>/DockerToolbox-<span class="ph">1.12</span>.exe</a></p>
+</li>
+<li>Linux<p>Consulte a <a href="https://docs.docker.com/engine/installation/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Documentação de instalação do Docker</a> para localizar instruções sobre como
+instalar o Docker versão <span class="ph">1.12</span> na
+distribuição Linux usada.</p>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Inicie o Docker.</span> <ul class="ul choices" id="install_plugin__choices_i5s_szz_nz"><li class="li choice" id="install_plugin__start_qst">Para o OS X e o Windows, clique duas vezes no ícone <span class="ph uicontrol">Terminal de iniciação rápida
+do Docker</span>. O daemon do Docker é iniciado e as variáveis de ambiente são configuradas para
+você.</li>
+<li class="li choice">Para o Linux, em um utilitário de linha de comandos, verifique se o daemon do Docker está em execução. Além disso, configure
+o daemon do Docker para reiniciar automaticamente. Para obter mais informações, <a href="https://docs.docker.com/installation/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">consulte a documentação do Docker para seu sistema operacional</a>.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique se sua instalação do Docker está configurada corretamente executando <samp class="ph codeph">docker run
+hello-word</samp> em seu terminal. </span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ O Docker procura a imagem <samp class="ph codeph">hello-world</samp> localmente da qual executar um contêiner, portanto, se
+esta for a primeira vez que o comando é executado, você receberá a mensagem a seguir.
+
+<pre class="codeblock"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+A
+imagem é extraída do Docker Hub, um repositório público de imagens, e depois que o
+comando for concluído, a saída será semelhante à seguinte:
+<pre class="codeblock"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ Se o comando não for concluído adequadamente, execute <samp class="ph codeph">docker version</samp> para ver se o Docker
+está instalado corretamente. </li>
+<li class="step stepexpand" id="install_plugin__install_cf"><span class="cmd">Instale a versão <span class="ph">CLI do Cloud Foundry versão <span class="ph" id="install_plugin__d1147e301-d1138e283a1310">6.14.0</span> - 6.22.0</span> da CLI do Cloud Foundry no repositório <a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)"> GitHub</a>.</span> Deve-se instalar o Cloud Foundry CLI no local padrão de seu sistema operacional, caso
+contrário, a variável de ambiente PATH não corresponderá a seu diretório de instalação. <div class="steps note"><span class="notetitle">Nota:</span> Os usuários do MacOS Sierra devem instalar o Cloud Foundry CLI versão 6.22.0 ou
+mais recente. </div>
+
+
+<div class="p">Para verificar se o Cloud Foundry CLI está instalado adequadamente ou, se você já o
+instalou, para verificar qual versão foi instalada, execute o comando
+a seguir:<pre class="codeblock"><code>cf -v</code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="install_plugin__install_bx"><span class="cmd">Instale a <a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">CLI do <span class="keyword">Bluemix</span></a>.</span></li>
+<li class="step stepexpand" id="install_plugin__bx_login"><span class="cmd">Efetue login na CLI do <span class="keyword">Bluemix</span>.</span> <pre class="codeblock"><code><span class="ph">bx</span> login -a https://api.ng.bluemix.net</code></pre>
+</li>
+<li class="step stepexpand" id="install_plugin__install"><span class="cmd" id="install_plugin__install_bx_ic">Instale o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>. </span> <pre class="codeblock" id="install_plugin__bx_cs_install"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">Para verificar se o plug-in está instalado adequadamente, execute o comando
+a seguir:<pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>O plug-in é exibido nos resultados como IBM-Containers.</p>
+</li>
+</ol>
+<div class="section result" id="install_plugin__result_j5s_szz_nz"><p>Você está pronto para efetuar login e começar a gerenciar contêineres.</p>
+</div></div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d72e528" lang="pt-br" id="container_cli_login"><h2 class="topictitle2" id="d72e528">Efetuando login no plug-in da CLI do <span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) </h2>
+<div class="body taskbody"><p class="shortdesc">Depois de instalar a CLI, efetue login para usá-la.</p>
+<div class="section prereq"><div class="p">Antes de começar, conclua as tarefas a seguir.<ul><li><a href="container_cli_cfic_install.html#install_plugin">Instale
+o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>).</a></li>
+<li>Decida qual organização e espaço do <span class="keyword">Bluemix</span>
+usar ao efetuar login no Cloud Foundry. Para obter mais informações sobre organizações e espaço, consulte <span class="ph"><a href="../admin/orgs_spaces.html">Organizações e espaços</a></span>.</li>
+<li>Para obter mais informações sobre as opções que podem ser especificadas com o comando
+<samp class="ph codeph">login</samp> do Cloud Foundry, consulte <a href="https://docs.cloudfoundry.org/devguide/installcf/whats-new-v6.html#login" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">o comando Login</a> na documentação do Cloud Foundry.</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Abra um utilitário de linha de comandos. </span> <ul class="ul choices"><li class="li choice">Para o OS X e o Windows, clique duas vezes no ícone <span class="ph uicontrol">Terminal de iniciação rápida
+do Docker</span>. O daemon do Docker é iniciado e as variáveis de ambiente são configuradas para
+você.</li>
+<li class="li choice">Para o Linux, abra qualquer utilitário de linha de comandos.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Efetue login no <span class="keyword">Bluemix</span> por meio do
+Cloud Foundry CLI.</span> Para especificar uma região específica, inclua a opção <samp class="ph codeph">-a</samp> com o terminal de API para
+a região. Se for a primeira vez que estiver usando a CLI e você não incluir a opção, será
+solicitado que insira um terminal de API. Após o terminal de API ser especificado, não será necessário inserir
+um durante logins subsequentes. <div class="p"><pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+</div>
+ <div class="p">Para efetuar login em uma região específica, inclua o terminal de API dessa região quando efetuar login no
+Cloud Foundry CLI.<ul><li>SUL dos EUA<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>United Kingdom<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+
+<span class="ph">O parâmetro de conexão única <span class="keyword option">--sso</span> é necessário quando você efetua login
+com um ID federado. Se essa opção for usada, abra
+<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>
+para obter uma senha descartável. Se
+você não incluir a opção <span class="keyword option">--sso</span>, conclua estas subetapas.</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">Para <span class="ph uicontrol">E-mail</span>, insira seu
+IBMId para o
+<span class="keyword">Bluemix</span>.</span></li>
+<li class="li substep"><span class="cmd">Para <span class="ph uicontrol">Senha</span>, insira a senha para o IBMId.</span> Suas organizações e espaços Bluemix são recuperados.</li>
+<li class="li substep"><span class="cmd">Insira o número que representa uma de suas organizações do <span class="keyword">Bluemix</span>. </span></li>
+<li class="li substep"><span class="cmd">Insira o número que representa um de seus espaços existentes do <span class="keyword">Bluemix</span>. </span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_cli_login__namespace"><span class="cmd"><span class="ph">Configure um <dfn class="term">espaço de nomes</dfn> para a sua organização.</span></span> Um namespace é um nome exclusivo para identificar seu registro de imagens privado do
+<span class="keyword">Bluemix</span>. Ao criar
+um contêiner, deve-se especificar o local de uma imagem incluindo o namespace com o nome
+da imagem. 
+<div class="p"><div class="steps note" id="container_cli_login__namespace_warning"><span class="notetitle">Nota:</span> Ao criar um espaço de nomes, ele não poderá ser mudado após ser criado,
+apenas excluído. Se os usuários de sua organização do <span class="keyword">Bluemix</span>
+já implementaram contêineres e configuraram um <dfn class="term">espaço de nomes</dfn>, uma mensagem será mostrada
+exibindo o espaço de nomes para a sua organização. Nesse caso, é possível continuar com a próxima
+etapa.</div>
+</div>
+
+
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">Dica:</span> Observe as regras a seguir para o namespace:
+<ul id="container_cli_login__d9179e140"><li>Ele pode conter somente letras minúsculas, números ou sublinhados (_).</li>
+<li>Pode ter entre 4 e 30 caracteres. Se planeja gerenciar contêineres a partir da linha de comandos,
+é possível que prefira ter um namespace curto que possa ser digitado rapidamente.</li>
+<li>O seu nome deve ser exclusivo no <span class="keyword">Bluemix</span>.</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand" id="container_cli_login__login"><span class="cmd">Inicialize o <span class="keyword">IBM
+Bluemix Container Service</span>.</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Decida se você deseja executar comandos do
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> ou nativos do Docker. </span> É possível selecionar uma dessas opções toda vez que você efetuar login no plug-in ou então usar o
+comando <samp class="ph codeph">shellinit</samp> para sempre selecionar a Opção 2 . <div class="p"><ul><li id="container_cli_login__option1_li"><span class="ph uicontrol">Opção 1</span> (Padrão)<p>Um shell simples para o
+<span class="keyword">IBM
+Bluemix Container Service</span> agrupa o
+Docker. O daemon do Docker local não é afetado pelo
+<span class="keyword">IBM
+Bluemix Container Service</span>. Os
+comandos <span class="ph"><samp class="ph codeph">bx ic</samp></span> são usados para
+gerenciar contêineres em seu espaço do
+<span class="keyword">Bluemix</span> e os
+comandos <samp class="ph codeph">docker</samp> são usados para gerenciar contêineres localmente. No
+entanto, os comandos <samp class="ph codeph">docker</samp> são sempre necessários para desenvolvimento
+de imagem local. </p>
+<p>Por exemplo, com a Opção 1, o comando
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> cria
+um contêiner no espaço do
+<span class="keyword">Bluemix</span> e
+<samp class="ph codeph">docker run</samp> cria um contêiner localmente. Você poderá preferir essa opção
+se for inexperiente no Docker e no
+<span class="keyword">IBM
+Bluemix Container Service</span> ou se
+gostar de testar os contêineres localmente.</p>
+</li>
+<li id="container_cli_login__option2_li"><span class="ph uicontrol">Opção 2</span><p>Redirecione o daemon do Docker local da sessão
+da CLI atual para o
+<span class="keyword">IBM
+Bluemix Container Service</span> para que os
+comandos <samp class="ph codeph">docker</samp> possam ser usados no lugar dos comandos
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> quando estiverem
+disponíveis para gerenciar contêineres em seu espaço do
+<span class="keyword">Bluemix</span>. </p>
+<p>Por
+exemplo, com a opção 2, o comando
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> ou
+<samp class="ph codeph">docker run</samp> pode ser usado para criar um contêiner em seu espaço. Você
+poderá preferir essa opção se for um usuário experiente do Docker que se sente mais à
+vontade com os comandos <samp class="ph codeph">docker</samp> ou se estiver adaptando scripts
+automatizados para trabalhar com o <span class="keyword">IBM
+Bluemix Container Service</span>.</p>
+<p>Algumas
+exceções ainda requerem o uso de comandos
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> para executar tarefas
+específicas do <span class="keyword">IBM
+Bluemix Container Service</span>. Por exemplo, para configurar um
+espaço de nomes, deve-se usar o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp>. <samp class="ph codeph">docker namespace-set</samp> não é um comando válido. Para
+obter uma lista de comandos <samp class="ph codeph">docker</samp> que são suportados com essa configuração, consulte
+<a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="Com o plug-in do IBM Bluemix Container Service (bx ic), alguns comandos docker são suportados para uso no lugar de comandos bx ic. Ao efetuar login no plug-in, configure as variáveis de ambiente para usar os comandos do Docker CLI. Em seguida, é possível executar comandos docker em vez de comandos bx ic sempre que possível. Por exemplo, em vez de usar bx ic images para ver as imagens em seu registro privado do Bluemix, execute docker images.">Comandos suportados do Docker para o plug-in do IBM Bluemix Container Service (bx ic)</a>.</p>
+<div class="p">Para
+configurar essa opção, copie e cole as variáveis de ambiente que são fornecidas no
+terminal durante o login.<ul><li><samp class="ph codeph">DOCKER_HOST</samp> configura o host do Docker para o <span class="keyword">IBM
+Bluemix Container Service</span>.</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp> configura o local das chaves de autenticação para o plug-in <span class="keyword">IBM
+Bluemix Container Service</span> para Cloud Foundry.</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp> usa TLS e verifica o servidor remoto.</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">Dica:</span> Quando você estiver concluindo as tarefas na documentação do <span class="keyword">IBM
+Bluemix Container Service</span>, será possível executar
+comandos <samp class="ph codeph">docker</samp> em todas as etapas marcadas com um asterisco (*).</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e528"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d72e1061" lang="pt-br" id="container_cli_cfic_upgrade"><h2 class="topictitle2" id="d72e1061">Fazendo upgrade
+do plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">Você pode desejar atualizar o plug-in periodicamente para usar novos recursos. </p>
+<div class="section context"><div class="tablenoborder"><table summary="Versão atual do plug-in do IBM Bluemix Container Service" id="container_cli_cfic_upgrade__version_history" class="defaultstyle"><caption><span class="tablecap">Tabela 1. Versão atual do plug-in do <span class="keyword">IBM
+Bluemix Container Service</span></span></caption><thead><tr><th id="d72e1185" class="thleft thbot">Data de liberação</th>
+<th id="d72e1187" class="thleft thbot">Versão</th>
+<th id="d72e1189" class="thleft thbot">Atualizações</th>
+</tr>
+</thead>
+<tbody><tr id="container_cli_cfic_upgrade__current"><td headers="d72e1185 ">16 de novembro de 2016</td>
+<td headers="d72e1187 ">0.8.964</td>
+<td headers="d72e1189 "><ul><li>Incluído suporte para gerenciar a verificação de funcionamento de grupos de contêineres por meio do comando
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> usando as opções
+<samp class="ph codeph">--http_monitor_enabled</samp>, <samp class="ph codeph">--http_monitor_path</samp> e
+<samp class="ph codeph">--http_monitor_rs_list</samp></li>
+<li>Incluído suporte para a opção <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+group-create --session_affinity</samp></li>
+<li>Correções de defeito</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection">Para atualizar o plug-in, siga estas etapas.</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Instale a atualização do repositório de plug-in que você configurou ao instalar pela primeira vez o
+plug-in.</span> <pre class="codeblock"><code><span class="ph">bx</span> plugin update IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Verifique a instalação do plug-in executando o comando a seguir e verificando a lista dos
+plug-ins instalados.</span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>O plug-in é exibido nos resultados como IBM-Containers.</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e1061"></aside></article><article class="topic reference nested1" role="article" aria-labelledby="d72e1253" lang="pt-br" id="container_cli_reference_cfic"><h2 class="topictitle2" id="d72e1253"><span class="ph"><span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>) para gerenciar <span class="ph">contêineres únicos e escaláveis</span></span></h2>
+<div class="body refbody"><div class="abstract"><span class="shortdesc"><span class="ph">Com o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>, consulte esses comandos para criar e
+gerenciar contêineres. </span></span>
+</div>
+<div id="container_cli_reference_cfic__d1504e97"><div class="note note" data-hd-status="deprecated"><span class="notetitle">A CLI cf ic foi descontinuada:</span> Em vez de usar
+o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> para Cloud Foundry
+(<samp class="ph codeph">cf ic</samp>), use o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> para
+o <span class="keyword">Bluemix</span>. É possível
+continuar a usar a CLI <samp class="ph codeph">cf ic</samp> até 1º de janeiro de 2018.
+<div class="p">Para iniciar usando o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> para
+o <span class="keyword">Bluemix</span> como alternativa, consulte os tópicos a seguir.<ul><li><a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Instalando a CLI do Bluemix</a></li>
+<li><a href="container_cli_cfic_install.html">Instalando o plug-in do <span class="ph">bx ic</span></a></li>
+<li><a href="container_cli_reference_cfic.html">Referência
+de plug-in do <span class="ph">bx ic</span></a></li>
+</ul>
+</div>
+</div>
+É possível executar qualquer um desses comandos sem nenhuma opção para revisar informações da ajuda. Também é possível
+executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> --help</samp> para visualizar uma lista
+desses comandos.</div><div id="container_cli_reference_cfic__d1504e104"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e106" class="defaultstyle"><caption><span class="tablecap">Tabela 2. Comandos para gerenciar a CLI e o seu serviço no <span class="keyword">Bluemix</span></span></caption><thead><tr><th colspan="4" id="d72e1401" class="thleft">Comandos para gerenciar a CLI e o seu serviço no <span class="keyword">Bluemix</span></th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1818"><span class="ph">bx ic</span>info</a></td>
+<td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1854"><span class="ph">bx ic</span> init</a></td>
+<td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2254"><span class="ph">bx ic</span> namespace</a></td>
+<td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2552"><span class="ph">bx ic</span> reprovision</a></td>
+</tr>
+<tr><td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3722"><span class="ph">bx ic</span> unprovision</a></td>
+<td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3771">bx ic update</a></td>
+<td headers="d72e1401 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3791">bx ic version</a></td>
+<td headers="d72e1401 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e148"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e150" class="defaultstyle"><caption><span class="tablecap">Tabela 3. Comandos para criar e gerenciar contêineres no </span></caption><thead><tr><th colspan="5" id="d72e1456" class="thleft">Comandos para criar e gerenciar contêineres no <span class="keyword">Bluemix</span></th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e418"><span class="ph">bx ic</span> attach</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e564"><span class="ph">bx ic</span> cp</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e737"><span class="ph">bx ic</span> exec</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e828"><span class="ph">bx ic</span> group-create</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1490"><span class="ph">bx ic</span> group-inspect</a></td>
+</tr>
+<tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1526"><span class="ph">bx ic</span> group-instances</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1562"><span class="ph">bx ic</span> group-remove</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1604"><span class="ph">bx ic</span> group-update</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1729"><span class="ph">bx ic</span> groups</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1890"><span class="ph">bx ic</span> inspect</a></td>
+</tr>
+<tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1947"><span class="ph">bx ic</span> ip-bind</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2001"><span class="ph">bx ic</span> ip-release</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2034"><span class="ph">bx ic</span> ip-request</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2063"><span class="ph">bx ic</span> ip-unbind</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2109"><span class="ph">bx ic</span> ips</a></td>
+</tr>
+<tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2144"><span class="ph">bx ic</span> kill</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2188"><span class="ph">bx ic</span> Registros do</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2296"><span class="ph">bx ic</span> pause</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2338"><span class="ph">bx ic</span> port</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2419"><span class="ph">bx ic</span>ps</a></td>
+</tr>
+<tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2503"><span class="ph">bx ic</span> rename</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2624"><span class="ph">bx ic</span> restart</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2673"><span class="ph">bx ic</span> rm</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2789"><span class="ph">bx ic</span> route-map</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2869"><span class="ph">bx ic</span> route-unmap</a></td>
+</tr>
+<tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2937"><span class="ph">bx ic</span> execução</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3367"><span class="ph">bx ic</span> service-bind</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3418"><span class="ph">bx ic</span> service-unbind</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3467"><span class="ph">bx ic</span> start</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3507"><span class="ph">bx ic</span> stats</a></td>
+</tr>
+<tr><td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3549"><span class="ph">bx ic</span> stop</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3600"><span class="ph">bx ic</span> top</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3682"><span class="ph">bx ic</span> unpause</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4125"><span class="ph">bx ic</span> wait</a></td>
+<td headers="d72e1456 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4162"><span class="ph">bx ic</span> wait-status</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e312"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e314" class="defaultstyle"><caption><span class="tablecap">Tabela 4. Comandos para gerenciar imagens no <span class="keyword">Bluemix</span></span></caption><thead><tr><th colspan="5" id="d72e1660" class="thleft">Comandos para gerenciar imagens no <span class="keyword">Bluemix</span></th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e474"><span class="ph">bx ic</span> compilação</a></td>
+<td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e644"><span class="ph">bx ic</span> cpi</a></td>
+<td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1757"><span class="ph">bx ic</span>imagens</a></td>
+<td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1890"><span class="ph">bx ic</span> inspect</a></td>
+<td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2254"><span class="ph">bx ic</span> namespace-get</a></td>
+</tr>
+<tr><td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2254"><span class="ph">bx ic</span> namespace-set</a></td>
+<td headers="d72e1660 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2720"><span class="ph">bx ic</span> rmi</a></td>
+<td headers="d72e1660 ">&nbsp;</td>
+<td headers="d72e1660 ">&nbsp;</td>
+<td headers="d72e1660 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div id="container_cli_reference_cfic__d1504e363"><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e365" class="defaultstyle"><caption><span class="tablecap">Tabela 5. Comandos para armazenar contêineres no <span class="keyword">Bluemix</span></span></caption><thead><tr><th colspan="5" id="d72e1722" class="thleft">Comandos para armazenar contêineres no <span class="keyword">Bluemix</span></th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3822"><span class="ph">bx ic</span> volume-create</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3868"><span class="ph">bx ic</span> volume-fs-create</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3923"><span class="ph">bx ic</span> volume-fs-flavors</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3941"><span class="ph">bx ic</span> volume-fs-inspect</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3973">bx ic volume-fs</a></td>
+</tr>
+<tr><td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3991"><span class="ph">bx ic</span> volume-fs-remove</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4024"><span class="ph">bx ic</span> volume-inspect</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4060"><span class="ph">bx ic</span> volume-remove</a></td>
+<td headers="d72e1722 "><a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e4096"><span class="ph">bx ic</span> volumes</a></td>
+<td headers="d72e1722 ">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><section role="region" aria-labelledby="d72e1776" id="container_cli_reference_cfic__d1504e418"><h3 class="sectiontitle" id="d72e1776"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach [--no-stdin] [--sig-proxy]</samp> CONTAINER </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Controlar um contêiner em execução ou visualizar sua saída. Use CTRL+C para sair e parar o contêiner. Para obter
+mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/attach/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">attach</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">--no-stdin</dt>
+<dd class="pd">(Opcional) Não incluir a entrada padrão. </dd>
+<dt class="pt dlterm">--sig-proxy</dt>
+<dd class="pd">(Opcional) O padrão é <span class="keyword option">true</span>.</dd>
+<dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) Um nome ou um ID do contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para anexar ao contêiner
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e1837" id="container_cli_reference_cfic__d1504e474"><h3 class="sectiontitle" id="d72e1837"><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t
+TAG [--no-cache] [--pull] [-q] DOCKERFILE_LOCATION </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e484">Construir uma imagem do Docker localmente ou no registro de imagens privadas do <span class="keyword">Bluemix</span>.</span> Para obter mais
+informações, consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/build/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">build</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e496"><!-- --></a><var class="keyword varname">DOCKERFILE_LOCATION</var></dt>
+<dd class="pd">(Obrigatório) O caminho para o <span class="ph filepath">Dockerfile</span> e o
+contexto no host local.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e505"><!-- --></a>--no-cache</dt>
+<dd class="pd">(Opcional) Quando uma imagem é construída pela primeira vez, as camadas da
+imagem são armazenadas em cache para uma organização inteira. Ao construir as versões
+subsequentes da imagem, essas versões em cache da imagem são usadas para acelerar o
+processo de construção. Ao incluir a opção
+<samp class="ph codeph">--no-cache</samp> na construção de uma nova versão da
+imagem, será possível assegurar que cada camada da imagem
+seja reconstruída também.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e513"><!-- --></a>--pull</dt>
+<dd class="pd">(Opcional) Por padrão, a imagem base só será extraída do registro se não estiver ainda
+no cache de imagem da sua organização. Ao incluir essa opção, será possível assegurar que a
+versão mais recente da imagem base seja usada para construir a nova imagem.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e518"><!-- --></a>-q, --quiet</dt>
+<dd class="pd">(Opcional) Suprimir a saída detalhada gerada pelos
+contêineres. O padrão
+é <span class="keyword option">false</span>.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e526"><!-- --></a>-t <var class="keyword varname">TAG</var>, --tag <var class="keyword varname">TAG</var></dt>
+<dd class="pd">(Necessário) O caminho para seu registro de imagens privadas a ser aplicado à imagem criada.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e540">O exemplo a seguir é uma solicitação para construir uma imagem nomeada
+<samp class="ph codeph">myimage</samp>. O <span class="ph filepath">Dockerfile</span> e outros artefatos para uso na
+construção estão no mesmo diretório a partir do qual o comando é executado. Como o registro e o namespace são
+incluídos com o nome da imagem, a imagem é construída no registro de imagens privadas do <span class="keyword">Bluemix</span> de sua organização.</span>
+<div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">myimage</var>.</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e1946" id="container_cli_reference_cfic__d1504e564"><h3 class="sectiontitle" id="d72e1946"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp SRC_PATH CONTAINER:DEST_PATH | <span class="ph"><samp class="ph codeph">bx ic</samp></span> cp CONTAINER:SRC_PATH DEST_PATH </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph">Copiar um arquivo ou uma pasta de um contêiner único em execução ou interrompido para sua máquina local e
+vice-versa. Para obter mais informações, consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/cp/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">cp</a> na ajuda do Docker.</span><div class="steps note"><span class="notetitle">Nota:</span> Esse comando é suportado para ser usado somente com contêineres
+únicos. Quando se deseja copiar arquivos de ou para um grupo de contêiner, deve-se copiar os arquivos de ou para
+cada instância de contêiner do grupo. </div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">DEST_PATH</dt>
+<dd class="pd">(Necessário) O caminho para o arquivo ou pasta em sua máquina local ou contêiner no
+qual você deseja copiar as informações do caminho de origem. O arquivo ou pasta deve
+existir em sua máquina local ou contêiner para poder iniciar a cópia. Se você quiser
+copiar para sua máquina local, será possível usar o caminho absoluto ou relativo. Para copiar para o contêiner único, <span class="ph" id="container_cli_reference_cfic__d1504e592">deve-se incluir o nome do contêiner, o delimitador <span class="q">":"</span> e o
+caminho para o arquivo ou a pasta de destino. O caminho deve ser relativo ao diretório raiz do
+contêiner. </span></dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">SRC_PATH</dt>
+<dd class="pd">(Necessário) O caminho para o arquivo ou pasta que você deseja copiar. Se o arquivo
+ou pasta estiver em sua máquina local, será possível usar o caminho absoluto ou
+relativo. Se o arquivo ou a pasta estiver no
+contêiner único, o nome do contêiner, o delimitador <span class="q">":"</span> e o caminho para o arquivo
+ou a pasta que você deseja copiar deverão ser incluídos. O caminho deve ser relativo ao diretório
+raiz do contêiner. <div class="steps note"><span class="notetitle">Nota:</span> Não é possível copiar
+determinados arquivos do sistema que são armazenados na pasta <span class="ph filepath">/dev</span>,
+<span class="ph filepath">/etc</span>, <span class="ph filepath">/proc</span> e <span class="ph filepath">/sys</span>
+de seu contêiner.</div>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>Esse comando de exemplo copia um arquivo chamado <span class="ph filepath">config.txt</span> do
+diretório atual de sua máquina local para o diretório <span class="ph filepath">config</span> de um contêiner
+único chamado <var class="keyword varname">my_container</var>.</dd>
+<dd class="ddexpand"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cp <span class="ph filepath">./config.txt</span> <span class="ph filepath">my_container:/config</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2033" id="container_cli_reference_cfic__d1504e644"><h3 class="sectiontitle" id="d72e2033"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi SRC DST </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e654">Acessar uma imagem do Docker Hub ou uma imagem de seu registro local e copiá-la
+para o registro de imagens privadas do
+<span class="keyword">Bluemix</span>.</span><div class="steps note"><span class="notetitle">Nota:</span>  Esse comando é uma alternativa ao uso de <samp class="ph codeph">docker pull</samp> e
+<samp class="ph codeph">docker push</samp> juntos para incluir uma imagem em seu registro de imagens do <span class="keyword">Bluemix</span>. Se você
+preferir usar <samp class="ph codeph">docker pull</samp> e <samp class="ph codeph">docker push</samp>, consulte
+<a href="container_images_adding_ov.html#container_images_pulling" title="É possível puxar uma imagem do Docker Hub ou de seu registro privado, modificá-la localmente e enviá-la por push para o registro privado do Bluemix de sua organização.">Enviando imagens locais por push para seu registro privado do Bluemix a partir da linha de comandos</a>.</div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e680"><dl class="parml"><dt class="pt dlterm">DST</dt>
+<dd class="pd">(Necessário) A URL do registro de imagens privadas do <span class="keyword">Bluemix</span>,
+que inclui o namespace e o nome da imagem de destino. Uma tag para a imagem é opcional.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">SRC</dt>
+<dd class="pd">(Necessário) O repositório de origem e o nome da imagem.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">source_repository</var>/<var class="keyword varname">source_image_name</var> <var class="keyword varname">private_registry_URL</var>/<var class="keyword varname">destination_image_name</var>:<var class="keyword varname">tag</var></code></pre>
+
+<div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">mysinatra</var>:<var class="keyword varname">v1</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2156" id="container_cli_reference_cfic__d1504e737"><h3 class="sectiontitle" id="d72e2156"><span class="ph" id="container_cli_reference_cfic__d1504e739"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec [-d] [-it ] [-u USER] CONTAINER CMD </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Executar um comando em um contêiner. Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/exec/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">exec</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd">(Necessário) O
+comando a ser executado no contêiner ou contêineres especificados.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) Um nome ou um ID do contêiner.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-d , --detach </dt>
+<dd class="pd">(Opcional) Executar o comando especificado no plano de fundo.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-it</dt>
+<dd class="pd">(Opcional) Modo interativo. Mantenha a exibição da entrada padrão. Digite
+<kbd class="ph userinput">exit</kbd> para sair.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-u <var class="keyword varname">USER</var>, --user <var class="keyword varname">USER</var></dt>
+<dd class="pd">(Opcional) Um nome de usuário.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplos</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e803">Este exemplo de comando executa um terminal bash interativo no contêiner
+<var class="keyword varname">my_container</var>. </span></dd>
+<dd class="ddexpand"><pre class="codeblock" id="container_cli_reference_cfic__d1504e809"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</dd>
+<dd class="ddexpand"><span class="ph" id="container_cli_reference_cfic__d1504e816">Este exemplo de comando executa o comando de data no contêiner
+<var class="keyword varname">my_container</var>. </span></dd>
+<dd class="ddexpand"><pre class="codeblock" id="container_cli_reference_cfic__d1504e822"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec <var class="keyword varname">my_container</var> date</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e2254" id="container_cli_reference_cfic__d1504e828"><h3 class="sectiontitle" id="d72e2254"><span class="ph" id="container_cli_reference_cfic__d1504e830"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create [--anti] [--auto] [-d DOMAIN] [--desired DESIRED] [-e ENV] [--env-file
+ENVFILE]<span class="ph"> [--http_monitor_enabled] [--http_monitor_path] [--http_monitor_rc_list] [--ip
+IP_ADDRESS]</span> [-m MEMORY] [--max MAX] [--min MIN] [-n HOST] --name NAME [-p PORT] [--session-affinity] [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD] </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e842">Criar um grupo de ajuste de escala.</span> Por padrão, os contêineres no <span class="keyword">Bluemix</span> são executados no modo separado.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e850"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e852"><!-- --></a>--anti</dt>
+<dd class="pd">(Opcional) Use antiafinidade para tornar seu grupo de contêiner mais altamente disponível. A
+opção <samp class="ph codeph">--anti</samp> força cada instância de contêiner no grupo a ser colocada em um
+nó de cálculo físico separado, reduzindo as chances de impacto de todos os contêineres em um grupo em razão de
+uma falha de hardware. <span class="ph" id="container_cli_reference_cfic__d1504e860">Você poderá não ser capaz de usar essa opção com
+tamanhos de grupo maiores porque cada região e organização do <span class="keyword">Bluemix</span>
+têm um conjunto limitado de nós de cálculo disponíveis para implementação. Se
+sua implementação não for bem-sucedida, reduza o número de instâncias de contêiner no grupo ou
+remova a opção <samp class="ph codeph">--anti</samp>.</span></dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e867"><!-- --></a>--auto</dt>
+<dd class="pd">(Opcional) <span class="ph">Quando a recuperação automática é ativada para um grupo de contêiner e
+o grupo fica em execução durante 10 minutos, o balanceador de carga do grupo inicia a verificação regular do
+funcionamento de cada instância do contêiner no grupo por meio de solicitações de HTTP. Se uma instância do contêiner não
+responder dentro de 100 segundos, ela será marcada como inativa. As instâncias de contêiner inativas são removidas do
+grupo e recriadas pela recuperação automática. A recuperação automática tenta recuperar instâncias do contêiner em
+um grupo 3 vezes. Após a terceira tentativa, a recuperação automática não recuperará nenhuma instância de contêiner no
+grupo durante 60 minutos. Depois de 60 minutos, o processo de recuperação automática inicia novamente.</span> Para obter
+mais informações sobre a verificação de funcionamento, veja a opção <samp class="ph codeph">--http_monitor_enabled</samp>.</dd>
+<dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e882">(Opcional) O comando e os argumentos são passados para o grupo de contêiner
+para serem executados. Esse deve ser um comando de longa execução. Não use um comando de curta duração, por
+exemplo, <span class="keyword cmdname">/bin/date</span>, porque isso pode causar travamento do contêiner.</span><div class="p">Exemplo de comandos de longa execução usando a imagem <span class="keyword option">ibmnode</span> que é fornecida pelo
+<span class="keyword">IBM
+Bluemix Container Service</span>:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> ping localhost</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- tail -f /dev/null</code></pre>
+<div class="steps note"><span class="notetitle">Nota:</span> O
+CMD e seus argumentos devem vir no término da linha de comandos <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>.</div>
+</div>
+</dd>
+<dt class="pt dlterm">-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">(Opcional) O domínio do sistema padrão é
+<samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>
+e já fornece um certificado SSL, para que seja possível acessar seus grupos de contêiner com
+HTTPS sem nenhuma configuração adicional. Para usar um domínio customizado, deve-se registrar o domínio customizado em um servidor DNS público, configurar o domínio customizado no <span class="keyword">Bluemix</span> e, em seguida, mapear o domínio customizado para o domínio do sistema do <span class="keyword">Bluemix</span> no servidor DNS público.
+Depois que seu domínio customizado estiver mapeado para o domínio do sistema do
+<span class="keyword">Bluemix</span>, as
+solicitações de seu domínio customizado serão roteadas para seu aplicativo no
+<span class="keyword">Bluemix</span>. Ao criar
+um domínio customizado, não inclua sublinhados (_) no nome do domínio. Para obter mais
+informações sobre domínios customizados, consulte
+<a href="../manageapps/updapps.html#domain">Criando e
+usando um domínio customizado</a>. Para tornar seu domínio customizado seguro,
+<a href="../manageapps/secapps.html#ssl_certificate">faça
+upload de um certificado SSL</a>, para que seus grupos de contêiner possam ser
+acessados via HTTPS. <p>O host e o domínio combinados formam a URL de rota pública
+completa, como
+<samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>,
+e devem ser exclusivos no <span class="keyword">Bluemix</span>. Quando você revisa os detalhes de
+um grupo de contêiner com o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+group-inspect</samp>, o host e o domínio são listados juntos como a rota.</p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e962"><!-- --></a>--desired <var class="keyword varname">DESIRED</var></dt>
+<dd class="pd">(Opcional) O número de instâncias no grupo. O padrão é <span class="keyword option">2</span>. <span class="ph">O número de instâncias do grupo de contêiner que seu app requer depende
+da carga de trabalho esperada e do tempo em que uma solicitação pode ser processada pelo app. Por exemplo,
+a conectividade de multitarefas ou de rede afeta quantas instâncias podem ser necessárias para seu app.</span>
+<span class="ph">Para determinar o número de instâncias desejadas, implemente um contêiner
+único no Bluemix que execute seu app e execute um teste de carga neste contêiner. Se o app puder
+manipular, por exemplo, 100 solicitações por segundo, mas você estiver esperando uma carga de trabalho média de 300
+solicitações por segundo, o número desejado de instâncias para o grupo de contêiner será
+3.</span>
+<span class="ph">Para tornar seu grupo de contêiner altamente disponível e mais resiliente
+à falha, considere a inclusão de instâncias extras, além do mínimo, para manipular a carga de trabalho esperada.
+Instâncias extras podem manipular a carga de trabalho no caso de travamento de outra instância. Para assegurar a recuperação
+automática de uma instância com falha sem afetar a carga de trabalho, inclua uma instância extra. Para
+proteção contra duas falhas simultâneas, inclua duas instâncias extras. Essa configuração é um
+padrão <var class="keyword varname">N+2</var>, em que <var class="keyword varname">N</var> é o número de instâncias para manipular as
+solicitações e <var class="keyword varname">+2</var> são duas instâncias extras.</span><div class="note important"><span class="importanttitle">Importante:</span> Um grupo de contêiner deve incluir pelo menos 2 instâncias de
+contêiner. Se você incluir somente 1 instância no grupo e essa instância se tornar indisponível, seus
+usuários poderão experimentar tempo de inatividade para o app.</div>
+</dd>
+<dt class="pt dlterm">-e <var class="keyword varname">ENV</var>, --env <var class="keyword varname">ENV</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e987">(Opcional)<span class="ph" id="container_cli_reference_cfic__d1504e989">Configure a variável de ambiente,
+em que <span class="keyword option">ENV</span> é um par <samp class="ph codeph">key=value</samp>. Liste diversas chaves
+separadamente e, se você incluir aspas, as inclua no nome e valor da
+variável de ambiente. Exemplo: <samp class="ph codeph">-e <span class="q">"<var class="keyword varname">key1</var>=<var class="keyword varname">value1</var>"</span> -e
+<span class="q">"<var class="keyword varname">key2</var>=<var class="keyword varname">value2a</var>,<var class="keyword varname">value2b</var>"</span> -e
+<span class="q">"<var class="keyword varname">key3</var>=<var class="keyword varname">value3</var>"</span></samp></span></span><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e1023" class="defaultstyle"><caption><span class="tablecap">Tabela 6. Variáveis de ambiente sugeridas</span></caption><thead><tr><th id="d72e2504" class="thleft">Variável de Ambiente</th>
+<th id="d72e2506" class="thleft">Descrição</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e2504 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d72e2506 ">Alguns serviços do
+<span class="keyword">Bluemix</span> não
+suportam a ligação direta com um contêiner. Nesse caso, é preciso criar um app Cloud
+Foundry e ligar o serviço do
+<span class="keyword">Bluemix</span> a ele. Em
+seguida, você liga o app ao contêiner usando <samp class="ph codeph">CCS_BIND_APP</samp>. O app Cloud
+Foundry age como ponte e permite que o
+<span class="keyword">Bluemix</span> injete as
+informações de VCAP_SERVICES do seu app ponte na instância do contêiner em execução. </td>
+</tr>
+<tr><td headers="d72e2504 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">Nota:</span>  Quando um serviço não suportar o uso da variável de ambiente <samp class="ph codeph">CCS_BIND_SRV=</samp>,
+use <samp class="ph codeph">CCS_BIND_APP=</samp>.</div>
+</td>
+<td headers="d72e2506 ">Para ligar um serviço do
+<span class="keyword">Bluemix</span> diretamente
+a um contêiner sem usar um app ponte, use <samp class="ph codeph">CCS_BIND_SRV</samp>. Essa ligação permite que o <span class="keyword">Bluemix</span> injete as informações de VCAP_SERVICES
+na instância de contêiner em execução. Para listar vários serviços do
+<span class="keyword">Bluemix</span>, inclua-os
+como parte da mesma variável de ambiente.</td>
+</tr>
+<tr><td headers="d72e2504 "><div class="lines">(Descontinuado) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d72e2506 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">Essa variável de ambiente foi descontinuada:</span> Em
+seu lugar, use <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> ou
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp>
+para acesso externo aos contêineres. Para obter mais informações, consulte
+<a href="container_security.html#container_cli_login_exec" title="Se você tiver que efetuar login no contêiner em execução, será possível usar bx ic exec.">Efetuando login em um contêiner com exec</a>.</div>
+<span class="ph">Para
+incluir uma chave SSH em um contêiner quando criá-lo, é possível usar <samp class="ph codeph">CCS_API_KEY</samp>.</span></td>
+</tr>
+<tr><td headers="d72e2504 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d72e2506 "><span class="ph" id="container_cli_reference_cfic__d1504e1129">Para incluir um arquivo de log para que seja monitorado no contêiner, inclua a
+variável de ambiente <samp class="ph codeph">LOG_LOCATIONS</samp> com um caminho no arquivo de log.</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+Exemplo:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -e CCS_BIND_SRV=<var class="keyword varname">&lt;service_instance_name&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+</dd>
+<dt class="pt dlterm">--env-file <var class="keyword varname">ENVFILE</var></dt>
+<dd class="pd">(Opcional) Importe as variáveis de ambiente de um arquivo em que
+<var class="keyword varname">ENVFILE</var> é o caminho para o arquivo no diretório local. Cada linha no
+arquivo representa um par <samp class="ph codeph">key=value</samp>. <p>Exemplo</p>
+<pre class="codeblock"><code>KEY1=VALUE1
+KEY2=VALUE2</code></pre>
+</dd>
+<dt class="pt dlterm">--http_monitor_enabled</dt>
+<dd class="pd">(Opcional) O valor padrão é <samp class="ph codeph">true</samp>. <span class="ph">Quando a recuperação automática é ativada para um grupo de contêiner e
+o grupo fica em execução durante 10 minutos, o balanceador de carga do grupo inicia a verificação regular do
+funcionamento de cada instância do contêiner no grupo por meio de solicitações de HTTP. Se uma instância do contêiner não
+responder dentro de 100 segundos, ela será marcada como inativa. As instâncias de contêiner inativas são removidas do
+grupo e recriadas pela recuperação automática. A recuperação automática tenta recuperar instâncias do contêiner em
+um grupo 3 vezes. Após a terceira tentativa, a recuperação automática não recuperará nenhuma instância de contêiner no
+grupo durante 60 minutos. Depois de 60 minutos, o processo de recuperação automática inicia novamente.</span> Alguns apps
+podem não requerer uma verificação de funcionamento de HTTP, como um app que usa TCP para
+comunicação, em vez de HTTP. Para desativar o monitor de HTTP,
+configure a opção como <samp class="ph codeph">false</samp>. Exemplo: <samp class="ph codeph">--http_monitor_enabled=false</samp></dd>
+<dt class="pt dlterm">--http_monitor_path</dt>
+<dd class="pd">(Opcional) O valor padrão é <samp class="ph codeph">/</samp>. Quando
+<samp class="ph codeph">--http_monitor_enabled</samp> está ativado, é possível usar essa opção para
+configurar um caminho customizado para a verificação de funcionamento, como
+<samp class="ph codeph">--http_monitor_path=<span class="q">"/health/path"</span></samp>.</dd>
+<dt class="pt dlterm">--http_monitor_rc_list</dt>
+<dd class="pd">(Opcional) Quando <samp class="ph codeph">--http_monitor_enabled</samp> está ativado, é possível
+especificar a lista de códigos de resposta para a verificação de funcionamento. O valor padrão inclui os códigos <samp class="ph codeph">200, 201, 202, 204, 300,
+301, 302, 401, 403</samp> e <samp class="ph codeph">404</samp>. Qualquer resposta
+que não estiver na lista de respostas válidas mudará o estado da instância do contêiner para
+<samp class="ph codeph">INACTIVE</samp> pelo balanceador de carga.
+Um contêiner inativo não recebe nenhuma carga e o estado do grupo de contêiner muda para
+HAS_INACTIVE_INSTANCES. Se nenhum dos contêineres estiver <samp class="ph codeph">ACTIVE</samp>, o estado do
+grupo de contêiner mudará para <samp class="ph codeph">NO_ACTIVE_INSTANCES</samp>. Para saber mais sobre estados,
+veja <a href="container_cli_reference_cfic.html#container_cli_reference_cfic_states" title="É possível visualizar o estado do contêiner atual executando o comando bx ic inspect e localizando o campo Status. O estado do contêiner pode dar a você informações adicionais sobre a disponibilidade das instâncias do contêiner e dos problemas que podem ter ocorrido.">Estados do contêiner no IBM Bluemix Container Service</a>.</dd>
+<dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd"><span class="ph" id="container_cli_reference_cfic__d1504e1230">(Necessário) A imagem para incluir em cada instância de contêiner no
+grupo de contêiner. É possível listar comandos após a imagem, mas não
+coloque nenhuma opção após a imagem;
+inclua todas as opções antes de especificar uma imagem.</span><p>Se você estiver usando uma imagem no
+registro de imagens privadas do <span class="keyword">Bluemix</span> de sua organização,
+especifique a imagem no formato a seguir: <samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">NAMESPACE</var>/<var class="keyword varname">IMAGE</var></samp></p>
+<p>Se você estiver usando uma imagem
+fornecida pelo <span class="keyword">IBM
+Bluemix Container Service</span>, não
+inclua o namespace de sua organização. Especifique a imagem no formato a seguir:
+<samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">IMAGE</var></samp></p>
+</dd>
+<dt class="pt dlterm"> --ip <var class="keyword varname">IP_ADDRESS</var></dt>
+<dd class="pd">(Opcional) Se você tiver um endereço IP disponível, ligue um endereço IP público ao grupo de
+contêiner. Deve-se também expor a porta com a sinalização <samp class="ph codeph">-p</samp>. Um grupo de contêiner pode ter
+uma rota pública ou um endereço IP público, mas não ambos. Para desvincular o endereço IP e retornar o
+IP para a cota do espaço, remova o grupo de contêiner e recrie o grupo sem o endereço IP.
+Para solicitar um endereço IP antes de criar um grupo de contêiner, execute <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp>.<div class="steps note"><span class="notetitle">Nota:</span> Ligar um endereço IP
+público não inclui um certificado SSL que criptografa os dados que são enviados de e para o
+grupo de contêiner. Se seu app requerer criptografia SSL, será possível implementar sua própria solução SSL
+ou mapear uma rota pública para seu grupo de contêiner, em vez de ligar um endereço IP público. As rotas públicas
+já incluem um certificado SSL para que seja possível acessar seu grupo de contêiner com HTTPS sem nenhuma
+configuração adicional.</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1272"><!-- --></a>-m <var class="keyword varname">MEMORY</var>, --memory <var class="keyword varname">MEMORY</var></dt>
+<dd class="pd">(Opcional) <span class="ph" id="container_cli_reference_cfic__d1504e1282">Insira um limite de memória para o contêiner em MB. O limite de memória
+faz parte do tamanho do contêiner que define a quantia máxima de memória e o espaço em disco que um contêiner
+obtém no host de cálculo durante o tempo de execução. Depois que um tamanho de contêiner é designado, não é possível mudar
+o valor.</span> Os tamanhos
+disponíveis no <span class="keyword">IBM
+Bluemix Container Service</span> são: <ul data-hd-audience="yellow" id="container_cli_reference_cfic__d1504e1287"><li>Pico (64 MB de memória, 4 GB de espaço em disco)</li>
+<li>Nano (128 MB de memória, 8 GB de espaço em disco)</li>
+<li>Micro (256 MB de memória, 16 GB de espaço em disco)</li>
+<li>Minúsculo (512 MB de memória, 32 GB de espaço em disco)</li>
+<li>Pequeno (1024 MB de memória, 64 GB de espaço em disco)</li>
+<li>Médio (2048 MB de memória, 128 GB de espaço em disco)</li>
+<li>Grande (4096 MB de memória, 256 GB de espaço em disco)</li>
+<li>Extra grande (8192 MB de memória, 512 GB de espaço em disco)</li>
+<li>Duplamente grande (16384 MB de memória, 1 TB de espaço em disco) </li>
+</ul>
+Se você não configurar um tamanho para seu contêiner, cada instância de contêiner será criada com
+<span class="keyword option">256</span> MB. <div class="note important"><span class="importanttitle">Importante:</span> Insira a memória do contêiner em MB sem o rótulo de unidade. Por exemplo, se você desejar criar um contêiner pico, insira <samp class="ph codeph">-m 64</samp>.</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1315"><!-- --></a>--max <var class="keyword varname">MAX</var></dt>
+<dd class="pd">(Opcional) O número máximo de instâncias. O padrão é <span class="keyword option">2</span>.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1325"><!-- --></a>--min <var class="keyword varname">MIN</var></dt>
+<dd class="pd">(Opcional) O número mínimo de instâncias. O padrão é <span class="keyword option">1</span>.</dd>
+<dt class="pt dlterm"> -n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">(Opcional) O nome do host, tal como <var class="keyword varname">mycontainerhost</var>. Não inclua
+sublinhados (_) no nome do host. O host e o domínio combinados formam a URL de rota pública
+completa, como <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>. Quando você revisa os detalhes
+de um grupo de contêiner com o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp>, o host e o domínio são listados
+juntos como a rota.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1356"><!-- --></a>--name <var class="keyword varname">NAME</var></dt>
+<dd class="pd">(Obrigatório) Designar um nome ao grupo. <samp class="ph codeph">-n</samp> está descontinuado.<div class="note tip" id="container_cli_reference_cfic__d1504e1366"><span class="tiptitle">Dica:</span> O nome do contêiner
+deve iniciar com uma letra e, em seguida, pode incluir letras maiúsculas, letras minúsculas, números,
+pontos (.), sublinhados (_) ou hifens (-).</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1368"><!-- --></a>-p <var class="keyword varname">PORT</var>, --publish <var class="keyword varname">PORT</var></dt>
+<dd class="pd"><p>(Obrigatório) Expor a porta para HTTP e o tráfego de rede privada. Se você não expuser uma porta, o grupo de contêiner será executado, mas o grupo de contêineres não poderá ser acessado por meio do balanceador de carga do grupo na rede pública ou privada.</p>
+<p>Para os grupos de contêiner, você não pode incluir várias
+portas. Se múltiplas portas forem listadas, somente a última porta listada será exposta. As outras
+portas serão ignoradas pelo comando. </p>
+<span class="ph" id="container_cli_reference_cfic__d1504e1381">Quando você ligar uma rota, os contêineres em seu grupo deverão
+receber o tráfego HTTP na porta exposta do grupo. As portas não HTTP não podem ser expostas publicamente. Quando o tráfego HTTPS chega na
+porta exposta, o (Go)Router conclui a finalização do HTTPS. Em seguida, o protocolo HTTP é usado na
+rede virtual privada entre o (Go)Router e os contêineres. </span>
+<span class="ph">Quando você ligar um endereço IP, os contêineres em seu grupo poderão receber o tráfego HTTP ou HTTPs,
+mas ainda será possível expor somente uma porta.</span><div class="p">Se uma porta for especificada no Dockerfile para a
+imagem que você está usando, inclua essa porta.<div class="note tip"><span class="tiptitle">Dica:</span> <ul id="container_cli_reference_cfic__d2114e233"><li>Para a imagem do Liberty Server certificada pela IBM ou uma versão
+modificada dessa imagem, insira a porta <kbd class="ph userinput">9080</kbd>.</li>
+<li>Para a imagem do Node.js certificada pela IBM ou uma versão modificada
+dessa imagem, insira qualquer porta, como a porta <kbd class="ph userinput">8000</kbd>.</li>
+</ul>
+</div>
+</div>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1387"><!-- --></a>--session_affinity</dt>
+<dd class="pd"><p>(Opcional) O valor padrão é <samp class="ph codeph">false</samp>. Quando
+<samp class="ph codeph">--http_monitor_enabled</samp> está configurado como
+<kbd class="ph userinput">true</kbd>, é possível configurar a opção
+<samp class="ph codeph">--session_affinity</samp> como <kbd class="ph userinput">true</kbd> para permitir que o
+<span class="keyword">IBM
+Bluemix Container Service</span> crie e
+gerencie um cookie de sessão em nome do app. Essa opção não estará disponível se
+<samp class="ph codeph">--http_monitor_enabled</samp> estiver configurado como
+<kbd class="ph userinput">false</kbd> ou se você estiver usando TCP para comunicação em vez de
+HTTP. </p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1417"><!-- --></a>--volume <var class="keyword varname">VOLUME</var>:<var class="keyword varname">/DIRECTORY_PATH</var>[:ro]</dt>
+<dd class="pd">(Optional) Anexe um volume a um contêiner especificando os detalhes no formato a seguir
+<samp class="ph codeph">VOLUME:/DIRECTORY_PATH[:ro]</samp>.<ul id="container_cli_reference_cfic__d1504e1431"><li><var class="keyword varname">VOLUME</var>: O ID ou o nome do volume.</li>
+<li><var class="keyword varname">DIRECTORY_PATH</var>: O caminho absoluto para o diretório no contêiner.</li>
+<li><samp class="ph codeph">ro</samp>: Opcional. Especificar <samp class="ph codeph">ro</samp> torna o volume somente leitura, em vez de
+leitura/gravação padrão.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para criar um grupo de ajuste de escala com uma rota
+pública.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --auto -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">mycontainerhost</var>  --name <var class="keyword varname">my_container_group</var> -p <var class="keyword varname">9080</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</dd>
+<dd class="ddexpand">O exemplo a seguir é uma solicitação para criar um grupo de ajuste de escala com um endereço IP
+público.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --auto --ip <var class="keyword varname">198.51.100.27</var>  --name <var class="keyword varname">my_container_group</var> -p <var class="keyword varname">9080</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3060" id="container_cli_reference_cfic__d1504e1490"><h3 class="sectiontitle" id="d72e3060"><span class="ph" id="container_cli_reference_cfic__d1504e1492"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd id="container_cli_reference_cfic__d1504e1500">Ver as informações detalhadas que foram especificadas para um grupo de contêiner
+quando ele foi criado, como as variáveis de ambiente, portas ou memória. Além disso, execute esse comando para
+ver a rota pública que está designada ao grupo.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1507"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do grupo.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para inspecionar o grupo
+<var class="keyword varname">my_container_group</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3100" id="container_cli_reference_cfic__d1504e1526"><h3 class="sectiontitle" id="d72e3100"><span class="ph" id="container_cli_reference_cfic__d1504e1528"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances GROUP </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd id="container_cli_reference_cfic__d1504e1536">Listar todos os contêineres com seu ID, nome, endereço IP e porta pública
+que fazem parte de um grupo de contêiner.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do grupo.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para recuperar todos os contêineres do grupo
+<var class="keyword varname">my_container_group</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3140" id="container_cli_reference_cfic__d1504e1562"><h3 class="sectiontitle" id="d72e3140"><span class="ph" id="container_cli_reference_cfic__d1504e1564"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd id="container_cli_reference_cfic__d1504e1572">Remover um ou mais grupos de contêineres de um espaço.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1579"><!-- --></a>-f, --force</dt>
+<dd class="pd">(Opcional) Força a remoção de um contêiner em execução ou com falha.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1586"><!-- --></a>GROUP</dt>
+<dd class="pd">(Obrigatório) O ID ou nome do grupo de pelo menos um grupo de contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para remover um grupo de contêiner, em que
+<var class="keyword varname">my_container_group</var> é o nome do
+grupo.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3186" id="container_cli_reference_cfic__d1504e1604"><h3 class="sectiontitle" id="d72e3186"><span class="ph" id="container_cli_reference_cfic__d1504e1606"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update [--desired DESIRED] [-e
+<span class="q">"<var class="keyword varname">KEY</var>=<var class="keyword varname">VALUE</var>"</span>]<span class="ph"> [--max MAX] [--min
+MIN]</span> GROUP </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd id="container_cli_reference_cfic__d1504e1624">Use o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update</samp> para executar as atualizações
+a seguir em seu grupo. <ul id="container_cli_reference_cfic__d1504e1630"><li>Atualize o número desejado de instâncias que são executadas no grupo de contêiner.</li>
+<li>Inclua novas variáveis de ambiente no grupo. </li>
+<li>Atualize o valor de uma variável de ambiente existente.</li>
+</ul>
+<div class="steps note"><span class="notetitle">Nota:</span> É possível executar somente uma atualização de cada vez.</div>
+</dd>
+<dd class="ddexpand"><div class="note tip"><span class="tiptitle">Dica:</span> Para
+atualizar o nome do host ou domínio para um grupo de contêineres, use
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2789">bx ic route-map [-d DOMAIN] [-n HOST] GROUP</a>.</div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml" id="container_cli_reference_cfic__d1504e1648"><dt class="pt dlterm">--desired <var class="keyword varname">DESIRED</var></dt>
+<dd class="pd">(Opcional) O número de instâncias que você precisa. O padrão é <span class="keyword option">2</span>.</dd>
+<dt class="pt dlterm">-e <span class="q">"<var class="keyword varname">KEY</var>=<var class="keyword varname">VALUE</var>"</span></dt>
+<dd class="pd">(Opcional) Inclua uma nova variável de ambiente no grupo de contêiner ou mude o valor de uma
+variável de ambiente existente. </dd>
+<dt class="pt dlterm">--max <var class="keyword varname">MAX</var></dt>
+<dd class="pd">(Opcional) O número máximo de instâncias. O padrão é <span class="keyword option">2</span>.</dd>
+<dt class="pt dlterm">--min <var class="keyword varname">MIN</var></dt>
+<dd class="pd">(Opcional) O número mínimo de instâncias. O padrão é <span class="keyword option">1</span>.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para atualizar o número desejado de instâncias
+de contêiner em um grupo de contêiner denominado <var class="keyword varname">my_container_group</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update --desired <var class="keyword varname">5</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+<dd class="ddexpand">O exemplo a seguir é uma solicitação para incluir uma nova variável de ambiente
+<var class="keyword varname">environment</var> com o valor <var class="keyword varname">Linux</var> em um grupo de contêiner
+chamado
+<var class="keyword varname">my_container_group</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-update -e <span class="q">"<var class="keyword varname">environment</var>=<var class="keyword varname">Linux</var>"</span> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3321" id="container_cli_reference_cfic__d1504e1729"><h3 class="sectiontitle" id="d72e3321"><span class="ph" id="container_cli_reference_cfic__d1504e1731"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd id="container_cli_reference_cfic__d1504e1739">Listar os grupos de contêineres em um espaço.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">(Opcional) Listar o ID do grupo de contêiner de cada grupo de contêiner somente. </dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3355" id="container_cli_reference_cfic__d1504e1757"><h3 class="sectiontitle" id="d72e3355"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images [-a] [-f CONDITION] [--no-trunc] [q]</h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Ver uma lista de todas as imagens disponíveis no registro de imagens privadas do <span class="keyword">Bluemix</span> da organização. Para obter mais informações, consulte
+o comando <a href="https://docs.docker.com/engine/reference/commandline/images" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">imagens</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-a, --all</dt>
+<dd class="pd">(Opcional) Inclui todas as camadas de imagem de cada imagem no registro de sua organização, não
+apenas a camada mais recente.</dd>
+</dl>
+
+
+<dl class="parml"><dt class="pt dlterm">-f, --filter <var class="keyword varname">CONDITION</var></dt>
+<dd class="pd">(Opcional) Filtrar a lista de imagens pela condição fornecida.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">--no-trunc</dt>
+<dd class="pd">(Opcional) Não truncar a saída.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-q, --quiet</dt>
+<dd class="pd">(Opcional) Exibir somente os IDs numéricos.</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1805"><!-- --></a>Respostas</dt>
+<dd>Você recebe uma lista de imagens que incluem o ID da imagem, a data de criação e o nome da
+imagem.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para receber uma lista de imagens disponíveis para a
+organização.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3423" id="container_cli_reference_cfic__d1504e1818"><h3 class="sectiontitle" id="d72e3423"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> info [--json]</samp></h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1825"><!-- --></a>Propósito</dt>
+<dd>Receber um conjunto de informações que descrevam o estado da instância de
+serviço de nuvem do contêiner.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">--json</var></dt>
+<dd class="pd">(Opcional) Estrutura da saída do comando no formato JSON.</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1841"><!-- --></a>Respostas</dt>
+<dd>Você recebe uma leitura que inclui informações sobre o limite de contêineres, uso de contêineres,
+contêineres que estão em execução, limite de memória, uso de memória, limite de IP flutuante, uso de IP flutuante, URL
+do host de CCS, URL do host de registro e status do modo de depuração.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para receber informações sobre
+a instância de serviço de nuvem do contêiner.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> info</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3463" id="container_cli_reference_cfic__d1504e1854"><h3 class="sectiontitle" id="d72e3463"><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Inicialize a CLI do <span class="keyword">IBM
+Bluemix Container Service</span>. <div class="steps note" id="container_cli_reference_cfic__d1504e1868"><span class="notetitle">Nota:</span> Antes de efetuar login, deve-se assegurar que a ferramenta de comando do Cloud Foundry (cf)
+esteja instalada, assim como o Docker CLI (docker), e que ambos estejam configurados no caminho
+do ambiente.</div>
+<div class="note tip" id="container_cli_reference_cfic__d1504e1870"><span class="tiptitle">Dica:</span> Para
+alternar para outra região, especifique o terminal de API para essa região quando efetuar login no Cloud
+Foundry CLI, não no <span class="keyword">IBM
+Bluemix Container Service</span> CLI.
+<ul id="container_cli_reference_cfic__d1504e1874"><li>Sul dos EUA:<pre class="codeblock"><code>bx login -a api.ng.bluemix.net</code></pre>
+</li>
+<li>Reino Unido:<pre class="codeblock"><code>bx login -a api.eu-gb.bluemix.net</code></pre>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3515" id="container_cli_reference_cfic__d1504e1890"><h3 class="sectiontitle" id="d72e3515"><span class="ph" id="container_cli_reference_cfic__d1504e1892"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect [IMAGE | images | CONTAINER] </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e1901">Recuperar informações sobre um ou mais contêineres ou
+imagens de contêiner.</span> Somente uma das opções IMAGE, imagens ou CONTAINER pode ser especificada de cada vez. Para obter mais informações, consulte
+o comando <a href="https://docs.docker.com/engine/reference/commandline/inspect" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">inspect</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1911"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) Obtenha informações detalhadas sobre um contêiner específico especificando o nome ou o ID
+do contêiner. É possível recuperar informações de vários contêineres listando seus nomes
+ou IDs no comando com um espaço entre eles </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">(Necessário) Obtenha informações detalhadas sobre uma imagem específica especificando o caminho de registro
+privado completo do <span class="keyword">Bluemix</span> para sua imagem.
+É possível recuperar informações para múltiplas imagens listando cada caminho de registro no comando com um
+espaço intermediário </dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">imagens</dt>
+<dd class="pd">(Necessário) Obtenha informações detalhadas sobre todas as imagens em seu registro.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para inspecionar um contêiner denominado
+<kbd class="ph userinput">my_container</kbd>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3579" id="container_cli_reference_cfic__d1504e1947"><h3 class="sectiontitle" id="d72e3579"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind ADDRESS CONTAINER </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e1953"><!-- --></a>Propósito</dt>
+<dd>Ligar um endereço IP flutuante disponível a um contêiner único. <div class="steps note"><span class="notetitle">Nota:</span> Para ligar um endereço IP flutuante
+a um grupo de contêiner, use a sinalização <samp class="ph codeph">--ip</samp> no comando <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e828"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp></a>.</div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1973"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">(Necessário) O endereço IP a ser ligado ao contêiner único.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e1979"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do contêiner a ser ligado ao endereço IP.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para ligar o endereço IP 192.0.2.23 ao contêiner com o nome
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">192.0.2.23</var> <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3639" id="container_cli_reference_cfic__d1504e2001"><h3 class="sectiontitle" id="d72e3639"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release ADDRESS </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2007"><!-- --></a>Propósito</dt>
+<dd>Liberar um endereço IP flutuante. Depois que um endereço IP flutuante é liberado, ele não pode ser ligado a um
+contêiner único ou um grupo de contêiner no espaço. </dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2017"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">(Necessário) O endereço IP para liberação.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para liberar o endereço IP
+192.0.2.23<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release <var class="keyword varname">192.0.2.23</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3676" id="container_cli_reference_cfic__d1504e2034"><h3 class="sectiontitle" id="d72e3676"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request [-q]</h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2040"><!-- --></a>Propósito</dt>
+<dd>Solicitar um novo IP flutuante.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">(Opcional) Somente o endereço IP é exibido na saída de comando. Nenhuma mensagem de texto é
+incluída.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para um novo endereço IP flutuante.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3709" id="container_cli_reference_cfic__d1504e2063"><h3 class="sectiontitle" id="d72e3709"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind ADDRESS CONTAINER </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2069"><!-- --></a>Propósito</dt>
+<dd>Desvincular um endereço IP flutuante de um contêiner único. <div class="steps note"><span class="notetitle">Nota:</span> Para desvincular o endereço IP de um
+grupo de contêiner, remova o grupo de contêiner e recrie o grupo sem o endereço IP.</div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2081"><!-- --></a><var class="keyword varname">ADDRESS</var></dt>
+<dd class="pd">(Necessário) O endereço IP que está sendo desvinculado.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2087"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do contêiner que está sendo desvinculado.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para desvincular o endereço IP 192.0.2.23 do contêiner com o
+nome
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">192.0.2.23</var> <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3759" id="container_cli_reference_cfic__d1504e2109"><h3 class="sectiontitle" id="d72e3759"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips [-q] </h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2115"><!-- --></a>Propósito</dt>
+<dd>Listar os endereços IP flutuantes disponíveis da organização e os IDs dos contêineres
+únicos ou grupos que são ligados a esses endereços IP.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-q</dt>
+<dd class="pd">(Opcional) Listar somente os endereços IP, sem os IDs para os contêineres únicos que são ligados
+a esses endereços IP.</dd>
+</dl>
+</dd>
+<dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2130"><!-- --></a>Respostas</dt>
+<dd>Você recebe uma lista de endereços IP e o ID do contêiner único ao qual eles estão vinculados. Se
+o endereço IP não for usado, nenhum ID do contêiner será mostrado.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2139">O exemplo a seguir é um solicitação para receber uma lista de todos os endereços
+IP para a organização, se eles estão disponíveis para uso ou
+não.</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-list -q</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3798" id="container_cli_reference_cfic__d1504e2144"><h3 class="sectiontitle" id="d72e3798"><span class="ph"><samp class="ph codeph">bx ic</samp></span> kill [-s
+CMD] CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Parar um processo em execução em um ou mais contêineres sem parar o contêiner. Para obter mais informações,
+consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/kill/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">kill</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O ID ou nome do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes ou IDs no comando com um
+espaço entre eles</dd>
+<dt class="pt dlterm">-s, --signal <var class="keyword varname">CMD</var></dt>
+<dd class="pd">(Opcional) Enviar qualquer comando para o processo que está em execução no contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para encerrar o processo em um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> kill <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3847" id="container_cli_reference_cfic__d1504e2188"><h3 class="sectiontitle" id="d72e3847"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs [-f | --since TIMESTAMP  | --tail
+STRING | -t] CONTAINER </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2198">Mostrar os logs de saída ou de erro para um contêiner em execução.</span> Para obter mais
+informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/logs" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Registros do</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2208"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O nome ou o ID do contêiner.</dd>
+<dt class="pt dlterm">-f, --follow</dt>
+<dd class="pd"><p>(Opcional) Incluir nova saída dos arquivos de log <samp class="ph codeph">STDOUT</samp> e <samp class="ph codeph">STDERR</samp>
+para o contêiner.</p>
+</dd>
+<dt class="pt dlterm">--since TIMESTAMP</dt>
+<dd class="pd">(Opcional) Mostrar todos os logs desde o registro de data e hora. </dd>
+<dt class="pt dlterm">--tail STRING</dt>
+<dd class="pd">(Opcional) Especificar o número das linhas de logs mais recentes a serem mostradas. O padrão é mostrar
+todos os logs.</dd>
+<dt class="pt dlterm">-t, --timestamps</dt>
+<dd class="pd">(Opcional) Exibir os registros de data e hora nos logs.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para obter o log de saída para um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs -o <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3918" id="container_cli_reference_cfic__d1504e2254"><h3 class="sectiontitle" id="d72e3918"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-[get | set] NAME</h3>
+<dl><dt class="dlterm"><a name="container_cli_reference_cfic__d1504e2260"><!-- --></a>Propósito</dt>
+<dd>Configurar ou recuperar o nome do registro de imagens privadas do <span class="keyword">Bluemix</span> para a organização com o qual
+o usuário efetuou login. </dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2272"><!-- --></a>get</dt>
+<dd class="pd">(Opcional) Solicite o namespace para o registro de imagens privadas de sua organização.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2277"><!-- --></a>set <var class="keyword varname">NAME</var></dt>
+<dd class="pd">(Opcional) Uma função única para configurar o namespace do registro de imagens privadas de sua
+organização, se ainda não estiver configurado. Depois de configurar o namespace, efetue logout e login no <span class="keyword">IBM
+Bluemix Container Service</span> CLI antes de continuar. <div class="note restriction"><span class="restrictiontitle">Restrição:</span> Não é possível usar um hífen (-) no nome do
+namespace do registro.</div>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para consultar o namespace para a organização na qual o usuário
+efetuou login.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e3972" id="container_cli_reference_cfic__d1504e2296"><h3 class="sectiontitle" id="d72e3972"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pause CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2306">Pausar todos os processos em um ou mais contêineres em
+execução.</span> Para obter mais
+informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/pause" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">pause</a> na ajuda do Docker. Para iniciar o contêiner novamente, execute o comando
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3682">unpause</a>.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2319"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O nome ou ID do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes ou IDs no comando com um
+espaço entre eles</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para pausar um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> pause <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4019" id="container_cli_reference_cfic__d1504e2338"><h3 class="sectiontitle" id="d72e4019"><span class="ph" id="container_cli_reference_cfic__d1504e2340"><span class="ph"><samp class="ph codeph">bx ic</samp></span> port
+CONTAINER</span> [PRIVATE_PORT[/PROTOCOL]]</h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2350">Listar todos os mapeamentos de portas para um contêiner ou recuperar a porta pública e o
+endereço IP que está mapeado para a sua porta privada. </span>Para obter mais informações, consulte o comando
+<a href="https://docs.docker.com/engine/reference/commandline/port" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">port</a>
+na ajuda do Docker.</dd>
+</dl>
+
+<dl><dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e2360"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do contêiner.</dd>
+<dt class="pt dlterm"><var class="keyword varname">PRIVATE PORT</var></dt>
+<dd class="pd">(Opcional) A porta privada para a qual você deseja consultar a porta pública e o
+endereço IP designados. </dd>
+<dt class="pt dlterm"><var class="keyword varname">PROTOCOL</var></dt>
+<dd class="pd">(Opcional) O protocolo que foi designado à sua porta privada. Ele pode ser
+<var class="keyword varname">tcp</var> ou <var class="keyword varname">udp</var>.</dd>
+</dl>
+</dd>
+</dl>
+
+<dl><dt class="dlterm">Exemplo</dt>
+<dd id="container_cli_reference_cfic__d1504e2391">O exemplo a seguir é uma solicitação para listar todos os mapeamentos de porta e IP para um
+contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> port <var class="keyword varname">my_container</var></code></pre>
+</dd>
+<dt class="dlterm">Saída do Sistema</dt>
+<dd><pre class="codeblock"><code><samp class="ph systemoutput">9080/tcp -&gt; 192.0.2.25:9080</samp></code></pre>
+</dd>
+<dd class="ddexpand">Neste exemplo, <samp class="ph systemoutput">9080/tcp</samp> é a sua porta privada que está usando o
+protocolo TCP/IP. Ela é mapeada para o endereço IP público <samp class="ph systemoutput">192.0.2.25</samp> e
+a porta pública <samp class="ph systemoutput">9080</samp>.</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4105" id="container_cli_reference_cfic__d1504e2419"><h3 class="sectiontitle" id="d72e4105"><span class="ph" id="container_cli_reference_cfic__d1504e2421"><span class="ph"><samp class="ph codeph">bx ic</samp></span> <span class="ph" id="container_cli_reference_cfic__d1504e2424">ps [-a] [--filter
+env=<var class="keyword varname">SEARCH_CRITERIA</var>] [-l <var class="keyword varname">NUM</var>] [-q] [-s]</span></span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2438">Recuperar uma lista de contêineres que estão em execução no espaço. Por padrão,
+somente contêineres em execução são exibidos.</span> Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/ps" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">ps</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e2446"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2448"><!-- --></a>-a, --all</dt>
+<dd class="pd">(Opcional) Mostrar todos os contêineres no espaço, em execução e interrompidos. </dd>
+<dt class="pt dlterm">--filter env=<var class="keyword varname">SEARCH_CRITERIA</var></dt>
+<dd class="pd">(Opcional) Contêineres de procura que têm um valor específico de variável de ambiente. É possível filtrar seus contêineres por qualquer chave ou valor de variável de
+ambiente que está listado na seção <var class="keyword varname">Env</var> da resposta
+da CLI ao inspecionar um contêiner. Substitua
+<var class="keyword varname">SEARCH_CRITERIA</var> pela chave ou valor que você está procurando. Seus
+critérios de procura não precisam ser uma correspondência exata. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2466"><!-- --></a>-l <var class="keyword varname">NUM</var>, --limit <var class="keyword varname">NUM</var></dt>
+<dd class="pd">(Opcional) Listar os contêineres criados mais recentemente, em que <var class="keyword varname">NUM</var> é
+o número dos contêineres criados mais recentemente que você deseja
+retornar. <p>Por exemplo, se você criou
+os contêineres node1 a node5 sequencialmente, a opção <samp class="ph codeph">--limit 2</samp> retornará node4
+e node5 porque são os dois últimos contêineres que foram criados.</p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2484"><!-- --></a>-q, --quiet</dt>
+<dd class="pd">(Opcional) Exibir somente IDs dos contêineres.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2489"><!-- --></a>-s, --size</dt>
+<dd class="pd">(Opcional) Listar os tamanhos dos contêineres.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplos</dt>
+<dd><div class="p">O exemplo a seguir é uma solicitação para ver todos os contêineres,
+em execução e interrompidos.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</div>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4194" id="container_cli_reference_cfic__d1504e2503"><h3 class="sectiontitle" id="d72e4194"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rename OLD_NAME NEW_NAME </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Renomear um contêiner. Para obter mais informações, consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/rename" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">rename</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">NEW_NAME</var></dt>
+<dd class="pd">(Necessário) Um novo nome para o contêiner.</dd>
+<dt class="pt dlterm"><var class="keyword varname">OLD_NAME</var></dt>
+<dd class="pd">(Necessário) O nome antigo do contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para renomear um contêiner que é atualmente denominado
+<var class="keyword varname">my_container</var> para
+<var class="keyword varname">container_renamed</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rename <var class="keyword varname">my_container</var> <var class="keyword varname">container_renamed</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4248" id="container_cli_reference_cfic__d1504e2552"><h3 class="sectiontitle" id="d72e4248"><span class="ph"><samp class="ph codeph">bx ic</samp></span> reprovision [-f]
+[AVAILABILITY_ZONE]</h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Mudar a zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span>
+de um espaço. A cota original para o espaço é mantida. Ao implementar seu app em múltiplos
+grupos de contêineres em diferentes zonas de disponibilidade, você está criando maior disponibilidade para seu app
+no caso de falhas de hardware.<div class="note attention"><span class="attentiontitle">Atenção:</span> Quando você executar esse comando, todos os contêineres
+únicos e grupos, endereços IP públicos e volumes nesse espaço não serão migrados para a nova
+zona de disponibilidade e serão removidos durante o processo de migração. As imagens não serão afetadas.
+<a href="container_volumes_ov.html#container_volume_different_dc" title="Se você planeja mover seu espaço atual do Bluemix para um novo datacenter, assegure-se de que seus volumes sejam submetidos a backup para que você possa restaurar e usar os dados no novo datacenter.">Faça backup de seus volumes</a> para assegurar-se de que possa restaurar
+os dados depois de ter migrado para a nova zona de disponibilidade. </div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">AVAILABILITY_ZONE</dt>
+<dd class="pd">(Opcional) O nome da zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span>
+na qual seus contêineres são implementados. Se nenhuma zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span> for especificada, a
+zona de disponibilidade padrão do <span class="keyword">IBM
+Bluemix Container Service</span> que
+estiver configurada para a região será usada.<div class="note important"><span class="importanttitle">Importante:</span> Se uma zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span> for incluída, a
+opção <samp class="ph codeph">-f</samp> também deverá ser incluída.</div>
+<div class="tablenoborder"><table summary="Zonas de disponibilidade do IBM Bluemix Container Service" id="container_cli_reference_cfic__d1504e2593" class="defaultstyle"><caption><span class="tablecap">Tabela 7. Zonas de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span></span></caption><thead><tr><th id="d72e4352" class="thleft">Região</th>
+<th id="d72e4354" class="thleft">Local do datacenter</th>
+<th id="d72e4356" class="thleft">Nomes da zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span></th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e4352 ">SUL dos EUA</td>
+<td headers="d72e4354 ">Dallas 1</td>
+<td headers="d72e4356 ">dal09-01</td>
+</tr>
+<tr><td headers="d72e4352 ">SUL dos EUA</td>
+<td headers="d72e4354 ">Dallas 2</td>
+<td headers="d72e4356 ">dal09-02</td>
+</tr>
+<tr><td headers="d72e4352 ">SUL dos EUA</td>
+<td headers="d72e4354 ">Dallas 3</td>
+<td headers="d72e4356 ">dal10-03</td>
+</tr>
+<tr><td headers="d72e4352 ">United Kingdom</td>
+<td headers="d72e4354 ">Londres</td>
+<td headers="d72e4356 ">lon02-01</td>
+</tr>
+<tr><td headers="d72e4352 ">United Kingdom</td>
+<td headers="d72e4354 ">Amsterdã</td>
+<td headers="d72e4356 ">ams03-01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm">-f, --force</dt>
+<dd class="pd">(Opcional) Força a recriação do <span class="keyword">IBM
+Bluemix Container Service</span> no espaço do <span class="keyword">Bluemix</span>.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para mudar a zona de disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span> do espaço atual
+para <kbd class="ph userinput">dal09-02</kbd>.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> reprovision -f dal09-02</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4443" id="container_cli_reference_cfic__d1504e2624"><h3 class="sectiontitle" id="d72e4443"><span class="ph"><samp class="ph codeph">bx ic</samp></span> restart CONTAINER [CONTAINER] [-t SECS] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2634">Reiniciar um ou mais contêineres.</span> Para obter mais informações, consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/restart" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">restart</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2644"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O nome ou ID do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes ou IDs no comando com um
+espaço entre eles </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2650"><!-- --></a>-t <var class="keyword varname">SECS</var>, --time <var class="keyword varname">SECS</var></dt>
+<dd class="pd">O número de segundos a aguardar antes que o contêiner seja reiniciado.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para reiniciar um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> restart <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4497" id="container_cli_reference_cfic__d1504e2673"><h3 class="sectiontitle" id="d72e4497"><span class="ph" id="container_cli_reference_cfic__d1504e2675"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2684">Remover um ou mais contêineres.</span> Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/rm" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">rm</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e2692"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2694"><!-- --></a><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O nome ou ID do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes ou IDs no comando com um
+espaço entre eles</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2702"><!-- --></a>-f, --force</dt>
+<dd class="pd">(Opcional) Força a remoção de um contêiner em execução ou com falha.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para remover um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4549" id="container_cli_reference_cfic__d1504e2720"><h3 class="sectiontitle" id="d72e4549"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi [-R REGISTRY] IMAGE [IMAGE] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2730">Remover uma ou mais imagens do registro de imagens privadas do <span class="keyword">Bluemix</span> da
+organização conectada.</span> Para obter mais informações,
+consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/rmi" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">rmi</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2742"><!-- --></a><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">(Necessário) O caminho do registro privado completo do <span class="keyword">Bluemix</span>
+para a imagem que você deseja remover. Se uma tag não for especificada no caminho da
+imagem, a imagem identificada como <samp class="ph codeph">latest</samp> será excluída por padrão. É possível executar esse comando com múltiplas
+imagens listando cada caminho de registro privado do <span class="keyword">Bluemix</span>
+no comando com um espaço intermediário. </dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2755"><!-- --></a>-R <var class="keyword varname">REGISTRY</var>, --registry <var class="keyword varname">REGISTRY</var></dt>
+<dd class="pd">(Opcional) Mudar o host do registro. O padrão é usar o registro que você usou com o
+comando <span class="keyword cmdname">init</span>.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para remover a imagem
+<samp class="ph codeph">mynamespace/myimage:latest</samp>:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">myimage</var>:<var class="keyword varname">latest</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4630" id="container_cli_reference_cfic__d1504e2789"><h3 class="sectiontitle" id="d72e4630"><span class="ph" id="container_cli_reference_cfic__d1504e2791"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-map [-d DOMAIN] [-n HOST] GROUP </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2800">Estabelecer a rota para que o tráfego da Internet use para acessar um grupo de
+contêiner. É possível usar esse comando para estabelecer uma nova rota ou atualizar uma rota existente. </span></dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e2805"><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2807"><!-- --></a>-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">(Opcional) O nome do domínio para a rota, que é a segunda parte da URL da rota pública completa.
+Na maioria dos casos, o domínio é <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>. Também
+é possível usar esse parâmetro para especificar um domínio customizado. Se você usar um
+domínio customizado, não inclua sublinhados (_) no nome do domínio.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2820"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do grupo.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2826"><!-- --></a>-n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">(Opcional) O nome do host para a rota. Não inclua sublinhados (_) no nome do host. O nome do host é a primeira parte da URL integral
+da rota pública, como <var class="keyword varname">mycontainerhost</var> na URL
+<samp class="ph codeph"><var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para mapear a rota para um grupo de contêiner denominado
+<samp class="ph codeph">my_container_group</samp>. O nome do host é <samp class="ph codeph">my_host</samp> e <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> é o
+domínio.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-map -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">my_host</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4718" id="container_cli_reference_cfic__d1504e2869"><h3 class="sectiontitle" id="d72e4718"><span class="ph" id="container_cli_reference_cfic__d1504e2871"><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap [-d DOMAIN] [-n HOST] GROUP </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2880">Remover mapeamento da rota de um grupo de contêiner. Um grupo que não tem
+uma rota não é acessível a partir da Internet.</span></dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2887"><!-- --></a>-d <var class="keyword varname">DOMAIN</var>, --domain <var class="keyword varname">DOMAIN</var></dt>
+<dd class="pd">(Opcional) O nome do domínio para a rota.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2897"><!-- --></a><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do grupo.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e2903"><!-- --></a>-n <var class="keyword varname">HOST</var>, --hostname <var class="keyword varname">HOST</var></dt>
+<dd class="pd">(Opcional) O nome do host para a rota.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para remover o mapeamento da rota para o grupo denominado
+<samp class="ph codeph">my_container_group</samp>, em que <samp class="ph codeph">my_host</samp> é o nome do host e
+<samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> é o
+domínio.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -n <var class="keyword varname">my_host</var> <var class="keyword varname">my_container_group</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e4792" id="container_cli_reference_cfic__d1504e2937"><h3 class="sectiontitle" id="d72e4792"><span class="ph" id="container_cli_reference_cfic__d1504e2939"><span class="ph"><samp class="ph codeph">bx ic</samp></span><span class="ph" id="container_cli_reference_cfic__d1504e2941"> run [-p PORT] [-P] [-d] [-e ENV] [--env-file
+ENVFILE] [-it] [--link NAME:ALIAS] [-m MEMORY] --name NAME [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD [CMD ...]] </span></span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd><span class="ph" id="container_cli_reference_cfic__d1504e2949">Iniciar um novo contêiner no serviço de nuvem do contêiner a partir de um nome de
+imagem.</span> Por padrão, o contêiner no <span class="keyword">Bluemix</span> é executado no modo separado. Para obter mais informações, consulte o comando <a href="https://docs.docker.com/engine/reference/commandline/run" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">execução</a> na ajuda do Docker.<div class="steps note"><span class="notetitle">Nota:</span> Deve-se assegurar que a ferramenta de comando do Cloud Foundry esteja
+instalada e que você tenha um token do Cloud Foundry. O login bem-sucedido usando <samp class="ph codeph">bx login</samp> e
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp> gera o
+token necessário. </div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e2968"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CMD</var></dt>
+<dd class="pd">(Opcional) O comando e os argumentos são transmitidos ao contêiner para execução. Esse deve ser um comando de longa execução. Não use
+um comando de curta duração, por exemplo, <span class="keyword cmdname">/bin/date</span>,
+porque ele poderia causar travamento do contêiner.<div class="p">Exemplo de comandos
+de longa execução, supondo que você esteja usando a imagem <span class="keyword option">ibmnode</span>
+fornecida no registro do <span class="keyword">IBM
+Bluemix Container Service</span>:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> ping localhost</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- tail -f /dev/null</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmnode</var> -- sh -c <span class="q">"while true; do date; sleep 20; done"</span></code></pre>
+<div class="steps note"><span class="notetitle">Nota:</span> O CMD e seus argumentos devem vir no término da linha de comandos <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp>.</div>
+</div>
+</dd>
+<dt class="pt dlterm">-d</dt>
+<dd class="pd">(Opcional) Execute o contêiner no modo separado. Os contêineres são executados no modo separado por padrão quando
+você usa <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp>. No modo
+separado, quando o processo raiz no contêiner sai, o contêiner também sai. Por exemplo, ao
+implementar um contêiner a partir da imagem ibmnode, seu contêiner é encerrado imediatamente depois de ser construído,
+uma vez que não existe processo de execução longa. <div class="note tip"><span class="tiptitle">Dica:</span> Se você optar por usar <samp class="ph codeph">docker run</samp>
+em vez de <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp>, a
+opção <samp class="ph codeph">-d</samp> será necessária.</div>
+</dd>
+<dt class="pt dlterm">-e <var class="keyword varname">ENV</var>, --env <var class="keyword varname">ENV</var></dt>
+<dd class="pd">(Opcional) Configurar diversas variáveis de ambiente, em que <span class="keyword option">ENV</span> seja
+um par <samp class="ph codeph">key=value</samp>. Liste diversas chaves
+separadamente e, se você incluir aspas, as inclua no nome e
+valor da variável de ambiente. <p>Exemplo</p>
+<samp class="ph codeph">-e
+<span class="q">"<var class="keyword varname">key1</var>=<var class="keyword varname">value1</var>"</span> -e
+<span class="q">"<var class="keyword varname">key2</var>=<var class="keyword varname">value2</var>"</span> -e
+<span class="q">"<var class="keyword varname">key3</var>=<var class="keyword varname">value3</var>"</span></samp><div class="p"><div class="tablenoborder"><table summary="" id="container_cli_reference_cfic__d1504e3089" class="defaultstyle"><caption><span class="tablecap">Tabela 8. Variáveis de ambiente sugeridas</span></caption><thead><tr><th id="d72e4979" class="thleft">Variável de Ambiente</th>
+<th id="d72e4981" class="thleft">Descrição</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d72e4979 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d72e4981 ">Alguns serviços do
+<span class="keyword">Bluemix</span> não
+suportam a ligação direta com um contêiner. Nesse caso, é preciso criar um app Cloud
+Foundry e ligar o serviço do
+<span class="keyword">Bluemix</span> a ele. Em
+seguida, você liga o app ao contêiner usando <samp class="ph codeph">CCS_BIND_APP</samp>. O app Cloud
+Foundry age como ponte e permite que o
+<span class="keyword">Bluemix</span> injete as
+informações de VCAP_SERVICES do seu app ponte na instância do contêiner em execução. </td>
+</tr>
+<tr><td headers="d72e4979 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">Nota:</span>  Quando um serviço não suportar o uso da variável de ambiente <samp class="ph codeph">CCS_BIND_SRV=</samp>,
+use <samp class="ph codeph">CCS_BIND_APP=</samp>.</div>
+</td>
+<td headers="d72e4981 ">Para ligar um serviço do
+<span class="keyword">Bluemix</span> diretamente
+a um contêiner sem usar um app ponte, use <samp class="ph codeph">CCS_BIND_SRV</samp>. Essa ligação permite que o <span class="keyword">Bluemix</span> injete as informações de VCAP_SERVICES
+na instância de contêiner em execução. Para listar vários serviços do
+<span class="keyword">Bluemix</span>, inclua-os
+como parte da mesma variável de ambiente.</td>
+</tr>
+<tr><td headers="d72e4979 "><div class="lines">(Descontinuado) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d72e4981 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">Essa variável de ambiente foi descontinuada:</span> Em
+seu lugar, use <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+<samp class="ph codeph">exec</samp> ou
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp>
+para acesso externo aos contêineres. Para obter mais informações, consulte
+<a href="container_security.html#container_cli_login_exec" title="Se você tiver que efetuar login no contêiner em execução, será possível usar bx ic exec.">Efetuando login em um contêiner com exec</a>.</div>
+<span class="ph">Para
+incluir uma chave SSH em um contêiner quando criá-lo, é possível usar <samp class="ph codeph">CCS_API_KEY</samp>.</span></td>
+</tr>
+<tr><td headers="d72e4979 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d72e4981 "><span class="ph" id="container_cli_reference_cfic__d1504e1129-d1500e3787a1310">Para incluir um arquivo de log para que seja monitorado no contêiner, inclua a
+variável de ambiente <samp class="ph codeph">LOG_LOCATIONS</samp> com um caminho no arquivo de log.</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</dd>
+<dt class="pt dlterm">--env-file <var class="keyword varname">ENVFILE</var></dt>
+<dd class="pd">(Opcional) Importe as variáveis de ambiente de um arquivo em que
+<var class="keyword varname">ENVFILE</var> é o caminho para o arquivo no diretório local. Cada linha no
+arquivo representa um par <samp class="ph codeph">key=value</samp>. <p>Exemplo</p>
+<pre class="codeblock"><code>KEY1=VALUE1
+KEY2=VALUE2</code></pre>
+</dd>
+<dt class="pt dlterm"><var class="keyword varname">IMAGE</var></dt>
+<dd class="pd">(Obrigatório) A imagem a ser incluída no contêiner. É possível listar comandos após
+a imagem, mas
+não coloque nenhuma opção após a imagem; inclua todas as opções antes de
+especificar uma imagem.<p>Se você estiver
+usando uma imagem no registro privado do <span class="keyword">Bluemix</span> de sua organização, especifique a imagem no
+formato a seguir: <samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">NAMESPACE</var>/<var class="keyword varname">IMAGE</var></samp></p>
+<p>Se estiver usando uma imagem
+que é fornecida pelo <span class="keyword">IBM
+Bluemix Container Service</span>, especifique
+a imagem no formato a seguir: <samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">IMAGE</var></samp></p>
+</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e3140"><!-- --></a>-it</dt>
+<dd class="pd">(Opcional) Executar o contêiner no modo interativo. Depois que o contêiner for criado, mantenha a
+exibição de entrada padrão. Digite
+<kbd class="ph userinput">exit</kbd> para sair.</dd>
+<dt class="pt dlterm">--link <var class="keyword varname">NAME</var>:<var class="keyword varname">ALIAS</var></dt>
+<dd class="pd">(Opcional) Sempre que desejar que um contêiner se comunique com outro contêiner que está em execução,
+você pode endereçá-lo usando um alias para o nome do host. Para obter informações adicionais, consulte <a href="container_single_ui.html#container_linking" title="Quando um contêiner é vinculado a um outro contêiner no mesmo espaço, o IBM Bluemix Container Service cria uma entrada de host no contêiner destinatário para o contêiner de origem. É possível usar um alias para referir-se ao contêiner de origem, em vez de um endereço IP específico que pode ser mudado frequentemente.">Vinculando contêineres únicos com a interface da linha de comandos (CLI)</a>.</dd>
+<dt class="pt dlterm">-m <var class="keyword varname">MEMORY</var>, --memory <var class="keyword varname">MEMORY</var></dt>
+<dd class="pd">(Opcional) <span class="ph" id="container_cli_reference_cfic__d1504e1282-d1500e3880a1310">Insira um limite de memória para o contêiner em MB. O limite de memória
+faz parte do tamanho do contêiner que define a quantia máxima de memória e o espaço em disco que um contêiner
+obtém no host de cálculo durante o tempo de execução. Depois que um tamanho de contêiner é designado, não é possível mudar
+o valor.</span> Os tamanhos
+disponíveis no <span class="keyword">IBM
+Bluemix Container Service</span> são: <ul data-hd-audience="yellow" id="container_cli_reference_cfic__d1504e1287-d1500e3891a1310"><li>Pico (64 MB de memória, 4 GB de espaço em disco)</li>
+<li>Nano (128 MB de memória, 8 GB de espaço em disco)</li>
+<li>Micro (256 MB de memória, 16 GB de espaço em disco)</li>
+<li>Minúsculo (512 MB de memória, 32 GB de espaço em disco)</li>
+<li>Pequeno (1024 MB de memória, 64 GB de espaço em disco)</li>
+<li>Médio (2048 MB de memória, 128 GB de espaço em disco)</li>
+<li>Grande (4096 MB de memória, 256 GB de espaço em disco)</li>
+<li>Extra grande (8192 MB de memória, 512 GB de espaço em disco)</li>
+<li>Duplamente grande (16384 MB de memória, 1 TB de espaço em disco) </li>
+</ul>
+Se você não configurar um tamanho para seu contêiner, cada instância de contêiner será criada com
+<span class="keyword option">256</span> MB. <div class="note important"><span class="importanttitle">Importante:</span> Insira a memória do contêiner em MB sem o rótulo de unidade. Por exemplo, se você desejar criar um contêiner pico, insira <samp class="ph codeph">-m 64</samp>.</div>
+</dd>
+<dt class="pt dlterm">--name <var class="keyword varname">NAME</var></dt>
+<dd class="pd">(Necessário) Designar um nome ao contêiner. <div class="note tip"><span class="tiptitle">Dica:</span> O nome do contêiner
+deve iniciar com uma letra e, em seguida, pode incluir letras maiúsculas, letras minúsculas, números,
+pontos (.), sublinhados (_) ou hifens (-).</div>
+</dd>
+<dt class="pt dlterm">-p <var class="keyword varname">PORT</var>, --publish <var class="keyword varname">PORT</var></dt>
+<dd class="pd"><p>(Opcional) <span class="ph" id="container_cli_reference_cfic__d1504e3184">Se desejar tornar seu app acessível na Internet, uma porta
+pública deverá ser exposta. Ao expor uma
+porta pública, você cria um Grupo de segurança de rede pública para seu contêiner que permite enviar
+e receber dados públicos somente na porta exposta. Todas as outras portas públicas estão encerradas e não podem ser
+usadas para acessar seu app na Internet. É possível incluir várias portas com várias
+opções <span class="keyword option">-p</span>. As portas não podem ser mapeadas ou
+encaminhadas. Se você não expuser uma porta, seu contêiner será acessível somente a partir da rede de contêiner
+privada. É
+possível usar o endereço IP privado designado para se comunicar com seu contêiner na rede privada.</span></p>
+
+<div class="p">Se uma porta for especificada no Dockerfile para a
+imagem que você está usando, inclua essa porta.<div class="note tip"><span class="tiptitle">Dica:</span> <ul id="container_cli_reference_cfic__d2114e233-d1500e3948a1310"><li>Para a imagem do Liberty Server certificada pela IBM ou uma versão
+modificada dessa imagem, insira a porta <kbd class="ph userinput">9080</kbd>.</li>
+<li>Para a imagem do Node.js certificada pela IBM ou uma versão modificada
+dessa imagem, insira qualquer porta, como a porta <kbd class="ph userinput">8000</kbd>.</li>
+</ul>
+</div>
+</div>
+
+<p>É possível escolher entre UDP e TCP para
+indicar o protocolo IP que você deseja usar. Se você não especificar um protocolo, a
+porta será automaticamente exposta para tráfego TCP. </p>
+
+<div class="p">Exemplos<ul id="container_cli_reference_cfic__d1504e3197"><li><samp class="ph codeph">-p 9080</samp></li>
+<li><samp class="ph codeph">-p 9080/udp</samp></li>
+<li><samp class="ph codeph">-p 9080/udp -o 8000/tcp</samp></li>
+</ul>
+</div>
+
+<p>Se você tiver um endereço IP existente no espaço que deseja ligar ao contêiner, será possível
+especificar o endereço IP com as informações da porta. Inclua o endereço IP,
+a porta ou o endereço
+IP e o número da porta do contêiner, como
+<var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;port_on_IP&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var>.
+A porta no endereço IP deve corresponder à porta do contêiner exposta no
+Dockerfile. </p>
+
+<div class="p">Exemplo<pre class="codeblock"><code>-p 192.0.2.23:9080:9080</code></pre>
+</div>
+
+<div class="steps note" id="container_cli_reference_cfic__d1504e3226"><span class="notetitle">Nota:</span> Ligar um endereço IP público não inclui um certificado SSL que criptografa os
+dados que são enviados de e para o contêiner único. Se seu app requerer criptografia SSL, será possível
+implementar sua própria solução SSL ou usar um grupo de contêiner, em vez de um contêiner único.
+Os grupos de contêineres são ligados a uma rota pública que já inclui um certificado SSL para que você possa
+acessar seu grupo de contêiner com HTTPS sem nenhuma configuração adicional. Para obter mais informações,
+consulte <a href="container_ha.html#container_group_ui" title="Crie e implemente um contêiner de grupo escalável a partir da GUI do Bluemix. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">Criando um grupo de contêiner com a
+GUI do Bluemix</a>.</div>
+</dd>
+<dt class="pt dlterm">-P</dt>
+<dd class="pd">(Opcional) Expor automaticamente as portas que estão especificadas no Dockerfile da imagem para tráfego
+HTTP.</dd>
+<dt class="pt dlterm"><a name="container_cli_reference_cfic__d1504e3237"><!-- --></a>--volume <var class="keyword varname">VOLUME</var>:<var class="keyword varname">/DIRECTORY_PATH</var>[:ro]</dt>
+<dd class="pd">(Optional) Anexe um volume a um contêiner especificando os detalhes no formato a seguir
+<samp class="ph codeph">VOLUME:/DIRECTORY_PATH[:ro]</samp>.<ul id="container_cli_reference_cfic__d1504e3251"><li><var class="keyword varname">VOLUME</var> O ID ou nome do volume.</li>
+<li><var class="keyword varname">DIRECTORY_PATH</var>: O caminho absoluto para o diretórios no contêiner.</li>
+<li><samp class="ph codeph">ro</samp> Opcional. Especificar <samp class="ph codeph">ro</samp> torna o volume somente leitura, em vez de
+leitura/gravação padrão.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplos</dt>
+<dd>O exemplo a seguir é uma solicitação válida para criar e iniciar um novo contêiner usando a
+imagem <span class="ph filepath"><var class="keyword varname">my_namespace</var>/nginx</span>, com o nome
+<var class="keyword varname">my_container</var> e um limite de memória de 1024 MB, em que <var class="keyword varname">my_namespace</var> é
+o namespace associado aos usuários que efetuaram
+login.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m <var class="keyword varname">1024</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">nginx</var></code></pre>
+<div class="p">O
+exemplo a seguir é uma solicitação válida para criar e iniciar um novo contêiner usando a
+imagem <span class="ph filepath">my_namespace/blog</span>, passando algumas credenciais como variáveis de ambiente,
+em que <var class="keyword varname">my_namespace</var> é o namespace associado dos usuários que
+efetuaram login.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -e <var class="keyword varname">USER</var>=<var class="keyword varname">johnsmith</var> -e <var class="keyword varname">PASS</var>=<var class="keyword varname">password</var> --name <var class="keyword varname">my_container</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">blog</var></code></pre>
+</div>
+<div class="p">O
+exemplo a seguir é uma solicitação válida para incluir um volume em um contêiner
+usando a imagem <span class="ph filepath">my_namespace/blog</span>, em que <var class="keyword varname">my_namespace</var> é
+o namespace associado dos usuários que efetuaram login.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">my_container</var> --volume <var class="keyword varname">VolId1</var>:<var class="keyword varname">/first/path</var> --volume <var class="keyword varname">VolId2</var>:<var class="keyword varname">/second/path</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">blog</var></code></pre>
+</div>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5487" id="container_cli_reference_cfic__d1504e3367"><h3 class="sectiontitle" id="d72e5487"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind</samp> GROUP SERVICE_INSTANCE </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Inclua um serviço em um grupo de contêiner em execução. Esse comando está disponível
+somente para grupos de contêiner.
+Contêineres únicos devem ligar um serviço como parte do comando
+<span class="ph">bx ic</span> run. Para desvincular um serviço, veja
+o comando <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3418">service-unbind</a>.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do grupo.</dd>
+<dt class="pt dlterm"><var class="keyword varname">SERVICE_INSTANCE</var></dt>
+<dd class="pd">(Necessário) O nome da instância de serviço a ser incluída no grupo de contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para ligar uma instância do serviço de Cache de
+dados chamado MyDataCache ao contêiner <var class="keyword varname">my_container_group</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind <var class="keyword varname">my_container_group</var> <var class="keyword varname">MyDataCache</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5543" id="container_cli_reference_cfic__d1504e3418"><h3 class="sectiontitle" id="d72e5543"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-unbind</samp> GROUP SERVICE_INSTANCE </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Remova um serviço de um grupo de contêiner em execução. Esse comando está disponível
+somente para grupos de contêiner. Contêineres únicos devem remover o contêiner e criar um
+novo sem o serviço.
+Para ligar um serviço, veja o comando <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3367">service-bind</a>.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">GROUP</var></dt>
+<dd class="pd">(Necessário) O ID ou o nome do grupo.</dd>
+<dt class="pt dlterm"><var class="keyword varname">SERVICE_INSTANCE</var></dt>
+<dd class="pd">(Necessário) O nome da instância de serviço a ser removida do grupo de contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para desvincular uma instância do serviço de Cache de
+dados chamado MyDataCache do contêiner <var class="keyword varname">my_container_group</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-unbind <var class="keyword varname">my_container_group</var> <var class="keyword varname">MyDataCache</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5596" id="container_cli_reference_cfic__d1504e3467"><h3 class="sectiontitle" id="d72e5596"><span class="ph"><samp class="ph codeph">bx ic</samp></span> start CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Iniciar um ou mais contêineres interrompidos. Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/start">start</a> na ajuda do Docker. Para parar um contêiner, veja o comando <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3549">stop</a>.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O nome ou ID do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes ou IDs no comando com um
+espaço entre eles </dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para iniciar um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> start <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5641" id="container_cli_reference_cfic__d1504e3507"><h3 class="sectiontitle" id="d72e5641"><span class="ph"><samp class="ph codeph">bx ic</samp></span> stats --no-stream CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Para um ou mais contêineres, visualizar estatísticas de uso em tempo real dos recursos do contêiner. Os dados são
+exibidos conforme são gerados em tempo real. Use <kbd class="ph userinput">CTRL+C</kbd> para
+sair. Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/stats/">stats</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O nome ou o ID do contêiner.</dd>
+<dt class="pt dlterm">--no-stream</dt>
+<dd class="pd">(Necessário) Exibir os resultados mais recentes. Não são exibidas novas informações geradas após a
+execução do comando. </dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação das estatísticas mais recentes sobre um
+contêiner.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stats --no-stream <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5688" id="container_cli_reference_cfic__d1504e3549"><h3 class="sectiontitle" id="d72e5688"><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop CONTAINER [CONTAINER] [-t SECS] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Parar um ou mais contêineres em execução. Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/stop">stop</a> na ajuda do Docker. Para iniciar um contêiner, veja o comando <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e3467">start</a>.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O nome ou ID do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes e IDs no comando com um
+espaço entre eles </dd>
+<dt class="pt dlterm">-t <var class="keyword varname">SECS</var>, --time <var class="keyword varname">SECS</var></dt>
+<dd class="pd">O número de segundos que se deve esperar antes do encerramento do contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para parar um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5744" id="container_cli_reference_cfic__d1504e3600"><h3 class="sectiontitle" id="d72e5744"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top CONTAINER [CONTAINER] [<samp class="ph codeph">ps</samp> options]</h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Listar os processos que estão em execução no contêiner. <p>Ao contrário do comando
+nativo <samp class="ph codeph">top</samp> no Linux, o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top</samp> exibe a saída do
+comando Linux <samp class="ph codeph">ps</samp> para os principais processos que estão em execução dentro de um contêiner. Como
+consequência, o uso de CPU e de memória não é atualizado na saída da CLI quando ele muda para um
+processo. </p>
+<div class="steps note"><span class="notetitle">Nota:</span> Se você precisar ver a saída do comando nativo do Linux <samp class="ph codeph">top</samp>,
+<a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e737">exec</a> em seu contêiner e execute o
+comando <samp class="ph codeph">top</samp>.</div>
+ Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/top/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">top</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O nome ou o ID do contêiner.</dd>
+</dl>
+</dd>
+<dd class="ddexpand"><dl class="parml"><dt class="pt dlterm">Opções de <samp class="ph codeph"><var class="keyword varname">ps</var></samp></dt>
+<dd class="pd">(Opcional) Use as opções fornecidas pelo comando nativo <samp class="ph codeph">ps</samp> do Linux para obter
+detalhes adicionais ou filtre a saída do comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> top</samp>. </dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para exibir informações detalhadas de todos os processos atuais
+que estão em execução dentro de um contêiner chamado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> top <var class="keyword varname">my_container</var> -aux</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5835" id="container_cli_reference_cfic__d1504e3682"><h3 class="sectiontitle" id="d72e5835"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unpause CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Retomar todos os processos em um ou mais contêineres em execução. Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/unpause">unpause</a> na ajuda do Docker. Para pausar um contêiner, veja o comando <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e2296">pause</a>.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Obrigatório) O nome ou ID do contêiner de pelo menos um contêiner. É possível
+executar esse comando com vários contêineres listando seus nomes ou IDs no comando com um
+espaço entre eles</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para cancelar a pausa de um contêiner denominado
+<var class="keyword varname">my_container</var>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> unpause <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5880" id="container_cli_reference_cfic__d1504e3722"><h3 class="sectiontitle" id="d72e5880"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unprovision [-f]</h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Excluir o <span class="keyword">IBM
+Bluemix Container Service</span> do
+espaço do <span class="keyword">Bluemix</span> ao qual você está conectado. <div class="note attention"><span class="attentiontitle">Atenção:</span> Quando
+você executa esse comando, todos os contêineres únicos e grupos de contêiner são
+perdidos. Seu espaço ainda está disponível no
+<span class="keyword">Bluemix</span>. Para iniciar o uso do
+<span class="keyword">IBM
+Bluemix Container Service</span> novamente, deve-se executar <a href="container_cli_cfic.html#container_cli_reference_cfic__d1504e1854">bx ic init</a> para
+inicializar o <span class="keyword">IBM
+Bluemix Container Service</span> novamente.</div>
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">-f, --force</dt>
+<dd class="pd">(Opcional) Força a exclusão do <span class="keyword">IBM
+Bluemix Container Service</span> do espaço do <span class="keyword">Bluemix</span>.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para excluir o <span class="keyword">IBM
+Bluemix Container Service</span> do espaço.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> unprovision</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e5971" id="container_cli_reference_cfic__d1504e3771"><h3 class="sectiontitle" id="d72e5971"><span class="ph" id="container_cli_reference_cfic__d1504e3773"><span class="ph"><samp class="ph codeph">bx ic</samp></span> update </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Verificar se há uma versão mais recente do plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> do que a versão
+instalada.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> update </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6003" id="container_cli_reference_cfic__d1504e3791"><h3 class="sectiontitle" id="d72e6003"><span class="ph" id="container_cli_reference_cfic__d1504e3793"><span class="ph"><samp class="ph codeph">bx ic</samp></span> version</span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Mostra a versão do Docker e a API do <span class="keyword">IBM
+Bluemix Container Service</span>. Para ver a versão do plug-in
+instalado para o <span class="keyword">IBM
+Bluemix Container Service</span>, execute <samp class="ph codeph">cf
+plugins</samp> ou <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> info</samp>.
+Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/version/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">version</a>
+na ajuda do Docker.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> version</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6055" id="container_cli_reference_cfic__d1504e3822"><h3 class="sectiontitle" id="d72e6055"><span class="ph" id="container_cli_reference_cfic__d1504e3824"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create VOLNAME [FSNAME] </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Criar o volume.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e3837"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(Opcional) O nome de compartilhamento de arquivo. Se nenhum compartilhamento de arquivo estiver disponível ou nomeado, o volume será construído
+no compartilhamento de arquivo padrão do espaço.</dd>
+</dl>
+
+<dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Necessário) O nome do volume. <span class="ph" id="container_cli_reference_cfic__d1504e3853">O nome pode conter letras maiúsculas, letras
+minúsculas, números, sublinhados (_) e hifens (-).</span></dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para criar um
+volume.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create <var class="keyword varname">my_volume</var> <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6105" id="container_cli_reference_cfic__d1504e3868"><h3 class="sectiontitle" id="d72e6105"><span class="ph" id="container_cli_reference_cfic__d1504e3870"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create FSNAME FSSIZE FSIOPS </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Criar um compartilhamento de arquivo.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e3883"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSIOPS</var></dt>
+<dd class="pd">(Necessário) O IOPS de compartilhamento de arquivo. Os valores válidos são 0,25, 2 ou 4 IOPS por GB.</dd>
+<dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(Necessário) O nome de compartilhamento de arquivo. <span class="ph">O nome pode conter letras maiúsculas, letras
+minúsculas, números, sublinhados (_) e hifens (-).</span></dd>
+<dt class="pt dlterm"><var class="keyword varname">FSSIZE</var></dt>
+<dd class="pd">(Necessário) O tamanho do sistema de compartilhamento de arquivo em GB. Use <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+volume-fs-flavors</samp> para listar todos os tamanhos válidos</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create <var class="keyword varname">my_fileshare</var> <var class="keyword varname">20</var> <var class="keyword varname">0.25</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6167" id="container_cli_reference_cfic__d1504e3923"><h3 class="sectiontitle" id="d72e6167"><span class="ph" id="container_cli_reference_cfic__d1504e3925"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Lista os tamanhos de compartilhamento de arquivo que estão disponíveis para uso.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-flavors </span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6191" id="container_cli_reference_cfic__d1504e3941"><h3 class="sectiontitle" id="d72e6191"><span class="ph" id="container_cli_reference_cfic__d1504e3943"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect FSNAME </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Inspecionar o compartilhamento de arquivo.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(Necessário) O nome de compartilhamento de arquivo. </dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-inspect <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6227" id="container_cli_reference_cfic__d1504e3973"><h3 class="sectiontitle" id="d72e6227"><span class="ph" id="container_cli_reference_cfic__d1504e3975"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Listar os compartilhamentos de arquivo em sua organização.</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6251" id="container_cli_reference_cfic__d1504e3991"><h3 class="sectiontitle" id="d72e6251"><span class="ph" id="container_cli_reference_cfic__d1504e3993"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove FSNAME </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Remover um compartilhamento de arquivo.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">FSNAME</var></dt>
+<dd class="pd">(Necessário) O nome de compartilhamento de arquivo. </dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-remove <var class="keyword varname">my_fileshare</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6288" id="container_cli_reference_cfic__d1504e4024"><h3 class="sectiontitle" id="d72e6288"><span class="ph" id="container_cli_reference_cfic__d1504e4026"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect VOLNAME </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Inspecionar o volume.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Necessário) O nome do volume.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para inspecionar o volume, em que <var class="keyword varname">my_volume</var> é
+o nome do
+volume.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect <var class="keyword varname">my_volume</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6328" id="container_cli_reference_cfic__d1504e4060"><h3 class="sectiontitle" id="d72e6328"><span class="ph" id="container_cli_reference_cfic__d1504e4062"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove VOLNAME </span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Remover o volume.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd id="container_cli_reference_cfic__d1504e4075"><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">VOLNAME</var></dt>
+<dd class="pd">(Necessário) O nome do volume.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para remover o volume, em que <var class="keyword varname">my_volume</var> é
+o nome do
+volume.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-remove <var class="keyword varname">my_volume</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6368" id="container_cli_reference_cfic__d1504e4096"><h3 class="sectiontitle" id="d72e6368"><span class="ph" id="container_cli_reference_cfic__d1504e4098"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Listar os volumes.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm">--table</dt>
+<dd class="pd">(Opcional) Estrutura a saída da lista em um formato de tabela.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para listar todos os volumes.<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> volumes [--table]</span></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6403" id="container_cli_reference_cfic__d1504e4125"><h3 class="sectiontitle" id="d72e6403"><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait CONTAINER [CONTAINER] </h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Aguarde a saída de um contêiner. Durante esse tempo de espera, a linha de comandos
+não é retornada e você não pode inserir os comandos. Assim que ocorrer a saída ou a
+parada do contêiner, o código de saída será impresso na saída da CLI. Para obter mais informações, veja o comando <a href="https://docs.docker.com/engine/reference/commandline/wait/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">wait</a> na ajuda do Docker.</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O nome ou o ID do contêiner.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para aguardar a saída de um contêiner denominado
+<var class="keyword varname">my_container</var>. Assim que ocorre a saída, o
+código de saída é impresso na CLI.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d72e6445" id="container_cli_reference_cfic__d1504e4162"><h3 class="sectiontitle" id="d72e6445"><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait-status CONTAINER</h3>
+<dl><dt class="dlterm">Propósito</dt>
+<dd>Aguarde até que um único contêiner ou um grupo de contêiner atinja um estado não
+temporário. Durante esse tempo de espera, a linha de comandos não é retornada e você não
+pode inserir os comandos. Assim que o contêiner atinge um estado não temporário, uma
+mensagem <span class="ph uicontrol">OK</span> é exibida. Para contêineres únicos, os estados não
+temporários incluem <samp class="ph codeph">Executando</samp>, <samp class="ph codeph">Encerramento</samp>,
+<samp class="ph codeph">Travado</samp>, <samp class="ph codeph">Pausado</samp> ou <samp class="ph codeph">Suspensos</samp>. Para
+grupos de contêineres, os estados não temporários incluem <samp class="ph codeph">CREATE_COMPLETE</samp>,
+<samp class="ph codeph">UPDATE_COMPLETE</samp> ou <samp class="ph codeph">FAILED</samp>.
+</dd>
+<dt class="dlterm">Parâmetros</dt>
+<dd><dl class="parml"><dt class="pt dlterm"><var class="keyword varname">CONTAINER</var></dt>
+<dd class="pd">(Necessário) O nome ou o ID do contêiner ou do grupo.</dd>
+</dl>
+</dd>
+<dt class="dlterm">Exemplo</dt>
+<dd>O exemplo a seguir é uma solicitação para aguardar até que um contêiner denominado
+<var class="keyword varname">my_container</var> atinja um estado não temporário.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> wait-status <var class="keyword varname">my_container</var></code></pre>
+</dd>
+</dl>
+</section></div>
+<aside role="complementary" aria-labelledby="d72e1253"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d72e6516" lang="pt-br" id="container_cli_cfic_uninstall"><h2 class="topictitle2" id="d72e6516">Desinstalando
+o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>
+(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</h2>
+<div class="body taskbody"><p class="shortdesc">Se você não precisar mais do plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>, será possível desinstalá-lo com
+um comando <span class="ph">bx</span>.</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">Nota:</span> Para desinstalar o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> Cloud
+Foundry, execute o comando a seguir.
+<pre class="codeblock"><code>cf uninstall-plugin IBM-Containers</code></pre>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Para desinstalar o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>
+para a CLI do <span class="keyword">Bluemix</span>, execute o comando
+a seguir. </span> <pre class="codeblock"><code><span class="ph">bx</span> plugin uninstall IBM-Containers</code></pre>
+</li>
+<li class="step stepexpand" id="container_cli_cfic_uninstall__verify"><span class="cmd">Verifique se o plug-in foi desinstalado executando o comando a seguir e verificando a lista dos
+plug-ins que estão instalados.</span> <div class="p"><pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>O plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> não é exibido
+nos resultados.</p>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d72e6516"></aside></article><article class="topic concept nested1" role="article" aria-labelledby="d72e6678" lang="pt-br" id="container_nav_help"><h2 class="topictitle2" id="d72e6678">Onde está o restante da documentação do
+<span class="keyword">IBM
+Bluemix Container Service</span>?</h2>
+<div class="body conbody"><div class="abstract">
+
+
+<p>Depois que você tiver revisado esse conteúdo, retorne para a documentação principal do <a href="container_index.html" title="Gerencie apps altamente disponíveis dentro de contêineres do Docker e clusters do Kubernetes na nuvem IBM. Um contêiner é uma maneira padrão para compactar um app e todas as suas dependências, para que o app possa ser movido entre ambientes e ser executado sem mudanças. Diferentemente de máquinas virtuais, os contêineres não empacotam o sistema operacional. Apenas o código de app, o tempo de execução, as ferramentas de sistema, as bibliotecas e as configurações são empacotados dentro do contêiner, o que torna um contêiner mais leve, portátil e eficiente do que uma máquina virtual."><span class="keyword">IBM
+Bluemix Container Service</span></a>.</p>
+</div>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d72e6678"></aside></article></article></div></main></body></html>

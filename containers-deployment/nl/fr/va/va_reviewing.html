@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="fr-fr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="Avant de déployer une image, vous pouvez examiner son rapport Vulnerability Advisor, lequel détaille les éventuels packages vulnérables, les paramètres de conteneur ou d'application non sécurisés, et qui indique si l'image se conforme aux règles de l'organisation.">
+<meta name="keywords" content="Vulnerability Advisor, vulnérabilités, sécurité du conteneur, sécurité de l'image">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "fr-fr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Examen de rapport de Vulnerability Advisor sur une image</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d351e2"><h1 class="topictitle1" id="d351e2">Examen de rapport de Vulnerability Advisor sur une image</h1>
+<div class="body taskbody"><p class="shortdesc">Avant de déployer une image, vous pouvez examiner son rapport Vulnerability Advisor, lequel détaille les
+éventuels packages vulnérables, les paramètres de conteneur ou d'application non sécurisés, et qui indique si l'image
+se conforme aux règles de l'organisation.</p>
+<div class="section context"><p>Des images de conteneurs sont fournies par IBMou peuvent être ajoutées par votre organisation. Vous
+devrez éventuellement configurer une image avant de la déployer afin qu'elle réponde aux exigences définies par les règles de votre organisation. Seul le responsable de l'organisation peut modifier les règles afin d'autoriser le déploiement d'une image vulnérable. Pour connaître les étapes permettant d'afficher et de modifier les règles de l'organisation, voir <a href="va_managing_policy.html" title="Si vous êtes le responsable de l'organisation Bluemix, vous pouvez définir une règle afin d'avertir les utilisateurs ou de bloquer le déploiement de conteneurs à partir d'images affectées par des problèmes de sécurité ou de configuration spécifiques.">Examen des règles de l'organisation</a>.</p>
+
+<p>Examinez les problèmes potentiels relatifs à l'image ou à la configuration en procédant comme suit :</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Connectez-vous à <span class="keyword">Bluemix</span>. </span> <span class="ph">Vulnerability Advisor</span> est disponible dans l'interface utilisateur uniquement lorsque vous êtes connecté.</li>
+<li class="step stepexpand"><span class="cmd">Dans la section <span class="ph uicontrol">Evaluation des vulnérabilités</span>, examinez le statut de votre évaluation des vulnérabilités.</span> Le statut affiche l'une des situations suivantes :
+<ul><li><span class="keyword wintitle">Prêt à être déployé</span> - Aucun problème de sécurité n'a été détecté.</li>
+<li><span class="keyword wintitle">A déployer avec précaution</span> - Des problèmes de sécurité ou de configuration à corriger ont été détectés, toutefois la règle de votre organisation
+autorise le déploiement d'images vulnérables. Si vous déployez cette image, vous recevez un avertissement.</li>
+<li><span class="keyword wintitle">Déploiement bloqué</span> - Des problèmes de sécurité ou de configuration ont été détectés et doivent être corrigés avant que l'image ne puisse être
+déployée vu que votre règle d'organisation n'autorise pas le déploiement d'images vulnérables.</li>
+<li><span class="keyword wintitle">Incomplet</span> - L'analyse est incomplète. Il se peut qu'elle soit encore en cours ou que le système d'exploitation de l'image soit
+incompatible. Patientez et relancez l'analyse. Si l'analyse est toujours incomplète, transférez à nouveau l'image pour lancer une nouvelle analyse. Le déploiement
+des images dont l'analyse est incomplète n'est pas bloqué.</li>
+</ul>
+
+<p>Passez en revue le rapport détaillé qui constitue l'évaluation de sécurité de Vulnerability Advisor :</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Sélectionnez l'image et dans la section <span class="ph uicontrol">Evaluation des vulnérabilités</span>, cliquez sur <span class="ph uicontrol">Afficher le rapport</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Passez en revue les différentes sections pour identifier les problèmes de sécurité et de configuration potentiels pour chaque package de l'image :</span> <div class="p"><ul id="va_reviewing__report"><li><span class="ph uicontrol">Règles de l'organisation</span><p>Indique si l'image est conforme aux règles définies par le responsable de l'organisation.</p>
+</li>
+<li><span class="ph uicontrol">Analyse des risques</span><p>Si l'image comporte au moins une vulnérabilité, cette section affiche l'évaluation des risques telle qu'elle est calculée par l'assistant de détection des vulnérabilités.
+Le risque est calculé à l'aide de la calculatrice <a href="https://www.first.org/cvss" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">CVSS</a> et la technologie <a href="https://exchange.xforce.ibmcloud.com/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)"><span class="keyword">IBM® X-Force Exchange</span></a>.</p>
+</li>
+<li><span class="ph uicontrol">Packages vulnérables</span><p>Recense les packages affectés par des problèmes de vulnérabilité connus, lesquels sont mis à jour quotidiennement depuis les avis de sécurité
+publiés pour les types d'image Docker répertoriés dans <a href="va_index.html" title="Vulnerability Advisor vérifie le statut de sécurité des images de conteneur avant leur déploiement, tout comme le statut des conteneurs en opération.">Gestion de la sécurité des conteneurs et des images avec Vulnerability Advisor</a>. Généralement, pour qu'un package vulnérable réussisse l'examen, une version plus récente de ce package incluant un correctif pour la vulnérabilité est requise. Un même package peut répertorier plusieurs vulnérabilités, auquel cas,
+une même mise à jour peut corriger plusieurs problèmes. Cliquez sur le code de l'avis de sécurité pour consulter plus d'informations sur le
+package et sur la procédure à suivre pour le mettre à jour.</p>
+</li>
+<li><span class="ph uicontrol">Paramètres de conteneur </span><p>Répertorie les suggestions qui peuvent vous permettre d'augmenter la sécurité de l'image. La colonne <span class="keyword wintitle">Corrective Action</span> explique comment améliorer la sécurité.</p>
+</li>
+<li><span class="ph uicontrol">Configurations d'applications</span><p>Recense les paramètres d'application non sécurisés de l'image. La colonne <span class="keyword wintitle">Corrective Action</span> explique comment améliorer la sécurité.</p>
+</li>
+<li><span class="ph uicontrol">Instances de conteneur</span><p>Recense les conteneurs utilisant cette image et déjà en opération dans votre organisation.</p>
+</li>
+</ul>
+</div>
+
+
+<p>Des actions correctives ou des suggestions sont indiquées pour chaque problème répertorié.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Résolvez les problèmes décrits dans le rapport <span class="ph uicontrol">Evaluation des vulnérabilités</span> et régénérez l'image.</span> Certains problèmes consignés dans le document Dockerfile peuvent être résolus à l'aide du code fourni dans <a href="va_report.html" title="Après avoir consulté le rapport de vulnérabilités, découvrez comment corriger les vulnérabilités signalées.">Résolution des vulnérabilités dans les conteneurs ou les images</a>. </li>
+</ol>
+<div class="section result"></div><div class="section postreq">Après le déploiement de votre image, Vulnerability Advisor continue à être à l'affût de problèmes de sécurité et de configuration dans le conteneur. Vous pouvez résoudre les problèmes
+rencontrés en suivant la procédure décrite dans la section <a href="va_reviewing_container.html" title="Dans votre tableau de bord, vous pouvez examiner le statut d'un conteneur pour déterminer si sa sécurité se conforme aux règles de votre organisation. Vous pouvez également consulter un rapport des vulnérabilités d'un conteneur, lequel recense les éventuels packages vulnérables et les paramètres de conteneur ou d'application non sécurisés.">Examen des vulnérabilités des conteneurs</a>.</div></div>
+<aside role="complementary" aria-labelledby="d351e2"></aside></article></main></body></html>

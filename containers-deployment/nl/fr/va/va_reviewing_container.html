@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="fr-fr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="Dans votre tableau de bord, vous pouvez examiner le statut d'un conteneur pour déterminer si sa sécurité se conforme aux règles de votre organisation. Vous pouvez également consulter un rapport des vulnérabilités d'un conteneur, lequel recense les éventuels packages vulnérables et les paramètres de conteneur ou d'application non sécurisés.">
+<meta name="keywords" content="Vulnerability Advisor, vulnérabilités, sécurité du conteneur">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "fr-fr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Examen des vulnérabilités des conteneurs</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d665e2"><h1 class="topictitle1" id="d665e2">Examen des vulnérabilités des conteneurs</h1>
+<div class="body taskbody"><p class="shortdesc">Dans votre tableau de bord, vous pouvez examiner le statut d'un conteneur pour déterminer si sa sécurité se conforme aux règles de votre organisation. Vous
+pouvez également consulter un rapport des vulnérabilités d'un conteneur, lequel recense les éventuels packages vulnérables et les paramètres de conteneur ou
+d'application non sécurisés.</p>
+<div class="section context"><div class="p">Vérifiez que les conteneurs s'exécutant dans votre espace continuent à se conformer aux règles de votre
+organisation en examinant la zone <span class="ph uicontrol">Statut de la règle</span>. Le statut affiche l'une des situations suivantes :<ul><li><span class="keyword wintitle">Réussite</span> - Aucune vulnérabilité n'a été détectée.</li>
+<li><span class="keyword wintitle">Avertissement</span> - Vulnerability Advisor a détecté des vulnérabilités potentielles dans votre conteneur
+qui entraînent que votre conteneur n'est pas en conformité avec la règle. Si la règle de votre organisation permet le déploiement d'images
+vulnérables, il se peut que l'image ait été déployée avec l'état
+(<span class="keyword wintitle">Déployer avec précaution</span>) et qu'un avertissement ait été envoyé à l'utilisateur l'ayant déployé.</li>
+<li><span class="keyword wintitle">Violation de règle</span> - Vulnerability Advisor a détecté des vulnérabilités potentielles dans votre conteneur
+qui entraînent que votre conteneur n'est pas en conformité avec la règle. La règle de votre organisation n'autorise pas le déploiement d'images vulnérables.</li>
+<li><span class="keyword wintitle">Incomplet</span> - L'analyse est incomplète. Il se peut que l'analyse soit encore en cours ou que le système d'exploitation pour cette instance
+de conteneur ne soit pas compatible.</li>
+</ul>
+</div>
+
+<p>Si <span class="ph uicontrol">Statut de la règle</span> n'indique pas <span class="keyword wintitle">Réussite</span>, vérifiez que votre conteneur
+est sécurisé autant que possible en examinant son rapport de vulnérabilité et en corrigeant les vulnérabilités signalées en procédant comme suit :</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Dans votre tableau de bord Bluemix, sélectionnez le conteneur que vous désirez examiner.</span></li>
+<li class="step stepexpand"><span class="cmd">Dans le panneau <span class="keyword wintitle">Vulnerability Advisor</span>, cliquez sur <span class="ph uicontrol">Afficher le rapport</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Passez en revue les sections pour voir les vulnérabilités potentielles de chaque package contenu dans l'image :</span> <ul id="va_reviewing__report"><li><span class="ph uicontrol">Règles de l'organisation</span><p>Indique si le conteneur adhère à la règle définie par le responsable de l'organisation.</p>
+</li>
+<li><span class="ph uicontrol">Packages vulnérables</span><p>Répertorie les packages avec des problèmes de vulnérabilité connus (mis à jour quotidiennement
+à partir des avis de sécurité publiées pour les systèmes d'exploitation répertoriés dans <a href="index.html" title="Lorsque vous ajoutez une image à votre référentiel d'images Bluemix privé, chaque package dans l'image est vérifié automatiquement par Vulnerability Advisor pour détecter des vulnérabilités possibles.">Recherche de vulnérabilités d'image à l'aide de Vulnerability Advisor</a>). Généralement, pour qu'un package vulnérable réussisse l'examen, une version plus récente de ce package incluant un correctif pour la vulnérabilité est requise. Un même package peut répertorier plusieurs vulnérabilités, auquel cas,
+une même mise à jour peut corriger plusieurs problèmes. Cliquez sur le code de l'avis de sécurité pour consulter plus d'informations sur le
+package et sur la procédure à suivre pour le mettre à jour.</p>
+</li>
+<li><span class="ph uicontrol">Paramètres de conteneur </span><p>Recense des suggestions que vous pouvez suivre pour améliorer la sécurité du conteneur. La colonne <span class="keyword wintitle">Corrective Action</span> explique comment améliorer la sécurité.</p>
+</li>
+<li><span class="ph uicontrol">Configurations d'applications</span><p>Répertorie les paramètres d'application non sécurisés pour le conteneur. La colonne <span class="keyword wintitle">Corrective Action</span> explique comment améliorer la sécurité.</p>
+</li>
+<li><span class="ph uicontrol">Source de l'image Docker</span><p>Affiche l'image qui a été utilisée pour créer ce conteneur.</p>
+</li>
+</ul>
+
+
+<p>Des actions correctives ou des suggestions sont indiquées pour chaque problème répertorié.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Décidez comment mettre à jour le conteneur en vue de résoudre les problèmes. </span> Vous devez avoir une bonne connaissance de l'architecture de votre conteneur pour pouvoir choisir la méthode appropriée pour le mettre à jour. Exemple :
+<ul><li>Si votre conteneur est découplé des données qu'il traite, vous pouvez arrêter le conteneur, apporter les modifications requises à l'image, puis le redéployer.</li>
+<li>Vous pouvez utiliser <a href="https://console.bluemix.net/docs/services/ActiveDeploy/index.html" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">Active Deploy</a>
+pour mettre à jour l'instance de conteneur vulnérable sans arrêter le conteneur.</li>
+<li>Dans une configuration à haute disponibilité avec plusieurs conteneurs dans un groupe de conteneur, vous pourriez acheminer le trafic à une autre instance
+de conteneur pendant que vous corrigez les vulnérabilités.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Corrigez les problèmes décrits dans le rapport <span class="ph uicontrol">Evaluation des vulnérabilités</span> et régénérez l'image ou redéployez le
+conteneur, selon la méthode retenue.</span> Certains problèmes consignés dans le document Dockerfile peuvent être résolus à l'aide du code fourni dans <a href="va_report.html" title="Après avoir consulté le rapport de vulnérabilités, découvrez comment corriger les vulnérabilités signalées.">Résolution des vulnérabilités dans les conteneurs ou les images</a>. </li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d665e2"></aside></article></main></body></html>

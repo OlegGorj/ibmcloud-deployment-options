@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="ダッシュボードでコンテナーの状況を調べて、そのセキュリティーが組織のポリシーに準拠しているかどうかを判別できます。 コンテナーの脆弱性レポートを精査することもできます。このレポートには、脆弱なパッケージと、セキュアでないコンテナーやアプリケーションの設定の詳細が示されます。">
+<meta name="keywords" content="Vulnerability Advisor, 脆弱性, コンテナーのセキュリティー">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>コンテナーの脆弱性の確認</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d665e2"><h1 class="topictitle1" id="d665e2">コンテナーの脆弱性の確認</h1>
+<div class="body taskbody"><p class="shortdesc">ダッシュボードでコンテナーの状況を調べて、そのセキュリティーが組織のポリシーに準拠しているかどうかを判別できます。
+コンテナーの脆弱性レポートを精査することもできます。このレポートには、脆弱なパッケージと、セキュアでないコンテナーやアプリケーションの設定の詳細が示されます。</p>
+<div class="section context"><div class="p"><span class="ph uicontrol">「ポリシーの状況 (POLICY STATUS)」</span>フィールドを調べて、スペースで実行中のコンテナーが組織ポリシーに準拠し続けていることを確認します。状況は、以下のいずれかの条件で示されます。
+<ul><li><span class="keyword wintitle">合格 (Passed)</span> - 脆弱性は検出されませんでした。</li>
+<li><span class="keyword wintitle">警告 (Warn)</span> - Vulnerability Advisor は、コンテナーがポリシーに準拠しない要因となる脆弱性がコンテナーに存在する可能性があることを検出しました。
+脆弱イメージのデプロイメントが組織ポリシーで許可されている場合、脆弱な状態 (<span class="keyword wintitle">「デプロイに注意が必要」</span>) のままイメージがデプロイされている可能性があり、それをデプロイしたユーザーに警告が送信されます。
+</li>
+<li><span class="keyword wintitle">ポリシー違反 (Policy violation)</span> - Vulnerability Advisor は、コンテナーがポリシーに準拠しない要因となる脆弱性がコンテナーに存在する可能性があることを検出しました。
+組織ポリシーは、脆弱イメージのデプロイメントを許可しないように設定されています。</li>
+<li><span class="keyword wintitle">不完全</span> - スキャンは完了していません。
+スキャンはまだ実行中である可能性があります。または、そのコンテナー・インスタンスのオペレーティング・システムが非互換である可能性があります。</li>
+</ul>
+</div>
+
+<p><span class="ph uicontrol">「ポリシーの状況 (POLICY STATUS)」</span>が<span class="keyword wintitle">「合格 (Passed)」</span>でない場合は、コンテナーの脆弱性レポートを調べて、コンテナーが可能な限りセキュアであることを確認し、脆弱性が報告されていればそれに対処します。そのためには、以下のステップを実行します。</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Bluemix ダッシュボードで、調べるコンテナーを選択します。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword wintitle">「Vulnerability Advisor」</span>ペインで、<span class="ph uicontrol">レポートの表示</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd">各セクションを確認して、イメージ内の各パッケージに脆弱性がある可能性を調べます。</span> <ul id="va_reviewing__report"><li><span class="ph uicontrol">組織ポリシー</span><p>組織管理者が設定したポリシーにコンテナーが従っているかどうかがリストされます。</p>
+</li>
+<li><span class="ph uicontrol">脆弱パッケージ</span><p>脆弱性に関する既知の問題が含まれるパッケージがリストされます。既知の問題は、<a href="index.html" title="イメージをプライベート Bluemix イメージ・レジストリーに追加すると、そのイメージ内の各パッケージは、Vulnerability Advisor によって、脆弱性の可能性について自動的に検査されます。">Vulnerability Advisor を使用したイメージの脆弱性の検査</a> にリストされているオペレーティング・システムの公開セキュリティー通知に基づいて、毎日更新されます。
+脆弱パッケージがスキャンに合格するようにするには通常、脆弱性の修正が反映された新しいバージョンのパッケージが必要です。同じパッケージに複数の脆弱性がリストされることがあり、その場合は、1 回のパッケージのアップグレードで複数の問題が修正されることがあります。セキュリティー通知コードをクリックして、パッケージに関する詳細情報と、パッケージを更新するための手順を確認してください。</p>
+</li>
+<li><span class="ph uicontrol">コンテナー設定</span><p>コンテナーのセキュリティーを高めるための実施可能な提案事項がリストされます。<span class="keyword wintitle">「修正アクション (Corrective Action)」</span>列に、セキュリティーを向上させる方法についての説明があります。</p>
+</li>
+<li><span class="ph uicontrol">アプリケーション構成</span><p>非セキュアなコンテナーのアプリケーションの設定がリストされます。
+<span class="keyword wintitle">「修正アクション (Corrective Action)」</span>列に、セキュリティーを向上させる方法についての説明があります。</p>
+</li>
+<li><span class="ph uicontrol">Docker イメージ・ソース</span><p>このコンテナーを作成するために使用されたイメージが表示されます。</p>
+</li>
+</ul>
+
+
+<p>リストされた項目ごとに、修正アクションまたは提案事項が示されます。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">問題を解決するためのコンテナーの更新方法を決定します。</span> 適切なコンテナー更新方法を選択するには、コンテナーのアーキテクチャーを十分理解しておく必要があります。
+以下に例を示します。<ul><li>コンテナーとそれが計算するデータが分離されている場合は、コンテナーを停止し、必要な変更をイメージに加えた後に、再デプロイすることができます。</li>
+<li><a href="https://console.bluemix.net/docs/services/ActiveDeploy/index.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Active Deploy</a> を使用することにより、コンテナーを停止せずに脆弱なコンテナー・インスタンスを更新できます。</li>
+<li>コンテナー・グループに複数のコンテナーが存在する HA 構成では、別のコンテナー・インスタンスにトラフィックをルーティングしておいて、その間に脆弱性を修正することもできます。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">脆弱性評価</span>レポートに示された問題を修正し、選択した方法に応じて、イメージを再ビルドするかコンテナーを再デプロイします。</span> Dockerfile の一部の問題は、<a href="va_report.html" title="脆弱性レポートを確認した後の、報告された脆弱性を修正する方法について説明します。">コンテナーまたはイメージの脆弱性の解決</a>に記載されているコードを使用して解決することができます。</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d665e2"></aside></article></main></body></html>

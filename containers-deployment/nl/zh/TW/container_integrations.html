@@ -1,0 +1,815 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="您可以使用 Bluemix「型錄」中的各種服務與 IBM Bluemix Container Service 搭配。許多 Bluemix 服務可協助您將額外功能帶至您在容器中部署的應用程式。此外，部分 Bluemix 服務可以用來協助您管理容器。">
+<meta name="keywords" content="IBM Containers, 容器, 服務, Bluemix, 整合, 連結, 警示通知, 原則, 通知, Delivery Pipeline, 管線, 持續交付, 單一容器, 映像檔, 建置, 漏洞警告器, 安全, 映像檔清除, 環境內容, 容器群組, Devops Services, 部署">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>整合服務，以與 單一及可擴充容器 搭配使用</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d58857e6" id="container_integrations"><h1 class="topictitle1" id="d58857e6"><span class="ph" id="title">整合服務與<span class="ph">單一及可擴充容器</span></span></h1>
+<div class="body conbody"><div class="abstract"><div class="shortdesc"><span class="ph" id="shortdesc">您可以使用 <span class="keyword">Bluemix®</span>「<span class="keyword wintitle">型錄</span>」中的各種服務與 <span class="keyword">IBM®
+Bluemix Container Service</span> 搭配。許多 <span class="keyword">Bluemix</span> 服務可協助您將額外功能帶至您在容器中部署的應用程式。此外，部分 <span class="keyword">Bluemix</span> 服務可以用來協助您管理容器。</span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">小心：</span> 不提供<span class="ph"><span class="ph">單一及可擴充容器</span>的免費試用。<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">瞭解在「<span class="keyword">Bluemix</span> 公用」上，如何在 <span class="keyword">IBM
+Bluemix Container Service</span> 中進行叢集管理並移轉至 Kubernetes。</a></span></div>
+</div>
+
+
+<div class="p">在此頁面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__data">資料分析及儲存服務</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__devops">DevOps Services</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__integrate">整合式服務</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__network">網路服務</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__security">安全服務</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一份服務清單，且會代表應用程式開發者管理它們。若要新增 Bluemix 服務供您的容器使用，您必須要求此服務的實例，並將服務連結至容器。">從 Bluemix GUI 連結服務</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations_binding_cli" title="IBM Bluemix 具有一份服務清單，且會代表應用程式開發者管理它們。若要新增 Bluemix 服務供您的容器使用，您必須要求此服務的實例，並將服務連結至容器。">從 CLI 將服務連結至容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_alertnotification" title="配置應用程式以在符合特定條件或準則時傳送通知，並使用 Alert Notification 服務來管理警示通知。您可以使用 Alert Notification 服務建立自訂通知原則，來過濾您感興趣的警示。您可以視需要調整原則過濾器，以指定個人或群組作為警示的收件者，以及偏好的通知方法及頻率。">使用 Alert Notification 來配置容器中所部署之應用程式的警示</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_pipeline_ov" title="使用 Delivery Pipeline（這是 IBM Bluemix Continuous Delivery 的一部分）自動建置應用程式，並將容器部署至 Bluemix。">在 Continuous Delivery 服務中使用 Delivery Pipeline 自動化容器部署</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_cfapp_tutorial_intro" title="您可以採用先前使用 Cloud Foundry 所部署的應用程式，並使用 IBM Bluemix Container Service 將它部署在容器中。">指導教學：在容器中部署 Cloud Foundry Node.js 應用程式</a></div>
+</div>
+</div>
+<section role="region" aria-labelledby="d58857e218" id="container_integrations__data"><h2 class="sectiontitle" id="d58857e218">資料分析及儲存服務</h2>
+<div class="p"><dl><dt class="dlterm"><span class="keyword">Object Storage</span></dt>
+<dd><p>儲存跨多個儲存節點抄寫的持續資料，以進行備份。</p>
+
+<div class="p"><ul><li>如需 <span class="keyword">Object Storage</span> 服務的一般資訊，請參閱<a href="../services/ObjectStorage/index.html">開始使用 <span class="keyword">Object Storage</span> 服務</a>。</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58857e245" id="container_integrations__devops"><h2 class="sectiontitle" id="d58857e245">DevOps Services</h2>
+<div class="p"><dl><dt class="dlterm"><span class="keyword">Active Deploy</span></dt>
+<dd><p>更新執行中的容器群組而不關機，並在必要時快速回復至原始版本。<span class="keyword">IBM Active
+Deploy for Bluemix</span> 服務會使用階段式方法來部署，讓您有時間在正式作業環境中測試並驗證已更新的應用程式。</p>
+</dd>
+<dd class="ddexpand"><div class="p">如需更新執行中容器群組的相關資訊，請參閱：<ul><li><a href="../services/ActiveDeploy/updatingapps.html#updatingappscli" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">使用 Active Deploy 服務更新應用程式或容器群組 (CLI)</a></li>
+<li><a href="../services/ActiveDeploy/updatingapps.html#updatingappsgui" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">使用 Active Deploy 服務更新應用程式或容器群組 (GUI)</a></li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm"><span class="keyword">Alert Notification</span></dt>
+<dd><p>設定通知原則，僅過濾從應用程式取得的感興趣警示。您可以視需要調整原則過濾器，以指定個人或群組作為警示的收件者，以及偏好的通知方法及頻率。</p>
+
+<div class="p"><ul><li>如需使用容器與 <span class="keyword">Alert Notification</span> 搭配的相關資訊，請參閱<a href="container_integrations.html#container_alertnotification" title="配置應用程式以在符合特定條件或準則時傳送通知，並使用 Alert Notification 服務來管理警示通知。您可以使用 Alert Notification 服務建立自訂通知原則，來過濾您感興趣的警示。您可以視需要調整原則過濾器，以指定個人或群組作為警示的收件者，以及偏好的通知方法及頻率。">使用 Alert Notification 來配置容器中所部署之應用程式的警示</a>。</li>
+<li>如需 <span class="keyword">Alert Notification</span> 服務的一般資訊，請參閱<a href="../services/AlertNotification/index.html">開始使用 <span class="keyword">Alert Notification</span></a>。</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm"><span class="keyword">Delivery Pipeline</span></dt>
+<dd><p>使用 <span class="keyword">Delivery Pipeline</span>（這是 <span class="keyword">IBM
+Bluemix Continuous Delivery</span> 的一部分）自動建置應用程式，並將容器部署至 <span class="keyword">Bluemix</span>。</p>
+
+<div class="p"><ul><li>如需使用容器與管線搭配的相關資訊，請參閱 <a href="container_integrations.html#container_pipeline_ov" title="使用 Delivery Pipeline（這是 IBM Bluemix Continuous Delivery 的一部分）自動建置應用程式，並將容器部署至 Bluemix。">在 Continuous Delivery 服務中使用 Delivery Pipeline 自動化容器部署</a>。</li>
+<li>如需 <span class="keyword">Delivery Pipeline</span> 服務的一般資訊，請參閱<a href="../services/ContinuousDelivery/pipeline_about.html">開始使用 Delivery
+Pipeline</a>。</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm">UrbanCode Deploy</dt>
+<dd><p>使用 IBM UrbanCode Deploy 可管理您的發行，並自動化容器部署。此服務提供多種工具，可用來洞悉您在每個環境中的部署。您可以使用此服務作為 <span class="keyword">Delivery Pipeline</span> 服務的替代方案。</p>
+
+<ul><li>如需購買資訊，請參閱 <a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">IBM UrbanCode Deploy</a> 的產品頁面。</li>
+<li>如需 UrbanCode Deploy 的一般資訊，請參閱 <a href="http://www.ibm.com/support/knowledgecenter/SS4GSP/ucd_welcome.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">IBM Knowledge Center</a>。</li>
+</ul>
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58857e389" id="container_integrations__integrate"><h2 class="sectiontitle" id="d58857e389">整合式服務</h2>
+<div class="p"><dl><dt class="dlterm">Istio</dt>
+<dd><p>管理 <span class="keyword">IBM
+Bluemix Container Service</span> 中應用程式或服務的微服務。<span class="ph">如需相關資訊或參與 Istio 開放程式碼專案，請參閱<a href="https://istio.io/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">https://istio.io/</a>。</span></p>
+</dd>
+<dt class="dlterm"><span class="keyword">Secure Gateway</span></dt>
+<dd><p>在內部部署或雲端中，將 <span class="keyword">Bluemix</span> 應用程式安全地連接至遠端位置。</p>
+
+<div class="p"><ul><li>如需搭配使用 <span class="keyword">IBM
+Bluemix Container Service</span> 與 <span class="keyword">Secure Gateway</span> 的相關資訊，請參閱<a href="../services/SecureGateway/sg_003.html#sg_003">使用 Docker 作為用戶端</a>。</li>
+<li>如需 <span class="keyword">Secure Gateway</span> 服務的一般資訊，請參閱<a href="../services/SecureGateway/secure_gateway.html">開始使用 <span class="keyword">Secure Gateway</span> 服務</a>。</li>
+</ul>
+</div>
+
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58857e457" id="container_integrations__network"><h2 class="sectiontitle" id="d58857e457">網路服務</h2>
+<div class="p"><dl><dt class="dlterm">VPN</dt>
+<dd><p>容許容器在 <span class="keyword">Bluemix</span> 空間與企業內部網路伺服器之間彼此通訊。</p>
+
+<div class="p"><ul><li>如需 <span class="keyword">IBM
+VPN</span> 服務的一般資訊，請參閱<a href="../services/vpn/index.html">開始使用 <span class="keyword">IBM
+VPN</span> 服務</a>。</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58857e491" id="container_integrations__security"><h2 class="sectiontitle" id="d58857e491">安全服務</h2>
+<div class="p"><dl><dt class="dlterm"><span class="keyword">Activity Tracker</span></dt>
+<dd><p>審核任何類型的異常活動的 API 呼叫，以及協助您符合法規審核需求。</p>
+</dd>
+<dd class="ddexpand"><div class="p"><ul><li>如需 <span class="keyword">Activity Tracker</span> 服務的一般資訊，請參閱<a href="../services/AccessTrail/index.html">開始使用 <span class="keyword">Activity Tracker</span> 服務</a>。</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</section></div>
+<article class="topic concept nested1" role="article" aria-labelledby="d58857e518" id="rellinks"><h2 class="topictitle2" id="d58857e518">相關鏈結</h2>
+<aside role="complementary" aria-labelledby="d58857e518">
+<div class="linklist" id="general"><h3 class="linklistlabel">相關鏈結</h3>
+<ul><li><img src="./sout.gif" alt=""><a href="https://wiki.eclipse.org/Linux_Tools_Project/Docker_Tooling" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">適用於 Eclipse 的 Docker 工具</a></li>
+</ul></div>
+</aside></article><article class="topic task nested1" role="article" aria-labelledby="d58857e528" lang="zh-tw" id="container_integrations_binding"><h2 class="topictitle2" id="d58857e528">從 <span class="keyword">Bluemix</span> GUI 連結服務</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix</span> 具有一份服務清單，且會代表應用程式開發者管理它們。若要新增 <span class="keyword">Bluemix</span> 服務供您的容器使用，您必須要求此服務的實例，並將服務連結至容器。</p>
+<div class="section prereq">開始之前，請將服務新增至 <span class="keyword">Bluemix</span> 空間。如需相關資訊，請參閱<a href="../services/reqnsi.html#req_instance">要求新的服務實例</a>。</div><div class="section context"><div class="note restriction" id="container_integrations_binding__restriction"><span class="restrictiontitle">限制：</span> 部分 <span class="keyword">Bluemix</span> 服務不支援直接連結至容器，並會導致建立容器期間發生失敗。在此情況下，請先將 <span class="keyword">Bluemix</span> 服務連結至 Cloud Foundry 應用程式，再將該應用程式連結至容器。此應用程式會作為服務與容器之間的橋接器。如需相關資訊，請參閱 <a href="container_troubleshoot.html#ts_bridge_app">Bluemix 服務不會直接連結至容器</a>。</div>
+</div><ol class="steps"><li class="step"><span class="cmd">在 <span class="keyword">Bluemix</span>「<span class="keyword wintitle">型錄</span>」中，按一下<span class="ph uicontrol">容器</span>。</span></li>
+<li class="step"><span class="cmd">按一下容器映像檔。</span></li>
+<li class="step"><span class="cmd">展開<span class="ph uicontrol">進階選項</span>，然後針對<span class="ph uicontrol">選取服務</span>，選取可用的 <span class="keyword">Bluemix</span> 服務。</span></li>
+<li class="step"><span class="cmd">按一下<span class="ph uicontrol">新增</span>。</span> <span class="keyword">Bluemix</span> 服務會顯示在<span class="ph uicontrol">已連結至您的容器</span>欄位中。</li>
+<li class="step"><span class="cmd">完成其他欄位，然後按一下<span class="ph uicontrol">建立</span>。</span></li>
+<li class="step"><span class="cmd">建立容器之後，請驗證已顯示 VCAP_SERVICES 資訊。</span> 在容器的「概觀」標籤中，尋找連結服務，然後按一下<span class="ph uicontrol">檢視認證</span>。所顯示的資訊是 VCAP_SERVICES。</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d58857e686" lang="zh-tw" id="container_integrations_binding_cli"><h2 class="topictitle2" id="d58857e686">從 CLI 將服務連結至容器</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix</span> 具有一份服務清單，且會代表應用程式開發者管理它們。若要新增 <span class="keyword">Bluemix</span> 服務供您的容器使用，您必須要求此服務的實例，並將服務連結至容器。</p>
+<div class="section prereq">開始之前，請將服務新增至 <span class="keyword">Bluemix</span> 空間。如需相關資訊，請參閱<a href="../services/reqnsi.html#req_instance">要求新的服務實例</a>。</div><div class="section context"><div class="note restriction" id="container_integrations_binding_cli__restriction"><span class="restrictiontitle">限制：</span> 部分 <span class="keyword">Bluemix</span> 服務不支援直接連結至容器，並會導致建立容器期間發生失敗。在此情況下，請先將 <span class="keyword">Bluemix</span> 服務連結至 Cloud Foundry 應用程式，再將該應用程式連結至容器。此應用程式會作為服務與容器之間的橋接器。如需相關資訊，請參閱 <a href="container_troubleshoot.html#ts_bridge_app">Bluemix 服務不會直接連結至容器</a>。</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">使用下列其中一個指令，將 <span class="keyword">Bluemix</span> 服務實例連結至新的容器。</span> <div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>，以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+<ul class="ul choices"><li class="li choice">如果您要建立單一容器，請使用下列指令。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">container_name</var> -e "<var class="keyword varname">CCS_BIND_SRV</var>=<var class="keyword varname">service_instance1</var>,<var class="keyword varname">service_instance2</var>" registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image_name</var></code></pre>
+</li>
+<li class="li choice">如果您要建立容器群組，請使用下列指令。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">container_group_name</var> -e "<var class="keyword varname">CCS_BIND_SRV</var>=<var class="keyword varname">service_instance1</var>,<var class="keyword varname">service_instance2</var>" registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image_name</var></code></pre>
+</li>
+<li class="li choice">如果您要將服務連結至已執行中的容器群組，請使用下列指令。此指令僅供容器群組使用。一次只能連結一個服務。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind <var class="keyword varname">container_group_name</var> <var class="keyword varname">service_instance</var></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">使用下列其中一個指令來驗證服務實例已連結至容器。</span> <ul class="ul choices"><li class="li choice">若為單一容器，請使用下列指令。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect CONTAINER</code></pre>
+</li>
+<li class="li choice">若為容器群組，請使用下列指令。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP</code></pre>
+</li>
+</ul>
+驗證已顯示服務的 VCAP_SERVICES 資訊。<pre class="codeblock"><code>{
+ "VCAP_SERVICES": {
+  "&lt;service_name&gt;": [
+   {
+    "credentials": {
+     "hostname": "&lt;hostname_id&gt;",
+     "jdbcUrl": "&lt;jdbc_URL&gt;",
+     "name": "&lt;encoded_name&gt;",
+     "password": "&lt;encoded_password&gt;",
+     "port": "&lt;port_number&gt;",
+     "uri": "&lt;service_URI&gt;",
+     "username": "&lt;encoded_username&gt;"
+    },
+    "label": "&lt;service_name&gt;",
+    "name": "&lt;service_instance&gt;",
+    "plan": "&lt;plan_name&gt;",
+    "tags": [
+     "&lt;tag1&gt;",
+     "&lt;tag2&gt;",
+     "&lt;tag3&gt;"
+    ]
+   } </code></pre>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d58857e885" lang="zh-tw" id="container_alertnotification"><h2 class="topictitle2" id="d58857e885">使用 <span class="keyword">Alert Notification</span> 來配置容器中所部署之應用程式的警示</h2>
+<div class="body taskbody"><p class="shortdesc">配置應用程式以在符合特定條件或準則時傳送通知，並使用 <span class="keyword">Alert Notification</span> 服務來管理警示通知。您可以使用 <span class="keyword">Alert Notification</span> 服務建立自訂通知原則，來過濾您感興趣的警示。您可以視需要調整原則過濾器，以指定個人或群組作為警示的收件者，以及偏好的通知方法及頻率。</p>
+<div class="section prereq">開始之前，請先檢閱<a href="../services/reqnsi.html#req_instance">要求新的服務實例</a>主題，並在 <span class="keyword">Bluemix</span> 空間中建立 <span class="keyword">Alert Notification</span> 服務實例。</div><div class="section context"><p>下列步驟顯示如何建立執行範例 <span class="keyword">Alert Notification</span> 節點應用程式的容器。您可以將測試警示傳送至 <span class="keyword">Alert Notification</span> 服務，然後以「警示檢視器」工具檢閱它們。</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">下載 <a href="https://github.com/IBM-Bluemix/alert-notification-helloworld" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Alert Notification 應用程式</a>範例，並將它複製到本端機器。</span> <pre class="codeblock"><code>git clone <span class="ph filepath">https://github.com/IBM-Bluemix/alert-notification-helloworld.git</span></code></pre>
+
+
+<div class="steps note"><span class="notetitle">註：</span> 複製 Git 專案時，會在本端複製 Git 專案時，會在本端機器上建立名為 <span class="ph filepath">alert-notification-helloworld</span> 的新資料夾。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">建置包含 Alert Notification 應用程式範例的容器映像檔，然後將它推送至您的專用 <span class="keyword">Bluemix</span> 映像檔登錄。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span> CLI</a>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">導覽至 <span class="ph filepath">alert-notification-helloworld</span> 目錄。</span></li>
+<li class="li substep substepexpand"><span class="cmd">建立容器映像檔，並將它推送至專用 <span class="keyword">Bluemix</span> 映像檔登錄。執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</samp> 以擷取名稱空間資訊，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/alert .</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">驗證已順利建立並推送容器映像檔。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">從映像檔建立容器，並將 <span class="keyword">Alert Notification</span> 服務連結至其中。將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊，並將 <var class="keyword varname">&lt;my_alert&gt;</var> 取代為您在開始時所建立之 Alert Notification 服務實例的名稱。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name alertcontainer -p 8080 -e "CCS_BIND_SRV=<var class="keyword varname">&lt;my_alert&gt;</var>" registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/alert</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">驗證容器執行中。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">將公用 IP 位址連結至容器。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">列出可在空間中使用的公用 IP 位址，並記下您要使用的 IP 位址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+
+
+<div class="note tip"><span class="tiptitle">提示：</span> 如果空間中沒有可用的公用 IP 位址，請執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp> 來要求新的 IP 位址。您也可以執行
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unbind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var>
+<var class="keyword varname">&lt;CONTAINER&gt;</var></samp> 指令，取消已使用之 IP 位址與容器的連結。</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">將公用 IP 位址連結至容器。將 <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> 取代為您在前一個步驟中記下的 IP 位址。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> alertcontainer</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">建立測試警示。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">開啟 Web 瀏覽器。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在 Web 瀏覽器中輸入 IP 位址及埠，如下所示：<samp class="ph codeph"><var class="keyword varname">&lt;IP_ADDRESS&gt;</var>:8080</samp>。</span> <span class="keyword">Alert Notification</span> Web 應用程式的歡迎使用頁面即會開啟。
+<p><img src="images/alertapp.png" width="400" alt="測試 Alert Notification Web 應用程式"></p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">按一下<span class="ph uicontrol">傳送範例警示</span>按鈕，將測試警示傳送至「警示檢視器」。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">開啟「<span class="keyword wintitle">警示檢視器</span>」，並檢閱測試警示。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">從 <span class="keyword">Bluemix</span> GUI 中，選取執行中容器實例。</span></li>
+<li class="li substep"><span class="cmd">在<span class="ph uicontrol">連結服務</span>下，按一下 <span class="keyword">Alert Notification</span> 服務。</span></li>
+<li class="li substep"><span class="cmd">按一下<span class="ph uicontrol">啟動</span>來開啟「警示檢視器」。</span></li>
+<li class="li substep"><span class="cmd">檢閱測試警示。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">探索 <span class="keyword">Alert Notification</span> 服務的功能。</span> 檢閱 <span class="keyword">Alert Notification</span> 文件，尋找如何<a href="../services/AlertNotification/alert_configuring.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">建立通知原則</a>及<a href="../services/AlertNotification/alert_viewer.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">管理警示</a>的相關資訊。</li>
+</ol>
+</div>
+</article><article class="topic concept nested1" role="article" aria-labelledby="d58857e1214" lang="zh-tw" id="container_pipeline_ov"><h2 class="topictitle2" id="d58857e1214">在 <span class="keyword">Continuous Delivery</span> 服務中使用 <span class="keyword">Delivery Pipeline</span> 自動化容器部署</h2>
+<div class="body conbody"><p class="shortdesc">使用 <span class="keyword">Delivery Pipeline</span>（這是 <span class="keyword">IBM
+Bluemix Continuous Delivery</span> 的一部分）自動建置應用程式，並將容器部署至 <span class="keyword">Bluemix</span>。</p>
+<div class="p"><span class="keyword">Delivery Pipeline</span> 支援：<ul><li>建置 Docker 映像檔</li>
+<li>將容器中的映像檔部署至 <span class="keyword">Bluemix</span></li>
+</ul>
+</div>
+<div><p>使用 <span class="keyword">Delivery Pipeline</span> 部署容器的快速入門手冊：</p>
+
+<ol><li>建立包含您程式碼的 Git 儲存庫。</li>
+<li>在儲存庫的根目錄中包括 <samp class="ph codeph">Dockerfile</samp>。</li>
+<li>從功能表中，按一下<span class="ph menucascade"><span class="ph uicontrol">服務</span> &gt; <span class="ph uicontrol">DevOps</span></span>，然後按一下<span class="ph uicontrol">管線</span>。</li>
+<li>按一下<span class="ph menucascade"><span class="ph uicontrol">建立管線</span> &gt; <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span></span>。</li>
+<li>按一下<span class="ph uicontrol">建立</span>。</li>
+<li>將 Git 儲存庫新增至工具鏈。<ol type="a" id="container_pipeline_ov__ol_mvk_s3v_vz"><li>按一下<span class="ph uicontrol">新增工具</span>。</li>
+<li>按一下管理您的儲存庫的 Git 服務類型。</li>
+<li>提供儲存庫的配置詳細資料。</li>
+<li>按一下<span class="ph uicontrol">建立整合</span>。</li>
+</ol>
+</li>
+<li>從工具鏈的「概觀」頁面中，按一下 <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span>。</li>
+<li>建立一個包含建置工作的建置階段。<ol type="a" id="container_pipeline_ov__ol_pds_x3v_vz"><li>按一下<span class="ph uicontrol">新增階段</span>。</li>
+<li>在<span class="ph uicontrol">輸入</span>標籤上，對於<span class="ph uicontrol">輸入類型</span>，選取 <span class="ph uicontrol">Git 儲存庫</span>。</li>
+<li>在<span class="ph uicontrol">工作</span>標籤上，新增建置工作。對於<span class="ph uicontrol">建置器類型</span>，選取 <span class="ph uicontrol">IBM Containers on <span class="keyword">Bluemix</span></span>。</li>
+</ol>
+</li>
+<li>建立一個包含部署工作的部署階段。<ol type="a" id="container_pipeline_ov__ol_ahk_djv_vz"><li>在<span class="ph uicontrol">輸入</span>標籤上，對於<span class="ph uicontrol">輸入類型</span>，選取<span class="ph uicontrol">建置構件</span>。</li>
+<li>在<span class="ph uicontrol">工作</span>標籤上，對於<span class="ph uicontrol">部署人員類型</span>，選取 <span class="ph uicontrol">IBM Container Service for Bluemix</span>。</li>
+</ol>
+</li>
+<li>透過推送程式碼變更，或按一下 <span class="keyword">Delivery Pipeline</span> 建置階段上的「執行階段」圖示，來執行部署。</li>
+</ol>
+</div><div>需要其他資訊嗎？請查看下列主題。<ul><li><a href="container_integrations.html#container_single_pipeline_ov" title="使用 Delivery Pipeline 自動建置及部署單一容器。">使用 Delivery Pipeline 建立單一容器</a></li>
+<li><a href="container_integrations.html#container_group_pipeline_ov" title="使用 Delivery Pipeline 自動建置及部署容器群組。">使用 Delivery Pipeline 建立容器群組</a></li>
+</ul>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d58857e1449" lang="zh-tw" id="container_single_pipeline_ov"><h3 class="topictitle3" id="d58857e1449">使用 <span class="keyword">Delivery Pipeline</span> 建立單一容器</h3>
+<div class="body taskbody"><p class="shortdesc">使用 <span class="keyword">Delivery Pipeline</span> 自動建置及部署單一容器。</p>
+</div>
+<article class="topic task nested3" role="article" aria-labelledby="d58857e1511" lang="zh-tw" id="container_single_pipeline_build"><h4 class="topictitle4" id="d58857e1511">使用 <span class="keyword">Delivery Pipeline</span> 為容器建立建置階段</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> 包括一個建置服務，它會取入原始碼，然後建置 Docker 映像檔並將其發佈至容器登錄。<span class="keyword">Delivery Pipeline</span>（這是 <span class="keyword">IBM
+Bluemix Continuous Delivery</span> 的一部分）提供一個使用容器建置服務的建置工作。此建置工作可從儲存庫取得原始碼、從該原始碼建置 Docker 映像檔、版本化（標記）該映像檔以符合建置號碼，然後將產生的映像檔推送至 <span class="keyword">Bluemix</span> 上組織的 <span class="keyword">IBM
+Bluemix Container Service</span> 登錄。然後，組織的成員可將產生的映像檔部署至組織內的空間。</p>
+<div class="section prereq" id="container_single_pipeline_build__prereq"> <div class="p">開始之前，請考量下列資訊。<ul><li>若要進一步瞭解建置、階段及基本管線功能的相關資訊，請參閱 <span class="keyword">Continuous Delivery</span> 文件中的<a href="../services/ContinuousDelivery/pipeline_about.html">關於 <span class="keyword">Delivery Pipeline</span></a> 主題。</li>
+<li>檢查 <span class="keyword">Bluemix</span>「<span class="keyword wintitle">型錄</span>」，以從組織的專用映像檔登錄中識別要用於容器的現有映像檔。</li>
+<li>如果知道您想要將服務連結至容器，請建立要用作橋接器的應用程式。
+如需相關資訊，請參閱<a href="container_integrations.html#unique_1448421743" title="服務無法直接連結至容器。替代方案為在管線階段中配置環境內容，以將服務連結至應用程式，然後再將該應用程式連結至容器。此應用程式會作為服務與容器之間的橋接器。">使用 <span class="keyword">Delivery Pipeline</span> 將服務連結至容器</a>。</li>
+</ul>
+</div>
+ </div><p class="li stepsection">從 <span class="keyword">Delivery Pipeline</span> 建置 Docker 映像檔。</p><ol class="steps" id="container_single_pipeline_build__steps"><li class="step stepexpand"><span class="cmd">在與工具鏈相關聯的 Git 儲存庫的根目錄中建立 Dockerfile，並將它確定至儲存庫。</span></li>
+<li class="step stepexpand"><span class="cmd">從工具鏈的「概觀」頁面中，按一下 <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span>。</span></li>
+<li class="step stepexpand"><span class="cmd">建立建置階段。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下<span class="ph uicontrol">新增階段</span>。</span></li>
+<li class="li substep"><span class="cmd">為階段命名。</span> 例如，<samp class="ph codeph"><var class="keyword varname">Build</var></samp>。</li>
+<li class="li substep"><span class="cmd">對於<span class="ph uicontrol">輸入類型</span>，選取 <span class="ph uicontrol">Git 儲存庫</span>。</span></li>
+<li class="li substep"><span class="cmd">對於其他欄位，請驗證值並視需要予以更新。</span></li>
+<li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">JOBS</span> 標籤。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">在建置階段中，建立建置工作。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在 <span class="ph uicontrol">JOBS</span> 標籤中，按一下 <span class="ph uicontrol">ADD JOB</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">選取 <span class="ph uicontrol">Build</span> 工作類型。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於<span class="ph uicontrol">建置器類型</span>，選取 <span class="ph uicontrol">IBM Containers on <span class="keyword">Bluemix</span></span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要的話，請更新 <span class="keyword">Bluemix</span> 目標、組織及空間。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於<span class="ph uicontrol">使用快取層</span>，當您必須強制重新整理從其他來源動態取回內容的層時，請清除此欄位。</span> <p>例如，如果 <samp class="ph codeph">Dockerfile</samp> 包含 <samp class="ph codeph">apt-get install</samp> 或 <samp class="ph codeph">wget</samp> 指令，請清除 <span class="ph uicontrol">Use cached layers</span> 勾選框，以確保每次建置時即會收集這些動態相依關係。</p>
+ <div class="steps note"><span class="notetitle">註：</span> 清除 <span class="ph uicontrol">Use cached layers</span> 欄位時，因為建置映像檔時未使用快取層，所以建置時間較長。</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">映像檔名稱</span>欄位中，輸入要建置的映像檔的名稱。若要符合 Docker 命名慣例，請只使用小寫字母、數字及連字號 (-)。</span> 建置映像檔時，會以映像檔名稱及建置號碼標記它。 例如，如果您輸入映像檔名稱 <samp class="ph codeph">myappimage</samp>，則對建置號碼 4 產生的映像檔稱為 <samp class="ph codeph">myappimage:4</samp>。</li>
+<li class="li substep substepexpand"><span class="cmd">如果您的 Dockerfile 不在專案的根目錄中，請在「建置 Script」區段中，新增 Dockerfile 在下列位置的路徑。</span> <ol type="i"><li>在「執行單元測試」區段之前，利用切換目錄指令來新增資料夾名稱。<div class="p"><pre class="codeblock"><code>cd <var class="keyword varname">&lt;folder&gt;</var></code></pre>
+</div>
+</li>
+<li>每當顯示 <var class="keyword varname">${WORKSPACE}</var> 變數時，即會附加資料夾名稱。<var class="keyword varname">${WORKSPACE}</var> 變數會為您自動偵測專案的根目錄。<div class="p">範例<pre class="codeblock"><code>BUILD_COMMAND="build --pull --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}/<var class="keyword varname">&lt;folder&gt;</var>"</code></pre>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">按一下<span class="ph uicontrol">執行階段</span>圖示，驗證階段的建置未發生錯誤。</span> 如果建置失敗，請檢閱日誌，並更正錯誤。如果通過此階段，請檢查組織的映像檔登錄，並驗證已建置映像檔。</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e1814" lang="zh-tw" id="container_pipeline_vulnerability"><h4 class="topictitle4" id="d58857e1814">（選用）在管線作業過程中檢查映像檔安全</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">使用「漏洞警告器」，在部署容器之前，先找出映像檔中的安全或配置問題。</span>
+</div>
+<div class="section context"><div class="p">包含此掃描的常用管線設定：<ul><li>建置原始檔用的建置階段</li>
+<li>處理階段，其中包含下列工作：<ul><li>執行容器建置用的建置工作</li>
+<li>在映像檔上執行「漏洞警告器」的測試工作</li>
+</ul>
+</li>
+<li>部署容器用的部署階段</li>
+</ul>
+</div>
+
+<div class="note tip"><span class="tiptitle">提示：</span> 此作業概述如何在與建置容器映像檔之工作不同的階段中，建立「漏洞警告器」的測試工作。或者，您也可以使用相同階段。如果決定建立個別的階段，則不需要設定環境變數。</div>
+</div><p class="li stepsection">建立「漏洞警告器」掃描。</p><ol class="steps" id="container_pipeline_vulnerability__steps"><li class="step stepexpand"><span class="cmd">建立處理階段。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下<span class="ph uicontrol">新增階段</span>。</span></li>
+<li class="li substep"><span class="cmd">為階段命名。</span> 例如，<samp class="ph codeph"><var class="keyword varname">Processing</var></samp>。</li>
+<li class="li substep"><span class="cmd">對於輸入類型，選取<span class="ph uicontrol">建置構件</span>。</span></li>
+<li class="li substep"><span class="cmd">對於階段及工作，請驗證值並視需要予以更新。</span></li>
+<li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">JOBS</span> 標籤。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">在處理階段中，新增測試工作來執行程式碼掃描。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">工作</span>標籤上，按一下<span class="ph uicontrol">新增工作</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於工作類型，選取<span class="ph uicontrol">測試</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於 <span class="ph uicontrol">Tester type</span>，選取 <span class="ph uicontrol">IBM Vulnerability Advisor</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要的話，請更新 <span class="keyword">Bluemix</span> 目標、組織及空間。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於 <span class="ph uicontrol">Minutes to wait for analysis to complete</span>，輸入 0 - 59 分鐘的值。</span> 預設值為 <var class="keyword varname">5</var> 分鐘。工作結束時，會在主控台日誌中提供儀表板的 URL。
+<p>如果掃描未在此時間結束之前完成，則工作會失敗，但是掃描分析會繼續執行，並且可在儀表板上進行檢視。在掃描完成之後，如果您重新執行工作，則不會重新提交掃描要求，管線工作也可以順利完成。或者，您可以將管線配置為在成功掃描結果時不封鎖，這會在下一個步驟中說明。</p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">若要判定逾時的行為，請選取或清除<span class="ph uicontrol">如果此工作失敗，停止執行此階段</span>勾選框。</span> <p>您可以將工作配置為在此工作失敗時，同時封鎖此階段中稍後的工作及稍後的階段，讓它們無法執行，也可以將階段配置為繼續執行，而不封鎖稍後的工作和階段。工作的狀態取決於是否存在主要安全問題。</p>
+
+
+<p>主要安全問題會導致工作失敗。視 <span class="ph uicontrol">Stop running this stage if this job fails</span> 的選項而定，失敗的工作會停止繼續執行階段及管線，或者容許它們繼續執行。如果知道報告包含許多要處理的問題，則您可能會配置階段以繼續執行，因為掃描可能會花費很長的時間。在此情境中，您可能不希望其餘的工作及階段只因為掃描花費太長的時間而停止。</p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">如果工作所在的階段與建置工作相同，請設定代表儲存庫名稱的環境變數。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">ENVIRONMENT PROPERTIES</span> 標籤。</span></li>
+<li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">ADD PROPERTY</span>，然後選取 <span class="ph uicontrol">Text
+Property</span>。</span></li>
+<li class="li substep"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入 <samp class="ph codeph">FULL_REPOSITORY_NAME</samp></span></li>
+<li class="li substep"><span class="cmd">在<span class="ph uicontrol">值</span>欄位中，不要輸入任何內容。</span> 容器建置工作中指定的映像檔名稱會透過此環境變數傳遞。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">按一下<span class="ph uicontrol">執行階段</span>圖示，驗證階段的建置未發生錯誤。</span></li>
+</ol>
+<div class="section result"><div class="p">若要檢視「漏洞警告器」掃描結果，請在工作完成之後，按一下 <span class="ph uicontrol">View results and history</span>。在<span class="ph uicontrol">日誌</span>標籤上，尋找下列區段：<pre class="pre msgblock"><code>image registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">image</var> vulnerability results found</code></pre>
+</div>
+
+<p>列出有漏洞的套件、安全問題及建議的增進功能清單，如「漏洞警告器」主題<a href="va/va_index.html#va_reviewing">檢閱映像檔報告</a>中所述。<a href="va/va_index.html#va_report">解決映像檔中的問題</a>中會提供 Dockerfile 程式碼，可解決一些常見問題。</p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e2093" lang="zh-tw" id="container_pipeline_cleanup"><h4 class="topictitle4" id="d58857e2093">（選用）利用 <span class="keyword">Delivery Pipeline</span> 清除映像檔</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> 建置工作會自動清除未使用的映像檔版本。使用中的映像檔不會遭到移除。您可以指定要保留的映像檔版本數目，也可以停用映像檔清理。</p>
+<p class="li stepsection">若要變更針對專案所保留的映像檔版本數目，請執行下列動作：</p><ol class="steps"><li class="step"><span class="cmd">在管線中，開啟建置階段的配置。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">環境內容</span>標籤上，按一下<span class="ph uicontrol">新增內容</span>。</span></li>
+<li class="step"><span class="cmd">選取 <span class="ph uicontrol">Text property</span>。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入 <samp class="ph codeph">IMAGE_LIMIT</samp> 指令。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">值</span>欄位中，輸入此專案要保留在登錄中的映像檔版本數目。依預設，會保留專案的五個最新映像檔版本。若要停用映像檔清除，並保留所有映像檔版本，請將值設為 <samp class="ph codeph">-1</samp>。</span></li>
+<li class="step"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e2229" lang="zh-tw" id="container_binding_pipeline"><h4 class="topictitle4" id="d58857e2229">（選用）使用 <span class="keyword">Delivery Pipeline</span> 將服務連結至容器</h4>
+<div class="body taskbody"><p class="shortdesc">服務無法直接連結至容器。替代方案為在管線階段中配置環境內容，以將服務連結至應用程式，然後再將該應用程式連結至容器。此應用程式會作為服務與容器之間的橋接器。</p>
+<div class="section prereq"><p id="container_binding_pipeline__context"><span class="keyword">Bluemix</span> 提供一組環境變數，定義連結至應用程式（例如 ClearDB MySQL Database 或 Question and Answer）之服務的名稱及詳細資料。這些環境變數稱為
+<samp class="ph codeph">VCAP_SERVICES</samp>。將容器連結至服務時，會透過一個作為容器與服務之間橋接器的應用程式，將 <samp class="ph codeph">VCAP_SERVICES</samp> 以環境變數的方式傳入容器。然後，容器即可從服務查閱資訊，例如端點、使用者及密碼。</p>
+
+<p>在配置環境內容之前，請識別已將服務連結至其中的現有應用程式，或使用 <span class="keyword">Bluemix</span> GUI 或指令行建立應用程式。如需相關資訊，請參閱 <a href="container_troubleshoot.html#ts_bridge_app">Bluemix 服務不會直接連結至容器</a>。</p>
+</div><p class="li stepsection">將橋接應用程式連結至容器。</p><ol class="steps"><li class="step"><span class="cmd">從工具鏈的「概觀」頁面中，按一下 <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span>。</span></li>
+<li class="step"><span class="cmd">開啟管線階段，然後按一下 <span class="ph uicontrol">ENVIRONMENT
+PROPERTIES</span> 標籤。</span></li>
+<li class="step"><span class="cmd">按一下 <span class="ph uicontrol">ADD PROPERTY</span>，然後選取 <span class="ph uicontrol">Text
+property</span>。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入 <kbd class="ph userinput">BIND_TO</kbd> 指令。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">值</span>欄位中，輸入橋接應用程式的名稱，例如 <var class="keyword varname">pipeline_bridge_app</var>。</span></li>
+<li class="step"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+<li class="step"><span class="cmd">執行您的管線來測試配置。</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">提示：</span> 在橋接應用程式連結至容器之後，請不要刪除橋接應用程式。如果您刪除連結的橋接應用程式，容器會當掉。請先刪除容器，以及任何正在使用橋接應用程式的其他容器，然後再刪除橋接應用程式。</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e2390" lang="zh-tw" id="container_single_pipeline_deploy"><h4 class="topictitle4" id="d58857e2390">利用 <span class="keyword">Delivery Pipeline</span> 為容器建立部署階段</h4>
+<div class="body taskbody"><p class="shortdesc">您可以使用 <span class="keyword">Delivery Pipeline</span> 建立容器的部署階段。</p>
+<div class="section prereq"><div class="p">開始之前：<ul><li><a href="container_integrations.html#container_single_pipeline_build" title="IBM Bluemix Container Service 包括一個建置服務，它會取入原始碼，然後建置 Docker 映像檔並將其發佈至容器登錄。Delivery Pipeline（這是 IBM Bluemix Continuous Delivery 的一部分）提供一個使用容器建置服務的建置工作。此建置工作可從儲存庫取得原始碼、從該原始碼建置 Docker 映像檔、版本化（標記）該映像檔以符合建置號碼，然後將產生的映像檔推送至 Bluemix 上組織的 IBM Bluemix Container Service 登錄。然後，組織的成員可將產生的映像檔部署至組織內的空間。">建立建置階段</a>。</li>
+<li><a href="https://github.com/Osthanes/deployscripts/blob/master/deploycontainer.sh" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">檢閱單一容器的預設部署 Script</a>。
+您可以分出並編輯預設 Script，或改成自行建立要使用的 Script。</li>
+<li><a href="../services/ContinuousDelivery/pipeline_deploy_var.html">檢閱 <span class="keyword">Delivery Pipeline</span> 服務所提供的可用環境變數清單</a>。</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">從工具鏈的「概觀」頁面中，按一下 <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span>。</span></li>
+<li class="step stepexpand" id="container_single_pipeline_deploy__deploy_stage"><span class="cmd">建立部署階段。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">ADD STAGE</span>。</span></li>
+<li class="li substep"><span class="cmd">為階段命名。</span> 例如，<samp class="ph codeph"><var class="keyword varname">Deploy</var></samp>。</li>
+<li class="li substep"><span class="cmd">對於輸入類型，選取<span class="ph uicontrol">建置構件</span>。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_single_pipeline_deploy__deployment_job"><span class="cmd">在階段中，建立部署工作。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">工作</span>標籤上，按一下<span class="ph uicontrol">新增工作</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於工作類型，選取<span class="ph uicontrol">部署</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於部署人員類型，選取 <span class="ph uicontrol">IBM Container service on <span class="keyword">Bluemix</span></span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於組織及空間，請驗證值並視需要予以更新。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">部署策略</span>欄位中，輸入下列其中一個值。</span> <ul><li><span class="ph uicontrol">red_black</span> - 部署新版本的應用程式。如果部署成功，則會移除應用程式的前一個部署，而且 IP 位址或路徑會對映至新版本。</li>
+<li><span class="ph uicontrol">clean</span> - 移除應用程式的所有先前部署。</li>
+</ul>
+ <div class="note tip"><span class="tiptitle">提示：</span> <samp class="ph codeph">CONCURRENT_VERSIONS</samp> 環境內容會設定要維持作用中的應用程式部署版本數。預設值為一個版本。例如，如果 <samp class="ph codeph">CONCURRENT_VERSIONS</samp> 設為 2，而且您是使用 IP 位址，則最新的部署會連結至 IP 位址，但是仍會部署舊版，以供快速待命。
+<p>若要一律移除應用程式的所有部署，則在 <span class="ph uicontrol">ENVIRONMENT PROPERTIES</span> 標籤中，您可以將 <samp class="ph codeph">CONCURRENT_VERSIONS</samp> 設為 <samp class="ph codeph">0</samp>。</p>
+</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入要部署之容器的名稱。</span></li>
+<li class="li substep substepexpand"><span class="cmd">針對埠，輸入容器的已發佈埠。</span> 請用逗點 (,) 區隔多個埠。<div class="note tip" id="container_single_pipeline_deploy__private_container"><span class="tiptitle">提示：</span> 如果未指定埠，而且您是使用預設部署 Script，則會自動發佈埠 80。若要使用預設部署 Script 以將容器設成專用狀態，請完成下列步驟。
+<ol type="i"><li>對於部署策略，輸入 <kbd class="ph userinput">simple</kbd>。</li>
+<li> 將 <span class="ph uicontrol">Port</span> 欄位保留為空白。</li>
+<li>因為簡單部署不會清除先前的部署，所以您可以建立另一個部署階段來予以清除。請將第二個部署階段中的 <span class="ph uicontrol">Deployment strategy</span> 設為 <kbd class="ph userinput">clean</kbd>。</li>
+</ol>
+</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">如果您有任何選用部署引數，請輸入它們。</span> 例如，如果您的應用程式需要一個環境變數來代表後端資料庫的位置，則可以併入以下這一行：
+
+<pre class="codeblock"><code>--env MY_DB_HOSTNAME_PROPERTY=<var class="keyword varname">mydbhostname</var></code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">如果您已自行建立部署 Script，請編輯 <span class="ph uicontrol">Deployer script</span> 區段來進行使用。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">複製下列這一行，並更新它以使用您的儲存庫。</span> <pre class="pre screen"><code>git_retry clone https://github.com/Osthanes/deployscripts.git deployscripts</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">編輯下列這一行，以使用您的 Script。</span> <pre class="pre screen"><code>/bin/bash deployscripts/deploycontainer.sh</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+</ol>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d58857e2668" lang="zh-tw" id="container_group_pipeline_ov"><h3 class="topictitle3" id="d58857e2668">使用 <span class="keyword">Delivery Pipeline</span> 建立容器群組</h3>
+<div class="body taskbody"><p class="shortdesc">使用 <span class="keyword">Delivery Pipeline</span> 自動建置及部署容器群組。</p>
+</div>
+<article class="topic task nested3" role="article" aria-labelledby="d58857e2736" lang="zh-tw" id="container_group_pipeline_build"><h4 class="topictitle4" id="d58857e2736">使用 <span class="keyword">Delivery Pipeline</span> 為容器群組建立建置階段</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> 包括一個建置服務，它會取入原始碼，然後建置 Docker 映像檔並將其發佈至容器登錄。<span class="keyword">Delivery Pipeline</span>（這是 <span class="keyword">IBM
+Bluemix Continuous Delivery</span> 的一部分）提供一個使用容器建置服務的建置工作。此建置工作可從儲存庫取得原始碼、從該原始碼建置 Docker 映像檔、版本化（標記）該映像檔以符合建置號碼，然後將產生的映像檔推送至 <span class="keyword">Bluemix</span> 上組織的 <span class="keyword">IBM
+Bluemix Container Service</span> 登錄。然後，組織的成員可將產生的映像檔部署至組織內的空間。</p>
+<div class="section prereq"> <div class="p">開始之前，請考量下列資訊。<ul><li>若要進一步瞭解建置、階段及基本管線功能的相關資訊，請參閱 <span class="keyword">Continuous Delivery</span> 文件中的<a href="../services/ContinuousDelivery/pipeline_about.html">關於 <span class="keyword">Delivery Pipeline</span></a> 主題。</li>
+<li>檢查 <span class="keyword">Bluemix</span>「<span class="keyword wintitle">型錄</span>」，以從組織的專用映像檔登錄中識別要用於容器的現有映像檔。</li>
+<li>如果知道您想要將服務連結至容器，請建立要用作橋接器的應用程式。
+如需相關資訊，請參閱<a href="container_integrations.html#unique_1448421743" title="服務無法直接連結至容器。替代方案為在管線階段中配置環境內容，以將服務連結至應用程式，然後再將該應用程式連結至容器。此應用程式會作為服務與容器之間的橋接器。">使用 <span class="keyword">Delivery Pipeline</span> 將服務連結至容器</a>。</li>
+</ul>
+</div>
+ </div><p class="li stepsection">從 <span class="keyword">Delivery Pipeline</span> 建置 Docker 映像檔。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">在與工具鏈相關聯的 Git 儲存庫的根目錄中建立 Dockerfile，並將它確定至儲存庫。</span></li>
+<li class="step stepexpand"><span class="cmd">從工具鏈的「概觀」頁面中，按一下 <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span>。</span></li>
+<li class="step stepexpand"><span class="cmd">建立建置階段。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下<span class="ph uicontrol">新增階段</span>。</span></li>
+<li class="li substep"><span class="cmd">為階段命名。</span> 例如，<samp class="ph codeph"><var class="keyword varname">Build</var></samp>。</li>
+<li class="li substep"><span class="cmd">對於<span class="ph uicontrol">輸入類型</span>，選取 <span class="ph uicontrol">Git 儲存庫</span>。</span></li>
+<li class="li substep"><span class="cmd">對於其他欄位，請驗證值並視需要予以更新。</span></li>
+<li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">JOBS</span> 標籤。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">在建置階段中，建立建置工作。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在 <span class="ph uicontrol">JOBS</span> 標籤中，按一下 <span class="ph uicontrol">ADD JOB</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">選取 <span class="ph uicontrol">Build</span> 工作類型。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於<span class="ph uicontrol">建置器類型</span>，選取 <span class="ph uicontrol">IBM Containers on <span class="keyword">Bluemix</span></span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要的話，請更新 <span class="keyword">Bluemix</span> 目標、組織及空間。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於<span class="ph uicontrol">使用快取層</span>，當您必須強制重新整理從其他來源動態取回內容的層時，請清除此欄位。</span> <p>例如，如果 <samp class="ph codeph">Dockerfile</samp> 包含 <samp class="ph codeph">apt-get install</samp> 或 <samp class="ph codeph">wget</samp> 指令，請清除 <span class="ph uicontrol">Use cached layers</span> 勾選框，以確保每次建置時即會收集這些動態相依關係。</p>
+ <div class="steps note"><span class="notetitle">註：</span> 清除 <span class="ph uicontrol">Use cached layers</span> 欄位時，因為建置映像檔時未使用快取層，所以建置時間較長。</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">映像檔名稱</span>欄位中，輸入要建置的映像檔的名稱。若要符合 Docker 命名慣例，請只使用小寫字母、數字及連字號 (-)。</span> 建置映像檔時，會以映像檔名稱及建置號碼標記它。 例如，如果您輸入映像檔名稱 <samp class="ph codeph">myappimage</samp>，則對建置號碼 4 產生的映像檔稱為 <samp class="ph codeph">myappimage:4</samp>。</li>
+<li class="li substep substepexpand"><span class="cmd">如果您的 Dockerfile 不在專案的根目錄中，請在「建置 Script」區段中，新增 Dockerfile 在下列位置的路徑。</span> <ol type="i"><li>在「執行單元測試」區段之前，利用切換目錄指令來新增資料夾名稱。<div class="p"><pre class="codeblock"><code>cd <var class="keyword varname">&lt;folder&gt;</var></code></pre>
+</div>
+</li>
+<li>每當顯示 <var class="keyword varname">${WORKSPACE}</var> 變數時，即會附加資料夾名稱。<var class="keyword varname">${WORKSPACE}</var> 變數會為您自動偵測專案的根目錄。<div class="p">範例<pre class="codeblock"><code>BUILD_COMMAND="build --pull --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}/<var class="keyword varname">&lt;folder&gt;</var>"</code></pre>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">按一下<span class="ph uicontrol">執行階段</span>圖示，驗證階段的建置未發生錯誤。</span> 如果建置失敗，請檢閱日誌，並更正錯誤。如果通過此階段，請檢查組織的映像檔登錄，並驗證已建置映像檔。</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e3043" lang="zh-tw" id="unique_666275242"><h4 class="topictitle4" id="d58857e3043">（選用）在管線作業過程中檢查映像檔安全</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">使用「漏洞警告器」，在部署容器之前，先找出映像檔中的安全或配置問題。</span>
+</div>
+<div class="section context"><div class="p">包含此掃描的常用管線設定：<ul><li>建置原始檔用的建置階段</li>
+<li>處理階段，其中包含下列工作：<ul><li>執行容器建置用的建置工作</li>
+<li>在映像檔上執行「漏洞警告器」的測試工作</li>
+</ul>
+</li>
+<li>部署容器用的部署階段</li>
+</ul>
+</div>
+
+<div class="note tip"><span class="tiptitle">提示：</span> 此作業概述如何在與建置容器映像檔之工作不同的階段中，建立「漏洞警告器」的測試工作。或者，您也可以使用相同階段。如果決定建立個別的階段，則不需要設定環境變數。</div>
+</div><p class="li stepsection">建立「漏洞警告器」掃描。</p><ol class="steps" id="unique_666275242__steps"><li class="step stepexpand"><span class="cmd">建立處理階段。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下<span class="ph uicontrol">新增階段</span>。</span></li>
+<li class="li substep"><span class="cmd">為階段命名。</span> 例如，<samp class="ph codeph"><var class="keyword varname">Processing</var></samp>。</li>
+<li class="li substep"><span class="cmd">對於輸入類型，選取<span class="ph uicontrol">建置構件</span>。</span></li>
+<li class="li substep"><span class="cmd">對於階段及工作，請驗證值並視需要予以更新。</span></li>
+<li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">JOBS</span> 標籤。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">在處理階段中，新增測試工作來執行程式碼掃描。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">工作</span>標籤上，按一下<span class="ph uicontrol">新增工作</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於工作類型，選取<span class="ph uicontrol">測試</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於 <span class="ph uicontrol">Tester type</span>，選取 <span class="ph uicontrol">IBM Vulnerability Advisor</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要的話，請更新 <span class="keyword">Bluemix</span> 目標、組織及空間。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於 <span class="ph uicontrol">Minutes to wait for analysis to complete</span>，輸入 0 - 59 分鐘的值。</span> 預設值為 <var class="keyword varname">5</var> 分鐘。工作結束時，會在主控台日誌中提供儀表板的 URL。
+<p>如果掃描未在此時間結束之前完成，則工作會失敗，但是掃描分析會繼續執行，並且可在儀表板上進行檢視。在掃描完成之後，如果您重新執行工作，則不會重新提交掃描要求，管線工作也可以順利完成。或者，您可以將管線配置為在成功掃描結果時不封鎖，這會在下一個步驟中說明。</p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">若要判定逾時的行為，請選取或清除<span class="ph uicontrol">如果此工作失敗，停止執行此階段</span>勾選框。</span> <p>您可以將工作配置為在此工作失敗時，同時封鎖此階段中稍後的工作及稍後的階段，讓它們無法執行，也可以將階段配置為繼續執行，而不封鎖稍後的工作和階段。工作的狀態取決於是否存在主要安全問題。</p>
+
+
+<p>主要安全問題會導致工作失敗。視 <span class="ph uicontrol">Stop running this stage if this job fails</span> 的選項而定，失敗的工作會停止繼續執行階段及管線，或者容許它們繼續執行。如果知道報告包含許多要處理的問題，則您可能會配置階段以繼續執行，因為掃描可能會花費很長的時間。在此情境中，您可能不希望其餘的工作及階段只因為掃描花費太長的時間而停止。</p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">如果工作所在的階段與建置工作相同，請設定代表儲存庫名稱的環境變數。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">ENVIRONMENT PROPERTIES</span> 標籤。</span></li>
+<li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">ADD PROPERTY</span>，然後選取 <span class="ph uicontrol">Text
+Property</span>。</span></li>
+<li class="li substep"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入 <samp class="ph codeph">FULL_REPOSITORY_NAME</samp></span></li>
+<li class="li substep"><span class="cmd">在<span class="ph uicontrol">值</span>欄位中，不要輸入任何內容。</span> 容器建置工作中指定的映像檔名稱會透過此環境變數傳遞。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">按一下<span class="ph uicontrol">執行階段</span>圖示，驗證階段的建置未發生錯誤。</span></li>
+</ol>
+<div class="section result"><div class="p">若要檢視「漏洞警告器」掃描結果，請在工作完成之後，按一下 <span class="ph uicontrol">View results and history</span>。在<span class="ph uicontrol">日誌</span>標籤上，尋找下列區段：<pre class="pre msgblock"><code>image registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">image</var> vulnerability results found</code></pre>
+</div>
+
+<p>列出有漏洞的套件、安全問題及建議的增進功能清單，如「漏洞警告器」主題<a href="va/va_index.html#va_reviewing">檢閱映像檔報告</a>中所述。<a href="va/va_index.html#va_report">解決映像檔中的問題</a>中會提供 Dockerfile 程式碼，可解決一些常見問題。</p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e3322" lang="zh-tw" id="unique_329388047"><h4 class="topictitle4" id="d58857e3322">（選用）利用 <span class="keyword">Delivery Pipeline</span> 清除映像檔</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> 建置工作會自動清除未使用的映像檔版本。使用中的映像檔不會遭到移除。您可以指定要保留的映像檔版本數目，也可以停用映像檔清理。</p>
+<p class="li stepsection">若要變更針對專案所保留的映像檔版本數目，請執行下列動作：</p><ol class="steps"><li class="step"><span class="cmd">在管線中，開啟建置階段的配置。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">環境內容</span>標籤上，按一下<span class="ph uicontrol">新增內容</span>。</span></li>
+<li class="step"><span class="cmd">選取 <span class="ph uicontrol">Text property</span>。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入 <samp class="ph codeph">IMAGE_LIMIT</samp> 指令。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">值</span>欄位中，輸入此專案要保留在登錄中的映像檔版本數目。依預設，會保留專案的五個最新映像檔版本。若要停用映像檔清除，並保留所有映像檔版本，請將值設為 <samp class="ph codeph">-1</samp>。</span></li>
+<li class="step"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e3458" lang="zh-tw" id="unique_1448421743"><h4 class="topictitle4" id="d58857e3458">（選用）使用 <span class="keyword">Delivery Pipeline</span> 將服務連結至容器</h4>
+<div class="body taskbody"><p class="shortdesc">服務無法直接連結至容器。替代方案為在管線階段中配置環境內容，以將服務連結至應用程式，然後再將該應用程式連結至容器。此應用程式會作為服務與容器之間的橋接器。</p>
+<div class="section prereq"><p id="unique_1448421743__context"><span class="keyword">Bluemix</span> 提供一組環境變數，定義連結至應用程式（例如 ClearDB MySQL Database 或 Question and Answer）之服務的名稱及詳細資料。這些環境變數稱為
+<samp class="ph codeph">VCAP_SERVICES</samp>。將容器連結至服務時，會透過一個作為容器與服務之間橋接器的應用程式，將 <samp class="ph codeph">VCAP_SERVICES</samp> 以環境變數的方式傳入容器。然後，容器即可從服務查閱資訊，例如端點、使用者及密碼。</p>
+
+<p>在配置環境內容之前，請識別已將服務連結至其中的現有應用程式，或使用 <span class="keyword">Bluemix</span> GUI 或指令行建立應用程式。如需相關資訊，請參閱 <a href="container_troubleshoot.html#ts_bridge_app">Bluemix 服務不會直接連結至容器</a>。</p>
+</div><p class="li stepsection">將橋接應用程式連結至容器。</p><ol class="steps"><li class="step"><span class="cmd">從工具鏈的「概觀」頁面中，按一下 <span class="ph uicontrol"><span class="keyword">Delivery Pipeline</span></span>。</span></li>
+<li class="step"><span class="cmd">開啟管線階段，然後按一下 <span class="ph uicontrol">ENVIRONMENT
+PROPERTIES</span> 標籤。</span></li>
+<li class="step"><span class="cmd">按一下 <span class="ph uicontrol">ADD PROPERTY</span>，然後選取 <span class="ph uicontrol">Text
+property</span>。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">名稱</span>欄位中，輸入 <kbd class="ph userinput">BIND_TO</kbd> 指令。</span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">值</span>欄位中，輸入橋接應用程式的名稱，例如 <var class="keyword varname">pipeline_bridge_app</var>。</span></li>
+<li class="step"><span class="cmd">按一下 <span class="ph uicontrol">SAVE</span>。</span></li>
+<li class="step"><span class="cmd">執行您的管線來測試配置。</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">提示：</span> 在橋接應用程式連結至容器之後，請不要刪除橋接應用程式。如果您刪除連結的橋接應用程式，容器會當掉。請先刪除容器，以及任何正在使用橋接應用程式的其他容器，然後再刪除橋接應用程式。</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58857e3619" lang="zh-tw" id="container_group_pipeline_deploy"><h4 class="topictitle4" id="d58857e3619">使用 <span class="keyword">Delivery Pipeline</span> 為容器群組建立部署階段</h4>
+<div class="body taskbody"><p class="shortdesc">您可以使用 <span class="keyword">Delivery Pipeline</span> 建立容器群組的部署階段。</p>
+<div class="section prereq"><div class="p">開始之前：<ul><li><a href="container_integrations.html#container_group_pipeline_build" title="IBM Bluemix Container Service 包括一個建置服務，它會取入原始碼，然後建置 Docker 映像檔並將其發佈至容器登錄。Delivery Pipeline（這是 IBM Bluemix Continuous Delivery 的一部分）提供一個使用容器建置服務的建置工作。此建置工作可從儲存庫取得原始碼、從該原始碼建置 Docker 映像檔、版本化（標記）該映像檔以符合建置號碼，然後將產生的映像檔推送至 Bluemix 上組織的 IBM Bluemix Container Service 登錄。然後，組織的成員可將產生的映像檔部署至組織內的空間。">建立建置階段</a>。</li>
+<li><a href="https://github.com/Osthanes/deployscripts/blob/master/deploygroup.sh" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">檢閱容器群組的預設部署 Script</a>。您可以分出並編輯預設 Script，或改為自行建立要使用的 Script。</li>
+<li><a href="../services/ContinuousDelivery/pipeline_deploy_var.html">檢閱 <span class="keyword">Delivery Pipeline</span> 服務所提供的可用環境變數清單</a>。</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">建立部署階段。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd">按一下 <span class="ph uicontrol">ADD STAGE</span>。</span></li>
+<li class="li substep"><span class="cmd">為階段命名。</span> 例如，<samp class="ph codeph"><var class="keyword varname">Deploy</var></samp>。</li>
+<li class="li substep"><span class="cmd">對於輸入類型，選取<span class="ph uicontrol">建置構件</span>。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">在階段上，建立部署工作。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">工作</span>標籤上，按一下<span class="ph uicontrol">新增工作</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於工作類型，選取<span class="ph uicontrol">部署</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於部署人員類型，選取 <span class="ph uicontrol">IBM Container service on <span class="keyword">Bluemix</span></span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">選取組織及空間。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於部署策略，輸入下列其中一個值。</span> <ul><li><span class="ph uicontrol">red_black</span> - 部署新版本的應用程式。如果部署成功，則會移除應用程式的前一個部署，而且 IP 位址或路徑會對映至新版本。</li>
+<li><span class="ph uicontrol">clean</span> - 移除應用程式的所有先前部署。</li>
+</ul>
+</li>
+<li class="li substep substepexpand"><span class="cmd">對於名稱，輸入要部署之容器的名稱。</span></li>
+<li class="li substep substepexpand"><span class="cmd">對於埠，輸入容器的已發佈埠。</span> 若為容器群組，您只能指定一個埠。
+<div class="note tip"><span class="tiptitle">提示：</span> 如果未指定埠，而且您是使用預設部署 Script，則會自動發佈埠 80。若要使用預設部署 Script 以將容器設成專用狀態，請完成下列步驟。
+<ol type="i"><li>對於部署策略，輸入 <kbd class="ph userinput">simple</kbd>。</li>
+<li> 將 <span class="ph uicontrol">Port</span> 欄位保留為空白。</li>
+<li>因為簡單部署不會清除先前的部署，所以您可以建立另一個部署階段來予以清除。請將第二個部署階段中的 <span class="ph uicontrol">Deployment strategy</span> 設為 <kbd class="ph userinput">clean</kbd>。</li>
+</ol>
+</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">如果您有任何選用部署引數，請輸入它們。</span> 例如，如果您的應用程式需要一個環境變數來代表後端資料庫的位置，則可以併入以下這一行：
+
+<pre class="codeblock"><code>--env MY_DB_HOSTNAME_PROPERTY=<var class="keyword varname">mydbhostname</var></code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">設定容器群組部署，而非單一容器部署。在「部署人員 Script」區段中，移除 #，以將容器群組 Script 解除註解。</span> <pre class="pre screen"><code>/bin/bash deployscripts/deploygroup.sh</code></pre>
+加上 #，以註銷單一容器 Script：
+<pre class="pre screen"><code>#/bin/bash deployscripts/deploycontainer.sh</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">如果您已自行建立部署 Script，請編輯 <span class="ph uicontrol">Deployer script</span> 區段來進行使用。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">複製下列這一行，並更新它以使用您的儲存庫。</span> <pre class="pre screen"><code>git_retry clone https://github.com/Osthanes/deployscripts.git deployscripts</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">編輯下列這一行，以使用您的 Script。</span> <pre class="pre screen"><code>/bin/bash deployscripts/deploygroup.sh</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">若要配置基本容器群組，請設定表格中的每一個環境變數。</span> 這些內容可讓您設定從指令行或 <span class="keyword">Bluemix</span> 使用者介面部署容器時所設定的部分選項。若為其他內容，請參閱使用者介面的 Deployer Script 區段中的註解。<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">按一下 <span class="ph uicontrol">ENVIRONMENT PROPERTIES</span> 標籤，然後按一下 <span class="ph uicontrol">ADD PROPERTY</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">選取 <span class="ph uicontrol">Text property</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">輸入環境內容的名稱及值。</span> <div class="tablenoborder"><table summary="" id="container_group_pipeline_deploy__common_properties" class="defaultstyle"><thead><tr><th id="d58857e3911" class="thleft">內容</th>
+<th id="d58857e3913" class="thleft">說明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d58857e3911 "><span class="ph uicontrol">AUTO_RECOVERY</span></td>
+<td headers="d58857e3913 "><kbd class="ph userinput">true</kbd> 或 <kbd class="ph userinput">false</kbd><p><span class="ph">若已啟用容器群組的自動回復，且群組已執行 10 分鐘，則群組的負載平衡器會透過 HTTP 要求開始定期檢查群組中每一個容器實例的性能。如果容器實例未在 100 秒內回應，則會將其標示為非作用中。非作用中容器實例會從群組中移除，並透過自動回復進行重建。自動回復會嘗試回復群組中的容器實例 3 次。在第三次嘗試之後，自動回復會有 60 分鐘的時間無法回復群組中的任何容器實例。在 60 分鐘之後，就會再次啟動自動回復處理程序。</span></p>
+</td>
+</tr>
+<tr><td headers="d58857e3911 "><span class="ph uicontrol">CONCURRENT_VERSIONS</span></td>
+<td headers="d58857e3913 ">數字<p><samp class="ph systemoutput">CONCURRENT_VERSIONS</samp> 環境內容會設定要維持作用中的應用程式部署版本數。預設值為一個版本。例如，如果 <samp class="ph systemoutput">CONCURRENT_VERSIONS</samp> 設為 2，而且您是部署容器群組，則兩個群組會對映至路徑並接收資料流量。</p>
+
+<p>若要一律移除應用程式的所有部署，您可以在 ENVIRONMENT PROPERTIES 標籤中將 <samp class="ph systemoutput">CONCURRENT_VERSIONS</samp> 設為 <samp class="ph systemoutput">0</samp>。</p>
+</td>
+</tr>
+<tr><td headers="d58857e3911 "><span class="ph uicontrol">DESIRED_INSTANCES</span></td>
+<td headers="d58857e3913 ">數字<p>範例：<samp class="ph codeph">4</samp></p>
+<span class="ph">應用程式所需要的容器群組實例數目，取決於預期的工作負載和應用程式處理要求所花的時間。例如，多工或網路連線會影響應用程式需要的實例數目。</span><p><span class="ph">若要讓容器群組具備高可用性及更大的失敗復原力，請考慮包含多於最小值的額外實例來處理預期工作負載。
+在另一個實例損毀時，額外實例可以處理工作負載。若要確保自動回復失敗的實例，而不影響工作負載，請包含一個額外的實例。為了預防兩個同時失敗，請包含兩個額外的實例。此設定是一種 <var class="keyword varname">N+2</var> 個型樣，其中 <var class="keyword varname">N</var> 是處理要求的實例數，而 <var class="keyword varname">+2</var> 是額外兩個實例。</span></p>
+</td>
+</tr>
+<tr><td headers="d58857e3911 "><span class="ph uicontrol">ROUTE_DOMAIN</span></td>
+<td headers="d58857e3913 ">字串或 <samp class="ph codeph">none</samp><p>範例：<samp class="ph codeph">mycustomdomain.com</samp></p>
+<p>預設系統網域是 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>，並且已提供 SSL 憑證，讓您可以使用 HTTPS 存取容器群組，而不需要進行任何其他配置。若要使用自訂網域，您必須在公用 DNS 伺服器上登錄自訂網域，並在 <span class="keyword">Bluemix</span> 中配置自訂網域，然後將自訂網域對映至公用 DNS 伺服器上的 <span class="keyword">Bluemix</span> 系統網域。</p>
+<p>如果未指定網域，則會使用 <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。如果指定 <samp class="ph codeph">none</samp>，則不會建立網域。</p>
+<p>如果將主機名稱及網域指定為 <samp class="ph codeph">none</samp>，則相同空間中的其他容器可以存取該群組，但不能公開存取該群組。</p>
+</td>
+</tr>
+<tr><td headers="d58857e3911 "><span class="ph uicontrol">ROUTE_HOSTNAME</span></td>
+<td headers="d58857e3913 ">字串或 <samp class="ph codeph">none</samp><p>範例：<samp class="ph codeph">myapp</samp></p>
+<p>主機名稱（例如 <var class="keyword varname">mycontainerhost</var>）。請不要在主機名稱中包含底線 (_)。合併的主機及網域可構成完整公用路徑 URL，例如 <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>。</p>
+<p>如果未指定主機名稱，則會為您建立一個主機名稱。如果指定 <samp class="ph codeph">none</samp>，則不會建立主機名稱。</p>
+<p>如果將主機名稱及網域指定為 <samp class="ph codeph">none</samp>，則相同空間中的其他容器可以存取該群組，但不能公開存取該群組。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">按一下<span class="ph uicontrol">儲存</span>。</span></li>
+</ol>
+</div>
+</article></article></article><article class="topic tutorial tutorialIntro nested1" role="article" aria-labelledby="d58857e4054" lang="zh-tw" id="container_cfapp_tutorial_intro"><h2 class="topictitle2" id="d58857e4054">指導教學：在容器中部署 Cloud Foundry Node.js 應用程式</h2>
+<div class="body  tutorialIntroBody"><p class="shortdesc">您可以採用先前使用 Cloud Foundry 所部署的應用程式，並使用 <span class="keyword">IBM
+Bluemix Container Service</span> 將它部署在容器中。</p>
+<div class="section tutorialDesc longDesc"></div><section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d58857e4104"><h3 class="sectiontitle" id="d58857e4104">目標</h3>
+<ul><li>瞭解容器的一般部署程序</li>
+<li>瞭解 Dockerfile 中必須包含的映像檔建置資訊</li>
+</ul>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d58857e4113"><h3 class="sectiontitle" id="d58857e4113">所需時間</h3>30 分鐘</section>
+<section role="region" aria-labelledby="d58857e4117" class="section section audienceDesc"><h3 class="sectiontitle" id="d58857e4117">適用對象</h3>Cloud Foundry 應用程式開發人員</section><section role="region" aria-labelledby="d58857e4121" class="section section prerequisites"><h3 class="sectiontitle" id="d58857e4121">必要條件</h3>
+<ul><li><a href="container_cli_cfic_install.html#container_cli_cfic_install" title="安裝 IBM Bluemix Container Service 外掛程式 (bx ic)，以執行原生 Docker CLI 指令來管理容器。">安裝 <span class="keyword">IBM
+Bluemix Container Service</span> CLI</a></li>
+<li><a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span> CLI</a></li>
+</ul>
+</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d58857e4164" lang="zh-tw" id="container_cfapp_tutorial_lesson1"><h3 class="topictitle3" id="d58857e4164">課程 1：下載 Cloud Foundry Node.js 應用程式碼</h3>
+<div class="body taskbody"><p class="shortdesc">請備妥 Node.js 程式碼。還沒有任何程式碼嗎？您可以從 <span class="keyword">Bluemix</span> 下載要在此指導教學中使用的入門範本程式碼。</p>
+<div class="section prereq">開始之前，請<a href="container_cli_cfic_install.html#container_cli_cfic_install" title="安裝 IBM Bluemix Container Service 外掛程式 (bx ic)，以執行原生 Docker CLI 指令來管理容器。">安裝 <span class="keyword">IBM
+Bluemix Container Service</span> CLI</a> 並<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入</a>。</div><p class="li stepsection">若要取得並組織應用程式碼，請執行下列動作：</p><ol class="steps"><li class="step stepexpand"><span class="cmd">建立名為 <kbd class="ph userinput"><var class="keyword varname">cf-pi-myinitials</var></kbd> 的目錄，並導覽至其中。</span> 在此目錄中，您會儲存建置 Docker 映像檔以及執行 Node.js 應用程式所需的所有檔案。您可以使用目錄的任何名稱。如果您使用範例中的名稱，請將 <var class="keyword varname">myinitials</var> 取代為您的姓名縮寫（例如 <var class="keyword varname">cf-pi-ms</var>）。
+<pre class="codeblock"><code>mkdir <var class="keyword varname">cf-pi-myinitials</var> &amp;&amp; cd <var class="keyword varname">cf-pi-myinitials</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">將 Node.js 應用程式碼及所有相關檔案複製到目錄。</span> 您可以使用自己的 Node.js 應用程式碼，或從 <span class="keyword">Bluemix</span> 下載 Personal Insights 應用程式。
+<p>若要從 <span class="keyword">Bluemix</span> 下載 Personal Insights 應用程式碼，請遵循下列步驟。</p>
+<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在 <span class="keyword">Bluemix</span>「<span class="keyword wintitle">型錄</span>」的<span class="ph uicontrol">樣板</span>中，按一下 <span class="ph uicontrol">Personality Insights Node.js Web 入門範本</span>。</span> 此樣板所包含的 Node.js 應用程式會使用 <span class="keyword">IBM Watson™ Personality Insights</span> 服務，以從人員透過部落格、推文或討論區貼文所產生的文字中擷取各種不同的認知及社交性質。</li>
+<li class="li substep substepexpand"><span class="cmd">輸入應用程式名稱 <kbd class="ph userinput"><var class="keyword varname">cf-pi-myinitials</var></kbd>，然後按一下<span class="ph uicontrol">建立</span>。</span> 若要存取樣板的應用程式碼，您必須先將 CF 應用程式部署至 <span class="keyword">Bluemix</span>。您可以使用應用程式的任何名稱。
+如果您使用範例中的名稱，請將 <var class="keyword varname">myinitials</var> 取代為您的姓名縮寫（例如 <var class="keyword varname">cf-pi-ms</var>），以確保它是唯一的。
+<p>此部署會建立名為 <var class="keyword varname">cf-pi-myinitials</var> 的應用程式，以及名為 <var class="keyword varname">cf-pi-myinitials-personality_insights</var> 的 <span class="keyword">IBM
+Watson Personality Insights</span> 服務實例。</p>
+
+<p>部署應用程式時，即會顯示<strong>使用指令行介面來部署應用程式</strong>的指示。</p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">從步驟 1 中，按一下<span class="ph uicontrol">下載入門範本程式碼</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">解壓縮 .zip 檔案，並將應用程式檔案儲存至目錄。</span></li>
+</ol>
+</li>
+</ol>
+<div class="section result">已準備好將您的 Cloud Foundry 應用程式碼設為容器！</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d58857e4361" lang="zh-tw" id="container_cfapp_tutorial_lesson2"><h3 class="topictitle3" id="d58857e4361">課程 2：使用 CF 應用程式碼建立 Docker 映像檔</h3>
+<div class="body taskbody"><p class="shortdesc">建立包含 Node.js 應用程式碼及必要容器配置的 Dockerfile。然後，從該 Dockerfile 建置 Docker 映像檔，並將它推送至專用 <span class="keyword">Bluemix</span> 登錄。</p>
+<p class="li stepsection">若要使用應用程式碼來建立 Docker 映像檔，請遵循下列步驟。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">建立 <span class="ph filepath">Dockerfile</span>，其為容器建立基礎。</span> 您可以在電腦上使用偏好的 CLI 編輯器或文字編輯器來建立 Dockerfile。下列範例顯示如何使用 <a href="https://www.nano-editor.org/dist/v2.2/nano.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">nano 編輯器</a>來建立 Dockerfile 檔案。
+<pre class="codeblock"><code>nano Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">將下列 Script 複製到 Dockerfile。</span> <pre class="codeblock"><code>#Use the IBM Node image as a base image
+FROM registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmnode:latest
+
+#Expose the port for your Personal Insights app, and set 
+#it as an environment variable as expected by cf apps
+ENV PORT=3000
+EXPOSE 3000
+ENV NODE_ENV production
+
+#Copy all app files from the current directory into the app 
+#directory in your container. Set the app directory
+#as the working directory
+ADD . /app
+WORKDIR /app
+
+#Install any necessary requirements from package.json
+RUN npm install
+
+#Sleep before the app starts. This command ensures that the
+#IBM Containers networking is finished before the app starts. 
+CMD (sleep 60; npm start)
+#Start the Personal Insight app. 
+CMD ["node", "/app/app.js"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">按 <span class="ph uicontrol">ctrl + o</span> 來儲存您的變更。按 <span class="ph uicontrol">ENTER</span> 鍵來確認您的變更。按 <span class="ph uicontrol">ctrl + x</span> 來結束 nano 編輯器。</span></li>
+<li class="step stepexpand"><span class="cmd">使用應用程式碼建置 Docker 映像檔，並將它推送至專用 <span class="keyword">Bluemix</span> 登錄。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var> .</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="container_cfapp_tutorial_lesson2__table_build" class="defaultstyle"><thead><tr><th colspan="2" id="d58857e4471" class="thleft"><span class="ph"><img src="images/idea.png" alt="此圖示指出還有相關資訊可讓您瞭解該作業的這個步驟。"></span> 瞭解此指令的元件</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d58857e4471 "><samp class="ph codeph">build</samp></td>
+<td style="width: 50%" headers="d58857e4471 "><samp class="ph codeph">build</samp> 指令。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4471 "><samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var></samp></td>
+<td style="width: 50%" headers="d58857e4471 ">您的專用 <span class="keyword">Bluemix</span> 登錄路徑，內含您的唯一名稱空間及映像檔名稱。在此範例中，映像檔與 CF 節點應用程式 <var class="keyword varname">cf-pi-myinitials</var> 所使用的名稱相同，但您可以在專用登錄中為映像檔選擇任何名稱。如果您不確定名稱空間為何，請執行下列指令來尋找它。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4471 "><samp class="ph codeph">.</samp></td>
+<td style="width: 50%" headers="d58857e4471 ">Dockerfile 的位置。如果您是從包含 Dockerfile 的目錄中執行 build 指令，請輸入句點 (.)。否則，請使用 Dockerfile 的相對路徑。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="section result">即會在登錄中建立映像檔。您可以執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> 指令，來驗證已建立映像檔。<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                   TAG     IMAGE ID      CREATED         SIZE
+registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var>  latest  b02b7a24c35f  48 seconds ago  251.3 MB</code></pre>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d58857e4540" lang="zh-tw" id="container_cfapp_tutorial_lesson3"><h3 class="topictitle3" id="d58857e4540">課程 3：從映像檔部署容器</h3>
+<div class="body taskbody"><p class="shortdesc">在 <span class="keyword">Bluemix</span> 中，將應用程式部署為容器群組。</p>
+<p class="li stepsection">若要在容器群組中部署應用程式，請遵循下列步驟。</p><ol class="steps"><li class="step stepexpand"><span class="cmd"> 執行下列指令，從您在前一個課程中所建立的映像檔來建立容器群組。</span>  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">cf-pi-myinitials</var> -m 64 -n <var class="keyword varname">pi-app-myinitials</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -p 3000 -e CCS_BIND_SRV=<var class="keyword varname">cf-pi-myinitials-personal_insights</var> --desired 3 --auto --anti registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var>:latest</code></pre>
+
+
+<div class="p"><div class="tablenoborder"><table summary="" id="container_cfapp_tutorial_lesson3__table_group_create" class="defaultstyle"><thead><tr><th colspan="2" id="d58857e4627" class="thleft"><span class="ph"><img src="images/idea.png" alt="此圖示指出還有相關資訊可讓您瞭解該作業的這個步驟。"></span> 瞭解此指令的元件</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">group-create</samp></td>
+<td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">group-create</samp> 指令。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">--name <var class="keyword varname">cf-pi-myinitials</var></samp></td>
+<td style="width: 50%" headers="d58857e4627 ">想要從 <span class="keyword">Bluemix</span> GUI 顯示的容器名稱。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">-m 64</samp></td>
+<td style="width: 50%" headers="d58857e4627 ">群組中的每一個實例都會獲指派 64 MB 的記憶體。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">-n <var class="keyword varname">pi-app-myinitials</var></samp></td>
+<td style="width: 50%" headers="d58857e4627 ">路徑 URL 中的主機名稱。<div class="note tip"><span class="tiptitle">提示：</span> 如果您使用的是入門範本程式碼，請使用與前一個課程中所使用的主機名稱不同的名稱來部署 Cloud Foundry 應用程式。如果使用相同的主機，而且 CF 應用程式仍在執行中，則會執行容器群組與應用程式之間的負載平衡。</div>
+</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">-d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp></td>
+<td style="width: 50%" headers="d58857e4627 ">路徑 URL 中的網域名稱。除非您有自訂網域，否則請使用 <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span>。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">-p 3000</samp></td>
+<td style="width: 50%" headers="d58857e4627 ">要公開的埠號。與路徑 URL 的連線會轉遞至容器上的埠 3000。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">-e
+CCS_BIND_SRV=<var class="keyword varname">cf-pi-myinitials-personal_insights</var></samp></td>
+<td style="width: 50%" headers="d58857e4627 ">將 <span class="keyword">IBM
+Watson Personality Insights</span> 服務實例連結至容器，以從 Personal Insights 應用程式中所輸入的文字來分析認知及社交性質。在課程 1 中，已將服務實例建立為 CF 應用程式部署的一部分。<div class="p">如果您不確定服務實例的名稱，請執行下列指令。<pre class="codeblock"><code>bx service list</code></pre>
+</div>
+</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">--desired 3</samp></td>
+<td style="width: 50%" headers="d58857e4627 ">要在容器群組中建立的單一容器實例數目。所有實例都相同。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">--auto</samp></td>
+<td style="width: 50%" headers="d58857e4627 ">啟用容器群組的自動回復。如果群組中的其中一個實例變成無法使用，則會自動建立可取代未回應實例的另一個實例。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">--anti</samp></td>
+<td style="width: 50%" headers="d58857e4627 ">啟用容器群組的反親緣性。群組的每一個實例都會放在個別的實體運算節點上，這會減少群組中所有容器因硬體故障而損毀的可能性。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58857e4627 "><samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var>:latest</samp></td>
+<td style="width: 50%" headers="d58857e4627 ">目的地儲存庫路徑，內含您的唯一名稱空間和目的地映像檔名稱。在此範例中，映像檔與 CF 節點應用程式 <var class="keyword varname">cf-pi-myinitials</var> 所使用的名稱相同。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">等待幾分鐘，以部署容器及設定網路。部署容器之後，輸入下列 URL <span class="ph filepath">http://<var class="keyword varname">pi-app-myinitials</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span>/</span>，即可在瀏覽器中檢視 Personal Insights 應用程式。</span></li>
+<li class="step stepexpand"><span class="cmd">移除 CF 應用程式。</span> 既然您的 CF 應用程式碼已部署在容器中，便可以移除 CF 應用程式，以充分利用您的配額。
+<pre class="codeblock"><code>cf delete <var class="keyword varname">cf-pi-myinitials</var></code></pre>
+請輸入 <span class="ph uicontrol">y</span> 來確認刪除。</li>
+</ol>
+<div class="section result">您的應用程式已部署在容器中！</div></div>
+</article></article></article></div></main></body></html>

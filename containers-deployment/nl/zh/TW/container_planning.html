@@ -1,0 +1,796 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service 提供許多選項來配置您的容器開發環境，以符合應用程式及組織的功能及非功能性需求。開始使用之前，請先瞭解有哪些選項。">
+<meta name="keywords" content="計劃, IBM Containers, 容器, 決策, 組織管理員, 管理, 名稱空間, 配額, 付費, 資料儲存空間, 檔案共用, 開發人員, 儀表板, GUI, CLI, REST, API, 安裝, 外掛程式, 專用映像檔, 本端映像檔, 映像檔, Docker Hub, 檢視映像檔, 登錄, 漏洞, 網路延遲, Dockerfile, 提示, 損毀, 關閉, 專用網路, IP 位址, 路徑, 容器損毀, 啟動容器, 公用網路, 網際網路, 單一容器, docker compose, 可存取的, 容器群組, 服務, VCAP_SERVICES, 磁區, 群組, 負載平衡, 反親緣性, 運算節點, 高可用性, 自動回復, 回復, 自動, 性能不佳的群組實例, 自動擴充, 擴增, 縮減, 擴充">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>計劃使用 單一及可擴充容器</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d67393e6" id="container_planning"><h1 class="topictitle1" id="d67393e6">計劃使用 <span class="ph">單一及可擴充容器</span></h1>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix® Container Service</span> 提供許多選項來配置您的容器開發環境，以符合應用程式及組織的功能及非功能性需求。開始使用之前，請先瞭解有哪些選項。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">小心：</span> 不提供<span class="ph"><span class="ph">單一及可擴充容器</span>的免費試用。<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">瞭解在「<span class="keyword">Bluemix</span> 公用」上，如何在 <span class="keyword">IBM
+Bluemix Container Service</span> 中進行叢集管理並移轉至 Kubernetes。</a></span></div>
+</div>
+
+
+<div class="p">在此頁面中：<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#roles">瞭解使用者角色</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#container_planning_org_ov" title="在 Bluemix 中，您可以使用組織，讓團隊成員之間進行協同作業，以及協助專案中的雲端資源進行邏輯分組。每個組織都會獲指派一個組織管理員，負責設定開發環境（空間），以及授權團隊成員存取所需要的雲端資源，以順利建立其應用程式的容器。此設定包括指派公用 IP 位址、資料儲存空間及容器記憶體。身為組織管理員，您還可以檢視雲端資源的現行配額及用量，並視需要加以調整。">管理單一容器及可擴充容器群組的 <span class="keyword">Bluemix</span> 組織</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_namespace" title="若要儲存及管理 IBM Bluemix Container Service 的專用映像檔，每個組織都必須在 Bluemix 中設定自己的專用 Docker 映像檔登錄。專用登錄的這個名稱稱為名稱空間，在 Bluemix 內必須是唯一的。">為專用 <span class="keyword">Bluemix</span> 登錄設定名稱空間</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_quota" title="Bluemix 中的每個組織，其容器記憶體、公用 IP 位址、檔案共用和組織的所有空間所共用的服務數目都有預設值。這些預設值稱為配額。">配額及可用的 <span class="keyword">Bluemix</span> 帳戶類型</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_fileshare" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">持續性儲存空間設定</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_planning.html#container_planning_container_ov" title="若要在 Bluemix 中使用 IBM Bluemix Container Service 建立可執行應用程式的容器，您必須已獲授與開發人員權限才能使用組織空間。身為應用程式的開發人員，務必知道容器元件之間的關係，以及如何變更容器的配置，以滿足應用程式的功能與非功能需求。">在 IBM Bluemix Container Service 中建立單一容器及可擴充容器群組</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_cli-ui" title="當您計劃使用 IBM Bluemix Container Service 時，可以使用 Bluemix GUI、安裝指令行介面 (CLI)，或針對 REST API 傳送 HTTP 要求，來存取 IBM Bluemix Container Service。">Bluemix GUI、CLI 或 REST API</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_images" title="容器映像檔是您建立的每個容器的基礎。映像檔是從 Dockerfile 建立的，Dockerfile 檔案中包含建置映像檔以及建置構件（例如應用程式、應用程式的配置及其相依關係）的指示。請將容器映像檔想像成執行檔（.exe 或 .bin）。執行這個可執行的應用程式檔案之後，即會建立應用程式的實例。當您執行容器時，會從映像檔建立容器實例。容器映像檔儲存在專用 Bluemix 登錄中，而且只能從 CLI 新增。您要使用的每個容器映像檔都必須位於登錄中，您才能從中建立容器。">IBM 公用、Docker Hub 及專用映像檔</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_private_network" title="容器專用網路為在同一空間執行的單一容器和容器群組建立一個隔離的安全環境。使用專用 IP 位址，連接至相同專用網路的容器，即可與專用網路中的其他容器彼此之間傳送及接收資料。必須等到已連結單一容器的公用埠與公用 IP 位址或容器群組的公用路徑之後，才能公開使用容器。">專用容器網路設定</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_public_network" title="依預設，IBM Bluemix Container Service 中的每個單一容器和容器群組都可用於專用網路。不過，您的應用程式可能需要從網際網路存取，或者您想要存取您組織的其他空間中的容器。在這些情況下，您必須將容器公開給大眾使用。視您選擇的容器類型而定，有不同的方式可讓容器供大眾使用。">公用網路設定</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_bmx_service" title="Bluemix 提供不同服務讓您與 IBM Bluemix Container Service 搭配使用，以將額外功能帶進應用程式，或簡化應用程式的實作及容器的管理。"><span class="keyword">Bluemix</span> 服務的整合</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_volumes" title="決定在何處儲存應用程式建立的資料或應用程式需要執行的檔案。">持續性資料儲存空間選項</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_types" title="使用 IBM Bluemix Container Service 建立容器之前，請決定您需要的容器類型。IBM Bluemix Container Service 提供不同的方法以在雲端中建立容器。您選擇的方法取決於容器中執行的應用程式的需求和相依關係。">容器類型</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_planning.html#container_planning_monlog" title="在 Bluemix 中，容器附有內建的監視及記載，讓您可以密切監看容器的性能。">監視及記載選項</a></div>
+</div>
+</div>
+<div class="section context"></div></div>
+<article class="topic task nested1" role="article" aria-labelledby="d67393e308" id="roles"><h2 class="topictitle2" id="d67393e308">瞭解使用者角色</h2>
+<div class="body taskbody"><div class="section context" id="roles__context_tc2_pxz_nz"><p data-hd-otherprops="registry_check">容器是由組織管理員及容器開發人員管理。下列映像檔顯示組織的範例容器配置，並強調顯示組織管理員或容器開發人員可以設定的元件。<a href="../api/content/containers/images/container_planning_container_ov_bluemixify.png" rel="external" target="_blank" title="（在新分頁或視窗中開啟）"><img id="roles__image_qlf_pxz_nz" src="images/container_planning_container_ov_bluemixify.png" width="700" alt="顯示容器開發人員或組織管理員可配置的 IBM&#xA;Bluemix Container Service 元件的圖表。"></a></p>
+請檢閱本主題的各小節，以取得每個元件及您可進行之決策和配置的相關資訊。建立容器之後，將無法變更其中部分配置。事先知道這些配置，可協助您確保所有資源（例如記憶體、磁碟空間及 IP 位址）可供開發團隊使用，以及充分利用組織配額。</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d67393e328" lang="zh-tw" id="container_planning_org_ov"><h2 class="topictitle2" id="d67393e328">管理 <span class="keyword">IBM
+Bluemix Container Service</span> 的 <span class="keyword">Bluemix</span> 組織</h2>
+<div class="body taskbody"><p class="shortdesc">在 <span class="keyword">Bluemix</span> 中，您可以使用組織，讓團隊成員之間進行協同作業，以及協助專案中的雲端資源進行邏輯分組。每個組織都會獲指派一個組織管理員，負責設定開發環境（空間），以及授權團隊成員存取所需要的雲端資源，以順利建立其應用程式的容器。此設定包括指派公用 IP 位址、資料儲存空間及容器記憶體。身為組織管理員，您還可以檢視雲端資源的現行配額及用量，並視需要加以調整。</p>
+<div class="section prereq">開始之前，請<a data-hd-audience="yellow" href="../iam/users_roles.html#userroles">確認使用者的角色</a>，而使用者位於組織中。<ul><li>將組織內的<dfn class="term">管理者</dfn> 角色授與使用者，以指派組織管理程式。</li>
+<li>將空間內的<dfn class="term">開發人員</dfn> 或<dfn class="term">審核員</dfn> 角色授與使用者，以指派容器建立者。</li>
+</ul>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d67393e421" id="container_planning_namespace"><h3 class="topictitle3" id="d67393e421">為專用 <span class="keyword">Bluemix</span> 登錄設定組織的名稱空間</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" data-hd-otherprops="registry_check" id="namespace_def">若要儲存及管理 <span class="keyword">IBM
+Bluemix Container Service</span> 的專用映像檔，每個組織都必須在 <span class="keyword">Bluemix</span> 中設定自己的專用 Docker 映像檔登錄。專用登錄的這個名稱稱為<dfn class="term">名稱空間</dfn>，在 <span class="keyword">Bluemix</span> 內必須是唯一的。</span></p>
+<div class="section context"><span class="ph">該名稱空間用來產生專用映像檔登錄的唯一 URL。因此，該名稱空間會附加到 <span class="keyword">Bluemix</span> 登錄 URL，如下所示：<span class="ph filepath">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var></span>。每次要從 CLI 使用其中一個映像檔時，您都必須輸入專用登錄的完整 URL。如果您要在多個 <span class="keyword">Bluemix</span> 地區中使用 <span class="keyword">IBM
+Bluemix Container Service</span>，則必須設定每個地區的名稱空間。</span> 儲存在專用登錄中的所有容器映像檔都是由組織的所有使用者共用。<div class="steps note"><span class="notetitle">註：</span> 在同一時間，每個組織只能針對每一個 <span class="keyword">Bluemix</span> 地區有一個名稱空間。設定組織的名稱空間之後，即無法改變，只能刪除。</div>
+<p>當您選擇組織的名稱空間時，請考量下列規則。</p>
+<ul data-hd-otherprops="registry_check"><li>您的名稱空間在 <span class="keyword">Bluemix</span> 中必須是唯一的。</li>
+<li>名稱空間的長度可為 4-30 個字元。</li>
+<li>名稱空間的開頭必須至少使用一個字母或數字。</li>
+<li>名稱空間只能包含小寫字母、數字或底線 (_)。</li>
+</ul>
+</div><p class="li stepsection"><p>從 <span class="keyword">Bluemix</span> GUI 中，遵循下列步驟。</p>
+</p><ol><li class="step stepexpand"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">從型錄中，選取<span class="ph uicontrol">容器</span>，然後選擇映像檔。</span></span></li>
+<li class="step stepexpand"><span class="cmd">如果已為您的組織設定名稱空間，則系統不會提示您建立一個名稱空間，而且可以繼續下一步。</span> 如果尚未為您的組織指定名稱空間，則系統會提示您為映像檔登錄設定一個名稱空間。</li>
+</ol><p class="li stepsection"><p>登入 <span class="keyword">IBM
+Bluemix Container Service</span> 之後，從 CLI 執行下列指令：</p>
+</p><ol start="3"><li class="step stepexpand"><span class="cmd">設定組織的名稱空間。將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您要為組織設定的名稱空間。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">&lt;my_namespace&gt;</var></code></pre>
+
+
+<div class="steps note"><span class="notetitle">註：</span> 如果您不確定是否已為您的組織設定了名稱空間，請遵循<a href="container_planning.html#namespace_get" title="如果已設定組織的名稱空間，您可以從 Bluemix GUI 或 CLI 擷取它。">擷取組織的名稱空間</a>主題中的步驟。</div>
+</li>
+</ol></div>
+<aside role="complementary" aria-labelledby="d67393e421"></aside><article class="topic task nested3" role="article" aria-labelledby="d67393e605" id="namespace_get"><h4 class="topictitle4" id="d67393e605">擷取組織的名稱空間</h4>
+<div class="body taskbody"><p class="shortdesc">如果已設定組織的名稱空間，您可以從 <span class="keyword">Bluemix</span> GUI 或 CLI 擷取它。</p>
+<div class="section context"><div class="steps note"><span class="notetitle">註：</span> 只有在已將專用映像檔新增至專用映像檔登錄時，才能從 <span class="keyword">Bluemix</span> GUI 中識別名稱空間。您無法從 IBM 提供的映像檔中擷取此資訊。如果您的登錄中還沒有專用映像檔，請選擇 CLI 選項來識別您組織的名稱空間。</div>
+</div><p class="li stepsection"><p>從 <span class="keyword">Bluemix</span> GUI 中，遵循下列步驟。</p>
+</p><ol><li class="step stepexpand"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">從型錄中，選取<span class="ph uicontrol">容器</span>，然後選擇映像檔。</span></span></li>
+<li class="step stepexpand"><span class="cmd">在映像檔名稱下，按一下<span class="ph uicontrol">複製 URL</span>。</span></li>
+<li class="step stepexpand"><span class="cmd">從已複製的 URL 中擷取名稱空間，其格式如下：registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var>。</span></li>
+</ol><p class="li stepsection"><p>從 CLI 中，登入 <span class="keyword">IBM
+Bluemix Container Service</span> 服務，然後執行下列指令。</p>
+</p><ol start="4"><li class="step stepexpand"><span class="cmd">擷取名稱空間資訊。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</li>
+</ol></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e678" id="container_planning_quota"><h3 class="topictitle3" id="d67393e678">配額及 <span class="keyword">Bluemix</span> 帳戶</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph"><span class="keyword">Bluemix</span> 中的每個組織，其容器記憶體、公用 IP 位址、檔案共用和組織的所有空間所共用的服務數目都有預設值。這些預設值稱為配額。</span></p>
+<div class="section context"><span class="ph" id="container_planning_quota__account_def"><span class="keyword">Bluemix</span> 提供不同帳戶，讓您與 <span class="keyword">IBM
+Bluemix Container Service</span> 搭配使用。帳戶類型影響您組織可用的配額，以及您使用容器資源的計價方式。</span>組織空間中的任何應用程式或服務都有助於配額的使用（不論它們是否在執行中）。因此，務必知道您要怎麼做才能<a href="container_planning.html#maximize_quota">充分利用現有配額</a>。<a href="container_planning.html#bluemix_account">隨收隨付制或訂閱方案</a>所設定的<a href="container_planning.html#default_quota_paid">預設配額限制</a>可以<a href="container_planning.html#change_quota">配置給 <span class="keyword">Bluemix</span> 空間</a>，以符合您組織的需求。</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e780" id="bluemix_account"><h4 class="topictitle4" id="d67393e780"><span class="keyword">Bluemix</span> 帳戶類型</h4>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context">下表提供可用帳戶類型的概觀。如需每一個帳戶及計費類型的詳細資訊，請檢閱<a href="../pricing/index.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">定價</a>主題。<div class="tablenoborder"><table summary="Bluemix 帳戶類型概觀" id="bluemix_account__table_psk_cl5_jw" class="defaultstyle"><caption><span class="tablecap">表 1. <span class="keyword">Bluemix</span> 帳戶類型概觀</span></caption><thead><tr><th id="d67393e809" class="thleft">帳戶類型</th>
+<th id="d67393e811" class="thleft">說明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67393e809 ">免費試用</td>
+<td headers="d67393e811 ">不提供<span class="ph">單一及可擴充容器</span>的免費試用。<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">瞭解在「<span class="keyword">Bluemix</span> 公用」上，如何在 <span class="keyword">IBM
+Bluemix Container Service</span> 中進行叢集管理並移轉至 Kubernetes。</a></td>
+</tr>
+<tr><td headers="d67393e809 ">隨收隨付制</td>
+<td headers="d67393e811 ">如果您註冊「隨收隨付制」帳戶，則只會針對所使用的 <span class="keyword">Bluemix</span> 資源付費。</td>
+</tr>
+<tr><td headers="d67393e809 ">訂閱</td>
+<td headers="d67393e811 ">如果您註冊「訂閱」帳戶，即承諾每個月的最低消費金額，並獲得適用於該最低收費的訂閱折扣。您同時會針對任何超出最低消費金額的用量付費。</td>
+</tr>
+<tr><td headers="d67393e809 "><span class="keyword">Bluemix</span> 專用</td>
+<td headers="d67393e811 ">使用「<span class="keyword">Bluemix</span> 專用」，您必須註冊至少一年的期間。您於該期間內每個月所支付的金額是根據您想要的專用服務，再加上讓您存取所有公用服務的訂閱帳戶。</td>
+</tr>
+<tr><td headers="d67393e809 "><span class="keyword">Bluemix</span> 本端</td>
+<td headers="d67393e811 ">使用「<span class="keyword">Bluemix</span> 本端」，您必須註冊至少一年的期間。您於該期間內每個月所支付的金額是根據您想要的本端服務，再加上讓您存取所有公用服務的訂閱帳戶。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e884" id="default_quota_paid"><h4 class="topictitle4" id="d67393e884">付費帳戶的預設配額</h4>
+<div class="body taskbody"><div class="section context">每個付費帳戶都會設定可在下表中檢閱的預設配額限制。如果您需要更多資源，則可以開立 <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> 支援問題單</a>來要求新增額外配額。<div class="tablenoborder"><table summary="付費帳戶的配額概觀" id="default_quota_paid__table_eq1_ccd_bx" class="defaultstyle"><caption><span class="tablecap">表 2. 付費帳戶的配額概觀</span></caption><thead><tr><th id="d67393e906" class="thleft">資源</th>
+<th id="d67393e908" class="thleft">付費帳戶配額限制</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67393e906 ">公用 IP 位址</td>
+<td headers="d67393e908 ">64</td>
+</tr>
+<tr><td headers="d67393e906 ">容器記憶體</td>
+<td headers="d67393e908 ">64 GB<div class="steps note"><span class="notetitle">註：</span> 空間中的每個容器都有助於配額的使用（不論容器是否在執行中）。若要釋出記憶體，您必須移除未用的容器。</div>
+</td>
+</tr>
+<tr><td headers="d67393e906 ">檔案共用</td>
+<td headers="d67393e908 ">10 個檔案共用</td>
+</tr>
+<tr><td headers="d67393e906 ">容器及容器群組</td>
+<td headers="d67393e908 ">無限制數量<div class="steps note"><span class="notetitle">註：</span> 容器及容器群組的大小會計入容器記憶體限制，但您不受限於特定的容器數量。</div>
+</td>
+</tr>
+<tr><td headers="d67393e906 ">映像檔</td>
+<td headers="d67393e908 ">25<div class="steps note"><span class="notetitle">註：</span> IBM 映像檔不計入專用 <span class="keyword">Bluemix</span> 登錄的映像檔數目限制。</div>
+</td>
+</tr>
+<tr><td headers="d67393e906 ">空間</td>
+<td headers="d67393e908 ">無限制數量<div class="steps note"><span class="notetitle">註：</span> 每個空間至少需要 2 個公用 IP 位址及 2 GB 容器記憶體，而這些是在您登入新的空間並嘗試搭配使用該空間與 <span class="keyword">IBM
+Bluemix Container Service</span> 時自動配置。這些資源會計入配額中，但您不受限於特定的空間數量。</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e962" id="change_quota"><h4 class="topictitle4" id="d67393e962">配置空間的配額</h4>
+<div class="body taskbody"><div class="section context">使用隨收隨付制方案或訂閱方案，除非達到配額限制，否則您都可以針對每一個空間調整記憶體、檔案共用數目及公用 IP 位址數目的配額配置。若要增加或減少容器的空間配額，請遵循下列步驟。</div><ol class="steps"><li class="step"><span class="cmd"><span class="ph" id="change_quota__view_quota_1">從帳戶詳細資料的「管理組織」中，選取組織。</span></span></li>
+<li class="step"><span class="cmd"><span class="ph" id="change_quota__view_quota_2">在「配額」區段中，檢視容器的詳細資料。</span></span></li>
+<li class="step"><span class="cmd">在<span class="ph uicontrol">配額配置</span>表格中，按一下<span class="ph uicontrol">編輯</span>按鈕，以變更每個空間所配置的配額。</span></li>
+<li class="step"><span class="cmd">按一下<span class="ph uicontrol">儲存</span>按鈕，以儲存變更。</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">提示：</span> 如果達到您的配額上限，則可以開立 <a href="../support/index.html#contacting-support"><span class="keyword">Bluemix</span> 支援問題單</a>來要求新增額外配額。</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e1001" id="maximize_quota"><h4 class="topictitle4" id="d67393e1001">充分利用配額的提示</h4>
+<div class="body taskbody"><div class="section context">請考量下列提示，以釋放不需要的容器資源，並充分利用您的配額。<ul><li>請確定移除未使用的容器，使其配置不計入配額。如需相關資訊，請參閱<a href="container_single_ui.html#container_single_remove" title="若要充分利用您的配額，請偶而移除未使用的容器。">移除單一容器</a>、<a href="container_ha.html#container_group_remove" title="若要充分利用您的配額，請偶而移除未使用的容器群組。">移除容器群組</a>及<a href="container_single_ui.html#container_compose_remove" title="最後一個步驟是移除多容器部署來釋出已使用的資源，並充分利用您的配額。">移除多容器應用程式</a>。</li>
+<li>若不得從網際網路存取您的容器，請不要將公用 IP 位址連結至您的容器。</li>
+<li>若要減少公用 IP 位址用量，請考慮使用容器群組來取代單一容器。容器群組會使用路徑，進行未受限於 IP 位址配額的公用存取。如需相關資訊，請參閱<a href="container_ha.html#container_group_ui" title="從 Bluemix GUI 建立及部署可擴充群組容器。容器群組包含兩個以上執行相同映像檔的容器。對於執行具有需要可擴充性及可靠性之工作負載的長期服務，或是進行所需規模的測試，都可以使用容器群組。">從 Bluemix GUI 將長期服務當作容器群組來執行</a>。</li>
+</ul>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e1043" id="container_planning_fileshare"><h3 class="topictitle3" id="d67393e1043">持續資料儲存空間</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="fileshare_def">檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 <span class="keyword">Bluemix</span> 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。</span></p>
+<div class="section context"><span class="ph">在空間中建立第一個磁區之後，即會免費建立一個具有 20 GB、4 IOPS（每秒輸入/輸出作業數）的預設檔案共用。磁區的大小相對於檔案共用的大小。當您新增其他磁區時，每一個磁區都會被指派等量的檔案共用儲存空間。</span><p><span class="ph">組織管理員可以建立具有特定儲存空間大小和 IOPS 的檔案共用，以符合空間的儲存需求。檔案共用佈建時，可以使用 20 GB 到 12 TB 的大小，以及每 GB 0.25、2 或 4 的 IOPS。相對於 IOPS 數的檔案共用大小會影響在容器磁區讀寫資料的速度。</span></p>
+<div class="p">若要建立檔案共用，請參閱：<ul><li><a href="container_volumes_ov.html#container_fileshares_adding_ui" title="檔案共用是一個持續性的 NFS 型（網路檔案系統）儲存系統，它在 Bluemix 空間中管理 Docker 磁區，並且允許使用者儲存及存取容器和應用程式相關檔案。若要將檔案儲存在檔案共用區，您必須建立容器磁區，然後將資料儲存至這個磁區。">使用 Bluemix GUI 新增磁區的檔案共用</a></li>
+<li><a href="container_volumes_ov.html#container_fileshares_adding_cli" title="使用 bx ic volume-fs-create 指令建立檔案共用。">使用指令行介面 (CLI) 新增檔案共用</a></li>
+</ul>
+</div>
+</div></div>
+</article></article><article class="topic task nested1" role="article" aria-labelledby="d67393e1133" lang="zh-tw" id="container_planning_container_ov"><h2 class="topictitle2" id="d67393e1133">在 <span class="keyword">Bluemix</span> 中使用 <span class="keyword">IBM
+Bluemix Container Service</span> 建立容器</h2>
+<div class="body taskbody"><p class="shortdesc">若要在 <span class="keyword">Bluemix</span> 中使用 <span class="keyword">IBM
+Bluemix Container Service</span> 建立可執行應用程式的容器，您必須已獲授與開發人員權限才能使用組織空間。身為應用程式的開發人員，務必知道容器元件之間的關係，以及如何變更容器的配置，以滿足應用程式的功能與非功能需求。</p>
+<div class="section prereq">開始之前，請確定您已獲指派空間的<dfn class="term">開發人員</dfn> 或<dfn class="term">審核員</dfn> 角色。組織管理員或擁有者可以將空間存取權授與您。</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d67393e1225" id="container_planning_cli-ui"><h3 class="topictitle3" id="d67393e1225"><span class="keyword">Bluemix</span> GUI、指令行及 REST API</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="cli_def">當您計劃使用 <span class="keyword">IBM
+Bluemix Container Service</span> 時，可以使用 <span class="keyword">Bluemix</span> GUI、安裝指令行介面 (CLI)，或針對 REST API 傳送 HTTP 要求，來存取 <span class="keyword">IBM
+Bluemix Container Service</span>。</span></p>
+<div class="section context"><p><span class="keyword">Bluemix</span> GUI 及 <a href="container_planning.html#install" title="安裝及配置 IBM Bluemix Container Service CLI，以從 CLI 來管理容器。">CLI</a> 可以用來完成 <span class="keyword">IBM
+Bluemix Container Service</span> 中的大部分作業。不過，有些作業只能透過 <span class="keyword">Bluemix</span> GUI 或 CLI 來執行。因此，請準備同時使用這兩者來管理您的容器。</p>
+<p>如果您不想使用 <span class="keyword">Bluemix</span> GUI，也不想使用 CLI，則可以將 HTTP 要求直接傳送至 <a href="container_planning.html#use_api" title="使用 IBM Bluemix Container Service API，以利用 REST 來處理單一容器及容器群組。"><span class="keyword">IBM
+Bluemix Container Service</span> API</a> 伺服器，以使用 REST 來管理容器。</p>
+下表顯示需要 <span class="keyword">Bluemix</span> GUI、<span class="keyword">IBM
+Bluemix Container Service</span> CLI 或 REST API 的所有容器相關作業。所有方法都可以執行這裡未列出的作業。<div class="tablenoborder"><table summary="需要 Bluemix GUI、IBM Bluemix Container Service CLI 或 REST API 的容器相關作業" id="container_planning_cli-ui__table_egk_dh3_rx" class="defaultstyle"><caption><span class="tablecap">表 3. 需要 <span class="keyword">Bluemix</span> GUI、<span class="keyword">IBM
+Bluemix Container Service</span> CLI 或 REST API 的容器相關作業</span></caption><thead><tr><th style="width: 25%" id="d67393e1420" class="thleft">作業</th>
+<th style="width: 25%" id="d67393e1422" class="thleft">GUI</th>
+<th style="width: 25%" id="d67393e1424" class="thleft">CLI</th>
+<th style="width: 25%" id="d67393e1426" class="thleft">API</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 25%" headers="d67393e1420 ">檢閱映像檔漏洞</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">將映像檔推送至登錄</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">從登錄中取回映像檔</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">複製 Docker Hub 中的映像檔</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">變更配額配置</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">擷取組織及空間特定配額</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">檢視詳細日誌資訊</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">指定其他日誌</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">自訂日誌</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">登入執行中容器</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">使用 Docker Compose</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">列出空間的磁區</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">將檔案寫入磁區</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">刪除磁區</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+</tr>
+<tr><td style="width: 25%" headers="d67393e1420 ">擷取系統訊息</td>
+<td style="width: 25%" headers="d67393e1422 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1424 "><img src="images/close.png" style="width: 1" alt="「不支援」圖示"></td>
+<td style="width: 25%" headers="d67393e1426 "><img src="images/healthy.png" style="width: 3" alt="「支援」圖示"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e1567" id="install"><h4 class="topictitle4" id="d67393e1567">安裝 CLI</h4>
+<div class="body taskbody"><p class="shortdesc">安裝及配置 <span class="keyword">IBM
+Bluemix Container Service</span> CLI，以從 CLI 來管理容器。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">安裝 <a href="container_cli_cfic_install.html#container_cli_cfic_install" title="安裝 IBM Bluemix Container Service 外掛程式 (bx ic)，以執行原生 Docker CLI 指令來管理容器。"><span class="keyword">IBM
+Bluemix Container Service</span> CLI</a> 及其必要條件。</span> 若要從 CLI 使用 <span class="keyword">IBM
+Bluemix Container Service</span>，您必須安裝 Cloud Foundry CLI (<samp class="ph codeph">cf</samp>)、Bluemix CLI (<samp class="ph codeph">bx</samp>) 及 <span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式 (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)。</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">安裝 <a href="container_cli_cfic_install.html#container_cli_compose_install" title="若要同時啟動及停止多個單一容器，您可以安裝 Docker Compose CLI。">Docker Compose</a>。</span> 如果您想要使用 <span class="keyword">IBM
+Bluemix Container Service</span> 來執行 Docker Compose 指令，則需要其他套裝軟體。</li>
+<li class="step stepexpand"><span class="cmd">登入 <span class="keyword">IBM
+Bluemix Container Service</span> CLI。</span></li>
+<li class="step stepexpand"><span class="cmd">選擇執行 <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) 或原生 Docker 指令。</span> <ul><li><span class="ph uicontrol">選項 1</span>（預設值）<p><span class="keyword">IBM
+Bluemix Container Service</span> 封套 Docker 的簡式 Shell。本端 Docker 常駐程式不受 <span class="keyword">IBM
+Bluemix Container Service</span> 影響。<span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令用來管理 <span class="keyword">Bluemix</span> 空間中的容器，而 <samp class="ph codeph">docker</samp> 指令則用來在本端管理容器。開發本端映像檔時一律需要 <samp class="ph codeph">docker</samp> 指令。</p>
+<p>例如，使用「選項 1」時，<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 指令會在 <span class="keyword">Bluemix</span> 空間中建立容器，而 <samp class="ph codeph">docker run</samp> 則會在本端建立容器。如果您剛開始使用 Docker 及 <span class="keyword">IBM
+Bluemix Container Service</span>，或是喜歡在本端測試容器的話，可能會偏好這個選項。</p>
+</li>
+<li><span class="ph uicontrol">選項 2</span><p>將現行 CLI 階段作業的本端 Docker 常駐程式重新導向至 <span class="keyword">IBM
+Bluemix Container Service</span>，以便只要 <samp class="ph codeph">docker</samp> 指令可用來管理 <span class="keyword">Bluemix</span> 空間中的容器，便使用該指令來取代 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令。</p>
+<p>例如，使用「選項 2」時，可以用 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 或 <samp class="ph codeph">docker run</samp> 指令在空間中建立容器。如果您是比較喜歡使用 <samp class="ph codeph">docker</samp> 指令的資深 Docker 使用者，或是要調整自動化 Script 來使用 <span class="keyword">IBM
+Bluemix Container Service</span>，可能會偏好這個選項。</p>
+<p>有些特例仍然需要使用 <span class="ph"><samp class="ph codeph">bx ic</samp></span> 指令，才能執行 <span class="keyword">IBM
+Bluemix Container Service</span> 特定的作業。例如，若要設定名稱空間，您必須使用指令
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set</samp>。<samp class="ph codeph">docker namespace-set</samp> 不是有效的指令。如需此配置支援之 <samp class="ph codeph">docker</samp> 指令的清單，請參閱 <a href="container_cli_reference_cfic.html#container_cli_reference_native-docker" title="使用 IBM Bluemix Container Service 外掛程式 (bx ic) 時，支援使用某些 docker 指令來取代 bx ic 指令。當您登入外掛程式時，請配置環境變數以使用 Docker CLI 指令。然後，您可以儘可能執行 docker 指令，而不使用 bx ic 指令。例如，不使用 bx ic images，而是執行 docker images 來查看專用 Bluemix 登錄中的映像檔。">IBM Bluemix Container Service 外掛程式 (bx ic) 支援的 Docker 指令</a>。</p>
+<div class="p">若要配置這個選項，請複製並貼上在登入期間的終端機中所提供的環境變數。<ul><li><samp class="ph codeph">DOCKER_HOST</samp> 將 Docker 主機設為 <span class="keyword">IBM
+Bluemix Container Service</span>。</li>
+<li><samp class="ph codeph">DOCKER_CERT_PATH</samp> 為 Cloud Foundry 的 <span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式設定鑑別金鑰的位置。</li>
+<li><samp class="ph codeph">DOCKER_TLS_VERIFY</samp> 使用 TLS 並驗證遠端伺服器。</li>
+</ul>
+</div>
+<div class="p"><div class="note tip"><span class="tiptitle">提示：</span> 完成 <span class="keyword">IBM
+Bluemix Container Service</span> 文件中的作業時，可以在所有標上星號 (*) 的步驟中執行 <samp class="ph codeph">docker</samp> 指令。</div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e1916" id="use_api"><h4 class="topictitle4" id="d67393e1916">透過 REST API 管理容器</h4>
+<div class="body taskbody"><p class="shortdesc">使用 <span class="keyword">IBM
+Bluemix Container Service</span> API，以利用 REST 來處理單一容器及容器群組。</p>
+<div class="section context"> 若要登入 <span class="keyword">IBM
+Bluemix Container Service</span> 服務，您必須先登入 <span class="keyword">Bluemix</span>。請遵循下列步驟來擷取 <span class="keyword">Bluemix</span> 存取記號，以及取得要在其中處理容器之空間的 ID。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">針對 <span class="keyword">Bluemix</span> API 執行 GET HTTP 擷取，以擷取現行鑑別端點資訊。</span> <pre class="codeblock"><code>GET <samp class="ph codeph">http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/info</samp></code></pre>
+您的輸出會與下列內容類似。
+
+<pre class="pre screen"><code>{
+  "name": "Bluemix",
+  "build": "235011",
+  "support": "http://ibm.biz/bluemix-supportinfo",
+  "version": 0,
+  "description": "IBM Bluemix",
+  "authorization_endpoint": "https://login.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/UAALoginServerWAR",
+  "token_endpoint": "https://uaa.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>",
+  "allow_debug": true
+}</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">向授權端點進行鑑別，以擷取 <span class="keyword">Bluemix</span> 存取記號。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在前一個步驟的 API 輸出中，找到 <span class="ph uicontrol">authorization_endpoint</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在授權端點 URL 尾端，新增 <span class="ph uicontrol">/oauth/token</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">將 <samp class="ph codeph">POST</samp> 要求提交給授權端點，以擷取 <span class="keyword">Bluemix</span> 存取記號。</span> <pre class="codeblock"><code>POST <samp class="ph codeph">https://login.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/UAALoginServerWAR/oauth/token</samp> </code></pre>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_u5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">表 4. 向 <span class="keyword">Bluemix</span> 進行鑑別的要求輸入參數</span></caption><thead><tr><th id="d67393e2048" class="thleft">要求輸入參數</th>
+<th id="d67393e2050" class="thleft">值</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67393e2048 ">Header</td>
+<td headers="d67393e2050 "><ul><li>Accept：<samp class="ph codeph">application/json;charset=utf-8</samp></li>
+<li>Authorization：<samp class="ph codeph">Basic Y2Y6</samp></li>
+<li>Content-Type：<samp class="ph codeph">application/x-www-form-urlencoded;charset=utf</samp></li>
+</ul>
+</td>
+</tr>
+<tr><td headers="d67393e2048 ">Body</td>
+<td headers="d67393e2050 "><samp class="ph codeph">grant_type=password&amp;username=<var class="keyword varname">&lt;username&gt;</var>
+&amp;password=<var class="keyword varname">&lt;password&gt;</var></samp><div class="p"><div class="steps note"><span class="notetitle">註：</span> 將 <var class="keyword varname">&lt;username&gt;</var> 及 <var class="keyword varname">&lt;password&gt;</var> 取代為 <span class="keyword">Bluemix</span> 使用者名稱及密碼。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+您的輸出會與下列內容類似。
+
+<pre class="pre screen"><code>{
+  "access_token": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMzhlZGZiZS0wOTJiLTQ4MmYtOTBhYi05ZGMyNzhlNGYyMmQiLCJzdWIiOiIyNjRmNjI1ZS0xNzliLTQ0NzYtYTJjNi1jZWZmMGM4YTFkNDUiLCJzY29wZSI6WyJvcGVuaWQiLCJjbG91ZF9jb250cm9sbGVyLnJlYWQiLCJwYXNzd29yZC53cml0ZSIsImNsb3VkX2NvbnRyb2xsZXIud3JpdGUiXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6IjI2NGY2MjVlLTE3OWItNDQ3Ni1hMmM2LWNlZmYwYzhhMWQ0NSIsIm9yaWdpbiI6InVhYSIsInVzZXJfbmFtZSI6Im5zcGllc0B1cy5pYm0uY29tIiwiZW1haWwiOiJuc3BpZXNAdXMuaWJtLmNvbSIsImF1dGhfdGltZSI6MTQ3MjU4NTUwNiwicmV2X3NpZyI6Ijc0MDA2OGI3IiwiaWF0IjoxNDcyNTg1NTA2LCJleHAiOjE0NzM3OTUxMDYsImlzcyI6Imh0dHBzOi8vdWFhLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiYXVkIjpbImNmIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIl19.B0jSzjrglzCv4EfAPmKCH-ZKsLOTXpsk5qrYTTL-GPI",
+  "token_type": "bearer",
+  "refresh_token": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4YWE3MmI0Yy02MGE4LTQwZmEtOGIxZi04NTllYWE1ZDBmMWUtciIsInN1YiI6IjI2NGY2MjVlLTE3OWItNDQ3Ni1hMmM2LWNlZmYwYzhhMWQ0NSIsInNjb3BlIjpbIm9wZW5pZCIsImNsb3VkX2NvbnRyb2xsZXIucmVhZCIsInBhc3N3b3JkLndyaXRlIiwiY2xvdWRfY29udHJvbGxlci53cml0ZSJdLCJpYXQiOjE0NzI1ODU1MDYsImV4cCI6MTQ3NTE3NzUwNiwiY2lkIjoiY2YiLCJjbGllbnRfaWQiOiJjZiIsImlzcyI6Imh0dHBzOi8vdWFhLm5nLmJsdWVtaXgubmV0L29hdXRoL3Rva2VuIiwiemlkIjoidWFhIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoibnNwaWVzQHVzLmlibS5jb20iLCJvcmlnaW4iOiJ1YWEiLCJ1c2VyX2lkIjoiMjY0ZjYyNWUtMTc5Yi00NDc2LWEyYzYtY2VmZjBjOGExZDQ1IiwicmV2X3NpZyI6Ijc0MDA2OGI3IiwiYXVkIjpbImNmIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlciIsInBhc3N3b3JkIl19.9TOrq_sg2CFIktjVLBNTc-yfnCRrSQyNV-lZt7N9FrM",
+  "expires_in": 1209599,
+  "scope": "openid cloud_controller.read password.write cloud_controller.write",
+  "jti": "d38edfbe-092b-482f-90ab-9dc278e4f22d"
+}</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">記下 CLI 回應中的 <span class="ph uicontrol">access_token</span>，以在下一步中使用。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">擷取 <span class="keyword">Bluemix</span> 空間的 ID。</span> 若要向 <span class="keyword">IBM
+Bluemix Container Service</span> 服務進行鑑別，您必須具有在前一個步驟中所取得的 <span class="keyword">Bluemix</span> 存取記號，以及要在其中處理容器之組織的空間 ID。
+<p>如果您有空間 ID，則可以跳過此步驟，並移至下一步。如果不確定您的空間 ID 為何，請遵循下列步驟來進行擷取。</p>
+<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">擷取 <span class="keyword">Bluemix</span> 組織的 ID。</span> <pre class="codeblock"><code>GET http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v2/organizations</code></pre>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_v5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">表 5. 擷取 <span class="keyword">Bluemix</span> 組織及空間的要求輸入參數</span></caption><thead><tr><th id="d67393e2153" class="thleft">要求輸入參數</th>
+<th id="d67393e2155" class="thleft">值</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67393e2153 ">Header</td>
+<td headers="d67393e2155 "><ul><li>Accept：<samp class="ph codeph">application/json;charset=utf-8</samp></li>
+<li>Authorization：<samp class="ph codeph">bearer <var class="keyword varname">&lt;access_token&gt;</var></samp></li>
+<li>Content-Type：<samp class="ph codeph">application/x-www-form-urlencoded;charset=utf</samp></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+您的輸出會與下列內容類似。在 <span class="ph uicontrol">metadata</span> 區段中，可以找到您組織的 ID，即 <span class="ph uicontrol">guid</span>。
+
+<pre class="pre screen"><code>"metadata": {
+        "guid": "31eb6110-5935-446f-ac94-f97f5852b19b",
+        "url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b",
+        "created_at": "2016-01-07T18:55:19Z",
+        "updated_at": "2016-02-09T15:56:22Z"
+      },
+      "entity": {
+        "name": "org@us.ibm.com",
+        "billing_enabled": false,
+        "quota_definition_guid": "7f66aaf3-9e9b-49f4-83d9-40d92d318ff3",
+        "status": "active",
+        "quota_definition_url": "/v2/quota_definitions/7f66aaf3-9e9b-49f4-83d9-40d92d318ff3",
+        "spaces_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/spaces",
+        "domains_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/domains",
+        "private_domains_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/private_domains",
+        "users_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/users",
+        "managers_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/managers",
+        "billing_managers_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/billing_managers",
+        "auditors_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/auditors",
+        "app_events_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/app_events",
+        "space_quota_definitions_url": "/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/space_quota_definitions"
+      }</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">在前一個步驟之 API 輸出的 <span class="ph uicontrol">entity</span> 區段中，找到 <span class="ph uicontrol">spaces_url</span> 欄位。針對 <span class="ph uicontrol">spaces_url</span> 執行 GET API 呼叫，以擷取該組織的所有空間清單。</span> 若要執行 API 呼叫，請使用您在前一個步驟中使用的相同標頭資訊。
+
+<pre class="codeblock"><code>GET http://api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v2/organizations/31eb6110-5935-446f-ac94-f97f5852b19b/spaces</code></pre>
+您的輸出會與下列內容類似。在 <span class="ph uicontrol">metadata</span> 區段中，可以找到您空間的 ID，即 <span class="ph uicontrol">guid</span>。
+
+<pre class="pre screen"><code>"metadata": {
+        "guid": "0e65c436-9413-46e2-8b42-ff06aa74ac21",
+        "url": "/v2/spaces/0e65c436-9413-46e2-8b42-ff06aa74ac21",
+        "created_at": "2016-01-07T18:55:22Z",
+        "updated_at": null
+      },
+      "entity": {
+        "name": "dev",
+...</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">使用 REST，處理 <span class="keyword">IBM
+Bluemix Container Service</span> 中的容器。</span> 在 <a href="http://ccsapi-doc.mybluemix.net/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">API 文件</a>中，尋找所有支援的 <span class="keyword">IBM
+Bluemix Container Service</span> API 呼叫。
+
+<p>每個 API 呼叫都需要存取記號及空間 ID 是標頭資訊的一部分（如下表中所示）。</p>
+
+<div class="tablenoborder"><table summary="" id="use_api__table_w5w_tf3_rx" class="defaultstyle"><caption><span class="tablecap">表 6. 處理 <span class="keyword">IBM
+Bluemix Container Service</span> API 的要求輸入參數</span></caption><thead><tr><th id="d67393e2257" class="thleft">要求輸入參數</th>
+<th id="d67393e2259" class="thleft">值</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d67393e2257 "><span class="keyword">IBM
+Bluemix Container Service</span> 基本 URL</td>
+<td headers="d67393e2259 "><span class="ph filepath">https://containers-api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/v3</span></td>
+</tr>
+<tr><td headers="d67393e2257 ">Header</td>
+<td headers="d67393e2259 "><ul><li>X-Auth-Token：<samp class="ph codeph">bearer <var class="keyword varname">&lt;access_token&gt;</var></samp></li>
+<li>X-Auth-Project-Id：<samp class="ph codeph"><var class="keyword varname">&lt;space_ID&gt;</var></samp></li>
+<li>Content-Type：<samp class="ph codeph">application/json</samp></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e2299" id="container_planning_images"><h3 class="topictitle3" id="d67393e2299">IBM 公用、Docker Hub 及專用映像檔</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" data-hd-otherprops="registry_check" id="image_def">容器映像檔是您建立的每個容器的基礎。映像檔是從 Dockerfile 建立的，Dockerfile 檔案中包含建置映像檔以及建置構件（例如應用程式、應用程式的配置及其相依關係）的指示。請將容器映像檔想像成執行檔（<span class="ph filepath">.exe</span> 或 <span class="ph filepath">.bin</span>）。執行這個可執行的應用程式檔案之後，即會建立應用程式的實例。當您執行容器時，會從映像檔建立容器實例。</span><span class="ph" data-hd-otherprops="registry_check">容器映像檔儲存在專用 <span class="keyword">Bluemix</span> 登錄中，而且只能從 CLI 新增。您要使用的每個容器映像檔都必須位於登錄中，您才能從中建立容器。</span></p>
+<div class="section context">在計劃使用 <span class="keyword">IBM
+Bluemix Container Service</span> 時，您必須決定所要使用的容器映像檔。有數種方式可讓您在專用 <span class="keyword">Bluemix</span> 登錄中建立、建置及使用映像檔。<div class="note important" id="container_planning_images__max_size"><span class="importanttitle">重要：</span> 在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，每一個映像檔最多有 10 GB 的大小可當作單一容器或可擴充容器群組來執行。</div>
+<dl id="container_planning_images__available_images"><dt class="dlterm">IBM 公用映像檔</dt>
+<dd>從 <span class="keyword">IBM
+Bluemix Container Service</span> 所提供的其中一個 <a href="container_images.html#images" title="您可以從 IBM 映像檔建立容器。映像檔可以部署為單一容器或多個可擴充容器群組。">IBM 公用映像檔</a>（例如 IBM Liberty 及 IBM Node 映像檔）開始測試 <span class="keyword">IBM
+Bluemix Container Service</span> 的特性。然後，您可以使用其中一個映像檔作為主映像檔，修改 Dockerfile，建置您自己的映像檔，上面有您自己的應用程式碼。</dd>
+<dt class="dlterm">Docker Hub 中的映像檔</dt>
+<dd><a href="container_images_adding_ov.html#container_images_copying" title="您可以將映像檔從下列其中一個位置複製到組織的專用 Bluemix 登錄。">從 Docker Hub 直接複製映像檔</a>到專用 <span class="keyword">Bluemix</span> 登錄，或<a href="container_images_adding_ov.html#container_images_pulling" title="您可以從 Docker Hub 或專用登錄取回映像檔，並在本端進行修改，然後將它推送至組織的專用 Bluemix 登錄。">從 Docker Hub 取回映像檔</a>，在本端進行修改，然後直接在登錄中建置。</dd>
+<dt class="dlterm">建立您自己的映像檔</dt>
+<dd>如果您有已在本端 Docker 環境中使用的容器映像檔，則可以<a href="container_images_adding_ov.html#container_images_pulling" title="您可以從 Docker Hub 或專用登錄取回映像檔，並在本端進行修改，然後將它推送至組織的專用 Bluemix 登錄。">將它們推送至專用 <span class="keyword">Bluemix</span> 登錄</a>，以在 <span class="keyword">IBM
+Bluemix Container Service</span> 中使用它們。您也可以建立自己的 Dockerfile，在本端進行建置及測試，然後將它推送至專用映像檔登錄。</dd>
+</dl>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e2472" id="viewing_images"><h4 class="topictitle4" id="d67393e2472">檢視專用映像檔登錄中的映像檔</h4>
+<div class="body taskbody"><p class="shortdesc">您可以使用 <span class="keyword">Bluemix</span> GUI 或 CLI，檢視專用 <span class="keyword">Bluemix</span> 映像檔登錄中可用的所有容器映像檔。</p>
+<div class="step"><span class="cmd">檢視 IBM 所提供的映像檔，以及先前推送至專用登錄的映像檔。</span> <ul class="ul choices"><li class="li choice">從 <span class="keyword">Bluemix</span> GUI 中，依序選取型錄及<span class="ph uicontrol">容器</span>。您可以查看 IBM 所提供的映像檔，以及先前推送至專用 <span class="keyword">Bluemix</span> 登錄的映像檔。</li>
+<li class="li choice">從 CLI 中，執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp>。</li>
+</ul>
+</div>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e2532" id="vulnerability_advisor"><h4 class="topictitle4" id="d67393e2532">檢閱映像檔漏洞</h4>
+<div class="body taskbody"><p class="shortdesc">當您將映像檔新增至專用 <span class="keyword">Bluemix</span> 登錄時，「漏洞警告器」會根據組織管理員設定的標準原則及已知 Ubuntu 問題資料庫，自動掃描它們。「漏洞警告器」會檢查庫存套件、配置、已開啟的埠，以及 Docker meta 資料。掃描完成時，您可以檢閱潛在漏洞的清單，並在您使用容器中的映像檔之前，視需要解決這些漏洞。視組織管理員所設定的原則而定，可能會封鎖從該映像檔部署容器，或者會向使用者顯示警告。</p>
+<div class="section context"><div class="p"><ul><li>若要列出映像檔漏洞，請參閱<a href="va/va_index.html#va_reviewing">檢閱映像檔報告</a>。</li>
+<li>若要在組織中設定自訂原則，請參閱<a href="va/va_index.html#va_managing_policy">檢閱組織原則</a>。</li>
+</ul>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e2573" id="tips"><h4 class="topictitle4" id="d67393e2573">防止容器關閉的 Dockerfile 提示</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> 提供許多特性以保持容器安全，以及管理使用者的雲端資源。視應用程式而定，可能需要將額外配置新增至 Dockerfile，以確保本端容器可以在 <span class="keyword">Bluemix</span> 中順利執行。</p>
+<div class="section context"><dl><dt class="dlterm">準備網路延遲</dt>
+<dd>容器啟動時，<span class="keyword">IBM
+Bluemix Container Service</span> 會設定專用容器網路，並將專用 IP 位址指派給容器。此處理程序可能需要數秒的時間。如果您的應用程式在應用程式啟動時需要作用中網路連線，請將 sleep 指令新增至 Dockerfile，<a href="container_planning.html#network_delay" title="容器啟動時，IBM Bluemix Container Service 會設定專用容器網路、公開容器埠，以及將專用 IP 位址指派給容器。此處理程序可能需要數秒的時間。如果您的應用程式在應用程式啟動時需要作用中的網路連線，則可能尚未設定容器專用網路，這樣可能會導致應用程式損毀。若要確保 IBM Bluemix Container Service 網路設定在應用程式啟動之前完成，請考慮實作下列其中一個解決方案來處理網路延遲。">確保已事先完成 <span class="keyword">IBM
+Bluemix Container Service</span> 網路設定</a>。</dd>
+<dt class="dlterm">使用長時間執行指令</dt>
+<dd>若要讓容器開始進行，至少需要在容器映像檔中包含一個長時間執行程序。例如，<samp class="ph codeph">echo "Hello world"</samp> 是簡短的執行中程序。
+如果映像檔中未指定任何其他指令，則在執行該指令之後容器會關閉。若要將 <samp class="ph codeph">echo "Hello world"</samp> 指令轉換成長時間執行程序，例如，您可以使它形成多重迴圈，或將 <samp class="ph codeph">echo</samp> 指令包含在您應用程式內的另一個長時間執行程序中。</dd>
+</dl>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e2664" id="container_planning_private_network"><h3 class="topictitle3" id="d67393e2664"><span class="keyword">IBM
+Bluemix Container Service</span> 中的專用容器網路設定</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="private_network_def">容器專用網路為在同一空間執行的單一容器和容器群組建立一個隔離的安全環境。使用專用 IP 位址，連接至相同專用網路的容器，即可與專用網路中的其他容器彼此之間傳送及接收資料。必須等到已連結單一容器的公用埠與公用 IP 位址或容器群組的公用路徑之後，才能公開使用容器。</span></p>
+<div class="section context">您可以選擇使用 <span class="keyword">IBM
+Bluemix Container Service</span> 預設專用網路設定或透過 VPN 將您的容器連接至組織資料中心。<dl><dt class="dlterm"><span class="keyword">IBM
+Bluemix Container Service</span> 預設專用網路設定</dt>
+<dd><span class="ph">在 <span class="keyword">Bluemix</span>
+中，已為每個空間提供容器專用網路，套用了預設的 <span class="keyword">IBM
+Bluemix Container Service</span>
+網路設定。這些設定包含自動設定預設「專用網路安全群組」，該預設「專用網路安全群組」使用專用 IP 位址來容許容器與容器群組之間的專用網路通訊。當您在空間中建立容器或容器群組時，它們就會自動連接至預設 <span class="keyword">IBM
+Bluemix Container Service</span> 專用網路，並獲指派來自子網路 172.31.0.0/16 的專用 IP 位址。指派專用 IP 位址之後，相同網路中的所有容器都可以使用單一容器的專用 IP 位址，以透過所有容器埠安全地通訊，或者，如果使用容器群組，則為群組負載平衡器的專用 IP 位址。不需要將容器埠對映至主機埠。</span></dd>
+<dt class="dlterm">將容器連接至組織資料中心的「虛擬專用網路」</dt>
+<dd><span class="ph" id="container_planning_private_network__vpn_def">利用 IBM® 虛擬專用網路 (VPN) 服務，將 <span class="keyword">Bluemix</span>
+中，專用容器網路中的單一容器和容器群組安全地連接到組織資料中心。<span class="keyword">IBM
+VPN</span> 在根據業界標準網際網路通訊協定安全 (IPsec) 通訊協定套組的網際網路上，提供安全的端對端通訊通道。IPsec 通訊協定是透過在 VPN 端點之間加密交換的套件，來提供網路層次對等節點鑑別、資料完整性和資料機密性。若要設定 <span class="keyword">Bluemix</span> 和組織資料中心的容器之間的安全連線，您必須已在內部部署的資料中心中安裝 IPsec VPN 閘道或 SoftLayer 伺服器。利用 <span class="keyword">IBM
+VPN</span> 服務，您可以對每個空間配置一個 VPN 閘道，並定義最多 16 條連線通往不同的目的地。</span><p>若要在 <span class="keyword">Bluemix</span> 中設定容器的安全 VPN 連線，請參閱 <a href="container_security.html#container_vpn" title="利用 IBM® 虛擬專用網路 (VPN) 服務，將 Bluemix 中，專用容器網路中的單一容器和容器群組安全地連接到組織資料中心。IBM VPN 在根據業界標準網際網路通訊協定安全 (IPsec) 通訊協定套組的網際網路上，提供安全的端對端通訊通道。IPsec 通訊協定是透過在 VPN 端點之間加密交換的套件，來提供網路層次對等節點鑑別、資料完整性和資料機密性。若要設定 Bluemix 和組織資料中心的容器之間的安全連線，您必須已在內部部署的資料中心中安裝 IPsec VPN 閘道或 SoftLayer 伺服器。利用 IBM VPN 服務，您可以對每個空間配置一個 VPN 閘道，並定義最多 16 條連線通往不同的目的地。"><span class="keyword">IBM
+VPN</span></a>。</p>
+</dd>
+</dl>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e2828" id="network_delay"><h4 class="topictitle4" id="d67393e2828">啟動容器時處理網路延遲的提示</h4>
+<div class="body taskbody"><p class="shortdesc">容器啟動時，<span class="keyword">IBM
+Bluemix Container Service</span> 會設定專用容器網路、公開容器埠，以及將專用 IP 位址指派給容器。此處理程序可能需要數秒的時間。如果您的應用程式在應用程式啟動時需要作用中的網路連線，則可能尚未設定容器專用網路，這樣可能會導致應用程式損毀。若要確保 <span class="keyword">IBM
+Bluemix Container Service</span> 網路設定在應用程式啟動之前完成，請考慮實作下列其中一個解決方案來處理網路延遲。</p>
+<div class="step"><span class="cmd">選擇下列其中一個選項來處理網路延遲。</span> <ul class="ul choices"><li class="li choice">將 sleep 指令新增至容器啟動時所執行的 Dockerfile。<p>在下列範例 Dockerfile 中，容器會先等待 60 秒，再啟動應用程式。</p>
+<pre class="codeblock"><code>FROM sdelements/lets-chat:latest
+CMD (sleep 60; npm start)</code></pre>
+</li>
+<li class="li choice">調整您的應用程式碼，以檢查是否有作用中的網路連線功能（例如，先對公用 IP 位址進行連線測試，再啟動此應用程式）。如果您無法對 IP 位址進行連線測試，請休眠數秒，然後再試一次。如果可以解析 IP 位址，請啟動應用程式。</li>
+</ul>
+</div>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e2887" id="container_planning_public_network"><h3 class="topictitle3" id="d67393e2887">決定公用網路設定</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">依預設，<span class="keyword">IBM
+Bluemix Container Service</span> 中的每個單一容器和容器群組都可用於專用網路。不過，您的應用程式可能需要從網際網路存取，或者您想要存取您組織的其他空間中的容器。在這些情況下，您必須將容器公開給大眾使用。</span>視您選擇的容器類型而定，有不同的方式可讓容器供大眾使用。</p>
+<div class="section context"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e2953" id="public_single_compose"><h4 class="topictitle4" id="d67393e2953">單一容器及 Docker Compose 公用網路設定</h4>
+<div class="body taskbody"><p class="shortdesc">您在空間中建立的所有單一容器都會獲指派一個專用 IP 位址，您只能用它來存取專用網路中的容器。專用網路通訊是透過不容許任何進入及離開公用網路的網路資料流量的預設「專用網路安全群組」所保護。如果您要讓應用程式可供公用網路使用，您必須公開公用埠，並將公用 IP 位址連結至您的容器。</p>
+<div class="section context"><p>必須要求公用 IP 位址，空間才會連結至容器。要求公用 IP 位址時，會將公用 IP 位址儲存區中的隨機公用 IP 位址配置給空間。配置給空間時，IP 位址不會變更。若要將公用 IP 位址連結至容器，您也必須在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> 指令中使用 <samp class="ph codeph">-p</samp> 選項，以公開 HTTP 埠。公開埠時會建立容器的「公用網路安全群組」，讓您可以僅透過公開埠傳送及接收公用資料。所有其他公用埠都會關閉，因此無法用來從網際網路存取應用程式。</p>
+
+<div class="steps note"><span class="notetitle">註：</span> 連結公用 IP 位址時不包含 SSL 憑證，這個 SSL 憑證會加密傳送至單一容器及從其中送出的資料。如果您的應用程式需要 SSL 加密，您可以實作自己的 SSL 解決方案，或使用容器群組，而非單一容器。
+容器群組會連結至已包含 SSL 憑證的公用路徑，讓您可以使用 HTTPS 存取容器群組，而不需要進行任何其他配置。</div>
+
+<p>空間可用的公用 IP 位址數目，視您組織的<a href="container_planning.html#container_planning_quota" title="Bluemix 中的每個組織，其容器記憶體、公用 IP 位址、檔案共用和組織的所有空間所共用的服務數目都有預設值。這些預設值稱為配額。">配額</a>而定。</p>
+
+<div class="p">若要檢閱空間中可用的公用 IP 位址清單，請執行下列指令。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+傳回的清單可能顯示沒有可用的公用 IP 位址、連結至容器的公用 IP 位址，或已取消連結的公用 IP 位址。</div>
+
+<div class="p"><dl><dt class="dlterm">空間中沒有可用的公用 IP 位址</dt>
+<dd><ul><li>CLI 輸出：<pre class="codeblock"><code>IP Address      Container ID</code></pre>
+</li>
+<li>我的選項：<div class="p">要求新的公用 IP 位址，並將它連結至您的容器。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt class="dlterm">空間中有可用的公用 IP 位址，但它未連結至容器</dt>
+<dd><ul><li>CLI 輸出：<pre class="codeblock"><code>IP Address      Container ID   
+192.0.2.56</code></pre>
+</li>
+<li>我的選項：<div class="p">將公用 IP 位址連結至容器。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</dd>
+<dt class="dlterm">空間中有可用的公用 IP 位址，但它已連結至容器</dt>
+<dd><ul><li>CLI 輸出：<pre class="codeblock"><code>IP Address      Container ID   
+192.0.2.56   d7b4a167-8e51-4b16-b591-1a17cb7ee41f </code></pre>
+</li>
+<li>我的選項：<ul><li>取消容器中已連結 IP 位址的連結，並將它連結至新容器。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</li>
+<li><div class="p">要求新的公用 IP 位址，並將它連結至您的容器。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></code></pre>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e3128" id="public_container_groups"><h4 class="topictitle4" id="d67393e3128">容器群組公用網路設定</h4>
+<div class="body taskbody"><p class="shortdesc">若要將容器群組設成可從網際網路進行存取，您必須公開埠，並將公用路徑或公用 IP 位址與其連結。</p>
+<div class="section context"><div class="p"><dl><dt class="dlterm">含預設網域的公用路徑</dt>
+<dd>公用路徑是由主機和網域名稱組成，並包含您在 Web 瀏覽器中輸入的完整公用 URL，以存取容器群組。每個路徑在 <span class="keyword">Bluemix</span> 中都必須是唯一的。<p>在容器建立期間，您可以選擇路徑的主機名稱，例如 <var class="keyword varname">mycontainerhost</var>。預設系統網域是 <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span>，並且已提供 SSL 憑證，讓您可以使用 HTTPS 存取容器群組，而不需要進行任何其他配置。</p>
+<p>範例：<span class="ph filepath">https://<var class="keyword varname">mycontainerhost</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></span></p>
+<div class="steps note"><span class="notetitle">註：</span> 若要使用公用路徑，您必須在建立期間公開容器群組的 HTTP 埠。無法公開非 HTTP 埠。您只能公開每個容器群組的一個公用埠。不支援容器群組的多個公用埠。</div>
+</dd>
+<dt class="dlterm">含自訂網域的公用路徑</dt>
+<dd>如果您要使用自己的自訂網域，而非預設網域 <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span>，您必須在公用 DNS
+伺服器上登錄自訂網域、在 Bluemix 中配置自訂網域，然後將自訂網域對映至公用 DNS 伺服器上的 Bluemix 系統網域。將自訂網域對映至 Bluemix 系統網域之後，對該自訂網域的要求即會遞送至 Bluemix 中的應用程式。建立自訂網域時，請不要在網域名稱中包含底線 (_)。<p>若要建立自訂網域，請參閱<a href="../manageapps/updapps.html#domain">建立及使用自訂網域</a>。</p>
+<p>若要讓您的自訂網域更為安全，請<a href="../manageapps/secapps.html#ssl_certificate">上傳 SSL 憑證</a>，以使用 HTTPS 來存取您的容器群組。</p>
+</dd>
+<dt class="dlterm">公用 IP 位址</dt>
+<dd>使用指令行建立容器群組時，您也可以連結 IP 位址。您只能將公用路徑或浮動 IP 位址連結至容器，而非同時兩者。若要移除容器群組中的 IP 位址，您必須移除容器群組，然後重新建立群組。<div class="p">以下範例建立具有公用 IP 位址的容器群組：<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create -p <var class="keyword varname">9080</var> --ip <var class="keyword varname">192.0.2.56</var>  --name <var class="keyword varname">my_container_group</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></code></pre>
+</div>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e3234" id="container_planning_bmx_service"><h3 class="topictitle3" id="d67393e3234">整合 <span class="keyword">Bluemix</span> 服務以便與容器搭配使用</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="service_def"><span class="keyword">Bluemix</span> 提供不同服務讓您與 <span class="keyword">IBM
+Bluemix Container Service</span> 搭配使用，以將額外功能帶進應用程式，或簡化應用程式的實作及容器的管理。</span></p>
+<div class="section context"><div class="p">您可以用下列方式查看 <span class="keyword">Bluemix</span> 中可用的所有服務：<ul><li>從 <span class="keyword">Bluemix</span> 使用者介面中，選取 <span class="keyword">Bluemix</span>「<span class="keyword wintitle">型錄</span>」。</li>
+<li>從 CLI 執行 <samp class="ph codeph">cf marketplace</samp> 指令。</li>
+</ul>
+</div>
+若要搭配使用 <span class="keyword">Bluemix</span> 服務與 <span class="keyword">IBM
+Bluemix Container Service</span>，您必須先在空間中<a href="../services/reqnsi.html#req_instance">建立這項服務的實例</a>，才能建立容器。在您的空間中建立服務實例之後，您必須<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix 具有一份服務清單，且會代表應用程式開發者管理它們。若要新增 Bluemix 服務供您的容器使用，您必須要求此服務的實例，並將服務連結至容器。">將服務連結至容器</a>，讓容器可以存取定義該服務的環境變數。這些環境變數稱為 VCAP_SERVICES。當您將服務連結至容器時，該服務會在容器中注入 VCAP_SERVICES 作為環境變數。如此一來，該容器就可以使用 VCAP_SERVICES 來查看服務中的資訊，例如端點、使用者名稱及密碼。<p>若要取得協助您管理容器的服務的相關資訊，請參閱<a href="container_integrations.html#container_integrations" title="您可以使用 Bluemix「型錄」中的各種服務與 IBM Bluemix Container Service 搭配。許多 Bluemix 服務可協助您將額外功能帶至您在容器中部署的應用程式。此外，部分 Bluemix 服務可以用來協助您管理容器。">整合服務與單一及可擴充容器</a>。</p>
+</div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d67393e3400" id="container_planning_volumes"><h3 class="topictitle3" id="d67393e3400">持續性資料儲存空間選項</h3>
+<div class="body taskbody"><p class="shortdesc">決定在何處儲存應用程式建立的資料或應用程式需要執行的檔案。</p>
+<div class="section context">單一容器設計為短期容器。不過，有數個選項可供您選擇，讓您可以在容器重新啟動之間持續保存資料、在空間的容器之間共用資料，以及在群組的容器實例之間共用資料。<p><a href="../api/content/containers/images/data_options.png" rel="external" target="_blank" title="（在新分頁或視窗中開啟）"><img src="images/data_options.png" width="400" alt="在何處儲存資料或檔案的選項。"></a></p>
+<div class="tablenoborder"><table summary="用於儲存應用程式檔案的選項" id="container_planning_volumes__table_pvn_fks_bw" class="defaultstyle"><caption><span class="tablecap">表 7. 用於儲存應用程式檔案的選項</span></caption><thead><tr><th style="width: 33.33333333333333%" id="d67393e3470" class="thleft">資料儲存選項</th>
+<th style="width: 33.33333333333333%" id="d67393e3472" class="thleft">說明</th>
+<th style="width: 33.33333333333333%" id="d67393e3474" class="thleft">可儲存的資料量受限於</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 33.33333333333333%" headers="d67393e3470 ">選項 1：在執行時將資料儲存在容器內</td>
+<td style="width: 33.33333333333333%" headers="d67393e3472 ">使用此選項，不會持續保存應用程式資料。容器只能在執行時使用資料。重建容器之後，所有資料都會遺失。</td>
+<td style="width: 33.33333333333333%" headers="d67393e3474 ">容器的大小</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67393e3470 ">選項 2：將資料儲存在容器磁區</td>
+<td style="width: 33.33333333333333%" headers="d67393e3472 ">在 Docker 中裝載磁區時，會將磁區裝載到本端檔案系統。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，運算主機的存取權受限，因此您無法將主機目錄裝載到容器。而是使用組織範圍的磁區，在容器重新啟動之間持續保存資料。磁區會在隔離檔案共用上管理，這些檔案共用可安全地儲存應用程式資料，以及管理對檔案的存取權和許可權。由於這項隔離，容器內的非
+root 使用者必須獲得<a href="container_planning.html#nonroot_image">授與裝載磁區的寫入權</a>。<p>使用此選項，您可以在容器重新啟動之間持續保存及存取資料，以及在空間的容器之間共用資料。刪除容器之後，不會移除關聯的磁區。</p>
+<div class="steps note"><span class="notetitle">註：</span> 若要將磁區裝載至容器，您必須先建立磁區，請參閱<a href="container_volumes_ov.html#container_volumes_ui" title="磁區是一個持續性的儲存位置，用來存放應用程式所建立的資料，或是應用程式執行所需的檔案。 您可以從 Bluemix GUI 建立容器的磁區。">使用 <span class="keyword">Bluemix</span> GUI 建立磁區</a>。</div>
+</td>
+<td style="width: 33.33333333333333%" headers="d67393e3474 ">管理磁區的檔案共用的大小</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67393e3470 ">選項 3：將容器連接至內部部署資料庫</td>
+<td style="width: 33.33333333333333%" headers="d67393e3472 ">使用此選項，您可以使用雲端與本端環境的容器之間的<a href="container_security.html#container_vpn" title="利用 IBM® 虛擬專用網路 (VPN) 服務，將 Bluemix 中，專用容器網路中的單一容器和容器群組安全地連接到組織資料中心。IBM VPN 在根據業界標準網際網路通訊協定安全 (IPsec) 通訊協定套組的網際網路上，提供安全的端對端通訊通道。IPsec 通訊協定是透過在 VPN 端點之間加密交換的套件，來提供網路層次對等節點鑑別、資料完整性和資料機密性。若要設定 Bluemix 和組織資料中心的容器之間的安全連線，您必須已在內部部署的資料中心中安裝 IPsec VPN 閘道或 SoftLayer 伺服器。利用 IBM VPN 服務，您可以對每個空間配置一個 VPN 閘道，並定義最多 16 條連線通往不同的目的地。">安全 VPN 連線</a>，在現有的內部部署資料庫中持續保存及存取資料。</td>
+<td style="width: 33.33333333333333%" headers="d67393e3474 ">內部部署資料庫可用的磁碟空間</td>
+</tr>
+<tr><td style="width: 33.33333333333333%" headers="d67393e3470 ">選項 4：將 <span class="keyword">Bluemix</span> 資料庫服務連結至容器。</td>
+<td style="width: 33.33333333333333%" headers="d67393e3472 ">使用此選項，您可以使用鏈結到雲端之容器的資料庫服務來持續保存及存取資料。大部分 <span class="keyword">Bluemix</span> 資料庫服務會免費提供少量資料的磁碟空間，讓您可以測試其特性。</td>
+<td style="width: 33.33333333333333%" headers="d67393e3474 ">您選擇的資料庫服務及方案</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e3569" id="nonroot_image"><h4 class="topictitle4" id="d67393e3569">對 <span class="keyword">Bluemix</span> 中容器磁區的非 root 使用者存取權</h4>
+<div class="body taskbody"><div class="section context">如果您決定使用組織範圍的容器磁區來持續保存應用程式資料，請確定容器內的使用者對於磁區裝載路徑上的檔案和資料夾具有寫入權。
+<p>若為 <span class="keyword">IBM
+Bluemix Container Service</span>，已對 Docker Engine 啟用使用者名稱空間特性。使用者名稱空間提供隔離功能，讓容器 root 使用者無法存取其他容器或運算主機。不過，磁區位於容器運算主機外部的 NFS 檔案共用上。磁區設定成辨識容器中的 root 使用者，但因為磁區是在容器外部，所以無法得知使用者名稱空間。</p>
+<p>對於一些應用程式，容器內的唯一使用者就是 root 使用者。不過，許多應用程式會指定寫入至容器裝載路徑的非 root 使用者。如果您是使用需要磁區寫入權的非 root 使用者來設計應用程式，則必須將下列處理程序新增至 Dockerfile 及進入點 Script：</p>
+<ul><li>建立非 root 使用者。</li>
+<li>暫時將使用者新增至 root 群組。</li>
+<li>使用正確的使用者許可權在磁區裝載路徑中建立目錄。</li>
+</ul>
+<p></p>
+<p>如需相關資訊，請參閱<a href="container_volumes_ov.html#container_volumes_write" title="非 root 使用者對磁區裝載路徑沒有寫入權。若要授與寫入權，您必須編輯映像檔的 Dockerfile，以使用正確許可權在裝載路徑上建立目錄。">使用適當的非 root 許可權自行建立 Dockerfile</a>。</p>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d67393e3606" id="container_planning_types"><h3 class="topictitle3" id="d67393e3606">容器類型</h3>
+<div class="body taskbody"><p class="shortdesc">使用 <span class="keyword">IBM
+Bluemix Container Service</span> 建立容器之前，請決定您需要的容器類型。<span class="keyword">IBM
+Bluemix Container Service</span> 提供不同的方法以在雲端中建立容器。您選擇的方法取決於容器中執行的應用程式的需求和相依關係。</p>
+<div class="section context"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d67393e3678" id="single_container_type"><h4 class="topictitle4" id="d67393e3678">單一容器</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="ph"><span class="keyword">IBM
+Bluemix Container Service</span> 中的單一容器類似您在本端
+Docker 環境中建立的容器。若要開始使用 <span class="keyword">IBM
+Bluemix Container Service</span>、瞭解容器在 IBM Cloud 中如何運作，以及瞭解 <span class="keyword">IBM
+Bluemix Container Service</span> 所提供的特性，單一容器是不錯的方式。您也可以使用單一容器來執行簡單的應用程式測試，或在應用程式的開發過程中使用它們。因為單一容器可以重新予以啟動，而且不是用於管理長時間執行的程式，所以您必須將容器群組用於任何需要高可用性的應用程式。</span></p>
+<div class="section context"><div class="p">單一容器的部署速度考量：<ul><li>映像檔大小具有重大影響。映像檔越小，部署就越快。</li>
+<li>前幾次部署映像檔之後，可改善部署速度。一開始，必須將映像檔下載至主機上的登錄。後續部署的速度會比較快。</li>
+<li>網路設定可能需要幾分鐘的時間。</li>
+<li>因為群組的遞送設定，單一容器的部署速度會比容器群組還要快。</li>
+<li>因為必須進行的連線，所以具有所鏈結容器的部署可能不會像其他部署一樣快。</li>
+</ul>
+</div>
+
+<p>若要從 <span class="keyword">Bluemix</span> GUI 建立單一容器，請參閱<a href="container_single_ui.html#container_single_ui" title="在開發應用程式或服務時，或針對不需要高可用性的短期程序，都可以使用單一容器來執行簡單測試。若要使用自己的網路前端，您可以將公用 IP 位址指派給容器。">將短期作業當作單一容器來執行</a>。</p>
+
+<p>若要從 CLI 建立單一容器，請參閱<a href="container_single_ui.html#container_single_cli" title="使用 run 指令來建立容器。容器必須內含映像檔。如果還沒有映像檔，您可以使用組織專用映像檔登錄中預設提供的其中一個預設 IBM 認證映像檔。">使用指令行介面 (CLI) 將短期作業當作單一容器來執行</a>。</p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d67393e3768" id="container_groups_type"><h4 class="topictitle4" id="d67393e3768">容器群組</h4>
+<div class="body taskbody"><p class="shortdesc">容器群組由多個單一容器組成，它們全部都是從相同的容器映像檔建立，因此是以相同的方式配置。</p>
+<div class="section context"><span class="ph">應用程式所需要的容器群組實例數目，取決於預期的工作負載和應用程式處理要求所花的時間。例如，多工或網路連線會影響應用程式需要的實例數目。</span>
+<span class="ph">若要判斷所要的實例數目，請在 Bluemix 中部署執行應用程式用的單一容器，並在此容器上執行負載測試。例如，如果應用程式每秒可處理 100 個要求，但您預期的平均工作負載是每秒 300 個要求，則該容器群組所要的實例數目是 3。</span>
+<span class="ph">若要讓容器群組具備高可用性及更大的失敗復原力，請考慮包含多於最小值的額外實例來處理預期工作負載。
+在另一個實例損毀時，額外實例可以處理工作負載。若要確保自動回復失敗的實例，而不影響工作負載，請包含一個額外的實例。為了預防兩個同時失敗，請包含兩個額外的實例。此設定是一種 <var class="keyword varname">N+2</var> 個型樣，其中 <var class="keyword varname">N</var> 是處理要求的實例數，而 <var class="keyword varname">+2</var> 是額外兩個實例。</span><p>容器群組免費提供進一步的選項，可讓您的應用程式具有高可用性。</p>
+<ul><li><a href="container_planning.html#group_loadbalancing" title="容器群組提供內建的負載平衡，將送入的資料流量平均（循環式）遞送至群組中的容器實例。若已建立容器群組，或已將實例新增至現有群組，則不論是自行新增實例，還是在自動回復期間重建實例，都會啟用負載平衡。">內建負載平衡</a></li>
+<li><a href="container_planning.html#group_anti-affinity" title="在 bx ic group-create 指令中使用 --anti 選項，即可選擇在建立容器群組時是否啟用反親緣性特性。">反親緣性</a>，以將容器群組實例分散到多個實體運算節點</li>
+<li>對性能不佳的容器群組實例進行<a href="container_planning.html#group_autorecovery" title="在 bx ic group-create 指令中使用 --auto 選項，即可選擇在建立容器群組時是否啟用自動回復。">自動回復</a></li>
+<li>根據 CPU 及記憶體用量<a href="container_planning.html#group_autoscaling" title="容器群組會根據應用程式使用的 CPU 及記憶體來自動擴充容器群組實例。">自動擴充</a>容器群組實例</li>
+</ul>
+若要更進一步提高容器群組的可用性，您可以建立另一個容器群組，以相同映像檔為基礎，並對映至相同路徑。第一個容器群組損毀時，第二個容器群組可以接管整個工作負載。請選擇下列其中一個選項，以將第二個容器群組分散到 <span class="keyword">IBM
+Bluemix Container Service</span> 架構中。<ul><li><a href="container_ha.html#container_ha_space" title="您可以在相同 Bluemix 空間中，從相同映像檔建立兩個容器群組，並將相同路徑對映至這兩個群組。利用此設定，如果容器群組或群組的負載平衡器關閉，資料流量會遞送至另一個容器群組。">在相同的空間內建立第二個容器群組</a>。</li>
+<li><a href="container_ha_org.html">使用 <span class="keyword">IBM
+Bluemix Container Service</span> 可用性區域，以將容器群組分散到多個空間</a>。</li>
+<li><a href="container_ha.html#container_ha_regions" title="如果您配置應用程式的網域名稱時所使用的「網域名稱系統 (DNS)」提供廣域負載平衡，則可以在不同 Bluemix 地區中，從相同映像檔建立路徑裡使用相同主機名稱的兩個容器群組。利用此設定，您可以允許根據使用者所在地區而進行負載平衡。如果一個地區的容器群組、硬體、甚至整個資料中心關閉，資料流量會遞送至部署在另一個地區的容器群組。">將容器群組分散到多個 <span class="keyword">Bluemix</span> 地區</a>。</li>
+</ul>
+<div class="p">容器群組的部署速度考量：<ul><li>映像檔大小具有重大影響。映像檔越小，部署就越快。</li>
+<li>前幾次部署映像檔之後，可改善部署速度。一開始，必須將映像檔下載至主機上的登錄。後續部署的速度會比較快。</li>
+<li>網路設定可能需要幾分鐘的時間。</li>
+<li>因為遞送設定，單一容器的部署速度會比容器群組還要快。</li>
+<li>未連結至路徑的容器群組的部署速度會比沒有路徑的容器群組還要快。</li>
+<li>未啟用反親緣性的容器群組的速度會比具有反親緣性的容器群組還要快。使用反親緣性，指定的主機數目每一個都必須下載映像檔層。</li>
+</ul>
+</div>
+<p>若要從 <span class="keyword">Bluemix</span> GUI 建立容器群組，請檢閱<a href="container_ha.html#container_group_ui" title="從 Bluemix GUI 建立及部署可擴充群組容器。容器群組包含兩個以上執行相同映像檔的容器。對於執行具有需要可擴充性及可靠性之工作負載的長期服務，或是進行所需規模的測試，都可以使用容器群組。">從 <span class="keyword">Bluemix</span> GUI 執行容器群組</a>主題。</p>
+<p>若要從 CLI 建立容器群組，請參閱<a href="container_ha.html#container_group_cli" title="從 IBM Bluemix Container Service CLI 建立及部署可擴充群組容器。容器群組包含兩個以上執行相同映像檔的容器。對於執行具有需要可擴充性及可靠性之工作負載的長期服務，或是進行所需規模的測試，都可以使用容器群組。">從 CLI 執行容器群組</a>。</p>
+</div></div>
+<article class="topic task nested4" role="article" aria-labelledby="d67393e3954" id="group_loadbalancing"><h5 class="topictitle5" id="d67393e3954">容器群組的負載平衡</h5>
+<div class="body taskbody"><p class="shortdesc">容器群組提供內建的負載平衡，將送入的資料流量平均（循環式）遞送至群組中的容器實例。若已建立容器群組，或已將實例新增至現有群組，則不論是自行新增實例，還是在自動回復期間重建實例，都會啟用負載平衡。</p>
+<div class="section context"><div class="p"><img id="group_loadbalancing__loadbalancing_gif" src="images/container_group_loadbalancing.gif" longdesc="transcript_loadbalancing.html" alt="使用者會遞送至群組實例，以平均分散工作負載。">
+<a href="../api/content/containers/images/container_group_loadbalancing_infinite.gif" rel="external" target="_blank" title="再看一遍？在新的標籤中重新載入此動畫，就可以再看一遍。 （在新分頁或視窗中開啟）"><img src="images/refresh.png" alt="「重新載入」圖示"></a><ul><li><span class="keyword calloutlabel">&nbsp;A&nbsp;</span>：具有三個實例的容器群組</li>
+<li><span class="keyword calloutlabel">&nbsp;B&nbsp;</span>：容器群組的負載平衡器</li>
+<li><span class="keyword calloutlabel">&nbsp;1、2、3&nbsp;</span>：容器群組中的實例</li>
+</ul>
+</div>
+
+<p>將新的實例新增至容器群組之後，負載平衡器會建立 TCP Socket 連線，以決定何時開始將資料流量傳送至新的容器實例。容器實例開始接聽其定義的埠之後，負載平衡器即會開始將資料流量傳送至該實例。負載平衡器會將專用 IP 位址指派給群組，讓相同空間中的其他容器或服務可以存取該群組。</p>
+
+<p>因為此專用 IP 位址是指派給群組，而非個別實例，所以將實例新增至群組或在自動回復期間重建實例時，專用 IP 位址不會變更。您可以執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect</samp> 來尋找這個專用 IP 位址。</p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67393e4014" id="group_anti-affinity"><h5 class="topictitle5" id="d67393e4014">容器群組的反親緣性</h5>
+<div class="body taskbody"><p class="shortdesc">在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 指令中使用 <samp class="ph codeph">--anti</samp> 選項，即可選擇在建立容器群組時是否啟用反親緣性特性。</p>
+<div class="section context"><p><span class="ph">啟用反親緣性時，容器實例會分散到不同的實體運算節點，如此可降低容器因硬體故障而損毀的可能性。</span></p>
+
+<p>若要從 CLI 使用 <samp class="ph codeph">--anti</samp> 選項，您必須已安裝 <span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式 (<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>) 0.8.934 版或更新版本。您可能無法對較大的群組大小使用此選項，因為每一個 <span class="keyword">Bluemix</span> 地區及組織可以部署的運算節點有限。如果部署不成功，請減少群組中的容器實例數目，或移除 <samp class="ph codeph">--anti</samp> 選項。</p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67393e4081" id="group_autorecovery"><h5 class="topictitle5" id="d67393e4081">容器群組的自動回復</h5>
+<div class="body taskbody"><p class="shortdesc">在 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create</samp> 指令中使用 <samp class="ph codeph">--auto</samp> 選項，即可選擇在建立容器群組時是否啟用自動回復。</p>
+<div class="section context"><p><img id="group_autorecovery__autorecovery_gif" src="images/container_group_autorecovery.gif" longdesc="transcript_autorecovery.html" alt="當群組中的某個實例失敗時，會將它移除，並啟動新的實例。後面會接著文字說明的鏈結。">
+<a href="../api/content/containers/images/container_group_autorecovery_infinite.gif" rel="external" target="_blank" title="再看一遍？在新的標籤中重新載入此動畫，就可以再看一遍。 （在新分頁或視窗中開啟）"><img src="images/refresh.png" alt="「重新載入」圖示"></a></p>
+
+<p><span class="ph" id="group_autorecovery__auto-recovery">若已啟用容器群組的自動回復，且群組已執行 10 分鐘，則群組的負載平衡器會透過 HTTP 要求開始定期檢查群組中每一個容器實例的性能。如果容器實例未在 100 秒內回應，則會將其標示為非作用中。非作用中容器實例會從群組中移除，並透過自動回復進行重建。自動回復會嘗試回復群組中的容器實例 3 次。在第三次嘗試之後，自動回復會有 60 分鐘的時間無法回復群組中的任何容器實例。在 60 分鐘之後，就會再次啟動自動回復處理程序。</span></p>
+</div></div>
+</article><article class="topic task nested4" role="article" aria-labelledby="d67393e4134" id="group_autoscaling"><h5 class="topictitle5" id="d67393e4134">自動擴充容器群組</h5>
+<div class="body taskbody"><p class="shortdesc">容器群組會根據應用程式使用的 CPU 及記憶體來自動擴充容器群組實例。</p>
+<div class="section context">您可以定義自動擴充原則，以決定何時將容器實例新增至群組中，或何時從群組移除。如此一來，您就可以根據應用程式的工作負載來自動擴充容器群組。目前，在倫敦地區，新的 Bluemix 主控台有 Auto-Scaling 測試版可供使用。當您建立容器群組時，自動擴充選項即會出現。<p>若要進一步瞭解如何自動擴充容器群組實例，請參閱<a href="container_ha.html#container_group_ui_as" title="「自動擴充容器」功能已淘汰。您可以使用 IBM Bluemix Container Service 來取代此功能。如需詳細資訊，請參閱自動擴充淘汰。">自動擴充容器群組（已淘汰）</a>。</p>
+</div></div>
+</article></article><article class="topic task nested3" role="article" aria-labelledby="d67393e4187" id="docker_compose_type"><h4 class="topictitle4" id="d67393e4187">Docker Compose</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">部分應用程式由多個元件組成，例如資料庫、服務及快取，其中每一個元件都必須在它自己的容器中執行。因為編排所有容器同時啟動、鏈結及關閉很困難，所以您可以使用 Docker Compose 來配置多容器部署，而且只需要一個指令即可執行。將 Docker Compose 想像成單一容器實例的集合，其中每個容器都是根據它自己的映像檔及配置。</span>配置您的多容器部署一次，然後在 <span class="keyword">Bluemix</span> 中進行部署。</p>
+<div class="section context"><div class="steps note"><span class="notetitle">註：</span> Docker Compose 不支援 <span class="keyword">IBM
+Bluemix Container Service</span> 群組概念，這就是為何必須使用您自己的工具來處理應用程式的負載平衡、自動回復及自動擴充的原因。</div>
+
+<div class="p">Docker Compose 的部署速度考量：<ul><li>因為正在設定協調的部署，所以 Docker Compose 部署可能不會像其他部署一樣快。</li>
+<li>映像檔大小具有重大影響。映像檔越小，部署就越快。</li>
+<li>前幾次部署映像檔之後，可改善部署速度。一開始，必須將映像檔下載至主機上的登錄。後續部署的速度會比較快。</li>
+<li>網路設定可能需要幾分鐘的時間。</li>
+</ul>
+</div>
+
+<p>若要使用 Docker Compose 來配置多容器部署，請參閱<a href="container_single_ui.html#container_compose_intro" title="如果您的應用程式有多個元件（例如資料庫、服務及快取），要將所有容器編排為一起啟動和關閉，可能會是一件很困難的事情。在本指導教學中，您將瞭解如何使用單一 Docker Compose 指令，在微服務架構中將應用程式部署及執行為多容器部署。每一個屬於此系統的容器都是根據 Docker Compose 服務定義，並在自己的隔離環境中執行。">指導教學：使用 Docker Compose 及 IBM Bluemix Container Service 建立多容器部署</a>。</p>
+</div></div>
+</article></article><article class="topic concept nested2" role="article" aria-labelledby="d67393e4250" lang="zh-tw" id="container_planning_monlog"><h3 class="topictitle3" id="d67393e4250">監視及記載</h3>
+<div class="body conbody"><p class="shortdesc">在 <span class="keyword">Bluemix</span> 中，容器附有內建的監視及記載，讓您可以密切監看容器的性能。</p>
+<div class="note important"><span class="importanttitle">重要：</span> 此服務不是用於處理機密資料。</div>
+<p><span class="keyword">IBM
+Bluemix</span> 提供平台型監視和記載功能。您可以從雲端中執行的運算實例（例如容器）或從其他來源中收集度量值和日誌資料。然後，來自多個來源的聚集資料可以透過視覺化產生分析、見解及動作。</p>
+<figure class="fignone" id="container_planning_monlog__fig_architecture"><figcaption>圖 1. 監視及記載服務的架構</figcaption><div class="image"><object data="images/architecture_logmet.svg"><img src="images/architecture_logmet.jpg" alt="監視及記載服務的架構"></object></div></figure>
+<dl><dt class="dlterm">監視</dt>
+<dd><span class="ph" id="container_planning_monlog__monitoring">容器度量值是從容器外收集，不需要在容器內部安裝及維護代理程式。容器內代理程式對短期的輕量型雲端實例及自動擴充群組（其中容器可快速建立及破壞）具有顯著的額外需要及設定時間。這種頻外資料收集方法可以免除這些挑戰，並移除使用者的監視負擔。</span></dd>
+<dd class="ddexpand" id="container_planning_monlog__default_metrics"><p>主機中執行的處理程序會針對度量值執行無代理程式監視。此處理程序（也稱為<dfn class="term">搜索程式</dfn>）會持續從所有容器收集下列資訊。</p>
+
+<div class="p"><ul><li>CPU</li>
+<li>記憶體</li>
+<li>網路資訊</li>
+</ul>
+</div>
+
+<p>此度量資料是在 Graphite 中收集，而且同時顯示在 <span class="keyword">Bluemix</span> 使用者介面及「進階監視」視圖中。Docker 使用慣例及群組帳戶資訊會用作基本機制，以收集監視資料。</p>
+
+<p>您可以看到為了收集 <span class="ph filepath">/etc/collectd/collectd.conf</span> 中的資料而安裝之外掛程式的清單。若要進一步瞭解那些外掛程式可執行的作業，請參閱<a href="https://collectd.org/documentation/manpages/collectd.conf.5.shtml" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">收集的文件</a>。</p>
+</dd>
+</dl>
+<dl><dt class="dlterm">記載</dt>
+<dd><span class="ph" id="container_planning_monlog__logging">容器日誌類似於度量值，是從容器外使用搜索器來進行監視及轉遞。資料由搜索器傳送至 Bluemix 中的多方承租戶 <a href="https://www.elastic.co/products/elasticsearch" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Elasticsearch</a>，正如同其他容器內代理程式所收集的日誌一樣，但沒有必須在容器內安裝代理程式的麻煩。</span></dd>
+<dd class="ddexpand"><p>依預設，搜索程式會從下列位置擷取資訊。</p>
+<ul id="container_planning_monlog__default_logs"><li><span class="ph filepath">/var/log/messages</span>：系統訊息。</li>
+<li><span class="ph filepath">/docker.log</span>：Docker 日誌。<p>Docker 日誌檔未儲存為容器內部的檔案，但仍然會予以收集。
+依預設，會收集此日誌檔，因為它是標準的 Docker 使用慣例，用於顯示容器的 <samp class="ph codeph">stdout</samp>（標準輸出）及 <samp class="ph codeph">stderr</samp>（標準錯誤）資訊。如果有任何容器處理程序列印至 <samp class="ph codeph">stdout</samp> 或 <samp class="ph codeph">stderr</samp>，便會收集該資訊。</p>
+</li>
+</ul>
+若要收集其他日誌，請新增 <samp class="ph codeph">LOG_LOCATIONS</samp> 環境變數，內含在 <a href="container_single_ui.html#gui__env_keys_group">GUI</a> 或 <a href="container_single_ui.html#container_single_cli" title="使用 run 指令來建立容器。容器必須內含映像檔。如果還沒有映像檔，您可以使用組織專用映像檔登錄中預設提供的其中一個預設 IBM 認證映像檔。">CLI</a> 中建立容器時的日誌檔路徑。</dd>
+</dl>
+<p>若要進一步瞭解如何收集日誌及度量值，以及如何建立自訂儀表板，請參閱<a href="../services/cloud-monitoring/containers/analyzing_metrics_bmx_ui.html#analyzing_metrics_bmx_ui">監視及記載容器</a></p>
+</div>
+<aside role="complementary" aria-labelledby="d67393e4250"></aside></article></article></article></div></main></body></html>

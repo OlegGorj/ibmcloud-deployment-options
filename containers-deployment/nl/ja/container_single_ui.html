@@ -1,0 +1,1320 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="単一コンテナーは、アプリやサービスの開発時に単純なテストを実行するために、または高可用性を必要としない短期間のプロセスのために使用します。独自のネットワーキング・フロントエンドを使用するために、パブリック IP アドレスをコンテナーに割り当てることができます。">
+<meta name="keywords" content="単一コンテナー, ダッシュボード, GUI, IBM Containers, コンテナー, CLI, docker run, bx ic, run, 更新, コマンド・ライン, リンク, --link, IP アドレス, パブリック, ip-bind, ip-request, ips, ip-unbind, 削除, 解放, docker rm, rm, チュートリアル, 概説, cli, インストール, プラグイン, イメージ, デプロイ, Docker Compose, マルチコンテナー・デプロイメント, マルチコンテナー・アプリ, docker-compose.yml, スケーリング, ロード・バランサー, nginx, ワークロード, yml, サポートされるオプション, FAQ">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service において短期実行タスクを単一コンテナーとして実行する</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d75670e6" id="container_single_ui"><h1 class="topictitle1" id="d75670e6">短期実行タスクを単一コンテナーとして実行する</h1>
+<div class="abstract"><div class="shortdesc"><span class="ph">単一コンテナーは、アプリやサービスの開発時に単純なテストを実行するために、または高可用性を必要としない短期間のプロセスのために使用します。独自のネットワーキング・フロントエンドを使用するために、パブリック IP アドレスをコンテナーに割り当てることができます。</span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <span class="ph"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix®</span> Public の <span class="keyword">IBM®
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></span></div>
+</div>
+
+
+<div class="p">このページでは、次について説明します。
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#gui" title="コンテナーを Bluemix GUI から作成およびデプロイします。">GUI</a> または <a href="container_single_ui.html#container_single_cli" title="run コマンドを使用して、コンテナーを作成します。コンテナーには、イメージを含める必要があります。イメージがまだない場合には、デフォルトで組織のプライベート・ イメージ・レジストリーで使用可能な IBM 認定のデフォルト・イメージのいずれかを使用できます。">CLI</a> から短期実行タスクを単一コンテナーとして実行する<br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_single_updating" title="アプリを更新するには、新規コンテナーをデプロイする必要があります。新規イメージをプッシュした場合は、コンテナーは自動的に再始動されません。">コンテナーを更新する</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_linking" title="あるコンテナーが同じスペース内の別のコンテナーにリンクされると、IBM Bluemix Container Service は、宛先コンテナー上にソース・コンテナー用のホスト・エントリーを作成します。ソース・コンテナーを参照するために、頻繁に変わる可能性のある特定の IP アドレスではなく、別名を使用することができます。">コンテナーをリンクする</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_cli_ips" title="パブリック IP アドレスを要求して、Bluemix 内のコンテナーにバインドします。">IP アドレスの要求とバインド</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_single_ui.html#container_single_remove" title="割り当て量を最大限使用できるよう、未使用のコンテナーを時々削除してください。">単一コンテナーの削除</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • チュートリアル: <a href="container_single_ui.html#container_gettingstarted_tutorial" title="IBM Bluemix には、パブリック・クラウドで Docker コンテナーを実行する機能があります。 コンテナーは、ホスト・オペレーティング・システムとは独立して実行される自己完結型の安全な Web アプリをデプロイするために使用します。 コンテナーはどれも同じシステム・カーネルを使用し、仮想マシンよりも実行効率が高いため、コンテナーは軽量であり、多量のシステム・リソースを必要としません。 このチュートリアルでは、Bluemix の中で Docker コンテナーを使用してメッセージング Web アプリをビルドする方法を示します。 そのプロセスで、Dockerfile を作成し、プライベート Bluemix イメージ・レジストリーに Docker イメージを追加し、コンテナーをリンクします。">単一コンテナー Web アプリケーションの作成</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • チュートリアル: <a href="container_single_ui.html#container_compose_intro" title="データベース、サービス、キャッシュなど、複数のコンポーネントを伴うアプリの場合、始動やシャットダウンが一緒に実行されるようにすべてのコンテナーを調整するのは、難しい場合があります。 このチュートリアルでは、単一の Docker Compose コマンドを使用することにより、マイクロサービス・アーキテクチャーでマルチコンテナー・デプロイメントとしてアプリをデプロイして実行する方法について学習します。このシステムに含まれる各コンテナーは、Docker Compose サービス定義に基づいており、独自の分離された環境で実行されます。">マルチコンテナー・デプロイメントの作成</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d75670e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d75670e171" id="gui"><h2 class="topictitle2" id="d75670e171"><span class="keyword">Bluemix</span> GUI から短期実行タスクを単一コンテナーとして実行する</h2>
+<div class="body taskbody"><p class="shortdesc">コンテナーを <span class="keyword">Bluemix</span> GUI から作成およびデプロイします。</p>
+<div class="section prereq" id="gui__prereq_oh5_421_4z"><div class="p">始める前に、以下の情報を考慮してください。<ul id="gui__ul_ph5_421_4z"><li id="gui__role">コンテナーを <span class="keyword">Bluemix</span> スペース内に作成するには、スペースに対する開発者ロールを持っている必要があります。各ロールの許可についてと、ロールの編集方法について詳しくは、<span class="ph"><a href="../iam/users_roles.html">ユーザーとロール</a></span>を参照してください。</li>
+<li id="gui__add_image"><span class="keyword">Bluemix</span> GUI を使用して、IBM 提供のパブリック・イメージから、または組織のプライベート <span class="keyword">Bluemix</span> レジストリー内にある既存のイメージからコンテナーを作成します。
+イメージを<span class="keyword wintitle">カタログ</span>に追加する方法について詳しくは、<a href="container_images_adding_ov.html#container_images_adding_ov" title="コンテナー・イメージとは、作成するすべてのコンテナーの基本です。 イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。 コンテナー・イメージは、実行可能ファイル (.exe または .bin) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。 コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。">組織のプライベート Bluemix イメージ・レジストリーへの Docker イメージの追加</a>を参照してください。</li>
+<li id="gui__existing_ip">スペース用の IP アドレスが存在して、新しいものを作成する代わりにそれを使用できるかどうかをチェックします。詳細については、<a href="container_single_ui.html#container_cli_ips_list" title="単一コンテナーにインターネットからアクセスできるようにするには、その単一コンテナーにパブリック IP アドレスをバインドする必要があります。 IP アドレスを要求する前に、既に組織に割り当てられているパブリック IP アドレスのリストを参照して、それらの既存の IP アドレスのいずれかを使用できないか確認してください。">コマンド・ライン・インターフェース (CLI) による組織の既存のパブリック IP アドレスの検索</a>を参照してください。</li>
+<li id="gui__bind_service"><span class="keyword">Bluemix</span> サービスをコンテナーにバインドすることが分かっている場合は、<span class="keyword">Bluemix</span> サービスをスペースに追加します。詳細については、<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">Bluemix GUI からのサービスのバインド</a>を参照してください。</li>
+<li>コンテナー内からファイルにアクセスできるようにする共有ディスクが必要なことが分かっている場合は、コンテナーを作成する前に、ボリュームを作成します。詳細については、<a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">コマンド・ライン (CLI) でのボリュームの作成</a>を参照してください。</li>
+</ul>
+</div>
+</div><p class="li stepsection">イメージを使ってコンテナーを作成およびデプロイするには、以下のようにします。</p><ol class="steps" id="gui__steps_qh5_421_4z"><li class="step stepexpand" id="gui__start"><span class="cmd"><span class="ph" data-hd-otherprops="registry_check">カタログから、<span class="ph uicontrol">「コンテナー」</span>を選択し、イメージを選択します。</span></span> IBM によって提供されたイメージと、プライベート <span class="keyword">Bluemix</span> レジストリーに保管されているイメージの両方が表示されます。</li>
+<li class="step stepexpand" id="gui__namespace"><span class="cmd">組織の名前空間が既に設定されている場合は、名前空間の作成を要求するプロンプトは出されず、次のステップに進むことができます。</span> 組織の名前空間をまだ指定していない場合は、イメージ・レジストリーで名前空間を設定するように求められます。 名前空間は、<span class="keyword">Bluemix</span> のプライベート・レジストリーを識別する固有の名前です。名前空間は、1 つの組織に対して 1 回割り当てられ、作成後は変更できません。<span class="keyword">IBM
+Bluemix Container Service</span> を複数の <span class="keyword">Bluemix</span> 領域で使用する場合、
+それぞれの領域で名前空間をセットアップする必要があります。
+<div class="note tip" id="gui__namespace_naming"><span class="tiptitle">ヒント:</span> 名前空間に関しては、以下の規則に従ってください。
+<ul id="gui__ul_rh5_421_4z"><li>使用できるのは、小文字、数字、下線 (_) のみです。</li>
+<li>4 文字から 30 文字までの長さにすることができます。コマンド・ラインからコンテナーを管理する予定の場合は、素早く入力できる短い名前空間を使用することをお勧めします。</li>
+<li>この名前は、<span class="keyword">Bluemix</span> において固有でなければなりません。</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">次に、コンテナーの定義を始めます。</span> ウィンドウにはデフォルトで<span class="ph uicontrol">「単一」</span>コンテナー・タブが表示されます。</li>
+<li class="step stepexpand" id="gui__tag">オプション: <span class="cmd">イメージ名の下で、使用するイメージのタグまたはバージョンを選択します。</span></li>
+<li class="step stepexpand" id="gui__space"><span class="cmd">組織内の <span class="keyword">Bluemix</span> スペースの 1 つを選択します。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「コンテナー名」</span>フィールドに、コンテナーの名前を入力します。</span> <div class="note tip"><span class="tiptitle">ヒント:</span> コンテナー名は文字で始める必要があり、その後には、大文字、小文字、数字、ピリオド (.)、下線 (_)、およびハイフン (-) を使用できます。</div>
+</li>
+<li class="step stepexpand" id="gui__size"><span class="cmd"><span class="ph uicontrol">「サイズ」</span>フィールドで、コンテナー・サイズを選択します。</span> デフォルトのサイズは、<span class="ph uicontrol" data-hd-audience="yellow">「マイクロ (256 MB メモリー、16 GB ストレージ)」</span>です。選択したサイズによって、コンテナーが実行時に計算ホスト上で取得するメモリーおよびディスク・スペースの量が決まります。
+コンテナー作成後にサイズを変更することはできません。
+選択可能なその他のサイズを次に示します。
+<ul data-hd-audience="yellow" id="gui__ul_sh5_421_4z"><li>ピコ (64 MB メモリー、4 GB ディスク・スペース)</li>
+<li>ナノ (128 MB メモリー、8 GB ディスク・スペース)</li>
+<li>タイニー (512 MB メモリー、32 GB ディスク・スペース)</li>
+<li>スモール (1 GB メモリー、64 GB ディスク・スペース)</li>
+<li>ミディアム (2 GB メモリー、128 GB ディスク・スペース)</li>
+<li>ラージ (4 GB メモリー、256 GB ディスク・スペース)</li>
+<li>X ラージ (8 GB メモリー、512 GB ディスク・スペース)</li>
+<li>2X ラージ (16 GB メモリー、1 TB ディスク・スペース)</li>
+</ul>
+
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「パブリック IP アドレス (Public IP address)」</span>フィールドで、新しいパブリック IP アドレスを要求して割り当てるかどうかを選択します。</span> パブリック IP アドレスはコンテナーとのパブリック接続を可能にします。パブリック IP アドレスを必要としない場合の例として考えられるのは、
+プライベート・ネットワーク内でのみユーザーのアプリに可視のデータベースを使用する場合です。
+<div class="steps note"><span class="notetitle">注:</span> パブリック IP アドレスをバインドしても、単一のコンテナーとの間で送受信するデータを暗号化する SSL 証明書は組み込まれません。ご使用のアプリに SSL 暗号化が必要である場合は、独自の SSL ソリューションを実装するか、または単一のコンテナーの代わりにコンテナー・グループを使用することができます。
+既に SSL 証明書が組み込まれているパブリック経路にコンテナー・グループがバインドされているなら、追加の構成を行わずに HTTPS でコンテナー・グループにアクセスできます。詳しくは、『<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">Bluemix GUI によるコンテナー・グループの作成</a>』を参照してください。</div>
+
+<p>使用できる IP アドレスがある場合、<span class="ph uicontrol">「未割り当てのままにする (Leave unassigned)」</span>を選択し、コンテナーが作成された後でそのアドレスをコンテナーにバインドします。</p>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「公開済みポート (Public ports)」</span>フィールドに、公開するパブリック・ポートをすべて指定します。</span> フィールドには、 イメージの作成時に
+Dockerfile でイメージに指定されたポートが事前に入力されています。パブリック・ポートを指定する際に、使用する IP プロトコルとして UDP か TCP のいずれかを選択できます。
+プロトコルを指定しない場合、自動的にポートは TCP トラフィックに対して公開されます。
+パブリック・ポートを公開するときには、公開したポートでのみパブリック・データを送受信できるパブリック・ネットワーク・セキュリティー・グループをコンテナー用に作成します。その他のすべてのパブリック・ポートは閉じられるため、それらのポートを使用してインターネットからアプリにアクセスすることはできません。各ポートをコンマ (,) で区切って指定することにより、複数ポートを含めることができます。 <div class="p" id="gui__ports_p">使用するイメージの Dockerfile 内にポートが指定されている場合、そのポートを含めてください。<div class="note tip"><span class="tiptitle">ヒント:</span> <ul id="gui__ul_uh5_421_4z"><li>IBM 認定 Liberty Server イメージ、またはこのイメージの変更版の場合、ポート <kbd class="ph userinput">9080</kbd> を入力します。</li>
+<li>IBM 認定 Node.js イメージ、またはこのイメージの変更版の場合、ポート <kbd class="ph userinput">8000.</kbd> など、任意のポートを入力します。</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">ボリュームの追加、環境変数の追加、または <span class="keyword">Bluemix</span> サービスのバインドを行う場合は、「<span class="ph uicontrol">詳細オプション</span>」を展開します。</span></li>
+<li class="step stepexpand" id="gui__volume">オプション: <span class="cmd">データまたはファイル・ストレージを定義します。既存のボリュームをコンテナーまたはコンテナー・グループに関連付けます。</span> ボリュームは、コンテナー内からのファイルへのアクセスを可能にする共有ディスクです。コンテナーのパスは、コンテナーのファイル・システムのどこにボリュームがマウントされるかを示します。
+<div class="note restriction"><span class="restrictiontitle">制約事項:</span> <span class="keyword">Bluemix</span> スペース内のボリュームの削除は、コマンド・ラインでしか行えません。</div>
+<ol type="a" class="ol substeps" id="gui__substeps_vh5_421_4z"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「既存ボリュームの割り当て」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ドロップダウン・リストからボリュームを選択します。</span></li>
+<li class="li substep"><span class="cmd">次のフィールドに、ボリュームをマップする、コンテナー上のパスを指定します。</span> 例えば、<span class="ph filepath">/var/lib/my_volume</span> と指定します。</li>
+<li class="li substep"><span class="cmd">ボリュームを読み取り専用として指定するには、<span class="ph uicontrol">「読み取り専用」</span>を選択します。</span> デフォルトで、ボリュームは読み取り/書き込みです。</li>
+<li class="li substep"><span class="cmd">複数のボリュームを追加するには、<span class="ph uicontrol">「既存ボリュームの割り当て」</span>をクリックし、上記の手順を繰り返します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="gui__env_var">オプション: <span class="cmd">環境変数を定義します。</span> <ol type="a" class="ol substeps" id="gui__substeps_wh5_421_4z"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「新規環境変数の追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd">環境変数の名前を入力します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">次のフィールドに、環境変数の値を指定します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">複数の環境変数を追加するには、<span class="ph uicontrol">「新規環境変数の追加」</span>をクリックし、上記の手順を繰り返します。</span> <div class="tablenoborder"><table summary="" id="gui__env_keys_group" class="defaultstyle"><caption><span class="tablecap">表 1. 推奨される環境変数</span></caption><thead><tr><th id="d75670e506" class="thleft">環境変数</th>
+<th id="d75670e508" class="thleft">説明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d75670e506 "><div class="lines"><samp class="ph codeph">CCS_BIND_APP=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;appname&gt;</var></samp></div>
+</td>
+<td headers="d75670e508 ">一部の <span class="keyword">Bluemix</span> サービスは、コンテナーへの直接バインディングをサポートしていません。その場合は、Cloud Foundry アプリを作成し、そのアプリに <span class="keyword">Bluemix</span> サービスをバインドする必要があります。次に、<samp class="ph codeph">CCS_BIND_APP</samp> を使用して、アプリをコンテナーにバインドします。Cloud Foundry アプリはブリッジとして機能し、実行中のコンテナー・インスタンスに <span class="keyword">Bluemix</span> がブリッジ・アプリの VCAP_SERVICES 情報を注入することを可能にします。</td>
+</tr>
+<tr><td headers="d75670e506 "><div class="lines"><samp class="ph codeph">CCS_BIND_SRV=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name1&gt;,</var></samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;service_instance_name2&gt;</var></samp></div>
+
+<div class="steps note"><span class="notetitle">注:</span>  サービスが <samp class="ph codeph">CCS_BIND_SRV=</samp> 環境変数の使用をサポートしていない場合は、代わりに <samp class="ph codeph">CCS_BIND_APP=</samp> を使用してください。</div>
+</td>
+<td headers="d75670e508 ">ブリッジ・アプリを使用せずに <span class="keyword">Bluemix</span> サービスをコンテナーに直接バインドするには、<samp class="ph codeph">CCS_BIND_SRV</samp> を使用します。このようにバインドすることで、 <span class="keyword">Bluemix</span> は、実行中のコンテナー・インスタンスに VCAP_SERVICES 情報を注入できるようになります。複数の <span class="keyword">Bluemix</span> サービスをリストするには、それらを同じ環境変数の一部として含めてください。</td>
+</tr>
+<tr><td headers="d75670e506 "><div class="lines">(非推奨) <samp class="ph codeph">CCS_SSH_KEY=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;public_ssh_key&gt; </var></samp></div>
+</td>
+<td headers="d75670e508 "><div class="note note" data-hd-status="deprecated"><span class="notetitle">この環境変数は推奨されていません:</span> コンテナーに対する外部アクセスには、代わりに <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">exec</samp> または <span class="ph"><samp class="ph codeph">bx ic</samp></span> <samp class="ph codeph">attach</samp> を使用してください。詳細については、<a href="container_security.html#container_cli_login_exec" title="実行中のコンテナーにログインする必要がある場合は、bx ic exec を使用できます。">exec を使用したコンテナーへのログイン</a>を参照してください。</div>
+<span class="ph">コンテナーの作成時に SSH 鍵をコンテナーに追加するには、<samp class="ph codeph">CCS_API_KEY</samp> を使用します。</span></td>
+</tr>
+<tr><td headers="d75670e506 "><div class="lines"><samp class="ph codeph">LOG_LOCATIONS=</samp><br>
+<samp class="ph codeph"><var class="keyword varname">&lt;path_to_file&gt; </var></samp></div>
+</td>
+<td headers="d75670e508 "><span class="ph" id="gui__d42728e1422">コンテナー内でモニターされるログ・ファイルを追加するには、
+<samp class="ph codeph">LOG_LOCATIONS</samp> 環境変数を、ログ・ファイルへのパスと共に設定します。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="gui__bind_service_step">オプション: <span class="cmd">アプリに他のサービスを定義します。<span class="keyword">Bluemix</span> スペースからコンテナーに <span class="keyword">Bluemix</span> サービスをバインドします。<span class="ph uicontrol">「サービス・バインディング」</span>セクションで <span class="keyword">Bluemix</span> サービス・インスタンスを選択し、<span class="ph uicontrol">「追加」</span>をクリックしてサービスをコンテナーにバインドします。</span> <span class="keyword">Bluemix</span> サービスをスペースにまだ追加していない場合、メニューに表示されるサービスはありません。</li>
+<li class="step stepexpand" id="gui__deploy"><span class="cmd">コンテナーをデプロイし、完了するのを待ちます。<span class="ph uicontrol">「作成」</span>をクリックします。</span> コンテナーが作成されると (しばらく時間がかかる場合があります)、そのコンテナーが <span class="keyword">Bluemix</span> で開始されます。コンテナーの状況については、<span class="ph uicontrol">「コンテナー・ヘルス (CONTAINER HEALTH)」</span>セクションを参照してください。作成が完了すると、状況が <span class="ph uicontrol">「実行中」</span> になります。</li>
+</ol>
+<div class="section result" id="gui__result_xh5_421_4z"><p>使用する既存 IP アドレスがあるために<span class="ph uicontrol">「パブリック IP アドレス (Public IP
+Address)」</span>に<span class="ph uicontrol">「未割り当てのままにする (Leave unassigned)」</span>を選択した場合、その IP アドレスをコンテナーにバインドします。詳細については、<a href="container_single_ui.html#container_cli_ips" title="パブリック IP アドレスを要求して、Bluemix 内のコンテナーにバインドします。">パブリック IP アドレスの要求とコンテナーへのバインド</a>を参照してください。</p>
+
+<div class="p" id="gui__wait">コンテナーから外部アプリに接続する場合、指定された IP アドレスに接続できるのは、コンテナー・プロセスの開始後に最大 5 分経過してからです。その後、以下のいずれかのオプションを実行して、アプリがコンテナー内で機能していることを確認できます。<ul id="gui__ul_yh5_421_4z"><li>パブリック IP アドレスとポートを使用して URL を作成することによって、ブラウザーでアプリを開くことができます。<p>例</p>
+<span class="ph filepath">http://<var class="keyword varname">public_IP</var>:<var class="keyword varname">public_port</var></span>
+<div class="steps note"><span class="notetitle">注:</span> HTTP エンドポイントを公開しないサービスがアプリ内に存在する場合、このオプションを使用してもブラウザーにアプリが表示されない可能性があります。</div>
+</li>
+<li>Linux または UNIX のコマンド・ラインから <span class="ph filepath">nc -zv
+<var class="keyword varname">&lt;public_IP&gt;</var>
+<var class="keyword varname">&lt;public_port&gt;</var></span> を実行して、指定されたポートをサーバーが listen していることを確認できます。</li>
+</ul>
+</div>
+</div><div class="section postreq" id="gui__postreq_zh5_421_4z"><p>次に、組織の管理者は、その組織のコンテナーに関する請求内容を確認できます。</p>
+
+<ol id="gui__ol_a35_421_4z"><li><span class="ph">「組織の管理」でアカウントの詳細から組織を選択します。</span></li>
+<li><span class="ph uicontrol">「使用状況ダッシュボード」</span>を選択し、使用状況と請求の詳細を確認します。</li>
+</ol>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d75670e739" lang="ja-jp" id="container_single_cli"><h2 class="topictitle2" id="d75670e739">コマンド・ライン・インターフェース (CLI) により短期実行タスクを単一コンテナーとして実行する</h2>
+<div class="body taskbody"><p class="shortdesc"><samp class="ph codeph">run</samp> コマンドを使用して、コンテナーを作成します。コンテナーには、イメージを含める必要があります。イメージがまだない場合には、デフォルトで組織のプライベート・ イメージ・レジストリーで使用可能な IBM 認定のデフォルト・イメージのいずれかを使用できます。</p>
+<div class="section prereq"><div class="p" id="container_single_cli__prereq">始める前に、以下の手順を検討してください。<ul><li>コンテナーを <span class="keyword">Bluemix</span> スペース内に作成するには、スペースに対する開発者ロールを持っている必要があります。各ロールの許可についてと、ロールの編集方法について詳しくは、<span class="ph"><a href="../iam/users_roles.html">ユーザーとロール</a></span>を参照してください。</li>
+<li id="container_single_cli__identify_images"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> コマンドを実行して、組織のプライベート・イメージ・レジストリー内にある、コンテナーで使用する既存イメージを特定します。イメージをレジストリーに追加するには、<a href="container_images_adding_ov.html#container_images_adding_ov" title="コンテナー・イメージとは、作成するすべてのコンテナーの基本です。 イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。 コンテナー・イメージは、実行可能ファイル (.exe または .bin) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。 コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。">組織のプライベート Bluemix イメージ・レジストリーへの Docker イメージの追加</a>を参照してください。</li>
+<li>スペース用の IP アドレスが存在して、新しいものを作成する代わりにそれを使用できるかどうかをチェックします。詳細については、<a href="container_single_ui.html#container_cli_ips_list" title="単一コンテナーにインターネットからアクセスできるようにするには、その単一コンテナーにパブリック IP アドレスをバインドする必要があります。 IP アドレスを要求する前に、既に組織に割り当てられているパブリック IP アドレスのリストを参照して、それらの既存の IP アドレスのいずれかを使用できないか確認してください。">コマンド・ライン・インターフェース (CLI) による組織の既存のパブリック IP アドレスの検索</a>を参照してください。</li>
+<li><span class="keyword">Bluemix</span> サービスをコンテナーにバインドすることが分かっている場合は、<span class="keyword">Bluemix</span> サービスをスペースに追加します。詳細については、<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">Bluemix GUI からのサービスのバインド</a>を参照してください。</li>
+<li id="container_single_cli__create_shared_volume">複数のコンテナーからファイルにアクセスできるようにする共有ディスクが必要なことが分かっている場合は、コンテナーを作成する前にボリュームを作成します。詳細については、<a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">コマンド・ライン (CLI) でのボリュームの作成</a>を参照してください。</li>
+</ul>
+</div>
+</div><p class="li stepsection">コンテナーを作成します。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">組織のプライベート・イメージ・レジストリー内の既存イメージと既存 IP アドレスを使用してコンテナーを作成します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;port_on_IP&gt;</var>:<var class="keyword varname">&lt;public_port&gt;</var> -e <var class="keyword varname">&lt;env_variable&gt;</var> -m <var class="keyword varname">&lt;container_size&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> --volume <var class="keyword varname">&lt;volname:mount_path&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;namespace&gt;</var>/<var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_single_cli__d41685e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_single_cli__d41685e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+
+<p>例</p>
+
+<div class="p">以下の例では、これらの詳細情報を使用して単一コンテナーを作成しています。<ul><li>名前: <var class="keyword varname">my_container</var></li>
+<li>サイズ: <var class="keyword varname">64 MB</var></li>
+<li>イメージ: <var class="keyword varname">ibmliberty</var></li>
+<li>マウントされるボリューム: <var class="keyword varname">myvol</var></li>
+<li>公開されるパブリック・ポート: <var class="keyword varname">9080</var></li>
+<li>バインドされる IP アドレス: <var class="keyword varname">192.0.2.23</var></li>
+<li>カスタム・ログ・ファイル・ロケーション: 標準的な Ubuntu ログ・ファイル。カスタム・ログ・ファイル・ロケーションにあるログは、コンテナーが作成された後に Kibana で表示できます。</li>
+</ul>
+</div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p 192.0.2.23:9080:9080 -e <span class="q">"LOG_LOCATION=/var/log/dpkg.log"</span> -m 64 --name my_container --volume myvol:/var/tmp registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty </code></pre>
+
+コンテナーは、作成されると開始します。コンテナーの ID が表示される場合、コンテナーはデプロイされています。</li>
+<li class="step stepexpand">オプション: <span class="cmd">実行中のコンテナーをリストします。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+</ol>
+<div class="section postreq"><div class="p">コンテナーから外部アプリに接続する場合、指定された IP アドレスに接続できるのは、コンテナー・プロセスの開始後に最大 5 分経過してからです。その後、以下のいずれかのオプションを実行して、アプリがコンテナー内で機能していることを確認できます。<ul id="container_single_cli__d41690e365"><li>パブリック IP アドレスとポートを使用して URL を作成することによって、ブラウザーでアプリを開くことができます。<p>例</p>
+<span class="ph filepath">http://<var class="keyword varname">public_IP</var>:<var class="keyword varname">public_port</var></span>
+<div class="steps note"><span class="notetitle">注:</span> HTTP エンドポイントを公開しないサービスがアプリ内に存在する場合、このオプションを使用してもブラウザーにアプリが表示されない可能性があります。</div>
+</li>
+<li>Linux または UNIX のコマンド・ラインから <span class="ph filepath">nc -zv
+<var class="keyword varname">&lt;public_IP&gt;</var>
+<var class="keyword varname">&lt;public_port&gt;</var></span> を実行して、指定されたポートをサーバーが listen していることを確認できます。</li>
+</ul>
+</div>
+
+<p>次に、組織の管理者は、その組織のコンテナーに関する請求内容を確認できます。</p>
+
+<div class="p"><ol><li>ユーザー・アバターをクリックします。</li>
+<li><span class="ph uicontrol">「アカウント」</span> をクリックします。</li>
+<li><span class="ph uicontrol">「+」</span>ボタンをクリックして、組織を展開します。</li>
+<li><span class="ph uicontrol">「使用状況ダッシュボード」</span>を選択し、使用状況と請求の詳細を確認します。</li>
+</ol>
+<span class="ph">詳細については、<span class="ph"><a href="../admin/account.html">アカウントの管理</a></span>を参照してください。</span></div>
+</div></div>
+<aside role="complementary" aria-labelledby="d75670e739"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75670e1055" lang="ja-jp" id="container_single_updating"><h2 class="topictitle2" id="d75670e1055">コマンド・ライン・インターフェース (CLI) による単一コンテナーでの短期実行タスクの更新</h2>
+<div class="body taskbody"><p class="shortdesc">アプリを更新するには、新規コンテナーをデプロイする必要があります。新規イメージをプッシュした場合は、コンテナーは自動的に再始動されません。</p>
+<div class="section context"><div class="tablenoborder"><table summary="" id="container_single_updating__updating_group_cli_table" class="defaultstyle"><caption><span class="tablecap">表 2. アプリの更新のためのオプション・ツール</span></caption><thead><tr><th id="d75670e1120" class="thleft">更新ツール</th>
+<th id="d75670e1122" class="thleft">説明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d75670e1120 "><span class="keyword">Delivery Pipeline</span></td>
+<td headers="d75670e1122 ">管理者が使用できる <span class="keyword">Bluemix</span> サービスである <span class="keyword">Delivery Pipeline</span> を使用して、アプリのビルドと <span class="keyword">Bluemix</span> へのコンテナーのデプロイメントを自動化します。
+詳細については、<a href="container_integrations.html#container_single_pipeline_ov" title="Delivery Pipeline を使用して、単一コンテナーの作成とデプロイメントを自動化します。">Delivery Pipeline を使用した単一コンテナーの作成</a>を参照してください。</td>
+</tr>
+<tr><td headers="d75670e1120 ">UrbanCode Deploy</td>
+<td headers="d75670e1122 ">UrbanCode Deploy を使用することによって、アプリのビルドおよび <span class="keyword">Bluemix</span> へのコンテナーの配置を自動化します。UrbanCode Deploy の購入について詳しくは、<a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">IBM UrbanCode Deploy</a> 製品ページを参照してください。</td>
+</tr>
+<tr><td headers="d75670e1120 "><span class="keyword">IBM
+Bluemix Container Service</span> CLI の使用による管理者自身でのアプリの更新</td>
+<td headers="d75670e1122 ">管理者自身がアプリを更新するには、このタスクにある手順を実行します。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div><p class="li stepsection"><span class="keyword">IBM
+Bluemix Container Service</span> CLI を使用して管理者自身がコンテナーを更新するには、以下のようにします。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">アプリをローカルで更新します。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span> でイメージを直接ビルドするか、またはイメージをローカルにビルドしてテストし、その後でそのイメージを <span class="keyword">Bluemix</span> にプッシュするかを選択します。</span> <ul><li><span class="keyword">Bluemix</span> でイメージを直接ビルドするには、以下のコマンドを実行します。*<div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_single_updating__d43235e236">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_single_updating__d43235e255">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li>イメージをローカルにビルドし、その後でイメージを <span class="keyword">Bluemix</span> にプッシュするには、以下のステップを実行します。<div class="p"><ol type="a"><li><span class="keyword">IBM
+Bluemix Container Service</span> 用プラグインを使用している場合、再ログインします。<samp class="ph codeph">docker</samp> コマンドがローカル・マシンの Docker エンジンに送られるように、
+オプション 2 の環境変数を設定しないでください。
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Dockerfile からイメージをローカルにビルドします。
+<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">例<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>以下のコマンドを使用して、イメージからコンテナーを実行して、新規アプリがローカルで実行されることをテストします。ここで、<var class="keyword varname">Port</var> は HTTP トラフィック用のポートです。
+<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">例<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>アプリが正しく実行されていれば、CLI 出力にコンテナー ID が表示されます。コンテナーのログを確認するには、<samp class="ph codeph">docker logs <var class="keyword varname">&lt;container_name_or_id&gt;</var></samp> を実行します。</p>
+</li>
+<li id="container_single_updating__d43235e335">プライベート <span class="keyword">Bluemix</span> レジストリーおよび新規名でローカル・イメージにタグを付けます。<span class="ph">イメージ名には小文字の英数字または下線 (_) のみを使用してください。
+ハイフン (-) やスラッシュ (/) などその他の記号を使用すると、イメージをイメージ・レジストリーへプッシュできない場合があります。</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>例</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>以下のコマンドを使用して、イメージをプライベート <span class="keyword">Bluemix</span> レジストリーへプッシュします。<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">例<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">重要:</span> <span class="ph">プライベート <span class="keyword">Bluemix</span> レジストリーにイメージをプッシュすると、イメージについて報告されるサイズは、ローカル Docker エンジンにおける同じイメージのサイズより小さくなります。これらのサイズに差があるからと言って、イメージがプッシュされた際に問題が発生したということではありません。<span class="keyword">IBM
+Bluemix Container Service</span> では、イメージの圧縮サイズが報告されます。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーからパブリック IP アドレスをアンバインドします。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+ <p>コンテナーはこの IP アドレスにバインドされた状態ではなくなりますが、この IP は引き続き組織のパブリック IP 割り当て量に計上されます。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">以下のコマンドを実行して、IP アドレスがアンバインドされたことを確認します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+
+
+<p><samp class="ph systemoutput">PublicIpAddress</samp> の値が空でない場合は、次のステップに進む前に、あと数分間待ってから再度コマンドを実行してください。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">IP アドレスが既存のコンテナーから削除されたら、更新されたイメージを使用して別のコンテナーを作成します。*</span> <pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span><span class="ph" id="container_single_updating__d43249e3564"> run [-p PORT] [-P] [-d] [-e ENV] [--env-file
+ENVFILE] [-it] [--link NAME:ALIAS] [-m MEMORY] --name NAME [--volume VOLUME:/DIRECTORY_PATH] IMAGE [CMD [CMD ...]] </span></span></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">IP アドレスを新しいコンテナーにバインドします。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">古いコンテナーを削除します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75670e1055"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75670e1514" lang="ja-jp" id="container_linking"><h2 class="topictitle2" id="d75670e1514">コマンド・ライン・インターフェース (CLI) による単一コンテナーのリンク</h2>
+<div class="body taskbody"><p class="shortdesc">あるコンテナーが同じスペース内の別のコンテナーにリンクされると、<span class="keyword">IBM
+Bluemix Container Service</span> は、宛先コンテナー上にソース・コンテナー用のホスト・エントリーを作成します。ソース・コンテナーを参照するために、頻繁に変わる可能性のある特定の IP アドレスではなく、別名を使用することができます。</p>
+<div class="section context"><p>単一コンテナーが、イメージ (<samp class="ph codeph">dbimage</samp> など) を実行している別のコンテナーと通信するようにしたい場合、ホスト名の別名 (<samp class="ph codeph">dbserver</samp> など) を使用してそのコンテナーのアドレスを指定できます。この機能を利用して、IP アドレスまたは実際の名前が何かに関わらず <samp class="ph codeph">dbserver</samp> ホスト名を使用してデータベース・サーバー・イメージを参照する、
+<samp class="ph codeph">webserver</samp> イメージを作成できます。構成または IP 情報を引き渡す必要なく、
+同じイメージ内でこのペアの多くのインスタンスを実行できます。常にデータベース・サーバーを <samp class="ph codeph">dbserver</samp> として参照することができます。</p>
+
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">以下のコマンドを実行して、ソース・コンテナーを作成します。*</span> <div class="note tip"><span class="tiptitle">ヒント:</span> ポートを公開するために <samp class="ph codeph">-p</samp> オプションを含めるようにしてください。
+これによって、そのポート番号が宛先コンテナーに公開されます。Dockerfile 内で、EXPOSE ステートメントでイメージ内に公開されるポートは、現在はリンク・ランタイムによって使用されていません。</div>
+
+<div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;port&gt;</var> --name <var class="keyword varname">&lt;source_container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;source_container_image_name&gt;</var> </code></pre>
+例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">17546</var> --name <var class="keyword varname">source</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">dbimage</var> </code></pre>
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_linking__d36715e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_linking__d36715e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li class="step stepexpand"><span class="cmd">以下のコマンドを実行して、宛先コンテナーを作成し、ソース・コンテナーにリンクします。*</span> alias には、ソース・コンテナーで使用される、イメージのカスタム名を選択します。<span class="keyword option">-p</span> オプションを複数回含めることによって、宛先コンテナー用の複数のポートをホスト・コンテナーに公開することができます。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;port&gt;</var> -p <var class="keyword varname">&lt;port&gt;</var> --name <var class="keyword varname">&lt;recipient_container_name&gt;</var> --link <var class="keyword varname">&lt;source_container_name&gt;</var>:<var class="keyword varname">&lt;alias&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;recipient_container_image_name&gt;</var> </code></pre>
+例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p 12534 -p 15256 --name <var class="keyword varname">recipient</var> --link <var class="keyword varname">source</var>:<var class="keyword varname">dbserver</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">webserver</var> </code></pre>
+
+<p>宛先コンテナーの ID が表示される場合、そのコンテナーはリンクされています。</p>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd"><samp class="ph codeph">exec</samp> を使用してコンテナーにログインし、リンクによって注入された環境変数を確認します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">&lt;recipient_container_name&gt;</var> bash </code></pre>
+ <div class="p">bash ウィンドウで <samp class="ph codeph">env</samp> コマンドを実行して、別名の詳細情報を確認します。
+<pre class="codeblock"><code>"Env": [
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_&lt;source_container_port&gt;/tcp_TCP_PORT=&lt;source_container_port&gt;/tcp",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_&lt;source_container_port&gt;/tcp_TCP=tcp://<var class="keyword varname">&lt;recipient_container_private_IP&gt;</var>:&lt;source_container_port&gt;/tcp",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_space_id=<var class="keyword varname">&lt;space_ID&gt;</var>",
+    "logging_password=",
+    "space_id=<var class="keyword varname">&lt;space_ID&gt;</var>",
+    "logstash_target=logs.opvis.bluemix.net:9091",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_<var class="keyword varname">&lt;source_container_port&gt;</var>/tcp_TCP_ADDR=<var class="keyword varname">&lt;recipient_container_private_ip&gt;</var>",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_metrics_target=metrics.opvis.bluemix.net:9095",
+    "<var class="keyword varname">&lt;alias&gt;</var>_NAME=/<var class="keyword varname">&lt;recipient_container&gt;</var>/<var class="keyword varname">&lt;alias&gt;</var>",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_logstash_target=logs.opvis.bluemix.net:9091",
+    "<var class="keyword varname">&lt;alias&gt;</var>_ENV_logging_password=",
+    "<var class="keyword varname">&lt;alias&gt;</var>_PORT_<var class="keyword varname">&lt;source_container_port&gt;</var>/tcp_TCP_PROTO=tcp",
+    "metrics_target=metrics.opvis.bluemix.net:9095"
+],</code></pre>
+</div>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75670e1514"></aside></article><article class="topic task nested1" role="article" aria-labelledby="d75670e1828" lang="ja-jp" id="container_cli_ips"><h2 class="topictitle2" id="d75670e1828">パブリック IP アドレスの要求とコンテナーへのバインド</h2>
+<div class="body taskbody"><p class="shortdesc">パブリック IP アドレスを要求して、<span class="keyword">Bluemix</span> 内のコンテナーにバインドします。</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">注:</span> パブリック IP アドレスをバインドしても、単一のコンテナーとの間で送受信するデータを暗号化する SSL 証明書は組み込まれません。ご使用のアプリに SSL 暗号化が必要である場合は、独自の SSL ソリューションを実装するか、または単一のコンテナーの代わりにコンテナー・グループを使用することができます。
+既に SSL 証明書が組み込まれているパブリック経路にコンテナー・グループがバインドされているなら、追加の構成を行わずに HTTPS でコンテナー・グループにアクセスできます。詳しくは、『<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">Bluemix GUI によるコンテナー・グループの作成</a>』を参照してください。</div>
+
+<p>始める前に、<a href="container_single_ui.html#container_cli_ips_list" title="単一コンテナーにインターネットからアクセスできるようにするには、その単一コンテナーにパブリック IP アドレスをバインドする必要があります。 IP アドレスを要求する前に、既に組織に割り当てられているパブリック IP アドレスのリストを参照して、それらの既存の IP アドレスのいずれかを使用できないか確認してください。">コマンド・ライン・インターフェース (CLI) による組織の既存のパブリック IP アドレスの検索</a>を参照して、新しく作成する代わりに既存のパブリック IP アドレスで使用できるものがスペースにないか確認してください。</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">パブリック IP アドレスを要求します。</span>  パブリック IP アドレスを要求すると、パブリック IP アドレス・プールからランダムに IP アドレスがスペースに割り振られます。
+スペースに割り振られた IP アドレスは変更されません。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">IP アドレスを記録してください。</span></li>
+<li class="step stepexpand"><span class="cmd">そのアドレスを新規コンテナーまたは既存の実行中コンテナーにバインドします。</span> <ul class="ul choices"><li class="li choice">既存の実行中コンテナーにバインドするには、以下のようにします。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind 192.0.2.23 my_container</code></pre>
+</li>
+<li class="li choice">新規コンテナーにバインドするには、以下のようにします。<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -p <var class="keyword varname">&lt;ip-address&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var>:<var class="keyword varname">&lt;container-port&gt;</var> --name <var class="keyword varname">&lt;container_name&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<div class="section result">バインド要求は即時に行われますが、その IP アドレスを使用したコンテナーへの接続には数分かかることがあります。</div></div>
+<aside role="complementary" aria-labelledby="d75670e1828"></aside><article class="topic task nested2" role="article" aria-labelledby="d75670e1979" lang="ja-jp" id="container_cli_ips_list"><h3 class="topictitle3" id="d75670e1979">コマンド・ライン・インターフェース (CLI) による組織の既存のパブリック IP アドレスの検索</h3>
+<div class="body taskbody"><p class="shortdesc">単一コンテナーにインターネットからアクセスできるようにするには、その単一コンテナーにパブリック IP アドレスをバインドする必要があります。
+IP アドレスを要求する前に、既に組織に割り当てられているパブリック IP アドレスのリストを参照して、それらの既存の IP アドレスのいずれかを使用できないか確認してください。</p>
+<div class="section context"><div class="steps note"><span class="notetitle">注:</span> パブリック IP アドレスをバインドしても、単一のコンテナーとの間で送受信するデータを暗号化する SSL 証明書は組み込まれません。ご使用のアプリに SSL 暗号化が必要である場合は、独自の SSL ソリューションを実装するか、または単一のコンテナーの代わりにコンテナー・グループを使用することができます。
+既に SSL 証明書が組み込まれているパブリック経路にコンテナー・グループがバインドされているなら、追加の構成を行わずに HTTPS でコンテナー・グループにアクセスできます。詳しくは、『<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">Bluemix GUI によるコンテナー・グループの作成</a>』を参照してください。</div>
+</div><div class="step"><span class="cmd">スペースで使用可能なパブリック IP アドレスをリストします。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</div>
+<div class="section postreq">IP アドレスがない場合や新しく要求する場合は、次のオプションの中から選択できます。
+<span class="keyword">Bluemix</span> GUI を使用して単一コンテナーを作成するとき、またはコマンド・ラインから <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp> を実行するときに、IP アドレスを要求することができます。コマンド・ラインを使用して IP アドレスを要求する方法については、
+<a href="container_single_ui.html#container_cli_ips" title="パブリック IP アドレスを要求して、Bluemix 内のコンテナーにバインドします。">パブリック IP アドレスの要求とコンテナーへのバインド</a>を参照してください。</div></div>
+<aside role="complementary" aria-labelledby="d75670e1979"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d75670e2080" lang="ja-jp" id="container_cli_ips_unbind"><h3 class="topictitle3" id="d75670e2080">パブリック IP アドレスをコンテナーからアンバインドする</h3>
+<div class="body taskbody"><p class="shortdesc">コンテナーからパブリック IP アドレスをアンバインドすることができますが、その IP アドレスは他のコンテナーに使用することが依然として可能であり、引き続き組織のパブリック IP 割り当て量に計上されます。</p>
+<ol class="steps"><li class="step stepexpand" id="container_cli_ips_unbind__unbind"><span class="cmd">コンテナーからパブリック IP アドレスをアンバインドします。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-unbind <var class="keyword varname">&lt;public_IP_address&gt;</var> <var class="keyword varname">&lt;container_name_or_id&gt;</var></code></pre>
+ <p>コンテナーはこの IP アドレスにバインドされた状態ではなくなりますが、この IP は引き続き組織のパブリック IP 割り当て量に計上されます。</p>
+</li>
+<li class="step stepexpand"><span class="cmd">IP アドレスが正常にアンバインドされたことを確認します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75670e2080"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d75670e2162" lang="ja-jp" id="container_cli_ips_remove"><h3 class="topictitle3" id="d75670e2162">割り当て量からパブリック IP アドレスを削除する</h3>
+<div class="body taskbody"><p class="shortdesc">パブリック IP アドレスを使用しない場合、または新しいアドレスを要求できるように IP アドレスを 1 つ削除する必要がある場合、組織の割り当て量からパブリック IP アドレスを削除することができます。</p>
+<div class="section prereq">始める前に、パブリック IP アドレスを使用しているコンテナーからそのアドレスをアンバインドします。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">その IP アドレスを組織の割り当て分から削除します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-release <var class="keyword varname">&lt;public_IP_address&gt;</var> </code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">対象の IP アドレスが、割り当て済みとしてリストされなくなったことを確認します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75670e2162"></aside></article></article><article class="topic task nested1" role="article" aria-labelledby="d75670e2242" lang="ja-jp" id="container_single_remove"><h2 class="topictitle2" id="d75670e2242">単一コンテナーの削除</h2>
+<div class="body taskbody"><p class="shortdesc">割り当て量を最大限使用できるよう、未使用のコンテナーを時々削除してください。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">以下のいずれかの方法を使用して、コンテナーを削除します。</span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI から<ol type="a"><li><span class="keyword">Bluemix</span> ダッシュボードで、削除するコンテナーを選択します。</li>
+<li><span class="ph uicontrol">「その他のアクション... (More actions...)」</span>メニューを展開し、<span class="ph uicontrol">「削除」</span>をクリックします。</li>
+</ol>
+<ul><li>コンテナーのタイルで、歯車アイコンをクリックして、<span class="ph uicontrol">「コンテナーの削除」</span>をクリックします。</li>
+</ul>
+</li>
+<li class="li choice">CLI から
+*<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_single_remove__d42512e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_single_remove__d42512e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行し、リストにコンテナーが含まれないことを確認して、コンテナーが削除されたことを検証します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d75670e2242"></aside></article><article class="topic tutorial nested1" role="article" aria-labelledby="d75670e2390" lang="ja-jp" id="container_gettingstarted_tutorial"><h2 class="topictitle2" id="d75670e2390">チュートリアル: 単一コンテナー Web アプリケーションの作成</h2>
+<div class="body tutorialBody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix</span> には、パブリック・クラウドで Docker コンテナーを実行する機能があります。
+コンテナーは、ホスト・オペレーティング・システムとは独立して実行される自己完結型の安全な Web アプリをデプロイするために使用します。
+コンテナーはどれも同じシステム・カーネルを使用し、仮想マシンよりも実行効率が高いため、コンテナーは軽量であり、多量のシステム・リソースを必要としません。
+このチュートリアルでは、<span class="keyword">Bluemix</span> の中で Docker コンテナーを使用してメッセージング Web アプリをビルドする方法を示します。
+そのプロセスで、Dockerfile を作成し、プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーに Docker イメージを追加し、コンテナーをリンクします。</p>
+<div class="section tutorialDesc"></div><section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d75670e2457"><h3 class="sectiontitle" id="d75670e2457">達成目標</h3>
+<p>このシナリオでは、Lets-Chat という Web アプリを <span class="keyword">Bluemix</span> スペース内に作成します。
+Lets-Chat は、小規模開発チーム向けに設計されたオンライン・メッセージ・アプリです。
+<span class="keyword">Bluemix</span> を使用することにより、プライベート Docker イメージ・レジストリーを管理したり、一般からアクセスできるように Web アプリをデプロイしたりできます。</p>
+
+<figure class="fignone" id="container_gettingstarted_tutorial__getting_started_tutorial"><figcaption>図 1. Web アプリ実行のアーキテクチャー</figcaption><div class="image"><object width="480" data="images/getting_started_tutorial.svg"><img width="480" src="images/getting_started_tutorial.jpg" alt="Lets Chat チュートリアルの図"></object></div></figure>
+
+<div class="p">このシナリオでは、以下の作業の手順を示します。
+<ul><li><span class="keyword">Bluemix</span> アカウントを設定する</li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span> コマンド・ライン・インターフェースを設定する</li>
+<li>Dockerfile の作成</li>
+<li>プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーにイメージをプッシュする</li>
+<li>2 つのコンテナーをリンクし、それらのコンテナーの間のネットワーク接続を作成する</li>
+<li>一般公開アクセス可能なコンテナーのビルド</li>
+</ul>
+</div>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d75670e2508"><h3 class="sectiontitle" id="d75670e2508">所要時間</h3>45 分</section>
+<section role="region" aria-labelledby="d75670e2512"><h3 class="sectiontitle" id="d75670e2512">対象読者</h3>
+<p>このチュートリアルは、<span class="keyword">Bluemix</span> の Docker コンテナー初心者で、実行中アプリを <span class="keyword">Bluemix</span> パブリック・クラウドにデプロイする方法について知りたいユーザーを対象にしています。</p>
+</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e2526" lang="ja-jp" id="container_gettingstarted_tutorial_lesson_1"><h3 class="topictitle3" id="d75670e2526">レッスン 1: <span class="keyword">IBM
+Bluemix Container Service</span> をセットアップする</h3>
+<div class="body taskbody"><p class="shortdesc">このレッスンでは、<span class="keyword">Bluemix</span> アカウントを作成し、<span class="keyword">IBM
+Bluemix Container Service</span> CLI をインストールし、アカウントにログインし、デフォルトの IBM イメージを確認します。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd"><a href="https://console.ng.bluemix.net/registration/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><span class="keyword">Bluemix</span> 登録ページ</a>に移動して、アカウントを作成します。</span> ユーザー名とパスワードをメモしておいてください。
+後でその情報が必要になります。</li>
+<li class="step stepexpand"><span class="cmd"><a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">GitHub リポジトリー</a>から Cloud Foundry CLI バージョン <span class="ph">Cloud Foundry CLI バージョン <span class="ph" id="container_gettingstarted_tutorial_lesson_1__d28116e285">6.14.0</span> - 6.22.0</span> をインストールします。</span> Cloud Foundry CLI は、オペレーティング・システムのデフォルト・ロケーションにインストールする必要があります。そうしないと、PATH 環境変数がインストール・ディレクトリーと一致しません。 <div class="steps note"><span class="notetitle">注:</span> MacOS Sierra ユーザーは、Cloud Foundry CLI バージョン 6.22.0 以降をインストールする必要があります。</div>
+
+
+<div class="p">Cloud Foundry CLI が正しくインストールされていることを確認するため、または既に Cloud Foundry がインストールされている場合にインストールしたバージョンを確認するためには、以下のコマンドを実行します。<pre class="codeblock"><code>cf -v</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Docker の Web サイトから <a href="https://www.docker.com/products/docker" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Docker 1.10.0 またはそれ以降をインストール</a>しておいてください。</span></li>
+<li class="step stepexpand"><span class="cmd">Docker 端末を開きます。</span> Windows または OS X 版の Docker Toolbox を使用している場合は、Docker Quickstart Terminal というプログラムを開きます。</li>
+<li class="step stepexpand"><span class="cmd"><a href="https://clis.ng.bluemix.net/ui/home.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><span class="keyword">Bluemix</span> CLI</a> をインストールします。</span></li>
+<li class="step stepexpand"><span class="cmd" id="container_gettingstarted_tutorial_lesson_1__d28116e319"><span class="keyword">IBM
+Bluemix Container Service</span> プラグインをインストールします。</span> <pre class="codeblock" id="container_gettingstarted_tutorial_lesson_1__d28116e329"><code><span class="ph">bx</span> plugin install IBM-Containers -r <span class="ph" data-hd-audience="yellow"><var class="keyword varname">Bluemix</var></span></code></pre>
+ <div class="p">プラグインが正常にインストールされていることを検証するには、以下のコマンドを実行します。
+<pre class="codeblock"><code><span class="ph">bx</span> plugin list</code></pre>
+</div>
+
+
+<p>プラグインが IBM-Containers として結果に表示されます。</p>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span> プラグインがインストールされたなら、Docker 端末で <samp class="ph codeph">docker run hello-world</samp> を実行します。</span> <pre class="codeblock"><code>docker run hello-world</code></pre>
+ これにより、Docker 構成が正しくセットアップされていることを確認できます。
+Docker はローカル・イメージを検索するため、このコマンドを初めて実行する場合は、以下のメッセージが表示されます。
+<pre class="pre screen"><code>Unable to find image 'hello-world:latest' locally</code></pre>
+イメージのパブリック・リポジトリーである Docker Hub からイメージがプルされ、コマンド完了後、出力は以下のようになります。
+<pre class="pre screen"><code>$ docker run hello-world
+
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the <span class="q">"hello-world"</span> image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/</code></pre>
+ hello-world が実行されない場合は、<samp class="ph codeph">docker version</samp> を実行して Docker が正しくインストールされているかどうかを確認してください。
+Windows や OS X を使用している場合は、標準の端末ウィンドウではなく Docker Quickstart Terminal が実行されていることを確認してください。</li>
+<li class="step stepexpand">オプション: <span class="cmd"><span class="keyword">Bluemix</span> を初めて使用する場合は、API エンドポイントを指定します。
+以下のコード・サンプルでは、<span class="keyword">Bluemix</span> アカウントのリージョンがデフォルトになっていますが、リージョンは手動で変更することが可能です。</span> <pre class="codeblock"><code>bx api https://api.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Bluemix</span> アカウントにログインします。</span> <span class="keyword">Bluemix</span> アカウント作成時に指定した電子メールとパスワードを入力します。
+表示されるプロンプトに対し、必要に応じて、優先して使用する組織とスペースを選択します。
+<pre class="codeblock"><code>bx login [-sso]</code></pre>
+<span class="ph">フェデレーテッド ID を使用してログインする場合は、シングル・サインオン・パラメーター <span class="keyword option">--sso</span> が必要です。このオプションを使用する場合は、<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a> を開いて、ワンタイム・パスコードを取得します。
+<span class="keyword option">--sso</span> オプションを含めない場合は、以下のサブステップを実行します。</span><ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「E メール」</span>に、<span class="keyword">Bluemix</span> の IBM ID を入力します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「パスワード」</span>に、IBM ID のパスワードを入力します。</span> Bluemix の組織とスペースが取得されました。</li>
+<li class="li substep"><span class="cmd"><span class="keyword">Bluemix</span> 組織の 1 つを表す数値を入力します。</span></li>
+<li class="li substep"><span class="cmd">既存の <span class="keyword">Bluemix</span> スペースの 1 つを表す数値を入力します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">名前空間を作成します。</span> 組織の名前空間は、<span class="keyword">Bluemix</span> 領域内にあるコンテナー・イメージのレジストリーの固有 ID です。
+名前空間は、IBM パブリック・クラウド内の他のあらゆるイメージ・レジストリーから、<span class="keyword">Bluemix</span> イメージ・レジストリーを区別するための手段と考えてください。<div class="steps note"><span class="notetitle">注:</span> いずれかのユーザーが <span class="keyword">Bluemix</span> 組織にログインしてコンテナーを既に作成した場合は、名前空間が既に存在します。
+その値を調べるには、以下のコマンドを実行します。
+<pre class="codeblock"><code><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp></code></pre>
+</div>
+ <div class="p">名前空間を作成する際のヒントを以下に示します。
+<ul><li>名前空間は固有でなければなりません。
+IBM パブリック・クラウド内の同じ領域の他の組織で使用することはできません。</li>
+<li>名前空間は 4 文字以上 30 文字以下であり、使用できるのは英小文字、数字、下線文字 (_) のみです。</li>
+<li>名前空間は短めにします。
+コマンド・ラインを使用する場合、イメージのタグ付けやプッシュを行う一環として名前空間を何度も入力することになります。</li>
+</ul>
+</div>
+
+
+<p>以下のコマンドの <var class="keyword varname">your_registry_name_here</var> を、実際に選んだ名前空間に置き換えてください。</p>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-set <var class="keyword varname">your_registry_name_here</var></code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">名前空間のための変数を設定します。</span> このチュートリアルのサンプル・コマンドには、<samp class="ph codeph">$your_namespace</samp> という文字列が含まれています。
+この文字列は、使用する名前空間を入力する部分を表しており、使用する名前空間に置き換える必要があります。
+それらのコマンドを手動で編集しなくても済むよう、端末で変数を作成してください。 <pre class="codeblock"><code>your_namespace=<var class="keyword varname">your_registry_name_here</var></code></pre>
+ ユーザー名前空間として <samp class="ph codeph">ljenkins1</samp> を使用する例 <pre class="pre screen"><code>$ your_namespace=<var class="keyword varname">ljenkins1</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span> を初期設定します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">IBM
+Bluemix Container Service</span> にログインした後、使用可能なデフォルト・イメージを確認してみましょう。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                        TAG                 IMAGE ID            CREATED             SIZE
+registry.ng.bluemix.net/ibm-mobilefirst-starter   latest              d61c09fd0af7        4 weeks ago         510.2 MB
+registry.ng.bluemix.net/ibm-node-strong-pm        latest              322b9ca7b2dc        2 weeks ago         255.5 MB
+registry.ng.bluemix.net/ibmliberty                latest              33fdda9431c7        2 days ago          292.5 MB
+registry.ng.bluemix.net/ibmnode                   latest              c33c25d4af3b        2 days ago          187.8 MB
+registry.ng.bluemix.net/ibmnode                   v4                  c33c25d4af3b        2 days ago          187.8 MB
+registry.ng.bluemix.net/ibmnode                   v1.1                ef3425f90e1e        2 days ago          175.3 MB
+registry.ng.bluemix.net/ibmnode                   v1.2                c5546bf5e891        2 days ago          183.6 MB</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_1__table_lqp_hkm_2v" class="defaultstyle"><caption><span class="tablecap">表 3. イメージとコンテナーについての詳細</span></caption><thead><tr><th colspan="2" id="d75670e2908" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> イメージとコンテナーについての詳細</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: NaN%" headers="d75670e2908 ">イメージとコンテナー</td>
+<td style="width: NaN%" headers="d75670e2908 "><p> イメージとコンテナーはどう違うのでしょうか?
+本質的に言ってイメージは、定義されているレイヤーとコマンドの読み取り専用スナップショットです。
+イメージを実行して初めて、それはコンテナーになります。
+このプロセスには、コンテナーにどのような変更を加えても、イメージ・スナップショットが変化することがないというメリットがあります。
+設計上、単一コンテナーは一時処理用です。複数のコンテナー間で維持する必要のある構成やデータは、イメージに書き込むか、または永続ボリュームに保管する必要があります。<a href="https://docs.docker.com/glossary/?term=image" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">イメージの定義</a>については、Docker 用語集を参照してください。</p>
+</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75670e2908 ">IBM イメージ</td>
+<td style="width: NaN%" headers="d75670e2908 "><p>このチュートリアルでは、Docker Hub にあるイメージを使用します。
+しかし、IBM では、独自イメージをビルドしたりコンテナーを実行したりするために使用できる 4 つのイメージ「スナップショット」を提供しています。<a href="container_images_adding_ov.html#container_images_adding_ov" title="コンテナー・イメージとは、作成するすべてのコンテナーの基本です。 イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。 コンテナー・イメージは、実行可能ファイル (.exe または .bin) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。 コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。">IBM イメージ</a>を参照してください。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="section result"><p>正しく Bluemix アカウントを作成し、CLI プラグインをインストールし、ログインして Web アプリのビルドに使用できるイメージを確認できました。</p>
+
+<p>イメージをレジストリーに追加するため、次のレッスンに進んでください。</p>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e2948" lang="ja-jp" id="container_gettingstarted_tutorial_lesson_2"><h3 class="topictitle3" id="d75670e2948">レッスン 2: プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーへのイメージの追加</h3>
+<div class="body taskbody"><p class="shortdesc">このレッスンでは、プライベート・イメージ・レジストリーにイメージを追加します。Docker Hub からイメージをコピーする方法と、Dockerfile を作成する方法の 2 種類の方法で追加します。独自の Dockerfile を作成する場合は、イメージに独自のコマンドを追加することができます。
+その場合は、そのイメージから立ち上げられるすべてのコンテナーにそれらのコマンドが含まれることになります。
+コンテナーのメリットの 1 つは、イメージによってソースが制御された状態が保たれることにより、組織内のだれもが、一貫した操作環境でコンテナーをビルドできるようになることです。</p>
+<div class="section context">以下のイメージがこのレッスンで使用されます。
+イメージや Docker Hub のその他の情報は Dockerfile で確認できます。
+<ul><li><a href="https://hub.docker.com/_/mongo/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">MongoDB</a></li>
+<li><a href="https://hub.docker.com/r/sdelements/lets-chat/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Let's Chat</a></li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">MongoDB イメージを Docker Hub からプライベート <span class="keyword">Bluemix</span> イメージ・レジストリーにコピーします。</span> MongoDB イメージは、データを保管するために使用されます。MongoDB コンテナーをデータ保管に使用できるとはいえ、このコンテナーに書き込まれたデータは、コンテナーが削除されたときにすべて失われます。コンテナーに書き込まれたデータを永続化するには、コンテナーを実行するときにボリュームをマウントする必要があります。 <p>変数置換を設定していない場合、<samp class="ph codeph"><var class="keyword varname">$your_namespace</var></samp> は、レッスン 1 で作成した名前空間に置き換えてください。
+名前空間を確認する必要がある場合は、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace get</samp> を実行します。</p>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">mongo</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></code></pre>
+ 初期出力コードは、以下の例のようになります。
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi mongo registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM mongo
+ ---&gt; 32427ae49eff
+Successfully built 32427ae49eff
+The push refers to a repository [registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>] (len: 1)</code></pre>
+ バックグラウンドで、mongo イメージが Docker Hub から Bluemix イメージ・レジストリーにコピーされます。<samp class="ph codeph">cpi</samp> コマンドの実行には数分かかることがあります。
+完了時の出力の全体は、以下の例のようになります。
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi mongo registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM mongo
+ ---&gt; 32427ae49eff
+Successfully built 32427ae49eff
+The push refers to a repository [registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>] (len: 1)
+32427ae49eff: Pushed
+424ec4bd7fc4: Pushed
+9e3490ec0722: Pushed
+166aa7bca9c1: Pushed
+c79deeebd6f0: Pushed
+c181e50c0e8b: Pushed
+438e27bd44bf: Pushed
+af6f43fa45bb: Pushed
+605e5767a4ac: Pushed
+33e8076f6b28: Pushed
+e63969171eec: Pushed
+latest: digest: sha256:ab092d78d331337cf6cf0ceeda28489f5e154b1403ca1220e9de6b417
+b7cfb95 size: 32158</code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_2__table_sdf_nkm_2v" class="defaultstyle"><thead><tr><th colspan="2" id="d75670e3116" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: NaN%" headers="d75670e3116 "><samp class="ph codeph">cpi</samp></td>
+<td style="width: NaN%" headers="d75670e3116 ">コピー・コマンド。</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75670e3116 "><samp class="ph codeph">mongo</samp></td>
+<td style="width: NaN%" headers="d75670e3116 ">ソース・リポジトリーと名前。
+この例では、イメージの名前は <var class="keyword varname">mongo</var> であり、このイメージは Docker Hub 内にあるため、これ以上のリポジトリー定義は不要です。</td>
+</tr>
+<tr><td style="width: NaN%" headers="d75670e3116 "><samp class="ph codeph">registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></samp></td>
+<td style="width: NaN%" headers="d75670e3116 ">宛先レジストリー・パス。固有の名前空間と宛先イメージの名前が含まれます。この例においてイメージの名前は <var class="keyword varname">mongo</var> としていますが、プライベート・レジストリー内の任意のイメージ名を選択できます。CLI でこのイメージの処理を実行する際には、次のように、フルパスでイメージを指定します。 <samp class="ph codeph">registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var></samp></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Dockerfile 用の新しいローカル・フォルダーを作成し、そこに移動します。</span> これで、<samp class="ph codeph">cpi</samp> コマンドによりイメージをレジストリーに追加することができました。次は、Dockerfile から別のイメージを作成してみましょう。Dockerfile を使用すると、ローカルにイメージをビルドして、Web アプリに必要な付加的なコマンドや変数を追加することができます。
+それらのコマンドのいくつかはコンテナーのビルド時に追加できますが、その場合は、同じイメージの複数バージョンのフラグメントが発生することがあります。
+Dockerfile にコマンドを追加すると、このイメージからビルドされるすべてのコンテナーにそれらのコマンドが含まれるようになります。 <pre class="codeblock"><code>mkdir wrapper &amp;&amp; cd wrapper</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph filepath">wrapper</span> フォルダー内に Dockerfile を作成します。</span> このコマンドにより Dockerfile が作成され、指定された <var class="keyword varname">FROM</var> コマンド (これはすべての Dockerfile に必要となります) が追加されます。
+<var class="keyword varname">FROM</var> は、親イメージが何かを示すものです。
+ここでは、<var class="keyword varname">lets-chat</var> イメージを親として使用しています。 <pre class="codeblock"><code>echo <span class="q">"FROM sdelements/lets-chat:latest"</span> &gt; Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">現行ディレクトリー内のファイルのリストを表示することにより、Dockerfile が作成されていることを確認します。</span> <pre class="codeblock"><code>ls</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Dockerfile に、ネットワーク遅延コマンドを追加します。</span> lets-chat コンテナーが開始されると、<span class="keyword">IBM
+Bluemix Container Service</span> はプライベート・コンテナー・ネットワークをセットアップし、コンテナーにプライベート IP アドレスを割り当てます。
+lets-chat アプリは、その開始時にアクティブなネットワーク接続を必要とします。
+ネットワーク遅延を加えると、<span class="keyword">IBM
+Bluemix Container Service</span> ネットワーキングはアプリが開始される前に余裕をもって完了するようになります。 <pre class="codeblock"><code>echo <span class="q">"CMD (sleep 60; npm start)"</span> &gt;&gt; Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">イメージをビルドし、タグ付けします。</span> コマンドの末尾に <samp class="ph codeph">.</samp> をつけることを忘れないようにしてください。
+このピリオドは、現行のローカル・フォルダーから必要な Dockerfile を検索するよう Docker に指示するものです。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/lets-chat .</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><var class="keyword varname">mongo</var> イメージと <var class="keyword varname">lets-chat</var> イメージが <span class="keyword">Bluemix</span> イメージ・レジストリー内にあることを確認します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                                  TAG                 IMAGE ID            CREATED             SIZE
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>                          latest              8de059ee71fc        2 minutes ago         317.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat </var>                      latest              d4de00f58363        5 minutes ago          0 B
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibm-node-strong-pm                  latest              322b9ca7b2dc        2 weeks ago         616.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty                          latest              6595ea483bf5        2 weeks ago         552.8 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             latest              b2c351248227        2 weeks ago         472.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v4                  b2c351248227        2 weeks ago         472.4 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v1.1                7d11220193d6        2 weeks ago         449.2 MB
+registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmnode                             v1.2                84efce0c747b        2 weeks ago         465.2 MB</code></pre>
+</li>
+</ol>
+<div class="section result"><p>これで、必要なイメージがプライベート <span class="keyword">Bluemix</span> イメージ・レジストリー内に作成されました。Docker Hub イメージが正常にコピーされ、Dockerfile が作成され、新しいイメージがビルドされ、そのイメージが <span class="keyword">Bluemix</span> イメージ・レジストリーにプッシュされました。</p>
+
+<p>次のレッスンでは、コンテナーを作成し、それらをリンクし、Web アプリをデプロイします。</p>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e3327" lang="ja-jp" id="container_gettingstarted_tutorial_lesson_3"><h3 class="topictitle3" id="d75670e3327">レッスン 3: コンテナーのビルドとデプロイ</h3>
+<div class="body taskbody"><p class="shortdesc">Lets-Chat メッセージング Web アプリをデプロイするために必要なイメージが、<span class="keyword">Bluemix</span> イメージ・レジストリー内に作成されています。このレッスンでは、コンテナーをビルドし、それらをリンクし、アプリにパブリック IP アドレスを割り当てます。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">mongo イメージからコンテナーを実行します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">lc-mongo</var> -p <var class="keyword varname">27017</var> -m <var class="keyword varname">128</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/mongo</code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_3__table_lqp_hkm_2v" class="defaultstyle"><thead><tr><th colspan="2" id="d75670e3414" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 22.22222222222222%" headers="d75670e3414 ">run</td>
+<td style="width: 77.77777777777779%" headers="d75670e3414 "><p> 指定されたイメージからコンテナーを作成する run コマンド。</p>
+</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75670e3414 ">--name</td>
+<td style="width: 77.77777777777779%" headers="d75670e3414 ">コンテナーの名前を定義します。
+ここでは、コンテナーの名前を <var class="keyword varname">lc-mongo</var> としました。</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75670e3414 ">-p</td>
+<td style="width: 77.77777777777779%" headers="d75670e3414 "><span class="ph">アプリをインターネットからアクセス可能にするには、パブリック・ポートを公開する必要があります。
+パブリック・ポートを公開するときには、公開したポートでのみパブリック・データを送受信できるパブリック・ネットワーク・セキュリティー・グループをコンテナー用に作成します。その他のすべてのパブリック・ポートは閉じられるため、それらのポートを使用してインターネットからアプリにアクセスすることはできません。複数の <span class="keyword option">-p</span> オプションを使用して、複数のポートを含めることができます。ポートはマップすることも転送することもできません。ポートを公開しない場合は、プライベート・コンテナー・ネットワークのみからアクセス可能になります。
+割り当てられたプライベート IP アドレスを使用して、プライベート・ネットワーク上のコンテナーと通信できます。</span> ここでは、Dockerfile の中でポート 27017 が指定されているため、ポート 27017 を公開します。</td>
+</tr>
+<tr><td style="width: 22.22222222222222%" headers="d75670e3414 ">-m</td>
+<td style="width: 77.77777777777779%" headers="d75670e3414 "><span class="ph">コンテナーのメモリー限度を MB 単位で入力します。
+メモリー限度は、コンテナーが実行時に計算ホスト上で取得するメモリーとディスク・スペースの最大量を定義するコンテナー・サイズの一部です。
+コンテナー・サイズが割り当てられた後、その値を変更することはできません。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーが実行中であることを確認します。</span> 次のステップに進む前に、ステータスが実行中に更新されるまで待ちます。
+必要なら、コンテナーのステータスが実行中になるまで、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</samp> を実行することができます。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$<span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                PORTS               NAMES
+9f73abc2-9a1        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>:latest       <span class="q">""</span>                  40 seconds ago          Running 5 seconds ago    27017/tcp           lc-mongo</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><var class="keyword varname">mongo</var> コンテナーが実行中の状態になってから、<var class="keyword varname">lets-chat</var> コンテナーを実行します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">lets-chat</var> --link lc-mongo:mongo -p <var class="keyword varname">8080</var> -m <var class="keyword varname">128</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat</var></code></pre>
+ <div class="tablenoborder"><table summary="" id="container_gettingstarted_tutorial_lesson_3__table_o22_ttv_4x" class="defaultstyle"><thead><tr><th colspan="2" id="d75670e3523" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 22.22222222222222%" headers="d75670e3523 ">--link</td>
+<td style="width: 77.77777777777779%" headers="d75670e3523 "><p><samp class="ph codeph">lc-mongo</samp> などのデータベース・コンテナーを別のコンテナーにリンクすることは、<samp class="ph codeph">--link</samp> の一般的な用途の 1 つです。
+<samp class="ph codeph">--link</samp> フラグにより、<var class="keyword varname">lets-chat</var> コンテナー上に <var class="keyword varname">lc-mongo</var> コンテナーのためのホスト・エントリーが作成され、それによりコンテナー相互の通信が可能になります。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーを表示します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+
+
+<pre class="pre screen"><code>$<span class="ph"><samp class="ph codeph">bx ic</samp></span> ps
+CONTAINER ID        IMAGE                                           COMMAND             CREATED             STATUS                  PORTS                         NAMES
+68f6536a-82f        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">lets-chat</var>:latest   <span class="q">""</span>                  3 days ago          Running 6 seconds ago   8080/tcp                      <var class="keyword varname">lets-chat</var>
+9f73abc2-9a1        registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/<var class="keyword varname">$your_namespace</var>/<var class="keyword varname">mongo</var>:latest       <span class="q">""</span>                  3 days ago          Running 3 days ago      27017/tcp                     <var class="keyword varname">lc-mongo</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">使用可能な IP アドレスのリストを表示します。</span> IP アドレスをバインドすることにより、単一コンテナー Web アプリがインターネット経由でアクセス可能になります。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">IP アドレスがリストされない場合は、IP アドレスを要求します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">使用可能な IP アドレスを選択し、それを <var class="keyword varname">lets-chat</var> コンテナーにバインドします。</span> IP アドレスのすべてが既にバインド済みの場合、まず <a href="container_cli_reference_cfic.html#container_cli_reference_cfic__ip_unbind">unbind an IP address</a> を実行する必要があります。
+このサンプル IP アドレスを、ご使用の Bluemix 組織で利用可能な IP アドレスに置き換えてください。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">192.0.2.100</var> lets-chat</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">IP アドレスをバインドする処理が終了するのを待ちます。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect lets-chat</code></pre>
+IP アドレスがコンテナーにバインドされると、その IP アドレスは CLI 出力の <span class="ph uicontrol">Networks</span> セクションに <span class="ph uicontrol">PublicIpAdress</span> としてリストされるようになります。
+<pre class="pre screen"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect lets-chat
+...
+<span class="q">"PortMapping"</span>: null,
+<span class="q">"Ports"</span>: {
+    <span class="q">"8080/tcp"</span>: [
+      {
+         <span class="q">"HostIp"</span>: <span class="q">"192.0.2.100"</span>,
+         <span class="q">"HostPort"</span>: <span class="q">"8080"</span>
+      }
+    ]
+ },
+ <span class="q">"PublicIpAddress"</span>: <span class="q">"192.0.2.100"</span>
+...</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">稼働中の Web アプリを確認します。
+バインド済みのパブリック IP アドレス (ポートを含む) を、Web ブラウザーに貼り付けます。</span> <pre class="codeblock"><code>http://<var class="keyword varname">192.0.2.100</var>:8080</code></pre>
+ <p><img src="images/lets-chat_screenshot.jpg" alt="Lets-Chat Web アプリにサインインします。"></p>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">Lets-Chat でアカウントを作成し、ログインして、IBM Containers 内で Web アプリが実行されることを確認します。</span> <p><img src="images/lets-chat-room.png" alt="lets-chat room"></p>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">コンテナーを停止します。</span> コンテナーによってリソースが消費されないようにするには、それらを停止して削除します。 <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> stop <var class="keyword varname">lets-chat</var> <var class="keyword varname">lc-mongo</var></code></pre>
+
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm <var class="keyword varname">lets-chat</var> <var class="keyword varname">lc-mongo</var></code></pre>
+</li>
+</ol>
+<div class="section result" id="container_gettingstarted_tutorial_lesson_3__quiz">知識を試してみましょう!
+チュートリアルを完了したので、<a href="http://bluemix-quizzes.mybluemix.net/containers/single_containers_gettingstarted_tutorial/quiz.php" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">学習結果を確認するためのクイズをしてみましょう</a>。</div><div class="section postreq"><div class="p"> 次に何をしますか?
+他にもまだ多くの <span class="keyword">IBM
+Bluemix Container Service</span> 機能をこのチュートリアルに適用することができます。
+<ul><li>単一コンテナーを<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">高可用性コンテナー・グループ</a>に置き換えて、自動リカバリー (使用不可のコンテナーを自動で置換する) を有効にすることができます。</li>
+<li><a href="container_volumes_ov.html#container_volumes_ui" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。 Bluemix GUI から、コンテナーのボリュームを作成できます。">ストレージ・ボリューム</a> を作成して、mongo コンテナーと lets-chat コンテナーにマウントすることで、コンテナーが再始動してもコンテナー・データが永続するように、またプライベート・ネットワーク内の複数のコンテナーからアクセスできるようにします。</li>
+<li><a href="va/va_index.html#va_reviewing">Vulnerability Advisor</a> (レジストリー中のイメージをスキャンして潜在的脆弱性を検出することにより、組織の安全性を保ちます) で、イメージを確認します。</li>
+</ul>
+これら以外にも、さまざまな機能があります。
+今すぐ試してみてください。</div>
+</div></div>
+</article></article><article class="topic tutorial tutorialIntro nested1" role="article" aria-labelledby="d75670e3774" lang="ja-jp" id="container_compose_intro"><h2 class="topictitle2" id="d75670e3774">チュートリアル: Docker Compose と <span class="keyword">IBM
+Bluemix Container Service</span> を使用してマルチコンテナー・デプロイメントを作成する</h2>
+<div class="body  tutorialIntroBody"><p class="shortdesc">データベース、サービス、キャッシュなど、複数のコンポーネントを伴うアプリの場合、始動やシャットダウンが一緒に実行されるようにすべてのコンテナーを調整するのは、難しい場合があります。
+このチュートリアルでは、単一の Docker Compose コマンドを使用することにより、マイクロサービス・アーキテクチャーでマルチコンテナー・デプロイメントとしてアプリをデプロイして実行する方法について学習します。このシステムに含まれる各コンテナーは、Docker Compose サービス定義に基づいており、独自の分離された環境で実行されます。</p>
+<section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d75670e3836"><h3 class="sectiontitle" id="d75670e3836">シナリオ</h3>このチュートリアルでは、ソフトウェア開発者が Docker Compose と <span class="keyword">IBM
+Bluemix Container Service</span> を使用することによって、Mongo データベースや、着信ユーザー・トラフィックのバランス調整をする nginx ロード・バランサーにリンクした Lets-Chat Web アプリを実行するマルチコンテナー・デプロイメントをデプロイする方法を示します。<div class="p"><figure class="fignone" id="container_compose_intro__fig_compose"><figcaption>図 2. マルチコンテナー Lets-Chat アプリのターゲット・シナリオ</figcaption><a href="../api/content/containers/images/container_compose_tutorial.png" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><div class="image"><img src="images/container_compose_tutorial.png" width="700" alt="マルチコンテナー Lets-Chat アプリのターゲット・シナリオ"></div></a></figure>
+</div>
+<div class="p">以下のレッスンが含まれます。
+<dl><dt class="dlterm"><a href="container_single_ui.html#container_compose_config" title="まず、docker-compose.yml という名前の YAML ファイルの中で、マルチコンテナー・デプロイメントの各サービスを構成します。サービスごとに、イメージ、公開するポート、そしてシステム内の他のサービスへのリンクを指定します。">レッスン 1: マルチコンテナー・デプロイメントを構成する</a></dt>
+<dd><span class="ph filepath">docker-compose.yml</span> という名前の構成ファイルの中で、Lets-Chat Web アプリのサービスと Mongo データベースを定義します。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_run" title="次に、マルチコンテナー・デプロイメントをデプロイして実行します。Lets-Chat と Mongo データベースのコンテナーを別々に作成して開始してから手動でリンクするのではなく、単一の Docker Compose コマンドを使用して docker-compose.yml ファイルの中にあるサービス定義に基づいてコンテナーを作成します。">レッスン 2: マルチコンテナー・デプロイメントを実行する</a></dt>
+<dd>単一の Docker Compose コマンドを使用することにより、Lets-Chat アプリをマルチコンテナー・デプロイメントで実行し、インターネットからそれにアクセスします。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_scale" title="マルチコンテナー・デプロイメントが実行されている状態で、Lets-Chat コンテナー・インスタンスの数を増やすことにより、アプリの信頼性を高めます。">レッスン 3: マルチコンテナー・デプロイメントを拡大縮小する</a></dt>
+<dd>コンテナーのインスタンス数を増やすことにより、Lets-Chat Web アプリの信頼性を高めます。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_loadbalance" title="高いワークロードに対応するため、複数の Lets-Chat コンテナー・インスタンスの間で着信ユーザー・トラフィックのバランスを調整する nginx ロード・バランサーを、マルチコンテナー・デプロイメントに追加します。">レッスン 4: マルチコンテナー・デプロイメントにロード・バランサーを追加する</a></dt>
+<dd>マルチコンテナー・デプロイメントに、複数の Lets-Chat コンテナー・インスタンスの間で着信ネットワーク・トラフィックのバランスを調整する nginx ロード・バランサーを追加することにより、営業時間中の高ワークロードに対応します。</dd>
+<dt class="dlterm"><a href="container_single_ui.html#container_compose_remove" title="最後のステップとして、マルチコンテナー・デプロイメントを削除して、使用済みのリソースを解放し、割り当て量の使用を最大化します。">レッスン 5: マルチコンテナー・デプロイメントを削除する</a></dt>
+<dd>マルチコンテナー・デプロイメントを削除して使用済みリソースを解放し、割り当て量を最大限使用できるようにします。</dd>
+</dl>
+<div class="note tip"><span class="tiptitle">ヒント:</span> <span class="keyword">IBM
+Bluemix Container Service</span> の詳細については、<a href="container_single_ui.html#container_gettingstarted_tutorial" title="IBM Bluemix には、パブリック・クラウドで Docker コンテナーを実行する機能があります。 コンテナーは、ホスト・オペレーティング・システムとは独立して実行される自己完結型の安全な Web アプリをデプロイするために使用します。 コンテナーはどれも同じシステム・カーネルを使用し、仮想マシンよりも実行効率が高いため、コンテナーは軽量であり、多量のシステム・リソースを必要としません。 このチュートリアルでは、Bluemix の中で Docker コンテナーを使用してメッセージング Web アプリをビルドする方法を示します。 そのプロセスで、Dockerfile を作成し、プライベート Bluemix イメージ・レジストリーに Docker イメージを追加し、コンテナーをリンクします。">概説のチュートリアル</a>、また、<a href="container_ov.html#container_docker_ov" title="IBM Bluemix Container Service は、 Docker テクノロジーを利用する Bluemix ランタイムです。既存の Docker ユーザー、および Docker の新しいユーザーは、IBM Bluemix Container Service での以下の機能を期待できます。">Docker と IBM Containers</a> の違いについての説明を参照してください。</div>
+</div>
+<p>Docker Compose の詳細については、<a href="container_single_ui.html#container_compose_faq" title="ここには、Docker Compose に関するよくある質問を記載しています。">Docker Compose FAQ</a> と <a href="container_cli_reference_cfic.html#container_cli_reference_docker-compose" title="IBM Bluemix Container Service プラグイン (bx ic) を使用したマルチコンテナー・デプロイメントを実行および管理するには、次のコマンドを参照してください。">Docker Compose コマンド・リファレンス</a>を参照してください。</p>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d75670e3982"><h3 class="sectiontitle" id="d75670e3982">所要時間</h3>45 分</section>
+<section role="region" aria-labelledby="d75670e3986" class="section section prerequisites"><h3 class="sectiontitle" id="d75670e3986">前提条件</h3>
+Docker Compose ソフトウェア・パッケージの最新バージョンがコンピューター上に<a href="container_cli_cfic_install.html#container_cli_compose_install" title="複数の単一コンテナーを一度に開始および停止するには、Docker Compose CLI をインストールします。">インストール</a>されていること、または最新バージョンに<a href="container_cli_cfic_install.html#container_cli_compose_upgrade" title="最新のフィーチャーを使用するために、Docker Compose パッケージのバージョンをアップグレードする必要が生じる場合があります。">アップグレード</a>されていること。</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e4000" lang="ja-jp" id="container_compose_config"><h3 class="topictitle3" id="d75670e4000">レッスン 1: マルチコンテナー・デプロイメントを構成する</h3>
+<div class="body taskbody"><p class="shortdesc">まず、<span class="ph filepath">docker-compose.yml</span> という名前の YAML ファイルの中で、マルチコンテナー・デプロイメントの各サービスを構成します。サービスごとに、イメージ、公開するポート、そしてシステム内の他のサービスへのリンクを指定します。</p>
+<div class="section prereq">始める前に、以下の手順を検討してください。<ul><li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</samp> を実行することにより、名前空間情報を取り出し、その情報を <var class="keyword varname">$your_namespace</var> という名前の環境変数に格納します。<pre class="codeblock"><code><var class="keyword varname">$your_namespace</var>=&lt;my_namespace_information&gt;</code></pre>
+</li>
+<li>プライベート <span class="keyword">Bluemix</span> イメージ・レジストリー中に <a href="container_single_ui.html#container_gettingstarted_tutorial_lesson_2" title="このレッスンでは、プライベート・イメージ・レジストリーにイメージを追加します。Docker Hub からイメージをコピーする方法と、Dockerfile を作成する方法の 2 種類の方法で追加します。独自の Dockerfile を作成する場合は、イメージに独自のコマンドを追加することができます。 その場合は、そのイメージから立ち上げられるすべてのコンテナーにそれらのコマンドが含まれることになります。 コンテナーのメリットの 1 つは、イメージによってソースが制御された状態が保たれることにより、組織内のだれもが、一貫した操作環境でコンテナーをビルドできるようになることです。">Lets-Chat と MongoDB コンテナーのイメージ</a>をビルドします。</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">コンピューター上に <var class="keyword varname">composetutorial</var> という名前の Docker Compose プロジェクト・ディレクトリー (ここに Docker Compose 構成ファイルを保存できる) を作成し、このディレクトリーにナビゲートします。</span> Docker Compose コマンドの実行時には、構成ファイルが見つかるように、このディレクトリー内で実行する必要があります。
+そうでないと、Docker Daemon からエラー・メッセージが出されます。実行時にはすべてのファイルが Docker Daemon に送信されるため、デプロイメントの時間を短縮するため、サブディレクトリーが含まれたディレクトリーは選択しないようにしてください。
+<pre class="codeblock"><code>mkdir <var class="keyword varname">composetutorial</var> &amp;&amp; cd <var class="keyword varname">composetutorial</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルを作成します。</span> コンピューター上の任意の CLI エディターまたはテキスト・エディターを使用して、構成ファイルを作成できます。次の例は、<a href="http://www.nano-editor.org/dist/v2.2/nano.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">nano editor</a> を使用して <span class="ph filepath">docker-compose.yml</span> ファイルを作成する方法を示しています。
+<ol type="a"><li>nano エディターを開いて、ファイル名として <span class="ph filepath">docker-compose.yml</span> を入力します。
+<pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li>Lets-Chat アプリを実行するマルチコンテナー・デプロイメントのサービスを定義します。<var class="keyword varname">#</var> を使用するとコメントを入力できます。
+<pre class="codeblock"><code>#Name of your Lets-Chat service. 
+#The first container that is started for this service is named:
+#<span class="ph filepath">composetutorial_lets-chat_1</span>
+lets-chat: 
+  #Container image that is used to run the lets-chat service. 
+  #Use the full path to your private Bluemix images registry.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat  
+  #Enter a public IP address and port 8080. Run <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</samp>
+  #to list available public IP addresses in your space. 
+  #Option 1: If you do not have a public IP address 
+  #that you can use, you can request a new one as follows: 
+  #ports:
+  #- "request:8080:8080". 
+  #Option 2: If you want to bind a public IP address after your Lets-Chat container
+  #is created by using the <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind</samp> command, enter the following:
+  #ports:
+  #- "8080"
+  #Option 3: Bind a public IP address directly to your Lets-Chat container
+  #ports: 
+  #- "<var class="keyword varname">YOUR_PUBLIC_IP_ADDRESS</var>:8080:8080"
+  #Choose one of the port options described. 
+  ports:
+   - "<var class="keyword varname">SELECT_YOUR_PORT_OPTION</var>"
+  #lets-chat service is linked to the mongo service. 
+  links: 
+    - mongo
+#Name of your Mongo database service. 
+#The first container that is started for this service is named:
+#<span class="ph filepath">composetutorial_mongo_1</span>
+mongo:
+  #Container image that is used to run the mongo service. 
+  #Use the full path to your private Bluemix images registry.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/mongo
+  #Container port 27017 is published within your private container network. 
+  #If a container instance wants to send messages to a mongo container, 
+  #requests need to be sent to this port. 
+  expose:
+    - "27017"</code></pre>
+<div class="note tip"><span class="tiptitle">ヒント:</span>  独自の <span class="ph filepath">docker-compose.yml</span> ファイルを作成する際は、少なくとも 1 つのサービス名と、使用するコンテナー・イメージへのリンクを追加して、<samp class="ph codeph">docker-compose up</samp> コマンドが構成ファイルからコンテナーをビルドできるようにしてください。</div>
+<div class="steps note"><span class="notetitle">注:</span> <span class="keyword">IBM
+Bluemix Container Service</span> は、<span class="ph filepath">docker-compose.yml</span> ファイル形式のバージョン 1 のみサポートしています。バージョン 2 は現在サポートされていません。<a href="https://docs.docker.com/compose/compose-file/compose-file-v1/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Docker 構成ファイル・バージョン 1 リファレンス</a>に、<span class="ph filepath">docker-compose.yml</span> ファイルの作成方法について、他にも例を記載しています。</div>
+</li>
+<li><span class="ph uicontrol">Ctrl + o</span> を押して、変更を保存します。<span class="ph uicontrol">ENTER</span> を押して、変更を確認します。</li>
+<li><span class="ph uicontrol">ctrl + x</span> を押して、nano エディターを終了します。</li>
+</ol>
+</li>
+</ol>
+<div class="section result">これで、<span class="keyword">IBM
+Bluemix Container Service</span> と Docker Compose に、<a href="container_single_ui.html#container_compose_run" title="次に、マルチコンテナー・デプロイメントをデプロイして実行します。Lets-Chat と Mongo データベースのコンテナーを別々に作成して開始してから手動でリンクするのではなく、単一の Docker Compose コマンドを使用して docker-compose.yml ファイルの中にあるサービス定義に基づいてコンテナーを作成します。">Lets-Chat アプリを実行するマルチコンテナー・デプロイメントをデプロイする</a>用意ができました。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e4225" lang="ja-jp" id="container_compose_run"><h3 class="topictitle3" id="d75670e4225">レッスン 2: マルチコンテナー・デプロイメントを実行する</h3>
+<div class="body taskbody"><p class="shortdesc">次に、マルチコンテナー・デプロイメントをデプロイして実行します。Lets-Chat と Mongo データベースのコンテナーを別々に作成して開始してから手動でリンクするのではなく、単一の Docker Compose コマンドを使用して <span class="ph filepath">docker-compose.yml</span> ファイルの中にあるサービス定義に基づいてコンテナーを作成します。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">まだ実行していない場合は、<a href="container_cli_cfic_install.html#container_cli_login__option2_li">IBM Containers プラグインにログイン</a>し、ネイティブ Docker コマンドを実行するように CLI を構成します。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルがあるディレクトリーに移動します。</span> Docker Compose のコマンドを実行するには、<span class="ph filepath">docker-compose.yml</span> ファイルが格納されているディレクトリーに移動する必要があります。</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルの中にあるサービス定義に基づいて、マルチコンテナー・デプロイメントをデプロイし、実行します。</span> <span class="keyword">IBM
+Bluemix Container Service</span> のサービスやアプリのほとんどは、長時間実行タスクです。
+このため、コンテナーのコンソール出力につきっきりでそこから離れられないという状況を避けるために、<samp class="ph codeph">-d</samp> オプションを使用します。
+<pre class="codeblock"><code>docker-compose up -d</code></pre>
+ <samp class="ph codeph">-d</samp> オプションを使用すると、コンテナーの作成後も、コンテナー・インスタンスの名前が CLI に表示されるので、それらを追跡することができます。
+<pre class="codeblock"><code>$ docker-compose up -d
+
+Creating composetutorial_mongo_1
+Creating composetutorial_lets-chat_1</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">マルチコンテナー・デプロイメントのコンテナーが実行中であることを確認します。</span> <pre class="codeblock"><code>docker-compose ps  </code></pre>
+コンテナー・インスタンスが実行中になると、すぐに <span class="ph uicontrol">Up</span> 状況が表示されます。
+この処理には数分かかる場合があります。
+出力は、以下のようになります。
+<pre class="codeblock"><code>$ docker-compose ps
+
+        Name                   Command      State             Ports             
+-----------------------------------------------------------------------
+composetutorial_lets-chat_1                  Up      192.0.2.100:8080-&gt;8080/tcp    
+composetutorial_mongo_1                    Up      203.0.113.23:27017-&gt;27017/tcp</code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルの中で IP アドレスが構成されていない場合、使用可能なパブリック IP アドレスを Lets-Chat コンテナーにバインドします。</span> <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</samp> を実行することにより、スペース内の利用可能なパブリック IP アドレスのリストを表示するか、または、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp> を実行することにより、新しいパブリック IP アドレスを要求します。<var class="keyword varname">&lt;IP_address&gt;</var> は、実際のパブリック IP アドレスに置き換えてください。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_address&gt;</var> composetutorial_lets-chat_1</code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">IP アドレスをコンテナーにバインドする処理が完了するのを待ちます。</span> この処理には数分かかる場合があります。
+このプロセスが完了すると、すぐに CLI に<span class="ph uicontrol">「OK」</span>メッセージが表示されます。</li>
+<li class="step stepexpand"><span class="cmd">インターネットから Lets-Chat アプリにアクセスします。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Web ブラウザーを開きます。</span></li>
+<li class="li substep substepexpand"><span class="cmd">この例で示されているように、パブリック IP アドレスとパブリック Lets-Chat ポート 8080 を Web ブラウザーに入力します: <samp class="ph codeph">192.0.2.100:8080</samp></span> Lets-Chat のログイン・ページが Web ブラウザーに表示されます。<p><img src="images/lets-chat_screenshot.jpg" alt="Lets-Chat Web アプリにサインインします。"></p>
+</li>
+</ol>
+</li>
+</ol>
+<div class="section result">これで Lets-Chat アプリを使用する準備ができました。
+Lets-Chat アカウントを作成し、このアプリの機能を試してみてください。
+Lets-Chat アプリの信頼性を高めるには、<a href="container_single_ui.html#container_compose_scale" title="マルチコンテナー・デプロイメントが実行されている状態で、Lets-Chat コンテナー・インスタンスの数を増やすことにより、アプリの信頼性を高めます。">Lets-Chat コンテナー・インスタンス数の拡大</a>を実行します。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e4398" lang="ja-jp" id="container_compose_scale"><h3 class="topictitle3" id="d75670e4398">レッスン 3: マルチコンテナー・デプロイメントを拡大縮小する</h3>
+<div class="body taskbody"><p class="shortdesc">マルチコンテナー・デプロイメントが実行されている状態で、Lets-Chat コンテナー・インスタンスの数を増やすことにより、アプリの信頼性を高めます。</p>
+<div class="section context"></div><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルを更新します。</span> このサービスで開始されるすべてのコンテナー・インスタンスが同じポートを使用しようとするため、拡大縮小できるサービスは、パブリック・ポートを公開しないサービスに限られます。
+前のレッスンでは Lets-Chat サービス用にポート 8080 を公開するものとして定義したため、<span class="ph filepath">docker-compose.yml</span> ファイルでこの設定を変更する必要があります。<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph filepath">docker-compose.yml</span> を開きます。</span> <pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">Lets-Chat サービス定義の中で <span class="ph uicontrol">ports</span> パラメーターを <span class="ph uicontrol">expose</span> に置き換え、パブリック IP アドレスを削除します。</span> expose パラメーターは、プライベート・コンテナー・ネットワーク内でのみポートを公開します。
+Lets-Chat サービス定義は次のようになります。
+<pre class="codeblock"><code>lets-chat: 
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat 
+  expose:
+   - "8080" 
+  links: 
+    - mongo</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">Ctrl + o</span> を押して、変更を保存します。<span class="ph uicontrol">ENTER</span> を押して、変更を確認します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">ctrl + x</span> を押して、nano エディターを終了します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">マルチコンテナー・デプロイメントを再作成します。<samp class="ph codeph">--force-recreate</samp> オプションを使用して、デプロイメント内のすべてのインスタンスを再作成してください。</span> <pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナー・インスタンスの数を 2 個に増やして、Lets-Chat サービスを拡大します。</span> 以下のコマンドを実行すると、<span class="ph filepath">docker-compose.yml</span> ファイルの中のサービス定義に基づいて、<span class="keyword">IBM
+Bluemix Container Service</span> により自動的に新しい Lets-Chat コンテナー・インスタンスが作成されます。
+<div class="steps note"><span class="notetitle">注:</span> コンテナー・インスタンスの数を減らすと、余分のコンテナー・インスタンスが <span class="keyword">IBM
+Bluemix Container Service</span> により自動的に停止され、マルチコンテナー・デプロイメントから削除されます。</div>
+
+<pre class="codeblock"><code>docker-compose scale lets-chat=2</code></pre>
+CLI 出力は、以下のようになります。
+<pre class="codeblock"><code>$ docker-compose scale lets-chat=2
+
+Creating and starting composetutorial_lets-chat_2 ... done</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">マルチコンテナー・デプロイメントを再作成して、新しいコンテナー・インスタンスをリンクします。</span> 現在のところ Docker Compose では自動リンク・アタッチ / デタッチがサポートされていません。そのために、<samp class="ph codeph">--force-recreate</samp> オプションを使用して、マルチコンテナー・デプロイメント内のすべてのコンテナー・インスタンスを再作成する必要があります。<pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">Mongo コンテナー・インスタンスが Lets-Chat コンテナー・インスタンスにリンクされていることを確認してください。</span> <pre class="codeblock"><code>docker inspect composetutorial_lets-chat_1</code></pre>
+
+<pre class="codeblock"><code>docker inspect composetutorial_lets-chat_2</code></pre>
+リンクされている Mongo コンテナー・インスタンスは、各応答の <var class="keyword varname">HostConfig &gt; Links</var> セクションの中で確認できます。
+<pre class="codeblock"><code>...
+"HostConfig": {
+        "Binds": [],
+        "CapAdd": [],
+        "CapDrop": [],
+        "ContainerIDFile": "",
+        "Links": [
+            "composetutorial_mongo_1:mongo",
+            "composetutorial_mongo_1:composetutorial_mongo_1",
+            "composetutorial_mongo_1:composetutorial_mongo_1"
+        ],
+        "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+        },
+        "LxcConf": [],
+        "PortBindings": {
+            "8080/tcp": [
+                {
+                    "HostPort": "8080"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false
+    },
+...</code></pre>
+</li>
+</ol>
+<div class="section result">正常に Lets-Chat サービスを拡大して、アプリの信頼性を向上させることができました。大量のユーザー・トラフィックに対応できるようにするため、マルチコンテナー・デプロイメントに <a href="container_single_ui.html#container_compose_loadbalance" title="高いワークロードに対応するため、複数の Lets-Chat コンテナー・インスタンスの間で着信ユーザー・トラフィックのバランスを調整する nginx ロード・バランサーを、マルチコンテナー・デプロイメントに追加します。">nginx ロード・バランサーを追加</a>して、複数の Lets-Chat コンテナー・インスタンスの間でワークロード・バランシングが行われるようにしてください。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e4584" lang="ja-jp" id="container_compose_loadbalance"><h3 class="topictitle3" id="d75670e4584">レッスン 4: マルチコンテナー・デプロイメントへのロード・バランサーの追加</h3>
+<div class="body taskbody"><p class="shortdesc">高いワークロードに対応するため、複数の Lets-Chat コンテナー・インスタンスの間で着信ユーザー・トラフィックのバランスを調整する nginx ロード・バランサーを、マルチコンテナー・デプロイメントに追加します。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">nginx</span> ロード・バランサーを構成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph filepath">nginx.conf</span> 構成ファイルを作成します。</span> <pre class="codeblock"><code>nano <span class="ph filepath">nginx.conf</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">次の情報を構成ファイルにコピーします。</span> 複数の Lets-Chat コンテナー・インスタンスの間で作業負荷分散を実行するには、それらのすべてのコンテナー・インスタンスをアップストリーム・サーバーとして構成ファイルに追加する必要があります。
+それにより、すべての着信要求がいずれかの Lets-Chat コンテナーに転送されます。
+<pre class="codeblock"><code>worker_processes 3;
+
+events { worker_connections 1024; }
+
+http {
+
+        upstream lets-chat-app {
+              ip_hash;
+              server composetutorial_lets-chat_1:8080 weight=10 max_fails=3 fail_timeout=30s;
+              server composetutorial_lets-chat_2:8080 weight=10 max_fails=3 fail_timeout=30s;
+        }
+         
+        server {
+              listen 80;
+         
+              location / {
+                proxy_pass http://lets-chat-app;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+              }
+        }
+}</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">Ctrl + o</span> を押して、変更を保存します。<span class="ph uicontrol">ENTER</span> を押して、変更を確認します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">ctrl + x</span> を押して、nano エディターを終了します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーに <span class="ph uicontrol">nginx</span> イメージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Dockerfile を作成します。</span> <pre class="codeblock"><code>nano Dockerfile</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">次の情報を Dockerfile にコピーします。</span> 作成するイメージは、Dockerhub で提供されているパブリックの <span class="ph uicontrol">nginx</span> イメージをベースとするものです。
+前のステップで指定したカスタム設定を適用するために、<samp class="ph codeph">COPY</samp> コマンドを使用して、<span class="ph filepath">nginx.conf</span> ファイルを <span class="ph uicontrol">nginx</span> 構成ファイルの場所にコピーします。
+<pre class="codeblock"><code>#Uses the public nginx image available on Dockerhub.
+FROM nginx
+#Copies your custom <span class="ph filepath">nginx.conf</span> file into the nginx configuration file location.
+COPY nginx.conf /etc/nginx/nginx.conf</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">Ctrl + o</span> を押して、変更を保存します。<span class="ph uicontrol">ENTER</span> を押して、変更を確認します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">ctrl + x</span> を押して、nano エディターを終了します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">nginx</span> イメージをビルドし、それをプライベート <span class="keyword">Bluemix</span> イメージ・レジストリーにプッシュします。</span> <pre class="codeblock"><code>docker build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx .</code></pre>
+
+CLI 出力は、以下のようになります。
+<pre class="codeblock"><code>Sending build context to Docker daemon 9.728 kB
+Step 1 : FROM nginx
+ ---&gt; 6f62f48c4e55
+Step 2 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---&gt; bc40817f0593
+Removing intermediate container 64c5e180943f
+Successfully built bc40817f0593
+The push refers to a repository [registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx] (len: 1)
+bc40817f0593: Pushed 
+6f62f48c4e55: Pushed 
+50ed65ac2e2d: Pushed 
+fed44c33bce9: Pushed 
+73e8d4f6bf84: Pushed 
+latest: digest: sha256:99587168cbf699b32804c4ff0de610460dfa150120b12385b194c2f9236903f5 size: 15270</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">nginx</span> サービス定義を <span class="ph filepath">docker-compose.yml</span> ファイルに追加します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルを開きます。</span> <pre class="codeblock"><code>nano <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">以下の情報を <span class="ph filepath">docker-compose.yml</span> にコピーします。
+<var class="keyword varname">IP_ADDRESS</var> は、<span class="ph uicontrol">nginx</span> ロード・バランサーへのアクセスに使用するパブリック IP アドレスに置き換えてください。</span> <pre class="codeblock"><code>nginx:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx  
+  ports:
+   - "<var class="keyword varname">IP_ADDRESS</var>:80:80"
+  links: 
+    - lets-chat</code></pre>
+<span class="ph filepath">docker-compose.yml</span> ファイルは、以下のようになります。
+<pre class="codeblock"><code>nginx:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/nginx
+  ports:
+   - "<var class="keyword varname">IP_ADDRESS</var>:80:80"
+  links:
+    - lets-chat
+lets-chat:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/lets-chat
+  expose:
+   - "8080"
+  links:
+    - mongo
+mongo:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">$your_namespace</var>/mongo
+  expose:
+    - "27017"</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">Ctrl + o</span> を押して、変更を保存します。<span class="ph uicontrol">ENTER</span> を押して、変更を確認します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">ctrl + x</span> を押して、nano エディターを終了します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Lets-Chat アプリを実行するマルチコンテナー・デプロイメントを <span class="ph uicontrol">nginx</span> ロード・バランサーでデプロイします。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">マルチコンテナー・デプロイメントを再作成します。</span> マルチコンテナー・デプロイメント内のすべてのコンテナー・インスタンスを再作成するために、<samp class="ph codeph">--force-recreate</samp> オプションを使用します。これにより、リンクが正しくアタッチされます。<pre class="codeblock"><code>docker-compose up -d --force-recreate</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">コンテナーが正しくリンクされていることを確認します。</span> <pre class="codeblock"><code>docker inspect composetutorial_nginx_1</code></pre>
+リンクされた Lets-Chat コンテナー・インスタンスは、応答の <var class="keyword varname">HostConfig &gt; Links</var> セクションで確認できます。<pre class="codeblock"><code>...
+"HostConfig": {
+        "Binds": [],
+        "CapAdd": [],
+        "CapDrop": [],
+        "ContainerIDFile": "",
+        "Links": [
+            "composetutorial_lets-chat_2:composetutorial_lets-chat_2",
+            "composetutorial_lets-chat_1:composetutorial_lets-chat_1",
+            "composetutorial_lets-chat_1:composetutorial_lets-chat_1",
+            "composetutorial_lets-chat_2:lets-chat",
+            "composetutorial_lets-chat_2:composetutorial_lets-chat_2"
+        ],
+        "LogConfig": {
+            "Config": {},
+            "Type": "json-file"
+        },
+        "LxcConf": [],
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostPort": "80"
+                }
+            ]
+        },
+        "Privileged": false,
+        "PublishAllPorts": false
+    },
+...</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">カスタム <span class="ph filepath">nginx.config</span> 設定が <span class="ph uicontrol">nginx</span> コンテナー・インスタンスに適用されていることを確認します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">nginx</span> コンテナーにログインします。</span> <pre class="codeblock"><code>docker exec -it composetutorial_nginx_1 bash</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">ホスト構成を確認します。</span> <pre class="codeblock"><code>cat <span class="ph filepath">/etc/hosts</span></code></pre>
+カスタム設定が適用されていれば、リンクされた Lets-Chat コンテナー・インスタンスとそのプライベート IP アドレスが CLI 出力にリストされます。
+<pre class="codeblock"><code>127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+198.51.100.19	composetutorial_lets-chat_1
+198.51.100.18	composetutorial_lets-chat_2
+198.51.100.20	instance-000f2b2b
+198.51.100.18	lets-chat
+198.51.100.20	composetutorial-nginx-1
+198.51.100.19	composetutoral_lets-chat_1
+198.51.100.18	composetutorial_lets-chat_2
+198.51.100.20	instance-000f2b2b</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">CLI に <samp class="ph codeph">exit</samp> を入力することにより、コンテナーからログアウトします。</span></li>
+</ol>
+</li>
+</ol>
+<div class="section result">これで、複数の Lets-Chat コンテナーの間で作業負荷分散がなされるようになり、大量のユーザー・トラフィックに対応できるようになります。
+最後のステップとして、<a href="container_single_ui.html#container_compose_remove" title="最後のステップとして、マルチコンテナー・デプロイメントを削除して、使用済みのリソースを解放し、割り当て量の使用を最大化します。">マルチコンテナー・デプロイメントを削除</a>して、使用されたリソースを解放し、割り当て量の使用を最大化します。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d75670e4915" lang="ja-jp" id="container_compose_remove"><h3 class="topictitle3" id="d75670e4915">レッスン 5: マルチコンテナー・デプロイメントを削除する</h3>
+<div class="body taskbody"><p class="shortdesc">最後のステップとして、マルチコンテナー・デプロイメントを削除して、使用済みのリソースを解放し、割り当て量の使用を最大化します。</p>
+<div class="section context"><div class="note attention"><span class="attentiontitle">重要:</span> マルチコンテナー・デプロイメントを削除した後は、元に戻すことができません。マルチコンテナー・デプロイメントの構成を保持する場合は、<span class="ph filepath">docker-compose.yml</span> ファイルを削除しないようにしてください。</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">マルチコンテナー・デプロイメントで実行中のコンテナー・インスタンスをすべて停止します。</span> <pre class="codeblock"><code>docker-compose stop</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">マルチコンテナー・デプロイメントのコンテナー・インスタンスをすべて削除します。</span> <pre class="codeblock"><code>docker-compose rm</code></pre>
+ 削除プロセス中に、すべてのコンテナー・インスタンスを削除するかどうか確認を求められます。<span class="ph uicontrol">y</span> を入力して確認します。</li>
+<li class="step stepexpand">オプション: <span class="cmd">コンテナー・システムからすべてのコンテナー・インスタンスが削除されたことを確認します。</span> <pre class="codeblock"><code>docker-compose ps</code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd"><span class="ph filepath">docker-compose.yml</span> ファイルを削除します。</span> <div class="note tip"><span class="tiptitle">ヒント:</span> ファイルを再利用する場合は、削除しないで、ソース管理システムに保管してください。</div>
+
+
+<pre class="codeblock"><code>rm <span class="ph filepath">docker-compose.yml</span></code></pre>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">Docker Compose プロジェクト・ディレクトリーを削除します。</span> <pre class="codeblock"><code>cd &amp;&amp; rmdir composetutorial</code></pre>
+</li>
+</ol>
+<div class="section result">マルチコンテナー・デプロイメントが正常に削除され、割り当て量の利用が最大化されました。</div></div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d75670e5021" lang="ja-jp" id="container_compose_yml"><h3 class="topictitle3" id="d75670e5021"><span class="ph filepath">docker-compose.yml</span> ファイルでサポートされるオプション</h3>
+<div class="body conbody"><p class="shortdesc"></p>
+<div><span class="keyword">IBM
+Bluemix Container Service</span> でサポートされる <span class="ph filepath">docker-compose.yml</span> ファイルのオプションを示します。
+<ul><li><a href="container_single_ui.html#container_compose_yml__environment">environment</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__expose">expose</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__image">image</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__links">links</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__mem">mem_limit</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__ports">ports</a></li>
+<li><a href="container_single_ui.html#container_compose_yml__volumes">volumes</a></li>
+</ul>
+</div><section role="region" aria-labelledby="d75670e5110" id="container_compose_yml__environment"><h4 class="sectiontitle" id="d75670e5110"><span class="ph"><samp class="ph codeph">environment</samp></span></h4><span class="ph uicontrol">environment</span> パラメーターは、環境変数を設定したり、<span class="keyword">Bluemix</span> サービスまたはアプリを Docker Compose サービスにバインドしたりする場合に使用します。
+<div class="steps note"><span class="notetitle">注:</span>  <span class="keyword">Bluemix</span> サービスをマルチコンテナー・デプロイメントに追加する場合は、このサービスのインスタンスをスペースに作成する必要があります。詳細については、<a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">Bluemix GUI からのサービスのバインド</a>を参照してください。<p>一部のサービスは、サービスを直接コンテナーにバインドすることをサポートしていません。その場合は、Cloud Foundry アプリを作成する必要があります。
+詳細については、<a href="container_troubleshoot.html#ts_bridge_app">Bluemix サービスがコンテナーに直接バインドされない</a>を参照してください。</p>
+</div>
+<ul><li><span class="keyword option">Bluemix サービスのバインド</span><p>サービスをバインドするには、<span class="ph uicontrol">CCS_BIND_SRV</span> キーを使用します。<var class="keyword varname">&lt;service_instance_name&gt;</var> を、プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーに作成したサービス・インスタンスの名前に置き換えてください。</p>
+<pre class="codeblock"><code>environment: 
+  - "CCS_BIND_SRV=<var class="keyword varname">&lt;service_instance_name&gt;</var>"</code></pre>
+</li>
+<li><span class="keyword option">Cloud Foundry アプリのバインド</span><p>アプリをバインドするには、<span class="ph uicontrol">CCS_BIND_APP</span> キーを使用します。<var class="keyword varname">&lt;app_name&gt;</var> を、プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーに作成した Cloud Foundry アプリの名前に置き換えてください。</p>
+<pre class="codeblock"><code>environment:
+  - "CCS_BIND_APP=<var class="keyword varname">&lt;app_name&gt;</var>"</code></pre>
+</li>
+</ul>
+<dl><dt class="dlterm">例</dt>
+<dd>次の <span class="ph filepath">docker-compose.yml</span> サンプル・ファイルは、lets-chat サービスに対して <var class="keyword varname">containerbridge</var> という名前の Cloud Foundry アプリをバインドし、<var class="keyword varname">tmp_folder</var> という環境変数を追加する例を示しています。
+<pre class="codeblock"><code>#Name of your service
+lets-chat:
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat
+  #Use <span class="ph uicontrol">CCS_BIND_SRV</span> to bind a <span class="keyword">Bluemix</span> service or <span class="ph uicontrol">CCS_BIND_APP</span> to bind a Cloud Foundry app to your Docker Compose service. 
+  environment:
+   - "CCS_BIND_APP=containerbridge"
+   - "tmp_folder=/tmp"</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75670e5228" id="container_compose_yml__expose"><h4 class="sectiontitle" id="d75670e5228"><span class="ph"><samp class="ph codeph">expose</samp></span></h4>プライベート・ネットワークのみにポートを公開します。
+このポートには、リンクされたすべてのサービスがアクセスできます。
+<dl><dt class="dlterm">例</dt>
+<dd>次の <span class="ph filepath">docker-compose.yml</span> サンプル・ファイルは、社内ネットワークのみにポート 8080 を公開する例を示しています。
+リンクされた mongo コンテナーは、このポートを使用して lets-chat コンテナーに要求を送信します。
+<pre class="codeblock"><code>lets-chat:
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat
+  #Make a port available to the private network only. 
+  expose:
+   - "8080"
+  links:
+    - mongo
+mongo:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/mongo</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75670e5260" id="container_compose_yml__image"><h4 class="sectiontitle" id="d75670e5260"><span class="ph"><samp class="ph codeph">image</samp></span></h4>Docker Compose サービスを実行するために使用するベース・イメージを定義します。
+<span class="ph filepath">docker-compose.yml</span> ファイルでこのイメージを使用するためには、その前にプライベート <span class="keyword">Bluemix</span> レジストリーでそのイメージが使用できなければなりません。
+<p>イメージを定義するには、次の形式のプライベート <span class="keyword">Bluemix</span> レジストリーへの絶対パスを使用します: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var>。</p>
+<dl><dt class="dlterm">例</dt>
+<dd>次の <span class="ph filepath">docker-compose.yml</span> サンプル・ファイルは、lets-chat サービスのベースとして lets-chat イメージを定義する例を示しています。
+<pre class="codeblock"><code>#Name of your service
+lets-chat:
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat
+  </code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75670e5311" id="container_compose_yml__links"><h4 class="sectiontitle" id="d75670e5311"><span class="ph"><samp class="ph codeph">links</samp></span></h4>別のサービスのために開始されるすべてのコンテナーに、コンテナーをリンクします。
+リンクを使用すると、サービス間の依存関係が決まるので、<samp class="ph codeph">docker-compose up</samp> コマンド実行時に各コンテナーが開始される順序が決まります。
+サービスをリンクするには、サービス名を入力します。<dl><dt class="dlterm">例</dt>
+<dd>次の <span class="ph filepath">docker-compose.yml</span> サンプル・ファイルは、lets-chat サービスのために開始されるすべてのコンテナーに nginx コンテナーをリンクする例を示しています。
+<pre class="codeblock"><code>#Name of your service
+nginx:
+  #Container image that is used to run the nginx service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/nginx
+  #Enter the name of the service that you want to link. 
+  links:
+    - lets-chat
+lets-chat:
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace</var>/lets-chat</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75670e5346" id="container_compose_yml__mem"><h4 class="sectiontitle" id="d75670e5346"><span class="ph"><samp class="ph codeph">mem_limit</samp></span></h4>コンテナー・インスタンスのサイズを設定します。
+このコンテナー・サイズによって、コンテナーが実行時に計算ホスト上で取得するメモリーとディスク・スペースの最大量が決まります。コンテナー・サイズが割り当てられた後、その値を変更することはできません。<p><span class="keyword">IBM
+Bluemix Container Service</span> では、以下のサイズから選択します。</p>
+<ul data-hd-audience="yellow"><li>ピコ (64 MB メモリー、4 GB ディスク・スペース)</li>
+<li>ナノ (128 MB メモリー、8 GB ディスク・スペース)</li>
+<li>マイクロ (256 MB メモリー、16 GB ディスク・スペース)</li>
+<li>タイニー (512 MB メモリー、32 GB ディスク・スペース)</li>
+<li>スモール (1024 MB メモリー、64 GB ディスク・スペース)</li>
+<li>ミディアム (2048 MB メモリー、128 GB ディスク・スペース)</li>
+<li>ラージ (4096 MB メモリー、256 GB ディスク・スペース)</li>
+<li>X ラージ (8192 MB メモリー、512 GB ディスク・スペース)</li>
+<li>2X ラージ (16384 MB メモリー、1 TB ディスク・スペース)</li>
+</ul>
+必要なサイズ (MB) を、<samp class="ph codeph">'M'</samp> 単位ラベルを付けずに入力します。サイズを指定しない場合、コンテナーはすべて、デフォルトで<span class="ph uicontrol">「マイクロ」</span>サイズで作成されます。
+<dl><dt class="dlterm">例</dt>
+<dd>次の例は、lets-chat サービスのコンテナー・サイズを 512 MB に設定する <span class="ph filepath">docker-compose.yml</span> ファイルの例を示しています。<pre class="codeblock"><code>#Name of your service
+lets-chat:
+  #Container image that is used to run the lets-chat service. Replace <var class="keyword varname">&lt;my_namespace&gt;</var> with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat
+  #Enter the size you want in megabytes
+  mem_limit: 512</code></pre>
+</dd>
+</dl>
+</section><section role="region" aria-labelledby="d75670e5407" id="container_compose_yml__ports"><h4 class="sectiontitle" id="d75670e5407"><span class="ph"><samp class="ph codeph">ports</samp></span></h4><span class="ph uicontrol">ports</span> オプションは、サービスのために開始される各コンテナー用にパブリック・ポートを公開する場合に使用します。
+以下の構成のいずれかを選択します。<ul><li><span class="keyword option">パブリック IP アドレスの要求</span><div class="p">この構成では、スペースのための新しいパブリック IP アドレスを要求し、ポート 8080 をパブリックに公開し、要求した IP アドレスをコンテナーにバインドします。
+<div class="steps note"><span class="notetitle">注:</span> 新しい IP アドレスをスペースに割り振ることができるだけのパブリック IP アドレス割り当て範囲が必要です。</div>
+</div>
+<pre class="codeblock"><code>ports:
+  - "request:8080:8080"</code></pre>
+</li>
+<li><span class="keyword option">パブリック・ポートの公開</span><p>この構成の場合は、ポート 8080 がパブリックに公開されます。
+IP アドレスはコンテナーにバインドされません。
+インターネットからアプリにアクセスできるようにするには、コンテナーの作成後、<a href="container_single_ui.html#container_cli_ips" title="パブリック IP アドレスを要求して、Bluemix 内のコンテナーにバインドします。">パブリック IP アドレスをバインド</a>します。</p>
+<pre class="codeblock"><code>ports:
+  - "8080"</code></pre>
+</li>
+<li><span class="keyword option">既存のパブリック IP アドレスのバインド</span><div class="p">この構成の場合は、ポート 8080 がパブリックに公開され、作成されたコンテナーに既存のパブリック IP アドレスが自動的にバインドされます。
+<div class="steps note"><span class="notetitle">注:</span> 使用する IP アドレスは、スペースに割り振る必要があり、使用できなければなりません。
+この IP アドレスが既にコンテナーにバインドされている場合は、まず<a href="container_single_ui.html#container_cli_ips_unbind" title="コンテナーからパブリック IP アドレスをアンバインドすることができますが、その IP アドレスは他のコンテナーに使用することが依然として可能であり、引き続き組織のパブリック IP 割り当て量に計上されます。">それをアンバインドする</a>必要があります。</div>
+</div>
+<pre class="codeblock"><code>ports:
+  - "<var class="keyword varname">IP_ADDRESS</var>:8080:8080"</code></pre>
+</li>
+</ul>
+</section><section role="region" aria-labelledby="d75670e5458" id="container_compose_yml__volumes"><h4 class="sectiontitle" id="d75670e5458"><span class="ph"><samp class="ph codeph">volumes</samp></span></h4><span class="ph uicontrol">volumes</span> パラメーターは、既存のボリュームをサービスに追加する場合に使用します。
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph filepath">docker-compose.yml</span> ファイルのサービス定義にボリュームを追加する前に、そのボリュームを作成しておく必要があります。詳しくは、<a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">コマンド・ライン (CLI) でのボリュームの作成</a> のトピックを参照してください。ボリュームをコンテナーにマウントする前にボリュームにデータを設定しておく方法については、<a href="container_volumes_ov.html#container_volumes_mount" title="ボリュームを作成した後、ボリュームをコンテナーにマウントし、ボリュームをマウントしたコンテナーで利用できるファイルを追加することができます。">コマンド・ライン・インターフェース (CLI) を使用したボリュームへのファイルの追加</a>を参照してください。</div>
+<dl><dt class="dlterm">例</dt>
+<dd>次の例は、<var class="keyword varname">my_volume</var> という名前の外部ボリュームを lets-chat サービスに追加する <span class="ph filepath">docker-compose.yml</span> ファイルの例を示しています。このボリュームは、<span class="ph filepath">/tmp/data</span> フォルダーにマウントされていて、読み取り権限と書き込み権限が設定されています。
+<pre class="codeblock"><code>version: '2'
+#Name of your service
+lets-chat:
+  #container image that is used to run the lets-chat service. Replace &lt;my_namespace&gt; with the name of your namespace.
+  image: registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/lets-chat
+  #You need to first create your volume before you can add it
+  volumes:
+   - <var class="keyword varname">my_volume</var>:<span class="ph filepath">/tmp/data</span>:rw
+
+#declare volume as external
+volumes:
+  my_volume:
+    external: true</code></pre>
+</dd>
+</dl>
+</section></div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d75670e5514" lang="ja-jp" id="container_compose_faq"><h3 class="topictitle3" id="d75670e5514">Docker Compose の FAQ</h3>
+<div class="body conbody"><p class="shortdesc">ここには、Docker Compose に関するよくある質問を記載しています。</p>
+<div class="p"><dl><dt class="dlterm">IBM Containers サービスを指定するように Docker Compose クライアントをセットアップするにはどうすればいいですか?</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> CLI にログインする際、<span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>) コマンドを実行するか、ネイティブ Docker コマンド (<samp class="ph codeph">docker</samp>) を使用できるように環境変数を設定するかを選択できます。<span class="keyword">IBM
+Bluemix Container Service</span> に対して Docker Compose コマンドを実行するには、<span class="keyword">IBM
+Bluemix Container Service</span> に対してネイティブ Docker コマンドを実行するように環境変数を設定する必要があります。詳細については、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。">IBM Bluemix Container Service CLI プラグイン (bx ic) へのログイン</a>を参照してください。</dd>
+<dt class="dlterm">Docker Compose ではスケーラブル・コンテナー・グループをどのように使用するのですか?</dt>
+<dd>Docker Compose は、複数のコンテナー・インスタンス間で負荷分散を行う機能が既に組み込まれている、<span class="keyword">IBM
+Bluemix Container Service</span> グループの概念をサポートしていません。コンテナー・インスタンス間でワークロードのバランスを取る場合、ロード・バランサーを実行する別のコンテナーを追加して、それをコンテナー・インスタンスにリンクする必要があります。</dd>
+<dt class="dlterm"><span class="keyword">IBM
+Bluemix Container Service</span> では、どのバージョンの <span class="ph filepath">docker-compose.yml</span> ファイル形式がサポートされていますか?</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> は、<span class="ph filepath">docker-compose.yml</span> ファイル形式のバージョン 1 のみサポートしています。バージョン 2 は現在サポートされていません。</dd>
+<dt class="dlterm">Docker Compose コマンドをアタッチ・モードで実行する方法を教えてください。</dt>
+<dd><samp class="ph codeph">docker-compose up</samp> コマンドをアタッチ・モードで実行すると、エラーが発生する可能性があります。
+<span class="keyword">IBM
+Bluemix Container Service</span> では、現在、Docker Compose はデタッチ・モードによる実行のみがサポートされています。デタッチできずにコンテナーのコンソール出力から抜け出せなくなる状況を防ぐために、<samp class="ph codeph">-d</samp> オプションを使用してください。</dd>
+<dt class="dlterm">マルチコンテナー・デプロイメントで実行する各コンテナー・インスタンスのログの利用方法を教えてください。</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> では、現在、<samp class="ph codeph">docker-compose logs</samp> コマンドはサポートされていません。</dd>
+<dt class="dlterm"><span class="ph filepath">docker-compose.yml</span> ファイルではどのようなパラメーター・オプションがサポートされていますか?</dt>
+<dd>サポートされるパラメーター・オプションのリストを確認するには、<a href="container_single_ui.html#container_compose_yml">docker-compose.yml ファイルでサポートされるオプション</a>を参照してください。</dd>
+</dl>
+</div>
+</div>
+</article></article></article></div></main></body></html>

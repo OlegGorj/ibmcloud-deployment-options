@@ -1,0 +1,864 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Bluemix カタログにあるさまざまなサービスを IBM Bluemix Container Service で使用できます。 これらの Bluemix サービスの多くは、コンテナーにデプロイするアプリに追加機能を提供します。さらに、Bluemix サービスの中には、コンテナーの管理に役立つものもあります。">
+<meta name="keywords" content="IBM Containers, コンテナー, サービス, Bluemix, インテグレーション, バインド, アラート通知, ポリシー, 通知, デリバリー・パイプライン, パイプライン, 継続的なデリバリー, 単一コンテナー, イメージ, build, Vulnerability Advisor, セキュリティー, イメージのクリーンアップ, 環境プロパティー, コンテナー・グループ, Devops サービス, デプロイ">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>単一コンテナーとスケーラブル・コンテナー で使用するためのサービスの統合</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d58898e6" id="container_integrations"><h1 class="topictitle1" id="d58898e6"><span class="ph" id="title"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>とサービスの統合</span></h1>
+<div class="body conbody"><div class="abstract"><div class="shortdesc"><span class="ph" id="shortdesc"><span class="keyword">Bluemix®</span> <span class="keyword wintitle">カタログ</span>にあるさまざまなサービスを <span class="keyword">IBM®
+Bluemix Container Service</span> で使用できます。
+これらの <span class="keyword">Bluemix</span> サービスの多くは、コンテナーにデプロイするアプリに追加機能を提供します。さらに、<span class="keyword">Bluemix</span> サービスの中には、コンテナーの管理に役立つものもあります。</span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <span class="ph"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix</span> Public の <span class="keyword">IBM
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></span></div>
+</div>
+
+
+<div class="p">このページでは、次について説明します。
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__data">データ分析とストレージ・サービス</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__devops">DevOps サービス</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__integrate">サービスの統合</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__network">ネットワーク・サービス</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations__security">セキュリティー・サービス</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">Bluemix GUI からのサービスのバインド</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_integrations_binding_cli" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">CLI からのサービスとコンテナーのバインド</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_alertnotification" title="ある条件や基準を満たした場合に通知を送信し、Alert Notification サービスを使用してアラート通知を管理するように、アプリを構成します。 Alert Notification サービスを使用すると、関心のあるアラートをフィルタリングする、カスタムの通知ポリシーを作成できます。 必要に応じてポリシー・フィルターを詳細化して、個人またはグループをアラートの受信者として指定したり、優先通知方式と頻度を指定したりすることができます。">コンテナーにデプロイされたアプリに Alert Notification を使用してアラートを構成する</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_pipeline_ov" title="IBM Bluemix Continuous Delivery の一部である Delivery Pipeline を使用して、アプリのビルドと Bluemix へのコンテナーのデプロイメントを自動化します。">Continuous Delivery サービス内で Delivery Pipeline を使用してコンテナーのデプロイメントを自動化する</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_integrations.html#container_cfapp_tutorial_intro" title="Cloud Foundry を使用して以前にデプロイしたアプリを、IBM Bluemix Container Service を使用してコンテナーにデプロイできます。">チュートリアル: Cloud Foundry Node.js アプリをコンテナーにデプロイする</a></div>
+</div>
+</div>
+<section role="region" aria-labelledby="d58898e214" id="container_integrations__data"><h2 class="sectiontitle" id="d58898e214">データ分析とストレージ・サービス</h2>
+<div class="p"><dl><dt class="dlterm"><span class="keyword">Object Storage</span></dt>
+<dd><p>複数のストレージ・ノードにまたがって複製されている永続データをバックアップ用に保管します。</p>
+
+<div class="p"><ul><li><span class="keyword">Object Storage</span> サービスに関する一般情報については、<a href="../services/ObjectStorage/index.html"><span class="keyword">Object Storage</span> サービス概説</a>を参照してください。</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58898e239" id="container_integrations__devops"><h2 class="sectiontitle" id="d58898e239">DevOps サービス</h2>
+<div class="p"><dl><dt class="dlterm"><span class="keyword">Active Deploy</span></dt>
+<dd><p>実行中のコンテナー・グループをダウン時間なしで更新し、必要に応じて元のバージョンに即時に戻します。
+<span class="keyword">IBM Active
+Deploy for Bluemix</span> はデプロイメントに段階的なアプローチを使用して、更新されたアプリを実稼働環境でテストおよび検証する時間を提供します。</p>
+</dd>
+<dd class="ddexpand"><div class="p">実行中のコンテナー・グループの更新について詳しくは、以下を参照してください。<ul><li><a href="../services/ActiveDeploy/updatingapps.html#updatingappscli" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Active Deploy サービス (CLI) によるアプリやコンテナー・グループの更新</a></li>
+<li><a href="../services/ActiveDeploy/updatingapps.html#updatingappsgui" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Active Deploy サービス (GUI) によるアプリやコンテナー・グループの更新</a></li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm"><span class="keyword">Alert Notification</span></dt>
+<dd><p>アプリケーションから取得する、関心のあるアラートのみをフィルターに掛けるように通知ポリシーを設定します。必要に応じてポリシー・フィルターを詳細化して、個人またはグループをアラートの受信者として指定したり、優先通知方式と頻度を指定したりすることができます。</p>
+
+<div class="p"><ul><li><span class="keyword">Alert Notification</span> とのコンテナーの使用について詳しくは、<a href="container_integrations.html#container_alertnotification" title="ある条件や基準を満たした場合に通知を送信し、Alert Notification サービスを使用してアラート通知を管理するように、アプリを構成します。 Alert Notification サービスを使用すると、関心のあるアラートをフィルタリングする、カスタムの通知ポリシーを作成できます。 必要に応じてポリシー・フィルターを詳細化して、個人またはグループをアラートの受信者として指定したり、優先通知方式と頻度を指定したりすることができます。">コンテナーにデプロイされたアプリに Alert Notification を使用してアラートを構成する</a>を参照してください。</li>
+<li><span class="keyword">Alert Notification</span> サービスに関する一般情報については、<a href="../services/AlertNotification/index.html"><span class="keyword">Alert Notification</span> 概説</a>を参照してください。</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm"><span class="keyword">Delivery Pipeline</span></dt>
+<dd><p><span class="keyword">IBM
+Bluemix Continuous Delivery</span> の一部である <span class="keyword">Delivery Pipeline</span> を使用して、アプリのビルドと <span class="keyword">Bluemix</span> へのコンテナーのデプロイメントを自動化します。</p>
+
+<div class="p"><ul><li>パイプラインでのコンテナーの使用について詳しくは、<a href="container_integrations.html#container_pipeline_ov" title="IBM Bluemix Continuous Delivery の一部である Delivery Pipeline を使用して、アプリのビルドと Bluemix へのコンテナーのデプロイメントを自動化します。">Continuous Delivery サービス内で Delivery Pipeline を使用してコンテナーのデプロイメントを自動化する</a>を参照してください。</li>
+<li><span class="keyword">Delivery Pipeline</span> サービスの一般情報については、<a href="../services/ContinuousDelivery/pipeline_about.html">Delivery Pipeline の概説</a>を参照してください。</li>
+</ul>
+</div>
+</dd>
+<dt class="dlterm">UrbanCode Deploy</dt>
+<dd><p>IBM UrbanCode Deploy を使用して、リリースの管理とコンテナー・デプロイメントの自動化を行います。このサービスには、すべての環境にわたってデプロイメントに対する可視性を持たせることが可能になるツールが用意されています。このサービスを、<span class="keyword">Delivery Pipeline</span> サービスの代わりに使用できます。</p>
+
+<ul><li>購入情報については、<a href="http://www.ibm.com/software/products/en/ucdep" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">IBM UrbanCode Deploy</a> の製品ページを参照してください。</li>
+<li>UrbanCode Deploy に関する一般情報については、<a href="http://www.ibm.com/support/knowledgecenter/SS4GSP/ucd_welcome.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">IBM Knowledge Center</a> を参照してください。</li>
+</ul>
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58898e378" id="container_integrations__integrate"><h2 class="sectiontitle" id="d58898e378">サービスの統合</h2>
+<div class="p"><dl><dt class="dlterm">Istio</dt>
+<dd><p>アプリケーションまたはサービス用に <span class="keyword">IBM
+Bluemix Container Service</span> でマイクロサービスを管理します。<span class="ph">Istio オープン・ソース・プロジェクトの情報を取得する、または、このプロジェクトに参加するには、<a href="https://istio.io/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">https://istio.io/</a> を参照してください。</span></p>
+</dd>
+<dt class="dlterm"><span class="keyword">Secure Gateway</span></dt>
+<dd><p><span class="keyword">Bluemix</span> アプリケーションをオンプレミスまたはクラウドのリモート・ロケーションとセキュアに接続します。</p>
+
+<div class="p"><ul><li><span class="keyword">IBM
+Bluemix Container Service</span> を <span class="keyword">Secure Gateway</span> とともに使用することについて詳しくは、『<a href="../services/SecureGateway/sg_003.html#sg_003">クライアントとしての Docker の使用</a>』を参照してください。</li>
+<li><span class="keyword">Secure Gateway</span> サービスに関する一般情報については、<a href="../services/SecureGateway/secure_gateway.html"><span class="keyword">Secure Gateway</span> サービス概説</a>を参照してください。</li>
+</ul>
+</div>
+
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58898e442" id="container_integrations__network"><h2 class="sectiontitle" id="d58898e442">ネットワーク・サービス</h2>
+<div class="p"><dl><dt class="dlterm">VPN</dt>
+<dd><p> <span class="keyword">Bluemix</span> スペースとイントラネット・サーバーの間で、コンテナーが相互に通信できるようにします。</p>
+
+<div class="p"><ul><li><span class="keyword">IBM
+VPN</span> サービスに関する一般情報については、<a href="../services/vpn/index.html"><span class="keyword">IBM
+VPN</span> サービス概説</a>を参照してください。</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</section><section role="region" aria-labelledby="d58898e474" id="container_integrations__security"><h2 class="sectiontitle" id="d58898e474">セキュリティー・サービス</h2>
+<div class="p"><dl><dt class="dlterm"><span class="keyword">Activity Tracker</span></dt>
+<dd><p>あらゆる種類の異常活動がないかを確認し、規制監査要件に準拠するように API 呼び出しを監査します。</p>
+</dd>
+<dd class="ddexpand"><div class="p"><ul><li><span class="keyword">Activity Tracker</span> サービスに関する一般情報については、<a href="../services/AccessTrail/index.html"><span class="keyword">Activity Tracker</span> サービス概説</a>を参照してください。</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</section></div>
+<article class="topic concept nested1" role="article" aria-labelledby="d58898e499" id="rellinks"><h2 class="topictitle2" id="d58898e499">関連リンク</h2>
+<aside role="complementary" aria-labelledby="d58898e499">
+<div class="linklist" id="general"><h3 class="linklistlabel">関連リンク</h3>
+<ul><li><img src="./sout.gif" alt=""><a href="https://wiki.eclipse.org/Linux_Tools_Project/Docker_Tooling" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Eclipse 用 Docker ツール</a></li>
+</ul></div>
+</aside></article><article class="topic task nested1" role="article" aria-labelledby="d58898e509" lang="ja-jp" id="container_integrations_binding"><h2 class="topictitle2" id="d58898e509"><span class="keyword">Bluemix</span> GUI からのサービスのバインド</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix</span> はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する <span class="keyword">Bluemix</span> サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。</p>
+<div class="section prereq">始めに、サービスを <span class="keyword">Bluemix</span> スペースに追加します。
+詳しくは、<a href="../services/reqnsi.html#req_instance">新しいサービス・インスタンスの要求</a>を参照してください。</div><div class="section context"><div class="note restriction" id="container_integrations_binding__restriction"><span class="restrictiontitle">制約事項:</span> 一部の <span class="keyword">Bluemix</span> サービスは、コンテナーへの直接バインディングをサポートしていないため、コンテナー作成時にエラーになります。
+その場合は、まず、<span class="keyword">Bluemix</span> サービスを Cloud Foundry アプリにバインドしてから、そのアプリをコンテナーにバインドします。
+このアプリが、サービスとコンテナーの間のブリッジとして動作します。詳細については、<a href="container_troubleshoot.html#ts_bridge_app">Bluemix サービスがコンテナーに直接バインドされない</a>を参照してください。</div>
+</div><ol class="steps"><li class="step"><span class="cmd"><span class="keyword">Bluemix</span> <span class="keyword wintitle">カタログ</span>で、<span class="ph uicontrol">「コンテナー」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd">コンテナー・イメージをクリックします。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「詳細オプション」</span>を展開し、<span class="ph uicontrol">「サービスの選択」</span>で使用可能な <span class="keyword">Bluemix</span> サービスを選択します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「追加」</span>をクリックします。</span> <span class="keyword">Bluemix</span> サービスが<span class="ph uicontrol">「コンテナーに既にバインド済み」</span>フィールドに表示されます。</li>
+<li class="step"><span class="cmd">他のフィールドに入力して、<span class="ph uicontrol">「作成」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd">コンテナーが作成されたら、VCAP_SERVICES 情報が表示されることを確認します。</span> コンテナーの「概要」タブで、バインドしたサービスを見つけ、<span class="ph uicontrol">「資格情報の表示」</span>をクリックします。
+表示される情報は VCAP_SERVICES です。</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d58898e661" lang="ja-jp" id="container_integrations_binding_cli"><h2 class="topictitle2" id="d58898e661">CLI からのサービスとコンテナーのバインド</h2>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix</span> はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する <span class="keyword">Bluemix</span> サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。</p>
+<div class="section prereq">始めに、サービスを <span class="keyword">Bluemix</span> スペースに追加します。
+詳しくは、<a href="../services/reqnsi.html#req_instance">新しいサービス・インスタンスの要求</a>を参照してください。</div><div class="section context"><div class="note restriction" id="container_integrations_binding_cli__restriction"><span class="restrictiontitle">制約事項:</span> 一部の <span class="keyword">Bluemix</span> サービスは、コンテナーへの直接バインディングをサポートしていないため、コンテナー作成時にエラーになります。
+その場合は、まず、<span class="keyword">Bluemix</span> サービスを Cloud Foundry アプリにバインドしてから、そのアプリをコンテナーにバインドします。
+このアプリが、サービスとコンテナーの間のブリッジとして動作します。詳細については、<a href="container_troubleshoot.html#ts_bridge_app">Bluemix サービスがコンテナーに直接バインドされない</a>を参照してください。</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">次のコマンドの 1 つを使用して、<span class="keyword">Bluemix</span> サービス・インスタンスを新しいコンテナーにバインドします。</span> <div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+<ul class="ul choices"><li class="li choice">単一のコンテナーを作成する場合は、次のコマンドを使用します。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name <var class="keyword varname">container_name</var> -e "<var class="keyword varname">CCS_BIND_SRV</var>=<var class="keyword varname">service_instance1</var>,<var class="keyword varname">service_instance2</var>" registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image_name</var></code></pre>
+</li>
+<li class="li choice">コンテナー・グループを作成する場合は、次のコマンドを使用します。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">container_group_name</var> -e "<var class="keyword varname">CCS_BIND_SRV</var>=<var class="keyword varname">service_instance1</var>,<var class="keyword varname">service_instance2</var>" registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image_name</var></code></pre>
+</li>
+<li class="li choice">既に実行中のコンテナー・グループにサービスをバインドする場合、次のコマンドを使用します。
+このコマンドは、コンテナー・グループのみに使用可能です。
+一度にバインドできるサービスは 1 つのみです。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> service-bind <var class="keyword varname">container_group_name</var> <var class="keyword varname">service_instance</var></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">以下のコマンドのいずれかを使用して、サービス・インスタンスがコンテナーにバインドされていることを確認します。</span> <ul class="ul choices"><li class="li choice">単一コンテナーの場合は、以下のコマンドを使用します。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect CONTAINER</code></pre>
+</li>
+<li class="li choice">コンテナー・グループの場合は、以下のコマンドを使用します。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect GROUP</code></pre>
+</li>
+</ul>
+サービスの VCAP_SERVICES 情報が表示されることを確認します。
+<pre class="codeblock"><code>{
+ "VCAP_SERVICES": {
+  "&lt;service_name&gt;": [
+   {
+    "credentials": {
+     "hostname": "&lt;hostname_id&gt;",
+     "jdbcUrl": "&lt;jdbc_URL&gt;",
+     "name": "&lt;encoded_name&gt;",
+     "password": "&lt;encoded_password&gt;",
+     "port": "&lt;port_number&gt;",
+     "uri": "&lt;service_URI&gt;",
+     "username": "&lt;encoded_username&gt;"
+    },
+    "label": "&lt;service_name&gt;",
+    "name": "&lt;service_instance&gt;",
+    "plan": "&lt;plan_name&gt;",
+    "tags": [
+     "&lt;tag1&gt;",
+     "&lt;tag2&gt;",
+     "&lt;tag3&gt;"
+    ]
+   } </code></pre>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d58898e859" lang="ja-jp" id="container_alertnotification"><h2 class="topictitle2" id="d58898e859">コンテナーにデプロイされたアプリに <span class="keyword">Alert Notification</span> を使用してアラートを構成する</h2>
+<div class="body taskbody"><p class="shortdesc">ある条件や基準を満たした場合に通知を送信し、<span class="keyword">Alert Notification</span> サービスを使用してアラート通知を管理するように、アプリを構成します。
+<span class="keyword">Alert Notification</span> サービスを使用すると、関心のあるアラートをフィルタリングする、カスタムの通知ポリシーを作成できます。
+必要に応じてポリシー・フィルターを詳細化して、個人またはグループをアラートの受信者として指定したり、優先通知方式と頻度を指定したりすることができます。</p>
+<div class="section prereq">作業を開始する前に、『<a href="../services/reqnsi.html#req_instance">新しいサービス・インスタンスの要求</a>』トピックを確認し、<span class="keyword">Alert Notification</span> サービスのインスタンスを <span class="keyword">Bluemix</span> スペースに作成します。</div><div class="section context"><p>以下の手順では、サンプルの <span class="keyword">Alert Notification</span> ノード・アプリを実行するコンテナーの作成方法を例示します。
+テスト・アラートを <span class="keyword">Alert Notification</span> サービスに送信して、それらをアラート・ビューアー・ツールで検討できます。</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">サンプルの<a href="https://github.com/IBM-Bluemix/alert-notification-helloworld" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">アラート通知アプリ</a>をローカル・マシンにダウンロードして複製します。</span> <pre class="codeblock"><code>git clone <span class="ph filepath">https://github.com/IBM-Bluemix/alert-notification-helloworld.git</span></code></pre>
+
+
+<div class="steps note"><span class="notetitle">注:</span> Git プロジェクトを複製すると、<span class="ph filepath">alert-notification-helloworld</span> という名前の新しいフォルダーが、ローカル・マシンに作成されます。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">サンプルのアラート通知アプリを含むコンテナー・イメージをビルドし、プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーにプッシュします。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> CLI</a> にログインします。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph filepath">alert-notification-helloworld</span> ディレクトリーに移動します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">コンテナー・イメージを作成し、それをプライベート <span class="keyword">Bluemix</span> イメージ・レジストリーにプッシュします。<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</samp> を実行して名前空間についての情報を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間に置き換えます。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/alert .</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">コンテナー・イメージが正常に作成され、プッシュされたことを確認します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">イメージからコンテナーを作成し、それに <span class="keyword">Alert Notification</span> サービスをバインドします。
+<var class="keyword varname">&lt;my_namespace&gt;</var> を名前空間についての情報に置き換え、<var class="keyword varname">&lt;my_alert&gt;</var> を最初に作成したアラート通知サービス・インスタンスの名前に置き換えます。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name alertcontainer -p 8080 -e "CCS_BIND_SRV=<var class="keyword varname">&lt;my_alert&gt;</var>" registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/alert</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーが実行中であることを確認します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">パブリック IP アドレスを、コンテナーにバインドします。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">ユーザーのスペースで使用可能なパブリック IP アドレスをリストし、使用する IP アドレスをメモします。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ips</code></pre>
+
+
+<div class="note tip"><span class="tiptitle">ヒント:</span> ご使用のスペースで使用可能なパブリック IP アドレスがない場合、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</samp> を実行して、新規 IP アドレスを要求します。また、コンテナーから使用済み IP アドレスをアンバインドするには、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> unbind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> <var class="keyword varname">&lt;CONTAINER&gt;</var></samp> コマンドを実行します。</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">パブリック IP アドレスをコンテナーにバインドします。
+<var class="keyword varname">&lt;IP_ADDRESS&gt;</var> を、前の手順でメモした IP アドレスに置き換えます。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">&lt;IP_ADDRESS&gt;</var> alertcontainer</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">テスト・アラートを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">Web ブラウザーを開きます。</span></li>
+<li class="li substep substepexpand"><span class="cmd">IP アドレスとポートを、次のように Web ブラウザーに入力します。
+<samp class="ph codeph"><var class="keyword varname">&lt;IP_ADDRESS&gt;</var>:8080</samp>。</span> <span class="keyword">Alert Notification</span> Web アプリのウェルカム・ページが開きます。
+<p><img src="images/alertapp.png" width="400" alt="アラート通知 Web アプリのテスト"></p>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「サンプル・アラートの送信 (Send Sample Alert)」</span>ボタンをクリックして、テスト・アラートをアラート・ビューアーに送信します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword wintitle">アラート・ビューアー</span>を開き、テスト・アラートをレビューします。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="keyword">Bluemix</span> GUI から、実行中のコンテナー・インスタンスを選択します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「バインド済みサービス (Bound services)」</span>の下の <span class="keyword">Alert Notification</span> サービスをクリックします。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「起動 (Launch)」</span>をクリックして、アラート・ビューアーを開きます。</span></li>
+<li class="li substep"><span class="cmd">テスト・アラートを確認します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="keyword">Alert Notification</span> サービスの機能を試します。</span> <span class="keyword">Alert Notification</span> のドキュメンテーションで、<a href="../services/AlertNotification/alert_configuring.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">通知ポリシーを作成する</a>方法と<a href="../services/AlertNotification/alert_viewer.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">アラートを管理する</a>方法についての詳細を確認してください。</li>
+</ol>
+</div>
+</article><article class="topic concept nested1" role="article" aria-labelledby="d58898e1179" lang="ja-jp" id="container_pipeline_ov"><h2 class="topictitle2" id="d58898e1179"><span class="keyword">Continuous Delivery</span> サービス内で <span class="keyword">Delivery Pipeline</span> を使用してコンテナーのデプロイメントを自動化する</h2>
+<div class="body conbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Continuous Delivery</span> の一部である <span class="keyword">Delivery Pipeline</span> を使用して、アプリのビルドと <span class="keyword">Bluemix</span> へのコンテナーのデプロイメントを自動化します。</p>
+<div class="p"><span class="keyword">Delivery Pipeline</span> では、以下がサポートされます。<ul><li>Docker イメージのビルド</li>
+<li>コンテナー内のイメージを <span class="keyword">Bluemix</span> にデプロイする</li>
+</ul>
+</div>
+<div><p><span class="keyword">Delivery Pipeline</span> を使用したコンテナーのデプロイのクイック・スタート・ガイド:</p>
+
+<ol><li>コードが含まれる Git リポジトリーを作成します。</li>
+<li>リポジトリーのルート・ディレクトリーに <samp class="ph codeph">Dockerfile</samp> を含めます。</li>
+<li>メニューから、<span class="ph menucascade"><span class="ph uicontrol">「サービス」</span> &gt; <span class="ph uicontrol">「DevOps」</span></span>をクリックし、<span class="ph uicontrol">「パイプライン」</span>をクリックします。</li>
+<li><span class="ph menucascade"><span class="ph uicontrol">「パイプラインの作成 (Create Pipeline)」</span> &gt; <span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span></span>をクリックします。</li>
+<li><span class="ph uicontrol">「作成」</span>をクリックします。 </li>
+<li>Git リポジトリーをツールチェーンに追加します。<ol type="a" id="container_pipeline_ov__ol_mvk_s3v_vz"><li><span class="ph uicontrol">「ツールの追加」</span>をクリックします。</li>
+<li>リポジトリーをホストする Git サービスのタイプをクリックします。</li>
+<li>リポジトリーの構成の詳細情報を入力します。</li>
+<li><span class="ph uicontrol">「統合の作成」</span>をクリックします。</li>
+</ol>
+</li>
+<li>ツールチェーンの「概要」ページから、<span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span>をクリックします。</li>
+<li>ビルド・ジョブが含まれたビルド・ステージを作成します。<ol type="a" id="container_pipeline_ov__ol_pds_x3v_vz"><li><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</li>
+<li><span class="ph uicontrol">「入力」</span>タブの<span class="ph uicontrol">「入力タイプ」</span>で、<span class="ph uicontrol">「Git リポジトリー」</span>を選択します。</li>
+<li><span class="ph uicontrol">「ジョブ」</span>タブで、ビルド・ジョブを追加します。<span class="ph uicontrol">「ビルダー・タイプ」</span>には、<span class="ph uicontrol">「<span class="keyword">Bluemix</span> 上の IBM Containers (IBM Containers on Bluemix)」</span>を選択します。</li>
+</ol>
+</li>
+<li>デプロイメント・ジョブが含まれたデプロイメント・ステージを作成します。<ol type="a" id="container_pipeline_ov__ol_ahk_djv_vz"><li><span class="ph uicontrol">「入力」</span>タブの<span class="ph uicontrol">「入力タイプ」</span>で、<span class="ph uicontrol">「ビルド成果物 (Build Artifacts)」</span>を選択します。</li>
+<li><span class="ph uicontrol">「ジョブ」</span>タブの<span class="ph uicontrol">「デプロイヤー・タイプ」</span>で、<span class="ph uicontrol">「Bluemix 用 IBM コンテナー・サービス (IBM Container Service for Bluemix)」</span>を選択します。</li>
+</ol>
+</li>
+<li>コード変更をプッシュするか、<span class="keyword">Delivery Pipeline</span> のビルド・ステージで「ステージの実行」アイコンをクリックすることで、デプロイメントを実行します。</li>
+</ol>
+</div><div>もっと詳しい情報が必要な場合は、以下のトピックを参照してください。<ul><li><a href="container_integrations.html#container_single_pipeline_ov" title="Delivery Pipeline を使用して、単一コンテナーの作成とデプロイメントを自動化します。">Delivery Pipeline を使用した単一コンテナーの作成</a></li>
+<li><a href="container_integrations.html#container_group_pipeline_ov" title="Delivery Pipeline を使用して、コンテナー・グループのビルドとデプロイを自動化します。">Delivery Pipeline を使用したコンテナー・グループの作成</a></li>
+</ul>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d58898e1405" lang="ja-jp" id="container_single_pipeline_ov"><h3 class="topictitle3" id="d58898e1405"><span class="keyword">Delivery Pipeline</span> を使用した単一コンテナーの作成</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Delivery Pipeline</span> を使用して、単一コンテナーの作成とデプロイメントを自動化します。</p>
+</div>
+<article class="topic task nested3" role="article" aria-labelledby="d58898e1464" lang="ja-jp" id="container_single_pipeline_build"><h4 class="topictitle4" id="d58898e1464"><span class="keyword">Delivery Pipeline</span> を使用したコンテナーのビルド・ステージの作成</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> には、ビルド・サービスが組み込まれています。ビルド・サービスは、ソース・コードを取り込み、Docker イメージをビルドして、これをコンテナー・レジストリーに公開します。<span class="keyword">IBM
+Bluemix Continuous Delivery</span> の一部である <span class="keyword">Delivery Pipeline</span> は、コンテナー・ビルド・サービスを使用するビルド・ジョブを備えています。このビルド・ジョブは、リポジトリー内のソース・コードを取得し、このコードから Docker イメージをビルドして、ビルド番号と一致するようにこのイメージをバージョニング (タグ付け) し、結果として得られたイメージを <span class="keyword">Bluemix</span> 上にある組織の <span class="keyword">IBM
+Bluemix Container Service</span> レジストリーにプッシュします。
+これにより組織のメンバーは、結果として得られたイメージを組織内のスペースにデプロイできます。</p>
+<div class="section prereq" id="container_single_pipeline_build__prereq"> <div class="p">始める前に、以下の情報を考慮してください。<ul><li><span class="keyword">Continuous Delivery</span> 資料で <a href="../services/ContinuousDelivery/pipeline_about.html"><span class="keyword">Delivery Pipeline</span>について</a>のトピックを参照して、ビルド、ステージ、基本的なパイプライン機能についてよく理解します。</li>
+<li><span class="keyword">Bluemix</span> <span class="keyword wintitle">カタログ</span>をチェックすることによって、組織のプライベート・イメージ・レジストリー内にある、コンテナーで使用する既存のイメージを特定します。</li>
+<li>サービスをコンテナーにバインドすることが分かっている場合は、ブリッジとして使用するアプリを作成します。詳しくは、<a href="container_integrations.html#unique_940136581" title="サービスをコンテナーに直接バインドすることはできません。代わりに、パイプライン・ステージで環境プロパティーを構成することによって、サービスをアプリにバインドしてから、そのアプリをコンテナーにバインドすることができます。このアプリが、サービスとコンテナーの間のブリッジとして機能します。"><span class="keyword">Delivery Pipeline</span> を使用したサービスとコンテナーのバインド</a>を参照してください。</li>
+</ul>
+</div>
+ </div><p class="li stepsection"><span class="keyword">Delivery Pipeline</span> から Docker イメージをビルドします。</p><ol class="steps" id="container_single_pipeline_build__steps"><li class="step stepexpand"><span class="cmd">ツールチェーンに関連付けられている Git リポジトリーのルート・ディレクトリー内に Dockerfile を作成して、リポジトリーにコミットします。</span></li>
+<li class="step stepexpand"><span class="cmd">ツールチェーンの「概要」ページから、<span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd">ビルド・ステージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ステージに名前を付けます。</span> 例えば、<samp class="ph codeph"><var class="keyword varname">Build</var></samp> と指定します。</li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「入力タイプ」</span>で<span class="ph uicontrol">「Git リポジトリー」</span> を選択します。</span></li>
+<li class="li substep"><span class="cmd">その他のフィールドについて、値を確認して、必要に応じて更新します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブをクリックします。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">ビルド・ステージでビルド・ジョブを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブで、<span class="ph uicontrol">「ジョブの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ビルド」</span>ジョブ・タイプを選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ビルダー・タイプ」</span>には、<span class="ph uicontrol">「<span class="keyword">Bluemix</span> 上の IBM Containers (IBM Containers on Bluemix)」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要な場合、<span class="keyword">Bluemix</span> のターゲット、組織、およびスペースを更新します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「キャッシュに入れられたレイヤーの使用 (Use cached layers)」</span>では、他のソースからコンテンツを動的にプルするレイヤーのリフレッシュを強制する必要がある場合、このフィールドをクリアします。</span> <p>例えば、<samp class="ph codeph">Dockerfile</samp> に <samp class="ph codeph">apt-get install</samp> または <samp class="ph codeph">wget</samp> コマンドが含まれている場合は、<span class="ph uicontrol">「キャッシュに入れられたレイヤーの使用 (Use cached layers)」</span>チェック・ボックスをクリアして、これらの動的依存関係がビルドごとに収集されるようにします。</p>
+ <div class="steps note"><span class="notetitle">注:</span> <span class="ph uicontrol">「キャッシュに入れられたレイヤーの使用 (Use cached layers)」</span>フィールドをクリアした場合、
+キャッシュに入れられたレイヤーがイメージのビルド時に使用されないため、ビルド時間が長くなります。</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「イメージ名」</span>フィールドに、ビルドするイメージの名前を入力します。Docker 命名規則に従うために、小文字、数字、およびハイフン (-) のみを使用してください。</span> イメージは、ビルドされるときに、イメージ名とビルド番号でタグ付けされます。 例えば、イメージ名として <samp class="ph codeph">myappimage</samp> を入力した場合、ビルド番号 4 の結果のイメージの名前は、<samp class="ph codeph">myappimage:4</samp> となります。</li>
+<li class="li substep substepexpand"><span class="cmd">Dockerfile がプロジェクトのルート・ディレクトリー内にない場合、Build Script セクションで、Dockerfile へのパスを以下の個所に追加します。</span> <ol type="i"><li>Run unit tests セクションの前に、ディレクトリー変更コマンドと共にフォルダー名を追加します。<div class="p"><pre class="codeblock"><code>cd <var class="keyword varname">&lt;folder&gt;</var></code></pre>
+</div>
+</li>
+<li><var class="keyword varname">${WORKSPACE}</var> 変数が表示されているすべての個所に、フォルダー名を付加します。<var class="keyword varname">${WORKSPACE}</var> 変数は自動的にプロジェクトのルート・ディレクトリーを検出します。<div class="p">例<pre class="codeblock"><code>BUILD_COMMAND="build --pull --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}/<var class="keyword varname">&lt;folder&gt;</var>"</code></pre>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「ステージの実行」</span>アイコンをクリックして、ステージでエラーを出さずにビルドが行われることを確認します。</span> ビルドが失敗した場合、ログを確認してエラーを訂正します。ステージが失敗せずに完了した場合、組織のイメージ・レジストリーを調べて、イメージがビルドされたことを確認します。</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e1752" lang="ja-jp" id="container_pipeline_vulnerability"><h4 class="topictitle4" id="d58898e1752">(オプション) パイプラインの一部としてのイメージ・セキュリティーの検査</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">コンテナーがデプロイされる前に、Vulnerability Advisor を使用してイメージ内のセキュリティーや構成の問題を見つけます。</span>
+</div>
+<div class="section context"><div class="p">このスキャンが含まれる一般的なパイプライン・セットアップは以下のとおりです。<ul><li>ソース・ファイルをビルドするビルド・ステージ</li>
+<li>以下のジョブが含まれている処理ステージ:<ul><li>コンテナー・ビルドを実行するビルド・ジョブ</li>
+<li>イメージに対して Vulnerability Advisor を実行するテスト・ジョブ</li>
+</ul>
+</li>
+<li>コンテナーをデプロイするデプロイ・ステージ</li>
+</ul>
+</div>
+
+<div class="note tip"><span class="tiptitle">ヒント:</span> このタスクでは、コンテナー・イメージをビルドするジョブとは異なるステージで Vulnerability Advisor のテスト・ジョブを作成する方法の概略を説明します。
+または、同じステージを使用することもできます。
+別のステージを作成することにした場合は、環境変数を設定する必要はありません。</div>
+</div><p class="li stepsection">Vulnerability Advisor スキャンを作成します。</p><ol class="steps" id="container_pipeline_vulnerability__steps"><li class="step stepexpand"><span class="cmd">処理ステージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ステージに名前を付けます。</span> 例えば、<samp class="ph codeph"><var class="keyword varname">Processing</var></samp> と指定します。</li>
+<li class="li substep"><span class="cmd">入力タイプとして<span class="ph uicontrol">「ビルド成果物」</span>を選択します。</span></li>
+<li class="li substep"><span class="cmd">ステージとジョブの値を確認し、必要であれば更新します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブをクリックします。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">この処理ステージに、コード・スキャンを実行するためのテスト・ジョブを追加します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブで、<span class="ph uicontrol">「ジョブの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd">ジョブ・タイプとして<span class="ph uicontrol">「テスト」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「テスター・タイプ (Tester type)」</span>で<span class="ph uicontrol">「IBM Vulnerability Advisor」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要な場合、<span class="keyword">Bluemix</span> のターゲット、組織、およびスペースを更新します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「分析が完了するまで待機する分数 (Minutes to wait for analysis to complete)」</span>に 0 から 59 分の値を入力します。</span> デフォルト値は <var class="keyword varname">5</var> 分です。
+ジョブの最後に、コンソール・ログにダッシュボードへの URL が示されます。<p>この期間が終了するまでにスキャンが完了しなかった場合、ジョブは失敗しますが、スキャン分析は実行され続け、ダッシュボードで表示できます。スキャンの完了後に、ジョブを再実行した場合、スキャン要求は再実行依頼されず、パイプライン・ジョブは正常に完了できます。あるいは、スキャンが成功したらパイプラインがブロックされないように構成することができます。これについては、次のステップで説明します。</p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">タイムアウト時の動作を決定するには、<span class="ph uicontrol">「このジョブが失敗した場合、このステージの実行を停止する (Stop running this stage if this job fails)」</span>チェック・ボックスを選択するか、クリアします。</span> <p>このジョブが失敗した場合にステージ内の後のジョブと後のステージの両方が実行されないようにブロックするようにジョブを構成できます。あるいは、後のジョブおよびステージをブロックせずに続行するようにステージを構成できます。ジョブの状態は、
+主なセキュリティー問題の有無で判定されます。</p>
+
+
+<p>主なセキュリティー問題があると、ジョブが失敗します。
+失敗したジョブがあった場合、<span class="ph uicontrol">「このジョブが失敗した場合、このステージの実行を停止する (Stop running this stage if this job fails)」</span>での選択に応じて、ステージとパイプラインの処理が停止するか、または続行が許可されるかが決まります。
+処理すべき問題がレポートに多数含まれていることが分かっている場合は、スキャンに長時間かかる可能性があるため、ステージを続行するように構成することをお勧めします。このシナリオでは、スキャンが長時間かかるという理由だけでは、ジョブおよびステージの残りを停止する必要がないことがあります。</p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">ジョブがビルド・ジョブと同じステージにある場合、リポジトリー名の環境変数を設定します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「環境プロパティー」</span>タブをクリックします。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「プロパティーの追加」</span>をクリックし、<span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドで、<samp class="ph codeph">FULL_REPOSITORY_NAME</samp> と入力します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「値」</span>フィールドには、何も入力しないでください。</span> コンテナー・ビルド・ジョブに指定されたイメージ名がこの環境変数を通して渡されます。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「ステージの実行」</span>アイコンをクリックして、ステージでエラーを出さずにビルドが行われることを確認します。</span></li>
+</ol>
+<div class="section result"><div class="p">Vulnerability Advisor スキャンの結果を表示するには、ジョブの完了後に<span class="ph uicontrol">「結果およびヒストリーの表示 (View results and history)」</span>をクリックします。<span class="ph uicontrol">「ログ」</span>タブで、以下のセクションを探してください。<pre class="pre msgblock"><code>image registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">image</var> vulnerability results found</code></pre>
+</div>
+
+<p>Vulnerability Advisor トピックの<a href="va/va_index.html#va_reviewing">イメージ脆弱性の検討</a>に記載されているように、脆弱パッケージ、セキュリティー問題、および推奨される改善の一覧がリストされます。
+<a href="va/va_index.html#va_report">イメージの問題の解決</a>に、よく起きる問題を解決するための Dockerfile コードをいくつか記載しています。</p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e2020" lang="ja-jp" id="container_pipeline_cleanup"><h4 class="topictitle4" id="d58898e2020">(オプション) <span class="keyword">Delivery Pipeline</span> によるイメージのクリーンアップ</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> のビルド・ジョブは、未使用のイメージのバージョンを自動的にクリーンアップします。使用中のイメージは削除されません。保持するイメージ・バージョンの数を指定したり、
+イメージ・クリーンアップを無効にしたりすることができます。</p>
+<p class="li stepsection">プロジェクトで保持されるイメージのバージョンの数を変更するには、以下のようにします。</p><ol class="steps"><li class="step"><span class="cmd">パイプラインで、ビルド・ステージの構成を開きます。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「環境プロパティー」</span>タブで、<span class="ph uicontrol">「プロパティーの追加」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドで、<samp class="ph codeph">IMAGE_LIMIT</samp> コマンドを入力します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「値」</span>フィールドで、このプロジェクト用にレジストリーに保持するイメージのバージョンの数を入力します。デフォルトでは、プロジェクトあたり最新の 5 つのイメージのバージョンが保持されます。イメージのクリーンアップを無効にして、すべてのイメージのバージョンを保持するには、値を <samp class="ph codeph">-1</samp> に設定します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e2150" lang="ja-jp" id="container_binding_pipeline"><h4 class="topictitle4" id="d58898e2150">(オプション) <span class="keyword">Delivery Pipeline</span> を使用したサービスとコンテナーのバインド</h4>
+<div class="body taskbody"><p class="shortdesc">サービスをコンテナーに直接バインドすることはできません。代わりに、パイプライン・ステージで環境プロパティーを構成することによって、サービスをアプリにバインドしてから、そのアプリをコンテナーにバインドすることができます。このアプリが、サービスとコンテナーの間のブリッジとして機能します。</p>
+<div class="section prereq"><p id="container_binding_pipeline__context"><span class="keyword">Bluemix</span> には、アプリにバインドするサービス (ClearDB MySQL データベースや Question and Answer など) の名前と詳細を定義する環境変数が一式用意されています。
+これらの環境変数を <samp class="ph codeph">VCAP_SERVICES</samp> と呼びます。
+コンテナーをサービスにバインドすると、そのコンテナーとサービスの間のブリッジとして機能するアプリを介して、<samp class="ph codeph">VCAP_SERVICES</samp> が環境変数としてコンテナーに渡されます。それにより、コンテナーは、エンドポイント、ユーザー、パスワードといった、サービスからの情報を調べることができます。</p>
+
+<p>環境プロパティーを構成する前に、既にサービスがバインドされている既存アプリを特定するか、または、<span class="keyword">Bluemix</span> GUI またはコマンド・ラインを使用してアプリを作成します。詳細については、<a href="container_troubleshoot.html#ts_bridge_app">Bluemix サービスがコンテナーに直接バインドされない</a>を参照してください。</p>
+</div><p class="li stepsection">ブリッジ・アプリをコンテナーにバインドします。</p><ol class="steps"><li class="step"><span class="cmd">ツールチェーンの「概要」ページから、<span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd">パイプライン・ステージを開き、<span class="ph uicontrol">「環境プロパティー」</span>タブをクリックします。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「プロパティーの追加」</span>をクリックし、<span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドで、コマンド <kbd class="ph userinput">BIND_TO</kbd> を入力します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「値」</span>フィールドで、ブリッジ・アプリの名前 (<var class="keyword varname">pipeline_bridge_app</var> など) を入力します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd">パイプラインを実行して構成をテストします。</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">ヒント:</span> ブリッジ・アプリがコンテナーにバインドされた後には、ブリッジ・アプリを削除しないでください。バインド済みのブリッジ・アプリを削除すると、コンテナーがハングします。ブリッジ・アプリを削除する場合は、コンテナーを削除し、そのブリッジ・アプリを使用している他のすべてのコンテナーを削除してから、削除してください。</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e2308" lang="ja-jp" id="container_single_pipeline_deploy"><h4 class="topictitle4" id="d58898e2308"><span class="keyword">Delivery Pipeline</span> によるコンテナーのデプロイメント・ステージの作成</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Delivery Pipeline</span> を使用することによって、コンテナーのデプロイメント・ステージを作成できます。</p>
+<div class="section prereq"><div class="p">開始前に、以下のことを行います。<ul><li><a href="container_integrations.html#container_single_pipeline_build" title="IBM Bluemix Container Service には、ビルド・サービスが組み込まれています。ビルド・サービスは、ソース・コードを取り込み、Docker イメージをビルドして、これをコンテナー・レジストリーに公開します。IBM Bluemix Continuous Delivery の一部である Delivery Pipeline は、コンテナー・ビルド・サービスを使用するビルド・ジョブを備えています。このビルド・ジョブは、リポジトリー内のソース・コードを取得し、このコードから Docker イメージをビルドして、ビルド番号と一致するようにこのイメージをバージョニング (タグ付け) し、結果として得られたイメージを Bluemix 上にある組織の IBM Bluemix Container Service レジストリーにプッシュします。 これにより組織のメンバーは、結果として得られたイメージを組織内のスペースにデプロイできます。">ビルド・ステージを作成する</a>。</li>
+<li><a href="https://github.com/Osthanes/deployscripts/blob/master/deploycontainer.sh" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">単一コンテナー用のデフォルトのデプロイメント・スクリプトを確認する</a>。
+デフォルト・スクリプトを fork して編集することも、代わりに独自のスクリプトを作成して使用することもできます。</li>
+<li><a href="../services/ContinuousDelivery/pipeline_deploy_var.html"><span class="keyword">Delivery Pipeline</span> サービスに用意されている環境変数のリストを確認する</a>。</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">ツールチェーンの「概要」ページから、<span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span>をクリックします。</span></li>
+<li class="step stepexpand" id="container_single_pipeline_deploy__deploy_stage"><span class="cmd">デプロイメント・ステージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ステージに名前を付けます。</span> 例えば、<samp class="ph codeph"><var class="keyword varname">Deploy</var></samp> と指定します。</li>
+<li class="li substep"><span class="cmd">入力タイプとして<span class="ph uicontrol">「ビルド成果物」</span>を選択します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_single_pipeline_deploy__deployment_job"><span class="cmd">ステージでデプロイメント・ジョブを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブで、<span class="ph uicontrol">「ジョブの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd">ジョブ・タイプとして<span class="ph uicontrol">「デプロイ」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">デプロイヤー・タイプとして、<span class="ph uicontrol">「<span class="keyword">Bluemix</span> 上の IBM Container サービス (IBM Container service on Bluemix)」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">組織およびスペースについて、値を確認して、必要に応じて更新します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「デプロイメント戦略 (Deployment strategy)」</span>フィールドで、以下のいずれかの値を入力します。</span> <ul><li><span class="ph uicontrol">red_black</span> - アプリの新しいバージョンをデプロイします。デプロイメントが成功した場合、アプリの以前のデプロイメントが削除され、IP アドレスまたは経路が新しいバージョンにマップされます。</li>
+<li><span class="ph uicontrol">clean</span> - アプリケーションの以前のすべてのデプロイメントが削除されます。</li>
+</ul>
+ <div class="note tip"><span class="tiptitle">ヒント:</span> <samp class="ph codeph">CONCURRENT_VERSIONS</samp> 環境プロパティーは、アクティブに保つアプリ・デプロイメントのバージョンの数を設定します。デフォルト値は 1 つのバージョンです。例えば、<samp class="ph codeph">CONCURRENT_VERSIONS</samp> を 2 に設定して、IP アドレスを 1 つ使用している場合は、最新のデプロイメントが IP アドレスにバインドされますが、前のバージョンはクイック・スタンバイ用にデプロイされたままになります。
+<p>アプリのすべてのデプロイメントを常に削除するには、<span class="ph uicontrol">「環境プロパティー」</span>タブで、<samp class="ph codeph">CONCURRENT_VERSIONS</samp> を <samp class="ph codeph">0</samp> に設定します。</p>
+</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドに、デプロイするコンテナーの名前を入力します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">ポートとして、コンテナーの公開ポートを入力します。</span> 複数のポートは、コンマ (,) で区切ります。<div class="note tip" id="container_single_pipeline_deploy__private_container"><span class="tiptitle">ヒント:</span> ポートを指定せずにデフォルトのデプロイメント・スクリプトを使用すると、ポート 80 が自動的に公開されます。
+デフォルトのデプロイメント・スクリプトを使用する場合にコンテナーをプライベートにするには、以下の手順を実行します。<ol type="i"><li>デプロイメント戦略として <kbd class="ph userinput">simple</kbd> と入力します。</li>
+<li> <span class="ph uicontrol">「ポート」</span>フィールドをブランクのままにします。</li>
+<li>simple デプロイメントでは、前のデプロイメントがクリーンアップされないため、別のデプロイメント・ステージを作成してそれらをクリーンアップすることができます。
+2 番目のデプロイメント・ステージの<span class="ph uicontrol">「デプロイメント戦略 (Deployment strategy)」</span>を <kbd class="ph userinput">clean</kbd> に設定します。</li>
+</ol>
+</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">オプションのデプロイメント引数がある場合は入力します。</span> 例えば、バックエンド・データベースの場所の環境変数がアプリに必要な場合には、以下の行を含めることができます。
+<pre class="codeblock"><code>--env MY_DB_HOSTNAME_PROPERTY=<var class="keyword varname">mydbhostname</var></code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">独自のデプロイメント・スクリプトを作成した場合は、<span class="ph uicontrol">「デプロイヤー・スクリプト (Deployer script)」</span>セクションを編集してそのスクリプトを使用します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">次の行をコピーし、自分のリポジトリーを使用するように更新します。</span> <pre class="pre screen"><code>git_retry clone https://github.com/Osthanes/deployscripts.git deployscripts</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">次の行を編集して、自分のスクリプトを使用するようにします。</span> <pre class="pre screen"><code>/bin/bash deployscripts/deploycontainer.sh</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+</ol>
+</div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d58898e2580" lang="ja-jp" id="container_group_pipeline_ov"><h3 class="topictitle3" id="d58898e2580"><span class="keyword">Delivery Pipeline</span> を使用したコンテナー・グループの作成</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Delivery Pipeline</span> を使用して、コンテナー・グループのビルドとデプロイを自動化します。</p>
+</div>
+<article class="topic task nested3" role="article" aria-labelledby="d58898e2645" lang="ja-jp" id="container_group_pipeline_build"><h4 class="topictitle4" id="d58898e2645"><span class="keyword">Delivery Pipeline</span> を使用したコンテナー・グループのビルド・ステージの作成</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> には、ビルド・サービスが組み込まれています。ビルド・サービスは、ソース・コードを取り込み、Docker イメージをビルドして、これをコンテナー・レジストリーに公開します。<span class="keyword">IBM
+Bluemix Continuous Delivery</span> の一部である <span class="keyword">Delivery Pipeline</span> は、コンテナー・ビルド・サービスを使用するビルド・ジョブを備えています。このビルド・ジョブは、リポジトリー内のソース・コードを取得し、このコードから Docker イメージをビルドして、ビルド番号と一致するようにこのイメージをバージョニング (タグ付け) し、結果として得られたイメージを <span class="keyword">Bluemix</span> 上にある組織の <span class="keyword">IBM
+Bluemix Container Service</span> レジストリーにプッシュします。
+これにより組織のメンバーは、結果として得られたイメージを組織内のスペースにデプロイできます。</p>
+<div class="section prereq"> <div class="p">始める前に、以下の情報を考慮してください。<ul><li><span class="keyword">Continuous Delivery</span> 資料で <a href="../services/ContinuousDelivery/pipeline_about.html"><span class="keyword">Delivery Pipeline</span>について</a>のトピックを参照して、ビルド、ステージ、基本的なパイプライン機能についてよく理解します。</li>
+<li><span class="keyword">Bluemix</span> <span class="keyword wintitle">カタログ</span>をチェックすることによって、組織のプライベート・イメージ・レジストリー内にある、コンテナーで使用する既存のイメージを特定します。</li>
+<li>サービスをコンテナーにバインドすることが分かっている場合は、ブリッジとして使用するアプリを作成します。詳しくは、<a href="container_integrations.html#unique_940136581" title="サービスをコンテナーに直接バインドすることはできません。代わりに、パイプライン・ステージで環境プロパティーを構成することによって、サービスをアプリにバインドしてから、そのアプリをコンテナーにバインドすることができます。このアプリが、サービスとコンテナーの間のブリッジとして機能します。"><span class="keyword">Delivery Pipeline</span> を使用したサービスとコンテナーのバインド</a>を参照してください。</li>
+</ul>
+</div>
+ </div><p class="li stepsection"><span class="keyword">Delivery Pipeline</span> から Docker イメージをビルドします。</p><ol class="steps"><li class="step stepexpand"><span class="cmd">ツールチェーンに関連付けられている Git リポジトリーのルート・ディレクトリー内に Dockerfile を作成して、リポジトリーにコミットします。</span></li>
+<li class="step stepexpand"><span class="cmd">ツールチェーンの「概要」ページから、<span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd">ビルド・ステージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ステージに名前を付けます。</span> 例えば、<samp class="ph codeph"><var class="keyword varname">Build</var></samp> と指定します。</li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「入力タイプ」</span>で<span class="ph uicontrol">「Git リポジトリー」</span> を選択します。</span></li>
+<li class="li substep"><span class="cmd">その他のフィールドについて、値を確認して、必要に応じて更新します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブをクリックします。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">ビルド・ステージでビルド・ジョブを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブで、<span class="ph uicontrol">「ジョブの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ビルド」</span>ジョブ・タイプを選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ビルダー・タイプ」</span>には、<span class="ph uicontrol">「<span class="keyword">Bluemix</span> 上の IBM Containers (IBM Containers on Bluemix)」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要な場合、<span class="keyword">Bluemix</span> のターゲット、組織、およびスペースを更新します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「キャッシュに入れられたレイヤーの使用 (Use cached layers)」</span>では、他のソースからコンテンツを動的にプルするレイヤーのリフレッシュを強制する必要がある場合、このフィールドをクリアします。</span> <p>例えば、<samp class="ph codeph">Dockerfile</samp> に <samp class="ph codeph">apt-get install</samp> または <samp class="ph codeph">wget</samp> コマンドが含まれている場合は、<span class="ph uicontrol">「キャッシュに入れられたレイヤーの使用 (Use cached layers)」</span>チェック・ボックスをクリアして、これらの動的依存関係がビルドごとに収集されるようにします。</p>
+ <div class="steps note"><span class="notetitle">注:</span> <span class="ph uicontrol">「キャッシュに入れられたレイヤーの使用 (Use cached layers)」</span>フィールドをクリアした場合、
+キャッシュに入れられたレイヤーがイメージのビルド時に使用されないため、ビルド時間が長くなります。</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「イメージ名」</span>フィールドに、ビルドするイメージの名前を入力します。Docker 命名規則に従うために、小文字、数字、およびハイフン (-) のみを使用してください。</span> イメージは、ビルドされるときに、イメージ名とビルド番号でタグ付けされます。 例えば、イメージ名として <samp class="ph codeph">myappimage</samp> を入力した場合、ビルド番号 4 の結果のイメージの名前は、<samp class="ph codeph">myappimage:4</samp> となります。</li>
+<li class="li substep substepexpand"><span class="cmd">Dockerfile がプロジェクトのルート・ディレクトリー内にない場合、Build Script セクションで、Dockerfile へのパスを以下の個所に追加します。</span> <ol type="i"><li>Run unit tests セクションの前に、ディレクトリー変更コマンドと共にフォルダー名を追加します。<div class="p"><pre class="codeblock"><code>cd <var class="keyword varname">&lt;folder&gt;</var></code></pre>
+</div>
+</li>
+<li><var class="keyword varname">${WORKSPACE}</var> 変数が表示されているすべての個所に、フォルダー名を付加します。<var class="keyword varname">${WORKSPACE}</var> 変数は自動的にプロジェクトのルート・ディレクトリーを検出します。<div class="p">例<pre class="codeblock"><code>BUILD_COMMAND="build --pull --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}/<var class="keyword varname">&lt;folder&gt;</var>"</code></pre>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「ステージの実行」</span>アイコンをクリックして、ステージでエラーを出さずにビルドが行われることを確認します。</span> ビルドが失敗した場合、ログを確認してエラーを訂正します。ステージが失敗せずに完了した場合、組織のイメージ・レジストリーを調べて、イメージがビルドされたことを確認します。</li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e2937" lang="ja-jp" id="unique_1923123982"><h4 class="topictitle4" id="d58898e2937">(オプション) パイプラインの一部としてのイメージ・セキュリティーの検査</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">コンテナーがデプロイされる前に、Vulnerability Advisor を使用してイメージ内のセキュリティーや構成の問題を見つけます。</span>
+</div>
+<div class="section context"><div class="p">このスキャンが含まれる一般的なパイプライン・セットアップは以下のとおりです。<ul><li>ソース・ファイルをビルドするビルド・ステージ</li>
+<li>以下のジョブが含まれている処理ステージ:<ul><li>コンテナー・ビルドを実行するビルド・ジョブ</li>
+<li>イメージに対して Vulnerability Advisor を実行するテスト・ジョブ</li>
+</ul>
+</li>
+<li>コンテナーをデプロイするデプロイ・ステージ</li>
+</ul>
+</div>
+
+<div class="note tip"><span class="tiptitle">ヒント:</span> このタスクでは、コンテナー・イメージをビルドするジョブとは異なるステージで Vulnerability Advisor のテスト・ジョブを作成する方法の概略を説明します。
+または、同じステージを使用することもできます。
+別のステージを作成することにした場合は、環境変数を設定する必要はありません。</div>
+</div><p class="li stepsection">Vulnerability Advisor スキャンを作成します。</p><ol class="steps" id="unique_1923123982__steps"><li class="step stepexpand"><span class="cmd">処理ステージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ステージに名前を付けます。</span> 例えば、<samp class="ph codeph"><var class="keyword varname">Processing</var></samp> と指定します。</li>
+<li class="li substep"><span class="cmd">入力タイプとして<span class="ph uicontrol">「ビルド成果物」</span>を選択します。</span></li>
+<li class="li substep"><span class="cmd">ステージとジョブの値を確認し、必要であれば更新します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブをクリックします。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">この処理ステージに、コード・スキャンを実行するためのテスト・ジョブを追加します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブで、<span class="ph uicontrol">「ジョブの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd">ジョブ・タイプとして<span class="ph uicontrol">「テスト」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「テスター・タイプ (Tester type)」</span>で<span class="ph uicontrol">「IBM Vulnerability Advisor」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">必要な場合、<span class="keyword">Bluemix</span> のターゲット、組織、およびスペースを更新します。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「分析が完了するまで待機する分数 (Minutes to wait for analysis to complete)」</span>に 0 から 59 分の値を入力します。</span> デフォルト値は <var class="keyword varname">5</var> 分です。
+ジョブの最後に、コンソール・ログにダッシュボードへの URL が示されます。<p>この期間が終了するまでにスキャンが完了しなかった場合、ジョブは失敗しますが、スキャン分析は実行され続け、ダッシュボードで表示できます。スキャンの完了後に、ジョブを再実行した場合、スキャン要求は再実行依頼されず、パイプライン・ジョブは正常に完了できます。あるいは、スキャンが成功したらパイプラインがブロックされないように構成することができます。これについては、次のステップで説明します。</p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">タイムアウト時の動作を決定するには、<span class="ph uicontrol">「このジョブが失敗した場合、このステージの実行を停止する (Stop running this stage if this job fails)」</span>チェック・ボックスを選択するか、クリアします。</span> <p>このジョブが失敗した場合にステージ内の後のジョブと後のステージの両方が実行されないようにブロックするようにジョブを構成できます。あるいは、後のジョブおよびステージをブロックせずに続行するようにステージを構成できます。ジョブの状態は、
+主なセキュリティー問題の有無で判定されます。</p>
+
+
+<p>主なセキュリティー問題があると、ジョブが失敗します。
+失敗したジョブがあった場合、<span class="ph uicontrol">「このジョブが失敗した場合、このステージの実行を停止する (Stop running this stage if this job fails)」</span>での選択に応じて、ステージとパイプラインの処理が停止するか、または続行が許可されるかが決まります。
+処理すべき問題がレポートに多数含まれていることが分かっている場合は、スキャンに長時間かかる可能性があるため、ステージを続行するように構成することをお勧めします。このシナリオでは、スキャンが長時間かかるという理由だけでは、ジョブおよびステージの残りを停止する必要がないことがあります。</p>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">ジョブがビルド・ジョブと同じステージにある場合、リポジトリー名の環境変数を設定します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「環境プロパティー」</span>タブをクリックします。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「プロパティーの追加」</span>をクリックし、<span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドで、<samp class="ph codeph">FULL_REPOSITORY_NAME</samp> と入力します。</span></li>
+<li class="li substep"><span class="cmd"><span class="ph uicontrol">「値」</span>フィールドには、何も入力しないでください。</span> コンテナー・ビルド・ジョブに指定されたイメージ名がこの環境変数を通して渡されます。</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「ステージの実行」</span>アイコンをクリックして、ステージでエラーを出さずにビルドが行われることを確認します。</span></li>
+</ol>
+<div class="section result"><div class="p">Vulnerability Advisor スキャンの結果を表示するには、ジョブの完了後に<span class="ph uicontrol">「結果およびヒストリーの表示 (View results and history)」</span>をクリックします。<span class="ph uicontrol">「ログ」</span>タブで、以下のセクションを探してください。<pre class="pre msgblock"><code>image registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">image</var> vulnerability results found</code></pre>
+</div>
+
+<p>Vulnerability Advisor トピックの<a href="va/va_index.html#va_reviewing">イメージ脆弱性の検討</a>に記載されているように、脆弱パッケージ、セキュリティー問題、および推奨される改善の一覧がリストされます。
+<a href="va/va_index.html#va_report">イメージの問題の解決</a>に、よく起きる問題を解決するための Dockerfile コードをいくつか記載しています。</p>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e3205" lang="ja-jp" id="unique_1492987670"><h4 class="topictitle4" id="d58898e3205">(オプション) <span class="keyword">Delivery Pipeline</span> によるイメージのクリーンアップ</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> のビルド・ジョブは、未使用のイメージのバージョンを自動的にクリーンアップします。使用中のイメージは削除されません。保持するイメージ・バージョンの数を指定したり、
+イメージ・クリーンアップを無効にしたりすることができます。</p>
+<p class="li stepsection">プロジェクトで保持されるイメージのバージョンの数を変更するには、以下のようにします。</p><ol class="steps"><li class="step"><span class="cmd">パイプラインで、ビルド・ステージの構成を開きます。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「環境プロパティー」</span>タブで、<span class="ph uicontrol">「プロパティーの追加」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドで、<samp class="ph codeph">IMAGE_LIMIT</samp> コマンドを入力します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「値」</span>フィールドで、このプロジェクト用にレジストリーに保持するイメージのバージョンの数を入力します。デフォルトでは、プロジェクトあたり最新の 5 つのイメージのバージョンが保持されます。イメージのクリーンアップを無効にして、すべてのイメージのバージョンを保持するには、値を <samp class="ph codeph">-1</samp> に設定します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e3335" lang="ja-jp" id="unique_940136581"><h4 class="topictitle4" id="d58898e3335">(オプション) <span class="keyword">Delivery Pipeline</span> を使用したサービスとコンテナーのバインド</h4>
+<div class="body taskbody"><p class="shortdesc">サービスをコンテナーに直接バインドすることはできません。代わりに、パイプライン・ステージで環境プロパティーを構成することによって、サービスをアプリにバインドしてから、そのアプリをコンテナーにバインドすることができます。このアプリが、サービスとコンテナーの間のブリッジとして機能します。</p>
+<div class="section prereq"><p id="unique_940136581__context"><span class="keyword">Bluemix</span> には、アプリにバインドするサービス (ClearDB MySQL データベースや Question and Answer など) の名前と詳細を定義する環境変数が一式用意されています。
+これらの環境変数を <samp class="ph codeph">VCAP_SERVICES</samp> と呼びます。
+コンテナーをサービスにバインドすると、そのコンテナーとサービスの間のブリッジとして機能するアプリを介して、<samp class="ph codeph">VCAP_SERVICES</samp> が環境変数としてコンテナーに渡されます。それにより、コンテナーは、エンドポイント、ユーザー、パスワードといった、サービスからの情報を調べることができます。</p>
+
+<p>環境プロパティーを構成する前に、既にサービスがバインドされている既存アプリを特定するか、または、<span class="keyword">Bluemix</span> GUI またはコマンド・ラインを使用してアプリを作成します。詳細については、<a href="container_troubleshoot.html#ts_bridge_app">Bluemix サービスがコンテナーに直接バインドされない</a>を参照してください。</p>
+</div><p class="li stepsection">ブリッジ・アプリをコンテナーにバインドします。</p><ol class="steps"><li class="step"><span class="cmd">ツールチェーンの「概要」ページから、<span class="ph uicontrol">「<span class="keyword">Delivery Pipeline</span>」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd">パイプライン・ステージを開き、<span class="ph uicontrol">「環境プロパティー」</span>タブをクリックします。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「プロパティーの追加」</span>をクリックし、<span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「名前」</span>フィールドで、コマンド <kbd class="ph userinput">BIND_TO</kbd> を入力します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「値」</span>フィールドで、ブリッジ・アプリの名前 (<var class="keyword varname">pipeline_bridge_app</var> など) を入力します。</span></li>
+<li class="step"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+<li class="step"><span class="cmd">パイプラインを実行して構成をテストします。</span></li>
+</ol>
+<div class="section postreq"><div class="note tip"><span class="tiptitle">ヒント:</span> ブリッジ・アプリがコンテナーにバインドされた後には、ブリッジ・アプリを削除しないでください。バインド済みのブリッジ・アプリを削除すると、コンテナーがハングします。ブリッジ・アプリを削除する場合は、コンテナーを削除し、そのブリッジ・アプリを使用している他のすべてのコンテナーを削除してから、削除してください。</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d58898e3493" lang="ja-jp" id="container_group_pipeline_deploy"><h4 class="topictitle4" id="d58898e3493"><span class="keyword">Delivery Pipeline</span> を使用したコンテナー・グループのデプロイメント・ステージの作成</h4>
+<div class="body taskbody"><p class="shortdesc"><span class="keyword">Delivery Pipeline</span> を使用することによって、コンテナー・グループのデプロイメント・ステージを作成できます。</p>
+<div class="section prereq"><div class="p">開始前に、以下のことを行います。<ul><li><a href="container_integrations.html#container_group_pipeline_build" title="IBM Bluemix Container Service には、ビルド・サービスが組み込まれています。ビルド・サービスは、ソース・コードを取り込み、Docker イメージをビルドして、これをコンテナー・レジストリーに公開します。IBM Bluemix Continuous Delivery の一部である Delivery Pipeline は、コンテナー・ビルド・サービスを使用するビルド・ジョブを備えています。このビルド・ジョブは、リポジトリー内のソース・コードを取得し、このコードから Docker イメージをビルドして、ビルド番号と一致するようにこのイメージをバージョニング (タグ付け) し、結果として得られたイメージを Bluemix 上にある組織の IBM Bluemix Container Service レジストリーにプッシュします。 これにより組織のメンバーは、結果として得られたイメージを組織内のスペースにデプロイできます。">ビルド・ステージを作成する</a>。</li>
+<li><a href="https://github.com/Osthanes/deployscripts/blob/master/deploygroup.sh" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">コンテナー・グループのデフォルトのデプロイメント・スクリプトを確認する</a>。デフォルト・スクリプトを fork して編集することも、代わりに独自のスクリプトを作成して使用することもできます。</li>
+<li><a href="../services/ContinuousDelivery/pipeline_deploy_var.html"><span class="keyword">Delivery Pipeline</span> サービスに用意されている環境変数のリストを確認する</a>。</li>
+</ul>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">デプロイメント・ステージを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep"><span class="cmd"><span class="ph uicontrol">「ステージの追加」</span>をクリックします。</span></li>
+<li class="li substep"><span class="cmd">ステージに名前を付けます。</span> 例えば、<samp class="ph codeph"><var class="keyword varname">Deploy</var></samp> と指定します。</li>
+<li class="li substep"><span class="cmd">入力タイプとして<span class="ph uicontrol">「ビルド成果物」</span>を選択します。</span></li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">ステージでデプロイメント・ジョブを作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「ジョブ」</span>タブで、<span class="ph uicontrol">「ジョブの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd">ジョブ・タイプとして<span class="ph uicontrol">「デプロイ」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">デプロイヤー・タイプとして、<span class="ph uicontrol">「<span class="keyword">Bluemix</span> 上の IBM Container サービス (IBM Container service on Bluemix)」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">組織とスペースを選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">デプロイメント戦略には次のいずれかの値を入力します。</span> <ul><li><span class="ph uicontrol">red_black</span> - アプリの新しいバージョンをデプロイします。デプロイメントが成功した場合、アプリの以前のデプロイメントが削除され、IP アドレスまたは経路が新しいバージョンにマップされます。</li>
+<li><span class="ph uicontrol">clean</span> - アプリケーションの以前のすべてのデプロイメントが削除されます。</li>
+</ul>
+</li>
+<li class="li substep substepexpand"><span class="cmd">名前として、デプロイするコンテナーの名前を入力します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">ポートとして、コンテナーの公開ポートを入力します。</span> コンテナー・グループの場合、指定できるポートは 1 つだけです。
+<div class="note tip"><span class="tiptitle">ヒント:</span> ポートを指定せずにデフォルトのデプロイメント・スクリプトを使用すると、ポート 80 が自動的に公開されます。
+デフォルトのデプロイメント・スクリプトを使用する場合にコンテナーをプライベートにするには、以下の手順を実行します。<ol type="i"><li>デプロイメント戦略として <kbd class="ph userinput">simple</kbd> と入力します。</li>
+<li> <span class="ph uicontrol">「ポート」</span>フィールドをブランクのままにします。</li>
+<li>simple デプロイメントでは、前のデプロイメントがクリーンアップされないため、別のデプロイメント・ステージを作成してそれらをクリーンアップすることができます。
+2 番目のデプロイメント・ステージの<span class="ph uicontrol">「デプロイメント戦略 (Deployment strategy)」</span>を <kbd class="ph userinput">clean</kbd> に設定します。</li>
+</ol>
+</div>
+</li>
+<li class="li substep substepexpand"><span class="cmd">オプションのデプロイメント引数がある場合は入力します。</span> 例えば、バックエンド・データベースの場所の環境変数がアプリに必要な場合には、以下の行を含めることができます。
+<pre class="codeblock"><code>--env MY_DB_HOSTNAME_PROPERTY=<var class="keyword varname">mydbhostname</var></code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">単一コンテナー・デプロイメントの代わりにコンテナー・グループ・デプロイメントをセットアップします。「デプロイヤー・スクリプト (Deployer script)」セクションで、# を削除してコンテナー・グループのスクリプトのコメントを外します。</span> <pre class="pre screen"><code>/bin/bash deployscripts/deploygroup.sh</code></pre>
+以下のように、# を追加して単一のコンテナーのスクリプトをコメント化します。
+<pre class="pre screen"><code>#/bin/bash deployscripts/deploycontainer.sh</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">独自のデプロイメント・スクリプトを作成した場合は、<span class="ph uicontrol">「デプロイヤー・スクリプト (Deployer script)」</span>セクションを編集してそのスクリプトを使用します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">次の行をコピーし、自分のリポジトリーを使用するように更新します。</span> <pre class="pre screen"><code>git_retry clone https://github.com/Osthanes/deployscripts.git deployscripts</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">次の行を編集して、自分のスクリプトを使用するようにします。</span> <pre class="pre screen"><code>/bin/bash deployscripts/deploygroup.sh</code></pre>
+</li>
+</ol>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">基本コンテナー・グループを構成するには、次の表の環境変数をすべて設定します。</span> これらのプロパティーを使用すると、コマンド・ラインまたは <span class="keyword">Bluemix</span> ユーザー・インターフェースからコンテナーをデプロイするときに設定するオプションの一部を設定できます。
+その他のプロパティーについては、ユーザー・インターフェースの「デプロイヤー・スクリプト (Deployer script)」セクション内のコメントを参照してください。<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「環境プロパティー」</span>タブをクリックし、<span class="ph uicontrol">「プロパティーの追加」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">「文字プロパティー」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">環境プロパティーの名前と値を入力します。</span> <div class="tablenoborder"><table summary="" id="container_group_pipeline_deploy__common_properties" class="defaultstyle"><thead><tr><th id="d58898e3778" class="thleft">プロパティー</th>
+<th id="d58898e3780" class="thleft">説明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d58898e3778 "><span class="ph uicontrol">AUTO_RECOVERY</span></td>
+<td headers="d58898e3780 "><kbd class="ph userinput">true</kbd> または <kbd class="ph userinput">false</kbd><p><span class="ph">コンテナー・グループで自動リカバリーが有効になり、そのグループが 10 分間実行すると、そのグループのロード・バランサーは HTTP 要求を介して、グループ内の各コンテナー・インスタンスの正常性に関する定期的な検査を開始します。
+コンテナー・インスタンスが 100 秒以内に応答しない場合、それは非アクティブとしてマークされます。
+非アクティブなコンテナー・インスタンスはグループから削除されて、自動リカバリーにより再作成されます。
+自動リカバリーでは、グループ内にコンテナー・インスタンスをリカバリーする試行を 3 回行います。
+3 回目の試行の後、そのグループでは、自動リカバリーによるコンテナー・インスタンスのリカバリーが 60 分間行われなくなります。
+60 分後に、自動リカバリーのプロセスが再開します。</span></p>
+</td>
+</tr>
+<tr><td headers="d58898e3778 "><span class="ph uicontrol">CONCURRENT_VERSIONS</span></td>
+<td headers="d58898e3780 ">数値<p><samp class="ph systemoutput">CONCURRENT_VERSIONS</samp> 環境プロパティーは、アクティブに保つアプリ・デプロイメントのバージョンの数を設定します。デフォルト値は 1 つのバージョンです。例えば、<samp class="ph systemoutput">CONCURRENT_VERSIONS</samp> が 2 に設定されていて、コンテナー・グループをデプロイする場合、2 つのグループが経路にマップされ、トラフィックを受信します。</p>
+
+<p>アプリの全デプロイメントを常に削除するには、「環境プロパティー」タブで <samp class="ph systemoutput">CONCURRENT_VERSIONS</samp> を <samp class="ph systemoutput">0</samp> に設定します。</p>
+</td>
+</tr>
+<tr><td headers="d58898e3778 "><span class="ph uicontrol">DESIRED_INSTANCES</span></td>
+<td headers="d58898e3780 ">数値<p>例: <samp class="ph codeph">4</samp></p>
+<span class="ph">アプリに必要なコンテナー・グループのインスタンス数は、予想されるワークロードや、アプリが要求を処理できる時間によって異なります。
+例えば、マルチタスキングやネットワーク接続によって、アプリに必要なインスタンス数は左右されます。</span><p><span class="ph">コンテナー・グループの可用性と耐障害性を高めるために、予想されるワークロードを処理する最低限の数のインスタンスではなく余分にインスタンスを組み込むことを検討してください。
+インスタンスを余分に組み込んでおくことで、さらに別のインスタンスが異常終了した場合でもワークロードを処理できます。障害が起きたインスタンスをワークロードに影響を与えずに自動復旧するには、1 つ余分にインスタンスを組み込みます。2 つが同時に障害を発生した場合に対応できるようにするには、2 つ余分にインスタンスを組み込みます。このセットアップは <var class="keyword varname">N+2</var> パターンです。
+<var class="keyword varname">N</var> は要求を処理するインスタンスの数、<var class="keyword varname">+2</var> は追加の 2 つのインスタンスです。</span></p>
+</td>
+</tr>
+<tr><td headers="d58898e3778 "><span class="ph uicontrol">ROUTE_DOMAIN</span></td>
+<td headers="d58898e3780 ">文字列または <samp class="ph codeph">none</samp><p>例: <samp class="ph codeph">mycustomdomain.com</samp></p>
+<p>デフォルトのシステム・ドメインは <samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> であり、SSL 証明書が既に用意されているため、追加の構成を行わずに HTTPS を使用してコンテナー・グループにアクセスできます。
+カスタム・ドメインを使用するには、パブリック DNS サーバー上でカスタム・ドメインを登録し、<span class="keyword">Bluemix</span> でカスタム・ドメインを構成してから、カスタム・ドメインをパブリック DNS サーバー上の <span class="keyword">Bluemix</span> システム・ドメインにマップする必要があります。</p>
+<p>ポートを指定しない場合は、<samp class="ph codeph"><span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp> が使用されます。
+<samp class="ph codeph">none</samp> を指定した場合、ドメインは作成されません。</p>
+<p>ホスト名とドメインに <samp class="ph codeph">none</samp> を指定した場合、同じスペース内の他のコンテナーからはそのグループにアクセスできますが、パブリックからはアクセスできません。</p>
+</td>
+</tr>
+<tr><td headers="d58898e3778 "><span class="ph uicontrol">ROUTE_HOSTNAME</span></td>
+<td headers="d58898e3780 ">文字列または <samp class="ph codeph">none</samp><p>例: <samp class="ph codeph">myapp</samp></p>
+<p>ホスト名 (例えば <var class="keyword varname">mycontainerhost</var>)。
+ホスト名に下線 (_) を含めないでください。ホストとドメインの組み合わせが、完全なパブリック経路 URL (例えば <samp class="ph codeph">http://mycontainerhost.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp>) を形成します。</p>
+<p>ホスト名を指定しない場合は、ホスト名が自動的に作成されます。
+<samp class="ph codeph">none</samp> を指定した場合、ホスト名は作成されません。</p>
+<p>ホスト名とドメインに <samp class="ph codeph">none</samp> を指定した場合、同じスペース内の他のコンテナーからはそのグループにアクセスできますが、パブリックからはアクセスできません。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">「保存」</span>をクリックします。</span></li>
+</ol>
+</div>
+</article></article></article><article class="topic tutorial tutorialIntro nested1" role="article" aria-labelledby="d58898e3920" lang="ja-jp" id="container_cfapp_tutorial_intro"><h2 class="topictitle2" id="d58898e3920">チュートリアル: Cloud Foundry Node.js アプリをコンテナーにデプロイする</h2>
+<div class="body  tutorialIntroBody"><p class="shortdesc">Cloud Foundry を使用して以前にデプロイしたアプリを、<span class="keyword">IBM
+Bluemix Container Service</span> を使用してコンテナーにデプロイできます。</p>
+<div class="section tutorialDesc longDesc"></div><section class="section learningObjectives tutorialLearningObjectives" role="region" aria-labelledby="d58898e3969"><h3 class="sectiontitle" id="d58898e3969">達成目標</h3>
+<ul><li>コンテナーをデプロイする一般的なプロセスを学習します。</li>
+<li>イメージを構築するために Dockerfile に組み込む必要のあるものについて学習します。</li>
+</ul>
+</section>
+<section class="section timeRequired tutorialTimeRequired" role="region" aria-labelledby="d58898e3978"><h3 class="sectiontitle" id="d58898e3978">所要時間</h3>30 分</section>
+<section role="region" aria-labelledby="d58898e3982" class="section section audienceDesc"><h3 class="sectiontitle" id="d58898e3982">対象読者</h3>Cloud Foundry アプリの開発者</section><section role="region" aria-labelledby="d58898e3986" class="section section prerequisites"><h3 class="sectiontitle" id="d58898e3986">前提条件</h3>
+<ul><li><a href="container_cli_cfic_install.html#container_cli_cfic_install" title="ネイティブの Docker CLI コマンドを実行してご使用のコンテナーを管理するには、IBM Bluemix Container Service プラグイン (bx ic) をインストールします。"><span class="keyword">IBM
+Bluemix Container Service</span> CLI のインストール</a></li>
+<li><a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> CLI にログインします。</a></li>
+</ul>
+</section></div>
+<article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d58898e4027" lang="ja-jp" id="container_cfapp_tutorial_lesson1"><h3 class="topictitle3" id="d58898e4027">レッスン 1: Cloud Foundry Node.js アプリのコードをダウンロードする</h3>
+<div class="body taskbody"><p class="shortdesc">Node.js コードを準備します。コードを持っていない場合は、このチュートリアルで使用するスターター・コードを <span class="keyword">Bluemix</span> からダウンロードできます。</p>
+<div class="section prereq">開始する前に、<a href="container_cli_cfic_install.html#container_cli_cfic_install" title="ネイティブの Docker CLI コマンドを実行してご使用のコンテナーを管理するには、IBM Bluemix Container Service プラグイン (bx ic) をインストールします。"><span class="keyword">IBM
+Bluemix Container Service</span> CLI をインストール</a>して、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。">ログイン</a>します。</div><p class="li stepsection">アプリのコードを取得して整理するには、次の手順を実行します。</p><ol class="steps"><li class="step stepexpand"><span class="cmd"><kbd class="ph userinput"><var class="keyword varname">cf-pi-myinitials</var></kbd> という名前のディレクトリーを作成し、その中にナビゲートします。</span> このディレクトリーには、Docker イメージをビルドし、Node.js アプリを実行するために必要なすべてのファイルを保存します。ディレクトリーには任意の名前を使用できます。例にある名前を使用する場合は、<var class="keyword varname">myinitials</var> を自分のイニシャルで置き換えます (例: <var class="keyword varname">cf-pi-ms</var>)。
+<pre class="codeblock"><code>mkdir <var class="keyword varname">cf-pi-myinitials</var> &amp;&amp; cd <var class="keyword varname">cf-pi-myinitials</var></code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">このディレクトリーに、Node.js アプリのコード・ファイルと、すべての関連ファイルをコピーします。</span> 独自の Node.js アプリのコードを使用することも、<span class="keyword">Bluemix</span> から Personal Insights アプリをダウンロードすることもできます。
+<p><span class="keyword">Bluemix</span> から Personal Insights アプリのコードをダウンロードするには、次の手順を実行します。</p>
+<ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="keyword">Bluemix</span> の<span class="keyword wintitle">カタログ</span>で、<span class="ph uicontrol">「ボイラープレート」</span>の<span class="ph uicontrol">「Personality Insights Node.js Web スターター」</span>をクリックします。</span> このボイラープレートには、ブログ、ツイート、フォーラム投稿を通して人が生成するテキストから、コグニティブ特性やソーシャル特性のスペクトルを、<span class="keyword">IBM Watson™ Personality Insights</span> サービスを使用して抽出する Node.js アプリが含まれています。</li>
+<li class="li substep substepexpand"><span class="cmd">アプリ名 <kbd class="ph userinput"><var class="keyword varname">cf-pi-myinitials</var></kbd> を入力して<span class="ph uicontrol">「作成」</span>をクリックします。</span> ボイラープレートのアプリ・コードにアクセスするには、まず CF アプリを <span class="keyword">Bluemix</span> にデプロイする必要があります。アプリには任意の名前を使用できます。例にある名前を使用する場合は、<var class="keyword varname">myinitials</var> を自分の名前で置き換えて (例: <var class="keyword varname">cf-pi-ms</var>)、その名前が固有であることを確認します。
+<p>このデプロイメントでは、<var class="keyword varname">cf-pi-myinitials</var> という名前のアプリのほかに、<var class="keyword varname">cf-pi-myinitials-personality_insights</var> という名前の <span class="keyword">IBM
+Watson Personality Insights</span> サービスのインスタンスを作成します。</p>
+
+<p>アプリがデプロイされると、<strong>「コマンド・ライン・インターフェースでアプリをデプロイする」</strong>ための指示が表示されます。</p>
+</li>
+<li class="li substep substepexpand"><span class="cmd">ステップ 1 で、<span class="ph uicontrol">「スターター・コードをダウンロード」</span>をクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd">.zip ファイルを解凍し、自分のディレクトリーにアプリ・ファイルを保存します。</span></li>
+</ol>
+</li>
+</ol>
+<div class="section result">これで、Cloud Foundry アプリのコードをコンテナー化する用意ができました。</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d58898e4220" lang="ja-jp" id="container_cfapp_tutorial_lesson2"><h3 class="topictitle3" id="d58898e4220">レッスン 2: CF アプリのコードを使用して Docker イメージを作成する</h3>
+<div class="body taskbody"><p class="shortdesc">Node.js アプリのコードとコンテナーに必要な構成を含む Dockerfile を作成します。その後、その Dockerfile から Docker イメージをビルドし、それを専用 <span class="keyword">Bluemix</span> レジストリーにプッシュします。</p>
+<p class="li stepsection">アプリのコードから Docker イメージを作成するには、次の手順を実行します。</p><ol class="steps"><li class="step stepexpand"><span class="cmd"><span class="ph filepath">Dockerfile</span> を作成し、これを基礎にしてコンテナーを作成します。</span> コンピューター上の任意の CLI エディターまたはテキスト・エディターを使用して、Dockerfile を作成できます。次の例は、<a href="https://www.nano-editor.org/dist/v2.2/nano.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">nano editor</a> を使用して Dockerfile ファイルを作成する方法を示しています。<pre class="codeblock"><code>nano Dockerfile</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd">次のスクリプトを Dockerfile にコピーします。</span> <pre class="codeblock"><code>#Use the IBM Node image as a base image
+FROM registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmnode:latest
+
+#Expose the port for your Personal Insights app, and set 
+#it as an environment variable as expected by cf apps
+ENV PORT=3000
+EXPOSE 3000
+ENV NODE_ENV production
+
+#Copy all app files from the current directory into the app 
+#directory in your container. Set the app directory
+#as the working directory
+ADD . /app
+WORKDIR /app
+
+#Install any necessary requirements from package.json
+RUN npm install
+
+#Sleep before the app starts. This command ensures that the
+#IBM Containers networking is finished before the app starts. 
+CMD (sleep 60; npm start)
+
+#Start the Personal Insight app. 
+CMD ["node", "/app/app.js"]</code></pre>
+</li>
+<li class="step stepexpand"><span class="cmd"><span class="ph uicontrol">Ctrl + o</span> を押して、変更を保存します。<span class="ph uicontrol">ENTER</span> を押して、変更を確認します。<span class="ph uicontrol">ctrl + x</span> を押して、nano エディターを終了します。</span></li>
+<li class="step stepexpand"><span class="cmd">アプリ・コードからイメージを作成し、それを専用 <span class="keyword">Bluemix</span> レジストリーにプッシュします。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var> .</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="container_cfapp_tutorial_lesson2__table_build" class="defaultstyle"><thead><tr><th colspan="2" id="d58898e4328" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d58898e4328 "><samp class="ph codeph">build</samp></td>
+<td style="width: 50%" headers="d58898e4328 "><samp class="ph codeph">build</samp> コマンド。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4328 "><samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var></samp></td>
+<td style="width: 50%" headers="d58898e4328 ">専用 <span class="keyword">Bluemix</span> レジストリーのパス。これには、固有の名前空間とイメージの名前が含まれます。この例では、イメージの名前に CF ノード・アプリと同じ名前 (<var class="keyword varname">cf-pi-myinitials</var>) を使用していますが、専用レジストリーにあるイメージの任意の名前を選択できます。名前空間がわからない場合は、次のコマンドを実行して調べることができます。
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> namespace-get</code></pre>
+</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4328 "><samp class="ph codeph">.</samp></td>
+<td style="width: 50%" headers="d58898e4328 ">Dockerfile の場所。Dockerfile の入ったディレクトリーからビルド・コマンドを実行している場合は、ピリオド (.) を入力します。その他の場合は、Dockerfile への相対パスを使用します。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+<div class="section result">指定したレジストリー内にイメージが作成されます。<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> コマンドを実行すると、イメージが作成されたことを確認できます。<pre class="pre screen"><code>$ <span class="ph"><samp class="ph codeph">bx ic</samp></span> images
+REPOSITORY                                   TAG     IMAGE ID      CREATED         SIZE
+registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var>  latest  b02b7a24c35f  48 seconds ago  251.3 MB</code></pre>
+</div></div>
+</article><article class="topic task tutorialLesson nested2" role="article" aria-labelledby="d58898e4397" lang="ja-jp" id="container_cfapp_tutorial_lesson3"><h3 class="topictitle3" id="d58898e4397">レッスン 3: イメージからコンテナーをデプロイする</h3>
+<div class="body taskbody"><p class="shortdesc">アプリを <span class="keyword">Bluemix</span> のコンテナー・グループとしてデプロイします。</p>
+<p class="li stepsection">アプリをコンテナー・グループにデプロイするには、次の手順を実行します。</p><ol class="steps"><li class="step stepexpand"><span class="cmd"> 前のレッスンで作成したイメージから、次のコマンドを実行してコンテナー・グループを作成します。</span>  <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name <var class="keyword varname">cf-pi-myinitials</var> -m 64 -n <var class="keyword varname">pi-app-myinitials</var> -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -p 3000 -e CCS_BIND_SRV=<var class="keyword varname">cf-pi-myinitials-personal_insights</var> --desired 3 --auto --anti registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var>:latest</code></pre>
+
+
+<div class="p"><div class="tablenoborder"><table summary="" id="container_cfapp_tutorial_lesson3__table_group_create" class="defaultstyle"><thead><tr><th colspan="2" id="d58898e4484" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">group-create</samp></td>
+<td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">group-create</samp> コマンド。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">--name <var class="keyword varname">cf-pi-myinitials</var></samp></td>
+<td style="width: 50%" headers="d58898e4484 "><span class="keyword">Bluemix</span> GUI に表示する、コンテナーの名前。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">-m 64</samp></td>
+<td style="width: 50%" headers="d58898e4484 ">グループ内の各インスタンスに 64 MB のメモリーを割り当てます。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">-n <var class="keyword varname">pi-app-myinitials</var></samp></td>
+<td style="width: 50%" headers="d58898e4484 ">経路 URL に含めるホスト名。
+<div class="note tip"><span class="tiptitle">ヒント:</span> スターター・コードを使用している場合は、前のレッスンで Cloud Foundry アプリをデプロイするために使用したのとは異なる名前をホスト名に使用してください。同じホストを使用し、CF アプリがまだ実行中の場合は、コンテナー・グループとアプリ間でロード・バランシングが発生します。</div>
+</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">-d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></samp></td>
+<td style="width: 50%" headers="d58898e4484 ">経路 URL に含めるドメイン・ネーム。カスタム・ドメインがある場合を除いて、<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> を使用します。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">-p 3000</samp></td>
+<td style="width: 50%" headers="d58898e4484 ">公開するポート番号。経路 URL に対する接続は、コンテナーのポート 3000 に転送されます。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">-e
+CCS_BIND_SRV=<var class="keyword varname">cf-pi-myinitials-personal_insights</var></samp></td>
+<td style="width: 50%" headers="d58898e4484 "><span class="keyword">IBM
+Watson Personality Insights</span> サービス・インスタンスをコンテナーにバインドし、Personal Insights アプリに入力するテキストからコグニティブ特性とソーシャル特性を分析できるようにします。このサービス・インスタンスは、レッスン 1 の CF アプリのデプロイメントの一部として作成したものです。
+<div class="p">サービス・インスタンスの名前がわからない場合は、次のコマンドを実行します。
+<pre class="codeblock"><code>bx service list</code></pre>
+</div>
+</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">--desired 3</samp></td>
+<td style="width: 50%" headers="d58898e4484 ">コンテナー・グループ内に作成する単一コンテナー・インスタンスの数。すべてのインスタンスは同じです。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">--auto</samp></td>
+<td style="width: 50%" headers="d58898e4484 ">コンテナー・グループの自動リカバリーを有効にします。グループ内のインスタンスの 1 つが使用不可になると、自動的に別のインスタンスが作成され、反応しなくなったインスタンスと置き換えられます。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">--anti</samp></td>
+<td style="width: 50%" headers="d58898e4484 ">コンテナー・グループのアンチアフィニティーを有効にします。グループの各インスタンスが別々の物理計算ノードに配置されます。これにより、1 つのハードウェア障害によってグループ内のすべてのコンテナーが異常終了してしまう可能性が低くなります。</td>
+</tr>
+<tr><td style="width: 50%" headers="d58898e4484 "><samp class="ph codeph">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var>/<var class="keyword varname">cf-pi-myinitials</var>:latest</samp></td>
+<td style="width: 50%" headers="d58898e4484 ">宛先リポジトリー・パス。固有の名前空間と宛先イメージの名前が含まれます。
+この例では、イメージの名前に CF ノード・アプリと同じ名前 (<var class="keyword varname">cf-pi-myinitials</var>) を使用しています。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーのデプロイとネットワーキングのセットアップが完了するまで数分待ちます。コンテナーのデプロイが完了すると、ブラウザーに <span class="ph filepath">http://<var class="keyword varname">pi-app-myinitials</var>.<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span>/</span> という URL を入力したときに Personal Insights アプリが表示されます。</span></li>
+<li class="step stepexpand"><span class="cmd">CF アプリを削除します。</span> これで、CF アプリのコードがコンテナーにデプロイされました。CF アプリを削除すれば、割り当て量の使用を最大化できます。
+<pre class="codeblock"><code>cf delete <var class="keyword varname">cf-pi-myinitials</var></code></pre>
+<span class="ph uicontrol">y</span> を入力して、削除を確認します。</li>
+</ol>
+<div class="section result">アプリがコンテナーにデプロイされました。</div></div>
+</article></article></article></div></main></body></html>

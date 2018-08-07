@@ -1,0 +1,453 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="使用 IBM Bluemix Container Service，在 IBM Cloud 上管理 Docker 容器內的應用程式。容器是用來包裝應用程式及其所有相依關係的標準方式，讓應用程式能夠在環境之間移動，以及在不變更的情況下執行。 它們具有資源隔離及配置的優點，但是比虛擬機器（舉例來說）更具可攜性與效率。">
+<meta name="keywords" content="單一容器, IBM Bluemix Container Service, 容器群組, 可擴充群組, 移轉, CLI, docker rm, bx ic, rm, IBM Containers, 容器, 移除, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>在 IBM Bluemix Container Service 中執行單一及可擴充容器</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d94020e6" id="cs_classic"><h1 class="topictitle1" id="d94020e6">在 <span class="keyword">IBM
+Bluemix Container Service</span> </h1>
+<div class="abstract"><div class="shortdesc">使用 <span class="keyword">IBM®
+Bluemix® Container Service</span>，在 IBM Cloud 上管理 Docker 容器內的應用程式。<span class="ph">容器是用來包裝應用程式及其所有相依關係的標準方式，讓應用程式能夠在環境之間移動，以及在不變更的情況下執行。</span> 它們具有資源隔離及配置的優點，但是比虛擬機器（舉例來說）更具可攜性與效率。
+</div>
+
+
+<p>您可以使用<span class="ph">單一及可擴充容器</span>來部署您的應用程式，而不是叢集，但若使用叢集，您會有更大的選項範圍可用來自訂環境。請考慮使用<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">叢集</a>作為容器編排工具，而不要使用<span class="ph">單一及可擴充容器</span>。</p>
+</div>
+<aside role="complementary" aria-labelledby="d94020e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d94020e104" id="cs_classic_migrating"><h2 class="topictitle2" id="d94020e104">將<span class="ph">單一及可擴充容器</span>移轉至 Kubernetes 叢集</h2>
+<div class="body taskbody"><p class="shortdesc">您可以在 Kubernetes 叢集中重建<span class="ph">單一及可擴充容器</span>。</p>
+<div class="section context" id="cs_classic_migrating__context_iy5_jgr_mz"><div class="p">在此頁面中：
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_containers" title="您可以從單一及可擴充容器建立指令取得內容並且建立配置 Script，以在 Kubernetes 叢集中部署類似的容器 Pod。">在叢集中重建單一及可擴充容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_autoscaling">移轉自動擴充</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_compose">將 Docker Compose 配置移轉至叢集</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_single_remove">移除單一容器</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_group_remove">移除容器群組</a></div>
+</div>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d94020e167" id="migrating_containers"><h3 class="topictitle3" id="d94020e167">在叢集中重建<span class="ph">單一及可擴充容器</span></h3>
+<div class="body taskbody"><p class="shortdesc">您可以從<span class="ph">單一及可擴充容器</span>建立指令取得內容並且建立配置 Script，以在 Kubernetes 叢集中部署類似的容器 Pod。</p>
+<div class="section context" id="migrating_containers__context_r35_hpq_mz"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d94020e179" id="migrate_groups"><h4 class="topictitle4" id="d94020e179">容器群組範例</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">如果您過去使用過容器群組，則可以在叢集中建立類似的設定。</span>
+ 如果您使用過容器群組的 VPN 服務，並且使用的是付費帳戶，<a href="https://knowledgelayer.softlayer.com/procedure/how-order-vyatta" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">則必須同時訂購叢集 VLAN 的 Vyatta</a>。</div>
+<div class="section context" id="migrate_groups__context_mdr_dhq_rz"><p>您可能已使用下列指令建立容器群組。按一下指令選項，以瞭解如何在叢集中實作類似的功能。</p>
+
+<div class="p"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create <a href="cs_classic.html#migrate_groups__group_anti">--anti</a>
+<a href="cs_classic.html#migrate_groups__group_auto">--auto</a>
+<a href="cs_classic.html#migrate_groups__group_domain">-d
+<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></a>
+<a href="cs_classic.html#migrate_groups__group_host">-n
+<var class="keyword varname">mycontainerhost</var></a>
+<a href="cs_classic.html#migrate_groups__group_desired">--desired 3</a>
+<a href="cs_classic.html#migrate_groups__group_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></a>
+<a href="cs_classic.html#migrate_groups__group_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_groups__group_max">--max
+5</a>
+<a href="cs_classic.html#migrate_groups__group_min">--min 2</a>
+<a href="cs_classic.html#migrate_groups__group_name">--name
+<var class="keyword varname">my_container_group</var></a>
+<a href="cs_classic.html#migrate_groups__group_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_groups__group_volume">--volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory_path</var></a>
+<a href="cs_classic.html#migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp><div class="steps note"><span class="notetitle">註：</span> 如果您已搭配使用 <samp class="ph codeph">cf ic group create</samp> 指令與 <samp class="ph codeph">--ip</samp> 選項，請注意，無法將現有浮動 IP 位址移轉至 Kubernetes 叢集。若要在公用 IP 位址上公開服務，請使用建立配置 Script 來部署 NodePort 或 LoadBalancer 服務類型。這項設定會在 Kubernetes 叢集的公用 IP 位址上公開服務。<a href="cs_planning.html#cs_planning_public_network">進一步瞭解公用部署設定選項。</a></div>
+</div>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_groups__group_anti">--anti</dt>
+<dd>將容器 Pod 分散到不同工作者節點，以提高可用性。
+<pre class="codeblock"><code>annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_auto">--auto</dt>
+<dd>在標準叢集中，使用「負載平衡器」或 Ingress 來啟用容器的自動回復。
+<a href="cs_planning_public_network.html" title="當您建立叢集時，每個叢集都必須連接至 IBM 所擁有的公用 VLAN（精簡叢集）或設定於客戶的 Bluemix Infrastructure (SoftLayer) 帳戶中的公用 VLAN（標準叢集）。公用 VLAN 會判定在建立叢集期間指派給工作者節點的公用 IP 位址。">進一步瞭解公用部署設定選項</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_domain">-d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></dt>
+<dd>在標準叢集中，使用「負載平衡器」或 Ingress 來定義網域。<a href="cs_planning_public_network.html" title="當您建立叢集時，每個叢集都必須連接至 IBM 所擁有的公用 VLAN（精簡叢集）或設定於客戶的 Bluemix Infrastructure (SoftLayer) 帳戶中的公用 VLAN（標準叢集）。公用 VLAN 會判定在建立叢集期間指派給工作者節點的公用 IP 位址。">進一步瞭解公用部署設定選項</a>。<pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_host">-n <var class="keyword varname">mycontainerhost</var></dt>
+<dd>在標準叢集中，使用「負載平衡器」或 Ingress 來定義主機。<a href="cs_planning_public_network.html" title="當您建立叢集時，每個叢集都必須連接至 IBM 所擁有的公用 VLAN（精簡叢集）或設定於客戶的 Bluemix Infrastructure (SoftLayer) 帳戶中的公用 VLAN（標準叢集）。公用 VLAN 會判定在建立叢集期間指派給工作者節點的公用 IP 位址。">進一步瞭解公用部署設定選項</a>。<pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_desired">--desired 3</dt>
+<dd>若要定義所要的應用程式實例數，請輸入抄本數目。<pre class="codeblock"><code>spec:
+  replicas: 3</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></dt>
+<dd id="migrate_groups__service_bind_dl">首先，建立 Secret，以<a href="cs_cluster_service.html" title="將現有 Bluemix 服務實例新增至叢集，讓叢集使用者在將應用程式部署至叢集時能夠存取及使用 Bluemix 服務。">將服務新增至叢集</a>。這項作業是一次性作業，讓叢集內的任何應用程式都可使用服務的 Secret。然後，在配置 Script 中<a href="cs_apps_volume_claim.html" title="建立持續性磁區宣告，以佈建 NFS 檔案儲存空間。此宣告可以裝載至 Pod 中的容器，以確保資料可用，即使 Pod 損毀或關閉。">新增該 Secret 及 Secret 的裝載路徑</a>，以進行部署。<p>支援所有支援服務金鑰的 <span class="keyword">Bluemix</span> 服務，以與 Kubernetes 功能搭配使用。換句話說，如果您必須使用 Cloud Foundry 應用程式橋接器方法將服務連接至<span class="ph">單一及可擴充容器</span> (CCS_BIND_APP)，則不支援該服務與 Kubernetes 叢集搭配使用。如果您已使用直接服務連結方法 (CCS_BIND_SRV)，則支援該服務與 Kubernetes 搭配使用。</p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_memory">-m 1024</dt>
+<dd id="migrate_groups__memory_dl">定義容器 Pod 的 CPU 及記憶體要求和限制，而不是大小。
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">進一步瞭解如何判斷 CPU 及記憶體值。</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_max">--max 5</dt>
+<dd>使用 HorizontalPodAutoscaler 類型的配置 Script，而不是此範例中所使用的部署類型。使用水平自動擴充，您可以設定 Pod 數目上限。<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">進一步瞭解水平自動擴充。</a><pre class="codeblock"><code>maxReplicas: 5</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_min">--min 2</dt>
+<dd>使用 HorizontalPodAutoscaler 類型的配置 Script，而不是此範例中所使用的部署類型。使用水平自動擴充，您可以設定 Pod 數目下限。<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">進一步瞭解水平自動擴充。</a><pre class="codeblock"><code>minReplicas: 2</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_name">--name <var class="keyword varname">my_container_group</var></dt>
+<dd id="migrate_groups__name_dl">資源的名稱。您也可以指派資源的標籤。<img id="migrate_groups__image_jzl_b3y_rz" src="sout.gif" alt="外部鏈結">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">進一步瞭解 Kubernetes 標籤</a>。<pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_port">-p <var class="keyword varname">9080</var></dt>
+<dd id="migrate_groups__port_dl">要向外部資料流量公開的埠。<pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_volume">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">directory_path</var></dt>
+<dd id="migrate_groups__volume_dl">首先，<a href="cs_apps_volume_claim.html" title="建立持續性磁區宣告，以佈建 NFS 檔案儲存空間。此宣告可以裝載至 Pod 中的容器，以確保資料可用，即使 Pod 損毀或關閉。">建立持續性磁區宣告</a>，並動態建立具有所要求儲存空間大小及儲存空間類別的持續性磁區。然後，<a href="cs_apps_volume_claim.html" title="建立持續性磁區宣告，以佈建 NFS 檔案儲存空間。此宣告可以裝載至 Pod 中的容器，以確保資料可用，即使 Pod 損毀或關閉。">將宣告名稱及裝載路徑新增</a>至配置 Script。<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd id="migrate_groups__image_dl">從中建置容器的映像檔。您可以繼續使用 <span class="keyword">Bluemix</span> 映像檔登錄、Docker Hub 或您專屬登錄中的映像檔。<a href="cs_planning_images.html" title="Docker 映像檔是您建立的每個容器的基礎。映像檔是從 Dockerfile 所建立的，該 Dockerfile 檔案包含建置映像檔的指示。Dockerfile 可能會參照其指示中個別儲存的建置構件（例如應用程式、應用程式的配置及其相依關係）。">進一步瞭解登錄設定選項</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_groups__postreq_rm5_hcx_rz"><div class="p">利用容器群組範例指令中的值，使用下列配置 Script，在叢集中部署類似的容器 Pod：<pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d94020e499" id="migrate_single"><h4 class="topictitle4" id="d94020e499">單一容器範例</h4>
+<div class="body taskbody"><div class="section context" id="migrate_single__context_kck_5mq_wz"><p>您可能已使用下列指令建單一容器。按一下指令選項，以瞭解如何在叢集中實作類似的功能。</p>
+
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run <a href="cs_classic.html#migrate_single__single_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_single__single_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></a>
+<a href="cs_classic.html#migrate_single__single_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_single__single_name">--name
+<var class="keyword varname">my_container</var></a>
+<a href="cs_classic.html#migrate_single__single_volumes">--volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory_path</var></a>
+<a href="cs_classic.html#migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp></p>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_single__single_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></dt>
+<dd>首先，建立 Secret，以<a href="cs_cluster_service.html" title="將現有 Bluemix 服務實例新增至叢集，讓叢集使用者在將應用程式部署至叢集時能夠存取及使用 Bluemix 服務。">將服務新增至叢集</a>。這項作業是一次性作業，讓叢集內的任何應用程式都可使用服務的 Secret。然後，在配置 Script 中<a href="cs_apps_volume_claim.html" title="建立持續性磁區宣告，以佈建 NFS 檔案儲存空間。此宣告可以裝載至 Pod 中的容器，以確保資料可用，即使 Pod 損毀或關閉。">新增該 Secret 及 Secret 的裝載路徑</a>，以進行部署。<p>支援所有支援服務金鑰的 <span class="keyword">Bluemix</span> 服務，以與 Kubernetes 功能搭配使用。換句話說，如果您必須使用 Cloud Foundry 應用程式橋接器方法將服務連接至<span class="ph">單一及可擴充容器</span> (CCS_BIND_APP)，則不支援該服務與 Kubernetes 叢集搭配使用。如果您已使用直接服務連結方法 (CCS_BIND_SRV)，則支援該服務與 Kubernetes 搭配使用。</p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_memory">-m 1024</dt>
+<dd>定義容器 Pod 的 CPU 及記憶體要求和限制，而不是大小。
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">進一步瞭解如何判斷 CPU 及記憶體值。</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_name">--name <var class="keyword varname">my_container_group</var></dt>
+<dd>資源的名稱。您也可以指派資源的標籤。<img id="migrate_single__d46237e241" src="sout.gif" alt="外部鏈結">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">進一步瞭解 Kubernetes 標籤</a>。<pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_port">-p <var class="keyword varname">9080</var></dt>
+<dd>要向外部資料流量公開的埠。<pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_volumes">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">directory_path</var></dt>
+<dd>首先，<a href="cs_apps_volume_claim.html" title="建立持續性磁區宣告，以佈建 NFS 檔案儲存空間。此宣告可以裝載至 Pod 中的容器，以確保資料可用，即使 Pod 損毀或關閉。">建立持續性磁區宣告</a>，並動態建立具有所要求儲存空間大小及儲存空間類別的持續性磁區。然後，<a href="cs_apps_volume_claim.html" title="建立持續性磁區宣告，以佈建 NFS 檔案儲存空間。此宣告可以裝載至 Pod 中的容器，以確保資料可用，即使 Pod 損毀或關閉。">將宣告名稱及裝載路徑新增</a>至配置 Script。<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd>從中建置容器的映像檔。您可以繼續使用 <span class="keyword">Bluemix</span> 映像檔登錄、Docker Hub 或您專屬登錄中的映像檔。<a href="cs_planning_images.html" title="Docker 映像檔是您建立的每個容器的基礎。映像檔是從 Dockerfile 所建立的，該 Dockerfile 檔案包含建置映像檔的指示。Dockerfile 可能會參照其指示中個別儲存的建置構件（例如應用程式、應用程式的配置及其相依關係）。">進一步瞭解登錄設定選項</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_single__postreq_wvj_vmq_wz"><div class="p">利用單一容器範例指令中的值，使用下列配置 Script，在叢集中部署類似的容器 Pod：<pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d94020e667" id="migrating_autoscaling"><h3 class="topictitle3" id="d94020e667">移轉至 Kubernetes 自動擴充</h3>
+<div class="body taskbody"><p class="li stepsection"><p>使用 <a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">Kubernetes</a>，您可以啟用 <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Horizontal Pod Autoscaling</a>，根據 CPU 來擴充應用程式。</p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">安裝必要的 <a href="cs_cli_install.html" title="您可以使用 IBM Bluemix Container Service CLI 或 API 來建立及管理 Kubernetes 叢集。">CLI</a>。</span></li>
+<li class="step stepexpand"><span class="cmd">遵循<a href="container_index.html#clusters" title="Kubernetes 是一種編排工具，可將應用程式容器排定到運算機器叢集上。透過 Kubernetes，開發人員可以運用容器的強大功能和彈性，快速開發高可用性的應用程式。">在 Bluemix 中開始使用 Kubernetes 叢集</a>中的步驟，建立叢集。請務必設定叢集來抄寫現行的容器群組，包括記載、監視、漏洞警告器，以及您既有的任何其他自訂項目。</span></li>
+<li class="step stepexpand"><span class="cmd">為叢集<a href="cs_cli_configure.html" title="您可以使用 Kubernetes CLI 隨附的指令來管理 Bluemix 中的叢集。建立叢集之後，使用環境變數將本端 CLI 的環境定義設定為該叢集。然後，您可以執行 Kubernetes kubectl 指令，在 Bluemix 中使用您的叢集。">設定環境定義</a>。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_apps_cli.html" title="建立叢集之後，您可以使用 Kubernetes CLI 以將應用程式部署至該叢集。">從 CLI</a> 將現有的應用程式部署至您的叢集。</span> 當您部署應用程式時，必須要求 CPU。
+
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46341e115" class="defaultstyle"><thead><tr><th colspan="2" id="d94020e750" class="thleft"><span class="ph"><img src="images/idea.png" alt="此圖示指出還有相關資訊可讓您瞭解該作業的這個步驟。"></span> 瞭解此指令的元件</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94020e750 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d94020e750 ">您要部署的應用程式。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94020e750 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d94020e750 ">容器所需的 CPU，以 milli-cores 為指定單位。例如，<samp class="ph codeph">--requests=200m</samp>。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94020e750 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d94020e750 ">設為 true 時，會建立外部服務。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94020e750 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d94020e750 ">透過此埠可讓您的應用程式供外部使用。</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">註：</span> 如需更複雜的部署，您可能需要建立<a href="cs_apps_cli.html" title="建立叢集之後，您可以使用 Kubernetes CLI 以將應用程式部署至該叢集。">部署 Script</a>。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">建立「水平 Pod 自動擴充程式」，並定義您的原則。</span>  如需使用 <samp class="ph codeph">kubetcl autoscale</samp> 指令的相關資訊，請參閱 <a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Kubernetes 文件</a>。
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46341e173" class="defaultstyle"><thead><tr><th colspan="2" id="d94020e810" class="thleft"><span class="ph"><img src="images/idea.png" alt="此圖示指出還有相關資訊可讓您瞭解該作業的這個步驟。"></span> 瞭解此指令的元件</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94020e810 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d94020e810 ">「水平 Pod 自動擴充程式」維護的平均 CPU 使用率，以百分比為指定單位。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94020e810 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d94020e810 ">用來維護指定 CPU 使用率百分比之已部署的 Pod 數目下限。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94020e810 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d94020e810 ">用來維護指定 CPU 使用率百分比之已部署的 Pod 數目上限。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">驗證您的應用程式正確運作。</span> <ul><li>檢查您的服務儀表板，確定您的應用程式正在執行中。</li>
+<li>檢查您的應用程式，確定已實作主要變更。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_ha.html#container_group_remove" title="若要充分利用您的配額，請偶而移除未使用的容器群組。">取消佈建並移除</a>「容器」的原始實例。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94020e850" id="migrating_compose"><h3 class="topictitle3" id="d94020e850">將 Docker Compose 配置移轉至叢集</h3>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context"><span class="ph">如果您已使用 Docker Compose 來部署容器，<a href="https://kubernetes.io/docs/tools/kompose/user-guide/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">則可以使用 Kubernetes 中的 Kompose 工具</a>，將 Docker Compose 配置 Script 移轉成將容器部署至 Kubernetes 叢集的配置 Script。</span></div><div class="section postreq" id="migrating_compose__postreq_sdm_kmd_5z">既然，您已將容器移轉至叢集中的 Kubernetes 資源，請查看<a href="cs_apps_dashboard.html" title="在本端系統上開啟 Kubernetes 儀表板，以檢視叢集及其工作者節點的相關資訊。">啟動 IBM Bluemix Container Service 的 Kubernetes 儀表板</a>，以瞭解這些資源的執行方式。</div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94020e869" lang="zh-tw" id="container_single_remove"><h3 class="topictitle3" id="d94020e869">移除單一容器</h3>
+<div class="body taskbody"><p class="shortdesc">若要充分利用您的配額，請偶而移除未使用的容器。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">使用下列其中一種方法來移除容器。</span> <ul class="ul choices"><li class="li choice">從 <span class="keyword">Bluemix</span> GUI<ol type="a"><li>從 <span class="keyword">Bluemix</span>「儀表板」中，選取您要刪除的容器。</li>
+<li>展開<span class="ph uicontrol">其他動作...</span> 功能表，然後按一下<span class="ph uicontrol">刪除</span>。</li>
+</ol>
+<ul><li>在容器磚中，按一下齒輪圖示，然後按一下<span class="ph uicontrol">刪除容器</span>。</li>
+</ul>
+</li>
+<li class="li choice">從 CLI
+*<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_single_remove__d42493e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_single_remove__d42493e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">驗證已移除容器，方法為執行下列指令，並確認容器並未出現在清單中。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94020e869"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d94020e1021" lang="zh-tw" id="container_group_remove"><h3 class="topictitle3" id="d94020e1021">移除容器群組</h3>
+<div class="body taskbody"><p class="shortdesc">若要充分利用您的配額，請偶而移除未使用的容器群組。</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">重要：</span>  在移除容器群組之前，或在使用 <samp class="ph codeph">cf delete-route</samp> 指令刪除路徑之前，請執行下列其中一個指令，從容器群組移除路徑。
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">host</var> -d <var class="keyword varname">domain</var> <var class="keyword varname">group_name_or_ID</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">使用下列其中一種方法來移除容器群組。</span> <ul class="ul choices"><li class="li choice">從 <span class="keyword">Bluemix</span> GUI 中，選取容器群組，然後按一下<span class="ph uicontrol">其他動作...</span> 功能表中的<span class="ph uicontrol">刪除</span>。</li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">驗證已移除容器群組，方法為執行下列指令，並確認容器群組並未出現在清單中。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94020e1021"></aside></article></article></article></div></main></body></html>

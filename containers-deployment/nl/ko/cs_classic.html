@@ -1,0 +1,497 @@
+<!DOCTYPE html><html lang="ko-kr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service를 사용하여 IBM 클라우드에서 Docker 컨테이너 내부의 앱을 관리합니다. 컨테이너는 환경 간에 앱을 이동하고 변경사항 없이 앱을 실행할 수 있도록 앱과 모든 종속 항목을 패키징하는 표준 방법입니다. 이는 리소스 격리와 할당이라는 이점을 갖는 동시에 가상 머신보다 이식성이 뛰어나고 효율적입니다.">
+<meta name="keywords" content="단일 컨테이너, IBM Bluemix Container Service, 컨테이너 그룹, 확장 가능 그룹, 마이그레이션, CLI, docker rm, bx ic, rm, IBM Containers, 컨테이너, 제거, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ko-kr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service에서 단일 및 확장 가능 컨테이너 실행</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d94195e6" id="cs_classic"><h1 class="topictitle1" id="d94195e6"><span class="keyword">IBM
+Bluemix Container Service</span>에서 <span class="ph">단일 및 확장 가능 컨테이너</span> 실행</h1>
+<div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix® Container Service</span>를 사용하여 IBM 클라우드에서
+Docker 컨테이너 내부의 앱을 관리합니다. <span class="ph">컨테이너는 환경 간에 앱을 이동하고 변경사항 없이 앱을 실행할 수 있도록
+앱과 모든 종속 항목을 패키징하는 표준 방법입니다. </span> 이는
+리소스 격리와 할당이라는 이점을 갖는 동시에 가상 머신보다 이식성이 뛰어나고 효율적입니다.
+</div>
+
+
+<p><span class="ph">단일 및 확장 가능 컨테이너</span>를 사용하여 클러스터 대신 앱을 배치할 수 있지만,
+클러스터를 사용하면 환경을 사용자 정의할 때 훨씬 더 다양한 옵션을 사용할 수 있습니다. <span class="ph">단일 및 확장 가능 컨테이너</span> 대신
+컨테이너 오케스트레이션 도구로 <a href="cs_ov.html" title="IBM Bluemix Container Service는 Kubernetes API를 사용하여 독립적인 컴퓨팅 호스트의 클러스터에서 컨테이너화된 앱의 배치, 오퍼레이션, 스케일링 및 모니터링을 자동화하는 강력한 도구, 직관적인 사용자 경험, 기본 제공 보안 및 격리를 제공할 수 있도록 Docker 및 Kubernetes를 결합합니다.">클러스터</a>를
+사용해 보십시오. </p>
+</div>
+<aside role="complementary" aria-labelledby="d94195e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d94195e104" id="cs_classic_migrating"><h2 class="topictitle2" id="d94195e104"><span class="ph">단일 및 확장 가능 컨테이너</span>를 Kubernetes 클러스터로 마이그레이션</h2>
+<div class="body taskbody"><p class="shortdesc">Kubernetes 클러스터에서 <span class="ph">단일 및 확장 가능 컨테이너</span>를 다시 작성할 수 있습니다. </p>
+<div class="section context" id="cs_classic_migrating__context_iy5_jgr_mz"><div class="p">이 페이지의
+내용:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_containers" title="단일 및 확장 가능 컨테이너 작성 명령에서 특성을 가져오고 Kubernetes 클러스터에서 비슷한 컨테이너 포드를 배치하기 위한 구성 스크립트를 작성할 수 있습니다.">클러스터에서 단일 및 확장 가능 컨테이너 다시 작성</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_autoscaling">Auto-Scaling 마이그레이션</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_compose">Docker Compose 구성을 클러스터로 마이그레이션</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_single_remove">단일 컨테이너 제거</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_group_remove">컨테이너 그룹 제거</a></div>
+</div>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d94195e165" id="migrating_containers"><h3 class="topictitle3" id="d94195e165">클러스터에서 <span class="ph">단일 및 확장 가능 컨테이너</span> 다시 작성</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">단일 및 확장 가능 컨테이너</span> 작성 명령에서 특성을 가져오고 Kubernetes
+클러스터에서 비슷한 컨테이너 포드를 배치하기 위한 구성 스크립트를 작성할 수 있습니다. </p>
+<div class="section context" id="migrating_containers__context_r35_hpq_mz"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d94195e177" id="migrate_groups"><h4 class="topictitle4" id="d94195e177">컨테이너 그룹 예</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">과거에 컨테이너 그룹을 사용한 경우 클러스터에서 비슷한 설정을 작성할 수 있습니다. </span>
+ 컨테이너 그룹에 VPN 서비스를 사용했으며
+유료 계정을 사용하고 있는 경우, <a href="https://knowledgelayer.softlayer.com/procedure/how-order-vyatta" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">클러스터의 VLAN에 대해서도 Vyatta를 주문해야 합니다</a>.</div>
+<div class="section context" id="migrate_groups__context_mdr_dhq_rz"><p>다음 명령을 사용하여 컨테이너 그룹을 작성했을 수 있습니다. 클러스터에서 비슷한 기능을 구현하는 방법을 알아보려면 명령 옵션을 클릭하십시오. </p>
+
+<div class="p"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create <a href="cs_classic.html#migrate_groups__group_anti">--anti</a>
+<a href="cs_classic.html#migrate_groups__group_auto">--auto</a>
+<a href="cs_classic.html#migrate_groups__group_domain">-d
+<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></a>
+<a href="cs_classic.html#migrate_groups__group_host">-n
+<var class="keyword varname">mycontainerhost</var></a>
+<a href="cs_classic.html#migrate_groups__group_desired">--desired 3</a>
+<a href="cs_classic.html#migrate_groups__group_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></a>
+<a href="cs_classic.html#migrate_groups__group_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_groups__group_max">--max
+5</a>
+<a href="cs_classic.html#migrate_groups__group_min">--min 2</a>
+<a href="cs_classic.html#migrate_groups__group_name">--name
+<var class="keyword varname">my_container_group</var></a>
+<a href="cs_classic.html#migrate_groups__group_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_groups__group_volume">--volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory_path</var></a>
+<a href="cs_classic.html#migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp><div class="steps note"><span class="notetitle">참고:</span> <samp class="ph codeph">cf ic group
+create</samp> 명령을 <samp class="ph codeph">--ip</samp> 옵션과 함께 사용한 경우, 기존 유동 IP
+주소를 Kubernetes 클러스터로 마이그레이션할 수 없다는 점을 참고하십시오. 서비스를 공인 IP 주소에 노출하려면
+NodePort 또는 LoadBalancer 서비스 유형을 배치하기 위한 구성 스크립트를 사용하여 작성하십시오. 이 설정은 Kubernetes 클러스터의 공인 IP 주소에 서비스를 노출합니다. <a href="cs_planning.html#cs_planning_public_network">공용 배치 설정 옵션에 대해 자세히 알아보십시오.</a></div>
+</div>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_groups__group_anti">--anti</dt>
+<dd>고가용성을 위해 다른 작업자 노드에 컨테이너 포드를 전개하십시오.
+<pre class="codeblock"><code>annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_auto">--auto</dt>
+<dd>표준 클러스터에서 로드 밸런서 또는 Ingress를 사용하여 컨테이너의 자동 복구를 사용으로 설정하십시오.
+<a href="cs_planning_public_network.html" title="클러스터를 작성할 때 모든 클러스터는 IBM이 소유하거나(라이트 클러스터) 고객의 Bluemix Infrastructure (SoftLayer) 계정에 설정된(표준 클러스터) 프라이빗 VLAN에 연결되어야 합니다. 퍼블릭 VLAN은 클러스터 작성 중에 작업자 노드에 지정된 공인 IP 주소를 판별합니다.">공용 배치 설정 옵션에 대해 자세히 알아보기</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_domain">-d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></dt>
+<dd>표준 클러스터에서 로드 밸런서 또는 Ingress를 사용하여 도메인을 정의하십시오. <a href="cs_planning_public_network.html" title="클러스터를 작성할 때 모든 클러스터는 IBM이 소유하거나(라이트 클러스터) 고객의 Bluemix Infrastructure (SoftLayer) 계정에 설정된(표준 클러스터) 프라이빗 VLAN에 연결되어야 합니다. 퍼블릭 VLAN은 클러스터 작성 중에 작업자 노드에 지정된 공인 IP 주소를 판별합니다.">공용 배치 설정 옵션에 대해 자세히 알아보기</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_host">-n <var class="keyword varname">mycontainerhost</var></dt>
+<dd>표준 클러스터에서 로드 밸런서 또는 Ingress를 사용하여 호스트를 정의하십시오. <a href="cs_planning_public_network.html" title="클러스터를 작성할 때 모든 클러스터는 IBM이 소유하거나(라이트 클러스터) 고객의 Bluemix Infrastructure (SoftLayer) 계정에 설정된(표준 클러스터) 프라이빗 VLAN에 연결되어야 합니다. 퍼블릭 VLAN은 클러스터 작성 중에 작업자 노드에 지정된 공인 IP 주소를 판별합니다.">공용 배치 설정 옵션에 대해 자세히 알아보기</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_desired">--desired 3</dt>
+<dd>앱의 인스턴스의 원하는 수를 정의하려면 많은 수의 복제를 입력하십시오. <pre class="codeblock"><code>spec:
+  replicas: 3</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></dt>
+<dd id="migrate_groups__service_bind_dl">우선, 시크릿을 작성하여 <a href="cs_cluster_service.html" title="기존 Bluemix 서비스 인스턴스를 클러스터에 추가하여 클러스터 사용자가 앱을 클러스터에 배치할 때 Bluemix 서비스에 액세스하고 이를 사용할 수 있게 합니다.">서비스를
+클러스터에 추가</a>하십시오. 이 태스크는 서비스에 대한 시크릿을 클러스터 내의 앱에 사용할 수 있게 하는 일회성 태스크입니다. 그리고 배치용 구성 스크립트에서 <a href="cs_apps_volume_claim.html" title="NFS 파일 스토리지를 프로비저닝하는 지속적 볼륨 클레임을 작성합니다. 포드의 장애 또는 중단이 발생해도 해당 데이터의 가용성을 보장할 수 있도록, 이 클레임은 포드의 컨테이너에 마운트될 수 있습니다.">해당 시크릿과
+시크릿에 대한 마운트 경로를 추가</a>하십시오. <p>서비스 키를 지원하는 모든 <span class="keyword">Bluemix</span> 서비스는
+Kubernetes 기능과 함께 사용하도록 지원됩니다. 즉, <span class="ph">단일 및 확장 가능 컨테이너</span>에
+서비스를 연결하기 위해 Cloud Foundry 앱 브릿지 방법(CCS_BIND_APP)을 사용해야 했던 경우, 그 서비스는 Kubernetes 클러스터와 함께 사용하도록 지원되지 않습니다. 직접 서비스
+바인딩 방법(CCS_BIND_SRV)을 사용한 경우, 그 서비스는 Kubernetes와 함께 사용하도록 지원됩니다. </p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_memory">-m 1024</dt>
+<dd id="migrate_groups__memory_dl">크기 대신에 컨테이너 포드에 대한 CPU 및 메모리 요청과 한계를 정의하십시오.
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">CPU 및 메모리 값을 판별하는 방법에 대해 자세히 알아보십시오.</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_max">--max 5</dt>
+<dd>이 예에 사용된 배치 유형 대신에 구성 스크립트의 HorizontalPodAutoscaler 유형을 사용하십시오. Horizontal Auto-Scaling으로 포드의 최대 수를 설정할 수 있습니다. <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Horizontal Auto-Scaling에
+대해 자세히 알아보십시오.</a><pre class="codeblock"><code>maxReplicas: 5</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_min">--min 2</dt>
+<dd>이 예에 사용된 배치 유형 대신에 구성 스크립트의 HorizontalPodAutoscaler 유형을 사용하십시오. Horizontal Auto-Scaling으로 포드의 최소 수를 설정할 수 있습니다. <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Horizontal Auto-Scaling에
+대해 자세히 알아보십시오.</a><pre class="codeblock"><code>minReplicas: 2</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_name">--name <var class="keyword varname">my_container_group</var></dt>
+<dd id="migrate_groups__name_dl">리소스의 이름입니다. 리소스에 레이블을 지정할 수도 있습니다. <img id="migrate_groups__image_jzl_b3y_rz" src="sout.gif" alt="외부 링크">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Kubernetes
+레이블에 대해 자세히 알아보십시오</a>.<pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_port">-p <var class="keyword varname">9080</var></dt>
+<dd id="migrate_groups__port_dl">외부 트래픽에 노출하기 위한 포트입니다. <pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_volume">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">directory_path</var></dt>
+<dd id="migrate_groups__volume_dl">우선, <a href="cs_apps_volume_claim.html" title="NFS 파일 스토리지를 프로비저닝하는 지속적 볼륨 클레임을 작성합니다. 포드의 장애 또는 중단이 발생해도 해당 데이터의 가용성을 보장할 수 있도록, 이 클레임은 포드의 컨테이너에 마운트될 수 있습니다.">지속적 볼륨 클레임을 작성</a>하면 요청된 스토리지 크기 및 스토리지 클래스의 지속적 볼륨이 동적으로 작성됩니다. 그리고 구성 스크립트에 <a href="cs_apps_volume_claim.html" title="NFS 파일 스토리지를 프로비저닝하는 지속적 볼륨 클레임을 작성합니다. 포드의 장애 또는 중단이 발생해도 해당 데이터의 가용성을 보장할 수 있도록, 이 클레임은 포드의 컨테이너에 마운트될 수 있습니다.">클레임 이름 및
+마운트 경로를 추가</a>하십시오. <pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd id="migrate_groups__image_dl">컨테이너를 빌드할 이미지입니다. <span class="keyword">Bluemix</span> 이미지 레지스트리, Docker Hub 또는
+사용자 고유의 레지스트리의 이미지를 계속 사용할 수 있습니다. <a href="cs_planning_images.html" title="Docker 이미지는 작성하는 모든 컨테이너의 기초가 됩니다. 이미지는 이미지를 빌드하는 지시사항이 포함된 파일인 Dockerfile에서 작성됩니다. Dockerfile은 앱, 해당 앱의 구성 및 그 종속 항목과 같이 개별적으로 저장되는 해당 지시사항의 빌드 아티팩트를 참조할 수 있습니다.">레지스트리 설정 옵션에 대해 자세히 알아보기</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_groups__postreq_rm5_hcx_rz"><div class="p">컨테이너 그룹 예제 명령의 값과 함께 클러스터에서 비슷한 컨테이너 포드를 배치하려면 다음 구성 스크립트를 사용하십시오. <pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d94195e494" id="migrate_single"><h4 class="topictitle4" id="d94195e494">단일 컨테이너 예</h4>
+<div class="body taskbody"><div class="section context" id="migrate_single__context_kck_5mq_wz"><p>다음 명령을 사용하여 단일 컨테이너를 작성했을 수 있습니다. 클러스터에서 비슷한 기능을 구현하는 방법을 알아보려면 명령 옵션을 클릭하십시오. </p>
+
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run <a href="cs_classic.html#migrate_single__single_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_single__single_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></a>
+<a href="cs_classic.html#migrate_single__single_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_single__single_name">--name
+<var class="keyword varname">my_container</var></a>
+<a href="cs_classic.html#migrate_single__single_volumes">--volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory_path</var></a>
+<a href="cs_classic.html#migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp></p>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_single__single_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></dt>
+<dd>우선, 시크릿을 작성하여 <a href="cs_cluster_service.html" title="기존 Bluemix 서비스 인스턴스를 클러스터에 추가하여 클러스터 사용자가 앱을 클러스터에 배치할 때 Bluemix 서비스에 액세스하고 이를 사용할 수 있게 합니다.">서비스를
+클러스터에 추가</a>하십시오. 이 태스크는 서비스에 대한 시크릿을 클러스터 내의 앱에 사용할 수 있게 하는 일회성 태스크입니다. 그리고 배치용 구성 스크립트에서 <a href="cs_apps_volume_claim.html" title="NFS 파일 스토리지를 프로비저닝하는 지속적 볼륨 클레임을 작성합니다. 포드의 장애 또는 중단이 발생해도 해당 데이터의 가용성을 보장할 수 있도록, 이 클레임은 포드의 컨테이너에 마운트될 수 있습니다.">해당 시크릿과
+시크릿에 대한 마운트 경로를 추가</a>하십시오. <p>서비스 키를 지원하는 모든 <span class="keyword">Bluemix</span> 서비스는
+Kubernetes 기능과 함께 사용하도록 지원됩니다. 즉, <span class="ph">단일 및 확장 가능 컨테이너</span>에
+서비스를 연결하기 위해 Cloud Foundry 앱 브릿지 방법(CCS_BIND_APP)을 사용해야 했던 경우, 그 서비스는 Kubernetes 클러스터와 함께 사용하도록 지원되지 않습니다. 직접 서비스
+바인딩 방법(CCS_BIND_SRV)을 사용한 경우, 그 서비스는 Kubernetes와 함께 사용하도록 지원됩니다. </p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_memory">-m 1024</dt>
+<dd>크기 대신에 컨테이너 포드에 대한 CPU 및 메모리 요청과 한계를 정의하십시오.
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">CPU 및 메모리 값을 판별하는 방법에 대해 자세히 알아보십시오.</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_name">--name <var class="keyword varname">my_container_group</var></dt>
+<dd>리소스의 이름입니다. 리소스에 레이블을 지정할 수도 있습니다. <img id="migrate_single__d46276e237" src="sout.gif" alt="외부 링크">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Kubernetes
+레이블에 대해 자세히 알아보십시오</a>.<pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_port">-p <var class="keyword varname">9080</var></dt>
+<dd>외부 트래픽에 노출하기 위한 포트입니다. <pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_volumes">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">directory_path</var></dt>
+<dd>우선, <a href="cs_apps_volume_claim.html" title="NFS 파일 스토리지를 프로비저닝하는 지속적 볼륨 클레임을 작성합니다. 포드의 장애 또는 중단이 발생해도 해당 데이터의 가용성을 보장할 수 있도록, 이 클레임은 포드의 컨테이너에 마운트될 수 있습니다.">지속적 볼륨 클레임을 작성</a>하면 요청된 스토리지 크기 및 스토리지 클래스의 지속적 볼륨이 동적으로 작성됩니다. 그리고 구성 스크립트에 <a href="cs_apps_volume_claim.html" title="NFS 파일 스토리지를 프로비저닝하는 지속적 볼륨 클레임을 작성합니다. 포드의 장애 또는 중단이 발생해도 해당 데이터의 가용성을 보장할 수 있도록, 이 클레임은 포드의 컨테이너에 마운트될 수 있습니다.">클레임 이름 및
+마운트 경로를 추가</a>하십시오. <pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd>컨테이너를 빌드할 이미지입니다. <span class="keyword">Bluemix</span> 이미지 레지스트리, Docker Hub 또는
+사용자 고유의 레지스트리의 이미지를 계속 사용할 수 있습니다. <a href="cs_planning_images.html" title="Docker 이미지는 작성하는 모든 컨테이너의 기초가 됩니다. 이미지는 이미지를 빌드하는 지시사항이 포함된 파일인 Dockerfile에서 작성됩니다. Dockerfile은 앱, 해당 앱의 구성 및 그 종속 항목과 같이 개별적으로 저장되는 해당 지시사항의 빌드 아티팩트를 참조할 수 있습니다.">레지스트리 설정 옵션에 대해 자세히 알아보기</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_single__postreq_wvj_vmq_wz"><div class="p">단일 컨테이너 예제 명령의 값과 함께 클러스터에서 비슷한 컨테이너 포드를 배치하려면 다음 구성 스크립트를 사용하십시오. <pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d94195e662" id="migrating_autoscaling"><h3 class="topictitle3" id="d94195e662">Kubernetes Autoscaling으로 마이그레이션</h3>
+<div class="body taskbody"><p class="li stepsection"><p><a href="cs_ov.html" title="IBM Bluemix Container Service는 Kubernetes API를 사용하여 독립적인 컴퓨팅 호스트의 클러스터에서 컨테이너화된 앱의 배치, 오퍼레이션, 스케일링 및 모니터링을 자동화하는 강력한 도구, 직관적인 사용자 경험, 기본 제공 보안 및 격리를 제공할 수 있도록 Docker 및 Kubernetes를 결합합니다.">Kubernetes</a>에서는
+<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Horizontal
+Pod Autoscaling</a>을 사용하여 CPU를 기반으로 앱을 스케일링할 수 있습니다. </p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">필수 <a href="cs_cli_install.html" title="IBM Bluemix Container Service CLI 또는 API를 사용하여 Kubernetes 클러스터를 작성하고 관리할 수 있습니다.">CLI</a>를 설치하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_index.html#clusters" title="Kubernetes는 컴퓨팅 시스템의 클러스터 상에서 앱 컨테이너를 스케줄링하기 위한 오케스트레이션 도구입니다. Kubernetes를 통해 개발자는 컨테이너의 처리능력과 유연성을 활용하여 고가용성 애플리케이션을 신속하게 개발할 수 있습니다.">Bluemix에서
+Kubernetes 클러스터 시작하기</a>의 단계에 따라 클러스터를 작성하십시오. 
+로깅, 모니터링, Vulnerability Advisor 및 해당 위치의 기타 사용자 정의를 포함하여
+반드시 현재 컨테이너 그룹을 복제하도록 클러스터를 설정하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd">클러스터의 <a href="cs_cli_configure.html" title="Kubernetes CLI와 함께 제공되는 명령을 사용하여 Bluemix에서 클러스터를 관리할 수 있습니다. 클러스터를 작성한 후, 로컬 CLI에 대한 컨텍스트를 환경 변수가 있는 해당 클러스터로 설정하십시오. 그런 다음, Kubernetes kubectl 명령을 실행하여 Bluemix에서 클러스터 관련 작업을 수행할 수 있습니다.">컨텍스트를 설정</a>하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_apps_cli.html" title="클러스터가 작성된 후에 Kubernetes CLI를 사용하여 해당 클러스터에 앱을 배치할 수 있습니다.">CLI에서</a> 클러스터에 앱을 배치하십시오. </span> 앱을 배치할 때는 CPU를 요청해야 합니다.
+
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46380e112" class="defaultstyle"><thead><tr><th colspan="2" id="d94195e742" class="thleft"><span class="ph"><img src="images/idea.png" alt="이 아이콘은 이 태스크 단계에 대해 학습할 정보가 더 있음을 나타냅니다."></span> 이 명령의 컴포넌트 이해</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94195e742 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d94195e742 ">배치하려는 애플리케이션입니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d94195e742 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d94195e742 ">컨테이너의 필수 CPU(밀리 코어 단위로 지정됨)입니다. 예: <samp class="ph codeph">--requests=200m</samp>.</td>
+</tr>
+<tr><td style="width: 50%" headers="d94195e742 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d94195e742 ">true인 경우, 외부 서비스를 작성합니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d94195e742 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d94195e742 ">외부에서 앱이 사용 가능한 포트입니다. </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">참고:</span> 보다 복잡한 배치를 위해서는 <a href="cs_apps_cli.html" title="클러스터가 작성된 후에 Kubernetes CLI를 사용하여 해당 클러스터에 앱을 배치할 수 있습니다.">배치 스크립트</a>를 작성해야 할 수 있습니다. </div>
+</li>
+<li class="step stepexpand"><span class="cmd">Horizontal Pod Autoscaler를 작성하고 정책을 정의하십시오. </span>  <samp class="ph codeph">kubetcl autoscale</samp> 명령으로 작업하는 방법에 대한 자세한 정보는
+<a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Kubernetes 문서</a>를 참조하십시오.
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46380e170" class="defaultstyle"><thead><tr><th colspan="2" id="d94195e802" class="thleft"><span class="ph"><img src="images/idea.png" alt="이 아이콘은 이 태스크 단계에 대해 학습할 정보가 더 있음을 나타냅니다."></span> 이 명령의 컴포넌트 이해</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94195e802 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d94195e802 ">Horizontal Pod Autoscaler에서 유지하는 평균 CPU 사용률(백분율로 지정됨)입니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d94195e802 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d94195e802 ">지정된 CPU 사용 백분율을 유지하기 위해 사용되는 배치된 포드의 최소 수입니다. </td>
+</tr>
+<tr><td style="width: 50%" headers="d94195e802 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d94195e802 ">지정된 CPU 사용 백분율을 유지하기 위해 사용되는 배치된 포드의 최대 수입니다. </td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">애플리케이션이 올바르게 작동 중인지 확인하십시오.</span> <ul><li>서비스 대시보드를 확인하여 앱이 실행 중인지 확인하십시오. </li>
+<li>앱을 확인하여 키 변경사항이 구현되었는지 확인하십시오. </li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Containers의 원래 인스턴스를 <a href="container_ha.html#container_group_remove" title="할당량의 사용을 최대화하려면 사용하지 않는 컨테이너 그룹을 가끔씩 제거하십시오.">디프로비저닝하고 제거</a>하십시오. </span></li>
+</ol>
+</div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94195e843" id="migrating_compose"><h3 class="topictitle3" id="d94195e843">Docker Compose 구성을 클러스터로 마이그레이션</h3>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context"><span class="ph">컨테이너를 배치하기 위해 Docker Compose를 사용한 경우, Docker Compose 구성 스크립트를
+컨테이너를 Kubernetes 클러스터로 배치하는 구성 스크립트로 마이그레이션하기 위해 <a href="https://kubernetes.io/docs/tools/kompose/user-guide/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Kubernetes에서
+Kompose 도구를 사용할 수 있습니다</a>. </span></div><div class="section postreq" id="migrating_compose__postreq_sdm_kmd_5z">컨테이너를 클러스터의 Kubernetes 리소스로 마이그레이션했으므로
+해당 리소스가 어떻게 실행 중인지 보려면 <a href="cs_apps_dashboard.html" title="로컬 시스템의 Kubernetes 대시보드를 열어서 클러스터 및 해당 작업자 노드에 대한 정보를 봅니다.">IBM Bluemix Container Service에 대한 Kubernetes 대시보드 실행</a>을 확인하십시오. </div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94195e862" lang="ko-kr" id="container_single_remove"><h3 class="topictitle3" id="d94195e862">단일 컨테이너 제거</h3>
+<div class="body taskbody"><p class="shortdesc">할당량의 사용을 최대화하려면 사용하지 않는 컨테이너를 가끔씩 제거하십시오. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">다음 방법 중 하나를 사용하여 컨테이너를 제거하십시오. </span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI 사용<ol type="a"><li><span class="keyword">Bluemix</span> 대시보드에서 삭제하려는 컨테이너를 선택하십시오. </li>
+<li><span class="ph uicontrol">추가 조치...</span> 메뉴를 펼치고 <span class="ph uicontrol">삭제</span>를 클릭하십시오. </li>
+</ol>
+<ul><li>컨테이너의 타일에서 기어 아이콘을 클릭하고 <span class="ph uicontrol">컨테이너
+삭제</span>를 클릭하십시오. </li>
+</ul>
+</li>
+<li class="li choice">CLI에서
+*<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+<div class="steps note"><span class="notetitle">참고:</span> <span class="ph" id="container_single_remove__d42527e176">*이 명령에서 <a href="container_cli_cfic_install.html#container_cli_login" title="CLI를 설치한 후 CLI를 사용하기 위해 로그인합니다."><span class="keyword">IBM
+Bluemix Container Service</span></a>에 로그인하고
+환경 변수를 기본 Docker 명령을 사용하도록 설정한 경우 <samp class="ph codeph"><span class="ph">bx ic</span></samp>를
+<samp class="ph codeph">docker</samp>로 대체할 수 있습니다. </span><span class="ph" id="container_single_remove__d42527e187">이 주제에서 별표(*)로 표시된 모든 단계에서 기본 Docker
+명령을 사용할 수 있습니다. </span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">다음 명령을 실행하고 컨테이너가 목록에 나타나지 않는지 확인하여 컨테이너가
+제거되었는지 확인하십시오.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94195e862"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d94195e1009" lang="ko-kr" id="container_group_remove"><h3 class="topictitle3" id="d94195e1009">컨테이너 그룹 제거</h3>
+<div class="body taskbody"><p class="shortdesc">할당량의 사용을 최대화하려면 사용하지 않는 컨테이너 그룹을 가끔씩 제거하십시오. </p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">중요사항:</span>  컨테이너 그룹을 제거하기 전이나 <samp class="ph codeph">cf delete-route</samp> 명령을 사용하여 라우트를 삭제하기 전에 다음 명령 중
+하나를 실행하여 컨테이너 그룹에서 라우트를 제거하십시오.
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">host</var> -d <var class="keyword varname">domain</var> <var class="keyword varname">group_name_or_ID</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">다음 방법 중 하나를 사용하여 컨테이너 그룹을 제거하십시오. </span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI에서 컨테이너 그룹을 선택하고 <span class="ph uicontrol">추가 조치...</span> 메뉴에서 <span class="ph uicontrol">삭제</span>를 클릭하십시오. </li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd">다음 명령을 실행하고 컨테이너 그룹이 목록에 나타나지 않는지 확인하여 컨테이너 그룹이 제거되었는지 확인하십시오.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94195e1009"></aside></article></article></article></div></main></body></html>

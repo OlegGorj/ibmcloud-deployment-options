@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="es-es">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="En el panel de control, puede ver el estado de un contenedor para determinar si su seguridad cumple con la política de la organización. También puede revisar el informe de vulnerabilidad de un contenedor, que detalla los paquetes vulnerables y los valores de aplicaciones o de contenedores no seguros.">
+<meta name="keywords" content="Vulnerability Advisor, vulnerabilidades, seguridad del contenedor">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "es-es",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Revisión de vulnerabilidades de contenedores</title>
+</head>
+<body id="va_reviewing"><main role="main"><article role="article" aria-labelledby="d665e2"><h1 class="topictitle1" id="d665e2">Revisión de vulnerabilidades de contenedores</h1>
+<div class="body taskbody"><p class="shortdesc">En el panel de control, puede ver el estado de un contenedor para determinar si su seguridad
+cumple con la política de la organización. También puede revisar el informe de vulnerabilidad de un contenedor,
+que detalla los paquetes vulnerables y los valores de aplicaciones o de contenedores no seguros.</p>
+<div class="section context"><div class="p">Compruebe que los contenedores que se ejecutan en el espacio siguen cumpliendo con la política de organización
+revisando el campo <span class="ph uicontrol">POLICY STATUS</span>. El estado se muestra como una de las siguientes condiciones:<ul><li><span class="keyword wintitle">Aprobado</span>: no se han encontrado vulnerabilidades.</li>
+<li><span class="keyword wintitle">Aviso</span>: Vulnerability Advisor ha encontrado vulnerabilidades potenciales en el
+contenedor que han provocado que el contenedor no cumpla con la política. Si la política de la organización
+permite el despliegue de imágenes vulnerables, es posible que la imagen se haya desplegado en el estado
+(<span class="keyword wintitle">Desplegar con cuidado</span>), y que se envíe un aviso al usuario que la ha desplegado.</li>
+<li><span class="keyword wintitle">Infracciones de política</span>: Vulnerability Advisor ha encontrado vulnerabilidades potenciales en
+el contenedor que han provocado que el contenedor no cumpla con la política. La política de la organización
+está establecida para no permitir el despliegue de las imágenes vulnerables.</li>
+<li><span class="keyword wintitle">Incompleto</span>: la exploración no se ha completado. La exploración puede seguir en ejecución, o
+el sistema operativo de la instancia del contenedor puede no ser compatible.</li>
+</ul>
+</div>
+
+<p>Si el <span class="ph uicontrol">ESTADO DE POLÍTICA</span> no es <span class="keyword wintitle">Aprobado</span>, compruebe que el
+contenedor sea lo más seguro posible visualizando su informe de vulnerabilidad y actuando en cualquier vulnerabilidad de la que se haya
+informado, realizando los pasos siguientes:</p>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">En el panel de control de Bluemix, seleccione el contenedor que desee revisar.</span></li>
+<li class="step stepexpand"><span class="cmd">En el panel <span class="keyword wintitle">Vulnerability Advisor</span>, pulse <span class="ph uicontrol">Ver informe</span>.</span></li>
+<li class="step stepexpand"><span class="cmd">Revise las secciones para ver las vulnerabilidades potenciales para cada paquete en la imagen:</span> <ul id="va_reviewing__report"><li><span class="ph uicontrol">Políticas de la organización</span><p>Lista si el contenedor cumple
+con la política establecida por el gestor de la organización.</p>
+</li>
+<li><span class="ph uicontrol">Paquetes vulnerables</span><p>Lista los paquetes con problemas de vulnerabilidad conocidos, actualizados diariamente a partir de avisos de seguridad publicados para los sistemas operativos listados
+en <a href="index.html" title="Cuando añade una imagen al registro de imágenes de Bluemix privado, Vulnerability Advisor comparará de forma automática cada uno de los paquetes de la imagen para ver posibles vulnerabilidades.">Comprobación de vulnerabilidades de imágenes utilizando el Vulnerability Advisor</a>. Por lo general, para que un paquete vulnerable pase la exploración, se necesita una versión posterior del paquete que incluya una corrección para la vulnerabilidad en cuestión. El mismo paquete puede tener varias vulnerabilidades; en tal caso, una única actualización del paquete puede corregir varios problemas. Pulse el código de aviso de seguridad para revisar más información sobre el paquete y para ver los pasos para
+actualizar el paquete.</p>
+</li>
+<li><span class="ph uicontrol">Valores de contenedor</span><p>Lista sugerencias que puede adoptar para aumentar la seguridad del contenedor. La columna <span class="keyword wintitle">Acción de corrección</span> describe cómo mejorar la seguridad.</p>
+</li>
+<li><span class="ph uicontrol">Configuraciones de aplicación</span><p>Lista valores de aplicaciones para el
+contenedor que no son seguros. La columna <span class="keyword wintitle">Acción de corrección</span> describe cómo mejorar la seguridad.</p>
+</li>
+<li><span class="ph uicontrol">Origen de imagen de Docker</span><p>Muestra la imagen que se ha utilizado para
+crear este contenedor.</p>
+</li>
+</ul>
+
+
+<p>Para cada elemento mostrado, se suministran acciones de corrección o sugerencias.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Decida cómo actualizar el contenedor para que pueda resolver los problemas. </span> Asegúrese de comprender bien la arquitectura del contenedor para elegir el
+método apropiado de actualización del contenedor. Por ejemplo:
+<ul><li>Si el contenedor está desacoplado de los datos que calcula, puede detener el contenedor, realizar los cambios
+necesarios a la imagen, y volver a desplegar.</li>
+<li>Puede utilizar <a href="https://console.bluemix.net/docs/services/ActiveDeploy/index.html" rel="external" target="_blank" title="(Abre en una nueva sesión o ventana)">Active Deploy</a> para actualizar la instancia de contenedor vulnerable
+sin detener el contenedor.</li>
+<li>En una configuración de HA con varios contenedores en un grupo de contenedores, puede direccionar tráfico a
+otra instancia de contenedor mientras arregla las vulnerabilidades.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Solucione los problemas descritos en el informe <span class="ph uicontrol">Valoración de la vulnerabilidad</span> y vuelva a crear la imagen o vuelva a desplegar el contenedor
+de acuerdo con el método que seleccione.</span> Algunos problemas del Dockerfile se pueden resolver usando el código suministrado en <a href="va_report.html" title="Después de ver el informe de vulnerabilidad, obtenga información sobre cómo arreglar las vulnerabilidades de las que se ha informado.">Resolución de vulnerabilidades en contenedores o imágenes</a>. </li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d665e2"></aside></article></main></body></html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="de-de">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="Hier erfahren Sie, wie Sie die im Bericht zu den Sicherheitslücken aufgezeigten Schwachstellen beheben können.">
+<meta name="keywords" content="Vulnerability Advisor, Schwachstellen, Containersicherheit, Imagesicherheit">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "de-de",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Sicherheitslücken in Containern oder Images beheben</title>
+</head>
+<body id="va_report"><main role="main"><article role="article" aria-labelledby="d246e2"><h1 class="topictitle1" id="d246e2">Sicherheitslücken in Containern oder Images beheben</h1>
+<div class="body taskbody"><p class="shortdesc">Hier erfahren Sie, wie Sie die im Bericht zu den Sicherheitslücken aufgezeigten
+Schwachstellen beheben können. </p>
+<div class="section context"><p>Vulnerability Advisor stellt Korrekturmaßnahmen für gemeldete Sicherheitslücken bereit. Einige der gemeldeten Schwachstellen können durch eine
+Aktualisierung der
+Dockerfile behoben werden. Damit allgemeine Sicherheitslücken schneller behoben werden können, implementieren Sie anhand der folgenden Codebeispiele die Lösung in der Dockerfile. </p>
+
+<div class="p" id="va_report__common_vulnerabilities">
+
+<dl><dt class="dlterm">Maximale Gültigkeitsdauer des Kennworts</dt>
+<dd>Sicherheitslücke:
+<pre class="pre screen"><code>Die maximale Gültigkeitsdauer des Kennworts muss auf 90 Tage begrenzt sein:
+Für PASS_MAX_DAYS ist in '/etc/login.defs' nicht 90 angegeben. Der aktuelle Wert ist 99999.
+Die Mindestkennwortlänge muss mit 8 angegeben sein: Die Mindestlänge des Kennworts ist
+in '/etc/pam.d/common-password' nicht festgelegt. Der Standardwert ist 6, es empfiehlt sich jedoch
+eine Mindestlänge von 8 zu verwenden. </code></pre>
+</dd>
+<dd class="ddexpand">Korrektur: Stellen Sie sicher, dass die Handhabung von Kennwörtern mit der
+Advisorfunktion konform ist, indem Sie den folgenden Code zu Ihrer Dockerfile
+hinzufügen. <pre class="codeblock"><code># Set password length and expiry for compliance with vulnerability advisor
+RUN sed -i 's/ˆPASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs
+RUN sed -i 's/sha512/sha512  minlen=8/' /etc/pam.d/common-password</code></pre>
+</dd>
+<dt class="dlterm">Sicherheitslücke bei SSH</dt>
+<dd>Sicherheitslücke: <pre class="pre screen"><code>SSH-Server sollte nicht installiert sein. </code></pre>
+</dd>
+<dd class="ddexpand">Korrektur: <p>Verwenden Sie für den Zugriff auf den Container <samp class="ph codeph">docker
+attach</samp> oder <samp class="ph codeph">docker exec</samp> anstelle von SSH. Entfernen
+Sie den SSH-Server in Ihrem Container, indem Sie den folgenden Code zu Ihrer
+Dockerfile
+hinzufügen: </p>
+<pre class="codeblock"><code># Remove SSH for compliance with vulnerability advisor
+RUN apt-get purge -y openssh-server
+RUN apt-get remove -y openssh-sftp-server
+RUN apt-get -y autoremove</code></pre>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></main></body></html>

@@ -1,0 +1,1155 @@
+<!DOCTYPE html><html lang="pt-br">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corporation 2014, 2017">
+
+<meta name="description" content="Se você tiver problemas ou perguntas quando estiver usando o IBM Bluemix Container Service, será possível obter ajuda procurando informações ou fazendo perguntas em um fórum. Também é possível abrir um chamado de suporte.">
+<meta name="keywords" content="solucionar problemas, suportar, IBM Containers, contêineres, depuração, falhar, troubleshooting, CLI, cota de recursos do volume, imagens, Delivery pipeline, contêiner, liberty, imagem, contêineres únicos, grupos de contêineres, recuperação automática, instâncias do grupo falham, instâncias do grupo travam, excluir, network_degraded, docker compose, armazenamento de dados, volumes">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "pt-br",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Resolução de problemas do contêineres únicos e escaláveis</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d84487e6" id="container_troubleshoot"><h1 class="topictitle1" id="d84487e6">Resolução de problemas do <span class="ph">contêineres únicos e escaláveis</span></h1>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc"> Se você tiver problemas ou perguntas quando estiver usando o <span class="keyword">IBM®
+Bluemix Container Service</span>, será possível obter ajuda procurando
+informações ou fazendo perguntas em um fórum. Também é possível abrir um chamado de suporte. </div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">Atenção:</span> <span class="ph">Avaliações grátis para o <span class="ph">contêineres únicos e escaláveis</span>
+não estão disponíveis. <a href="cs_ov.html" title="O IBM Bluemix Container Service combina o Docker e o Kubernetes para entregar ferramentas poderosas, uma experiência intuitiva do usuário e a segurança e o isolamento integrados para automatizar a implementação, operação, ajuste de escala e monitoramento de apps conteinerizados por um cluster de hosts de cálculo independente usando as APIs do Kubernetes.">Saiba mais sobre gerenciamento de
+cluster e migração para o Kubernetes no <span class="keyword">IBM
+Bluemix Container Service</span> no <span class="keyword">Bluemix</span> Public.</a></span></div>
+</div>
+
+
+<div class="p">Nesta página:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_debug_containers" title="Revise as opções que você tem para depurar seus contêineres e encontrar as causas-raiz das falhas.">Depurando contêineres e revisando logs</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_cli">Resolvendo problemas de instalação da CLI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_orgs">Resolução de problemas de cotas</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_images">Resolvendo problemas de imagens</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_containers">Resolvendo problemas de contêineres</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_compose">Resolvendo problemas do Docker Compose</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_volumes">Resolução de problemas de armazenamento de dados</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_known_issues" title="Saiba mais sobre os problemas conhecidos que ocorrem no IBM Containers.">Problemas conhecidos</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_getting_help" title="Onde você inicia a resolução de problemas de um contêiner?">Obtendo ajuda e suporte para o IBM Bluemix Container Service</a></div>
+</div>
+</div>
+</div>
+<article class="topic task nested1" role="article" aria-labelledby="d84487e154" lang="pt-br" id="ts_debug_containers"><h2 class="topictitle2" id="d84487e154">Depurando contêineres e revisando logs</h2>
+<div class="body taskbody"><p class="shortdesc">Revise as opções que você tem para depurar seus contêineres e encontrar as
+causas-raiz das falhas. </p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Liste seus contêineres e revise o status atual.</span> <ul><li><span class="keyword option">Contêiner único</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="keyword option">Grupo de contêiner</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">Opcional: <span class="cmd">Consulte <a href="container_cli_reference_cfic.html#container_cli_reference_cfic_states" title="É possível visualizar o estado do contêiner atual executando o comando bx ic inspect e localizando o campo Status. O estado do contêiner pode dar a você informações adicionais sobre a disponibilidade das instâncias do contêiner e dos problemas que podem ter ocorrido.">o
+que cada status significa</a> e revise as dicas para evitar que um contêiner falhe. </span></li>
+<li class="step stepexpand"><span class="cmd">Se seu contêiner falhou ou travou, inspecione seus contêineres para descobrir a
+causa-raiz da falha. </span> A mensagem de erro pode ser encontrada na seção <span class="ph uicontrol">Falha</span> da resposta. 
+<ul><li><span class="keyword option">Contêiner único</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li><span class="keyword option">Grupo de contêiner</span><ol type="a"><li>Inspecione o grupo de contêiner.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">GROUP</var></code></pre>
+</li>
+<li>Para obter informações adicionais, liste as instâncias de um grupo de contêiner e
+inspecione cada instância.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">GROUP</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">GROUP_INSTANCE</var></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Se o app foi encerrado com uma falha, recupere os logs do app. </span> <div class="steps note"><span class="notetitle">Nota:</span> Esse comando poderá ser usado somente se o app gravar logs nos fluxos de saída
+padrão STDOUT e STDERR. A gravação nesses fluxos de saída padrão permite visualizar os
+logs do contêiner, mesmo se o contêiner for encerrado ou travar.</div>
+
+
+<ul><li><span class="keyword option">Contêiner único</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li><span class="keyword option">Grupo de contêiner</span><ol type="a"><li>Liste as instâncias de contêiner de um grupo de contêiner.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">GROUP</var></code></pre>
+</li>
+<li>Recupere os logs para cada instância.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs <var class="keyword varname">GROUP_INSTANCE</var></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">Se você precisar acessar logs de um contêiner que não está mais disponível, como uma instância de um
+grupo de contêiner que foi recriada com a recuperação automática, use Kibana para visualizar os logs.</span> <p><samp class="ph codeph"><span class="ph filepath">https://logmet.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/</span></samp></p>
+
+
+<p>Os logs ficam disponíveis por até 7 dias no Kibana.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">Se os logs foram salvos em um arquivo dentro do contêiner, deve-se efetuar login no
+contêiner para revisá-lo. </span> <div class="note important"><span class="importanttitle">Importante:</span> Você só pode efetuar login em um contêiner em execução. Se seu
+contêiner travou e não pode ser iniciado novamente, você talvez não consiga acessar os
+logs dele. Considere mudar seu app para gravar nos fluxos de saída padrão STDOUT e STDERR
+para que você possa acessar os arquivos de log mesmo que o contêiner não esteja mais
+acessível.</div>
+
+
+<ol type="a"><li>Se seu contêiner não estiver em execução, inicie-o.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> start <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li>Efetue login no contêiner em execução.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">CONTAINER</var> bash</code></pre>
+</li>
+<li>Navegue para seu arquivo de log e revise os logs. </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Se os logs foram salvos em um volume e seu contêiner não pode ser mais iniciado,
+crie um novo contêiner para acessar o volume. </span> <ol type="a"><li>Crie um novo contêiner que seja montado no volume no qual os arquivos de log são armazenados.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name logcontainer -m 64 --volume <var class="keyword varname">MOUNT_PATH_TO_VOLUME</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li>Efetue login no contêiner em execução.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it logcontainer bash</code></pre>
+</li>
+<li>Navegue para o caminho de montagem do volume e revise os arquivos de log. </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">Se você precisar de suporte adicional com a depuração seus contêineres, abra um
+<a href="../support/index.html#contacting-support" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">chamado
+de suporte do <span class="keyword">Bluemix</span></a>. </span></li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d84487e154"></aside></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e418" lang="pt-br" id="ts_ov_cli"><h2 class="topictitle2" id="d84487e418">Resolvendo problemas de instalação da CLI</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e418"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e479" lang="pt-br" id="ts_cf_ic_rpc"><h3 class="topictitle3" id="d84487e479">Erro de método <samp class="ph codeph">(rpc)</samp> durante o init</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao tentar executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+init</samp>, você obterá uma das mensagens a seguir.<ul><li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rpc: não é possível localizar o método
+CliRpcCmd.IsLoggedIn</samp></li>
+<li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rpc: não é possível localizar o método
+CliRpcCmd.IsMinCliVersion</samp></li>
+</ul>
+</div><div class="section tsCauses">A versão instalada do Cloud Foundry é uma versão anterior da que é suportada
+para o <span class="keyword">IBM
+Bluemix Container Service</span>.</div><div class="section tsResolve"><ol><li>Execute <samp class="ph codeph">cf -v</samp> para ver qual versão do Cloud Foundry CLI está instalada.</li>
+<li>Se a versão instalada for anterior à
+<span class="ph">6.14.0</span>,
+<a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">atualize
+a CLI do Cloud Foundry</a>.</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e584" lang="pt-br" id="ts_cf_ic_registry_error"><h3 class="topictitle3" id="d84487e584">Erro de autenticação de registro recebido durante o <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+init</samp>, você verá uma das mensagens de erro de autenticação a seguir.<div class="p"><ul><li><pre class="codeblock"><code>Could not authenticate with IBM Containers registry at registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>
+****exit status 1
+****time="2015-07-31T08:58:32-04:00" level=fatal msg="Post http:///var/run/docker.sock/v1.18/auth: dial 
+unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?”</code></pre>
+</li>
+<li><pre class="codeblock"><code>** Retrieving client certificates from IBM Containers
+Authentication failure. Check your username and password
+Invalid token format. Please generate new token.</code></pre>
+</li>
+</ul>
+</div>
+</div><div class="section tsCauses">Um dos pré-requisitos de <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+não foi atendido ou o <span class="keyword">IBM
+Bluemix Container Service</span> não está
+disponível.</div><div class="section tsResolve"><ol><li>Verifique se o daemon do Docker está em execução. Se não estiver, inicie-o e execute <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+init</samp> novamente.</li>
+<li>Verifique se você está conectado à CLI do Cloud Foundry executando <samp class="ph codeph">bx login</samp>.
+Então, efetue login no plug-in novamente executando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp>.</li>
+<li>Verifique a disponibilidade do <span class="keyword">IBM
+Bluemix Container Service</span>.
+<a href="https://developer.ibm.com/bluemix/support/#status" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Verifique
+a página de status do <span class="keyword">Bluemix</span> para obter
+informações.</a></li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e715" lang="pt-br" id="ts_sudo"><h3 class="topictitle3" id="d84487e715">O sudo é necessário com os comandos
+<span class="ph"><samp class="ph codeph">bx ic</samp></span></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"> Ao executar comandos <span class="ph"><samp class="ph codeph">bx ic</samp></span>, é
+obrigatório usar o prefixo <samp class="ph codeph">sudo</samp> com todos os seus comandos.</div><div class="section tsCauses">Por padrão, os comandos <span class="ph"><samp class="ph codeph">bx ic</samp></span> devem ser
+executados com autenticação raiz e, portanto, podem requerer o prefixo <samp class="ph codeph">sudo</samp>,
+dependendo de seu sistema operacional.</div><div class="section tsResolve">Para executar os comandos <samp class="ph codeph">docker</samp> e <span class="ph"><samp class="ph codeph">bx ic</samp></span> sem <samp class="ph codeph">sudo</samp>, execute
+o comando a seguir; se você estiver no Linux, deverá efetuar logout e depois efetuar login novamente.
+<pre class="codeblock"><code>sudo usermod -a -G docker <var class="keyword varname">&lt;CURRENT_USER&gt;</var></code></pre>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e806" lang="pt-br" id="ts_ov_orgs"><h2 class="topictitle2" id="d84487e806">Resolução de problemas de cotas </h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e806"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e867" lang="pt-br" id="ts_quota_space"><h3 class="topictitle3" id="d84487e867">Um contêiner não pode ser criado devido à cota de
+organização insuficiente</h3>
+<div class="body tsBody"><div class="section tsSymptoms">Ao criar um contêiner, você recebe uma mensagem de que não têm cota suficiente
+em seu espaço.<pre class="pre msgblock"><code>BXNUI0110E: não foi possível alocar recursos do IBM Containers. Cota de ORG insuficiente para alocar 
+ao novo ESPAÇO. Não é possível exceder os IPs flutuantes de sua organização '<var class="keyword varname">organization</var>'. Use o IBM
+    <span class="keyword">Bluemix</span> Gerenciar organizações para 
+ajustar alocação de cota.</code></pre>
+</div><div class="section tsCauses">Essa mensagem pode ser exibida quando você tenta criar contêineres em um espaço que não
+tem cota suficiente alocada. Por padrão, cada espaço requer 2 endereços IP e 2 GB de memória a
+ser alocada para esse espaço para trabalhar com o serviço de contêiner.</div><div class="section tsResolve"><div class="p">Para distribuir a cota de memória e IP entre múltiplos espaços:<ol><li><span class="ph">Nos detalhes de sua conta, em
+Gerenciar organizações, selecione uma organização.</span></li>
+<li><span class="ph">Na seção de cota, visualize
+os detalhes para contêineres.</span></li>
+<li>Clique em <span class="ph uicontrol">Editar</span> e aloque a memória e os endereços IP nos espaços na
+organização.</li>
+<li>Crie um contêiner em qualquer espaço na organização.</li>
+</ol>
+</div>
+
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e949" lang="pt-br" id="ts_trial_upgrade"><h3 class="topictitle3" id="d84487e949">A conta não pode ser editada, embora você tenha uma conta
+paga</h3>
+<div class="body tsBody"><div class="section tsSymptoms">Não é possível modificar sua cota do contêiner.</div><div class="section tsCauses">Pode haver inconsistências entre o gerenciador da organização e as informações de
+faturamento.</div><div class="section tsResolve"><div class="p">O usuário conectado deve ser o gerenciador da organização. Para verificar o proprietário, conclua estas etapas.<ol><li><span class="ph">Nos detalhes de sua conta, em
+Gerenciar organizações, selecione uma organização.</span></li>
+<li>Na lista de usuários, verifique se o gerenciador da organização é o mesmo que o ID com o qual você está
+efetuando login.</li>
+<li>Efetue logout da conta e efetue login novamente.</li>
+</ol>
+Se você concluir estas etapas e ainda não puder editar a cota do contêiner, entre em contato com o Suporte IBM.</div>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e1014" lang="pt-br" id="ts_ov_images"><h2 class="topictitle2" id="d84487e1014">Resolvendo problemas de imagens</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e1014"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1075" lang="pt-br" id="ts_firewall_images"><h3 class="topictitle3" id="d84487e1075">Solicitações de blocos de proxy interno para enviar por push as imagens</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Para criar um contêiner dentro de uma região específica do <span class="keyword">Bluemix</span>, deve-se enviar por push a imagem para
+criar o contêiner para um registro dentro dessa região. Quando você tenta enviar por push uma imagem para esse
+registro, a conexão falha com uma das mensagens de erro a seguir.
+<pre class="pre screen"><code>Conexão recusada</code></pre>
+<pre class="pre screen"><code>Conexão expirada</code></pre>
+</div><div class="section tsCauses">É possível que haja configurações de firewall que estão evitando a comunicação de seu computador com
+o registro do <span class="keyword">Bluemix</span>. Geralmente, as configurações
+de proxy interno são configuradas para permitir somente comunicação permissível por razões de segurança. </div><div class="section tsResolve">Em seu firewall, abra a comunicação de seu computador com o registro para os
+endereços IP de uma região específica: <ul id="ts_firewall_images__ul_on4_rfj_wz"><li>Sul dos EUA:
+<pre class="codeblock"><code>169.55.39.122
+169.55.39.124
+169.55.39.126
+169.55.211.14
+169.46.9.2
+169.46.9.3
+169.46.9.20
+169.46.9.21</code></pre>
+</li>
+<li>Reino Unido:<pre class="codeblock"><code>159.8.188.168
+159.8.188.169
+159.8.188.174
+159.8.188.179
+169.50.153.69
+169.50.153.76
+169.50.153.81
+169.50.153.85</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1140" lang="pt-br" id="ts_liberty_image"><h3 class="topictitle3" id="d84487e1140">Problemas com imagens do IBM
+WebSphere Application Server Liberty</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Você está
+encontrando problemas ao usar uma das imagens do IBM
+WebSphere Application Server Liberty
+no <span class="keyword">IBM
+Bluemix Container Service</span>.</div><div class="section tsCauses"><p>A imagem pode não estar corretamente configurada.</p>
+</div><div class="section tsResolve"><p>Se você tiver problemas relacionados especificamente a essa imagem <span class="ph filepath">Dockerfile</span>, use o
+<a href="https://github.com/WASdev/ci.docker/issues" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Rastreador de problemas GitHub</a>. Para
+problemas mais gerais relativos ao IBM
+WebSphere Application Server Liberty, é
+possível obter ajuda acessando a
+<a href="https://developer.ibm.com/wasdev/help/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">comunidade
+WASdev</a>.</p>
+
+<p>Para obter mais informações sobre as imagens do IBM
+WebSphere Application Server Liberty no
+<span class="keyword">IBM
+Bluemix Container Service</span>, consulte
+<a href="../images/docker_image_ibmliberty/ibmliberty_starter.html">Imagens
+do IBM WebSphere Application Server Liberty</a>.</p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1270" lang="pt-br" id="ts_image_baduserid"><h3 class="topictitle3" id="d84487e1270">Não é possível puxar a imagem de seu registro de imagens privadas do <span class="keyword">Bluemix</span></h3>
+<div class="body tsBody"><div class="section tsSymptoms">Você criou um contêiner a partir de uma imagem de contêiner em seu registro privado do <span class="keyword">Bluemix</span>, mas o contêiner fica preso
+em um estado <span class="ph uicontrol">CONSTRUINDO</span>. Quando você executa o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect</samp>, a mensagem de erro
+a seguir é mostrada na seção <span class="ph uicontrol">Env</span> de resposta de sua CLI.
+<pre class="codeblock"><code>"Env": [
+            "metadata_exit_code=-1",
+            "logging_password=",
+            "space_id=0e65c436-9413-46e2-8b42-ff06aa74ac21",
+            "logstash_target=logmet.opvis.bluemix.net:9091",
+            "metadata_err_msg=Cannot pull image from registry: Pull failed with error message failed 
+             to register layer: ApplyLayer exit status 1 stdout:  stderr: Container ID 1234567890 
+             cannot be mapped to a host ID",
+            "metrics_target=logmet.opvis.bluemix.net:9095",
+            "metadata_running=1"</code></pre>
+</div><div class="section tsCauses">No <span class="keyword">IBM
+Bluemix Container Service</span>, o
+<a href="https://docs.docker.com/engine/security/security/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Recurso de
+namespace do usuário do Docker</a> é ativado no Docker Engine. O recurso de namespace do usuário foi introduzido pela
+primeira vez com o Docker versão 1.10 e fornece a possibilidade de mapear um usuário raiz no contêiner
+para um usuário não raiz fora do contêiner. Dessa maneira, as permissões de um usuário que pode executar
+ações raiz dentro do contêiner podem ficar restritas fora do contêiner, portanto, os arquivos no host e
+em outros contêineres não podem ser acessados, alterados ou removidos. <div class="steps note"><span class="notetitle">Nota:</span> O namespace do usuário do Docker é diferente do namespace configurado no <span class="keyword">Bluemix</span> para identificar seu <a href="container_planning.html#container_planning_namespace" title="Para armazenar e gerenciar imagens privadas para o IBM Bluemix Container Service, toda organização precisa configurar seu próprio registro de imagens privadas do Docker no Bluemix. Esse nome do registro privado chama-se namespace e deve ser exclusivo no Bluemix.">registro de imagens privadas</a>.</div>
+<p>Ao criar um contêiner a partir de uma
+imagem de contêiner com o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+run</samp>, a imagem é carregada de seu registro de imagens privadas do <span class="keyword">Bluemix</span> para o IBM Cloud
+Docker Engine. O Docker Engine então começa a criar as respectivas camadas de contêiner. Dependendo do que
+está especificado na imagem do contêiner, arquivos de app de sua máquina local podem ser incluídos no
+contêiner. Todos esses arquivos são criados por um ID de usuário (UID) e um ID de grupo (GID) em sua máquina local. O UID e o GID indicam a permissão do usuário na máquina local. Quando você desejar incluir esses
+arquivos no contêiner, os respectivos UID e GID serão mapeados para um UID e um GID dentro do contêiner. O UID e o GID mapeados podem ter permissões diferentes dentro do contêiner do que na máquina
+local. Por exemplo, o UID e o GID não raiz da máquina local são mapeados para um usuário raiz dentro do
+contêiner. Dessa maneira, o usuário pode agir como um usuário raiz dentro do contêiner e acessar, alterar
+e remover arquivos do contêiner. Como o contêiner está em execução em um ambiente isolado, o UID e o GID
+não podem acessar nenhum arquivo no host, uma vez que ele está designado a permissões não raiz fora do contêiner. </p>
+<p>Para mapear o UID e o GID da máquina local para um dentro de um contêiner, o recurso de namespace do usuário
+requer que todos os arquivos sejam criados com um UID e um GID entre 0 e 65536.</p>
+<p>O
+erro que é mostrado ocorre quando um arquivo é criado a partir de um UID ou GID fora
+desse intervalo e quando esse arquivo está incluído em uma das camadas de imagem do
+contêiner. Ao criar um contêiner a partir da imagem, o Docker Engine constrói cada camada
+da imagem. Quando um arquivo com um UID ou GID fora do intervalo é encontrado, o Docker
+Engine falha porque esse UID ou GID não pôde ser mapeado para um válido dentro do
+contêiner. O Docker Engine também falha quando um arquivo é usado em uma camada de imagem
+e removido na camada de imagem seguinte. </p>
+</div><div class="section tsResolve"><dl><dt class="dlterm">Ativar o namespace do usuário em seu Docker Engine local</dt>
+<dd>Ao construir suas imagens de contêiner localmente, certifique-se de ativar o recurso
+de namespace do usuário em seu Docker Engine local. Dessa maneira, todos os UIDs e GIDs
+em sua máquina local que estão fora do intervalo de namespace do usuário válido são
+mapeados automaticamente para um ID válido dentro do intervalo. Teste sua imagem do
+contêiner localmente antes de enviá-la por push para o registro de imagens privado do
+<span class="keyword">Bluemix</span> e usá-la
+com o <span class="keyword">IBM
+Bluemix Container Service</span>. Para obter mais informações sobre como
+ativar o recurso de namespace do usuário, consulte <a href="https://docs.docker.com/engine/reference/commandline/daemon/#starting-the-daemon-with-user-namespaces-enabled" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Iniciando o daemon com namespaces do usuário ativados</a>. </dd>
+<dt class="dlterm">Comente a camada de imagem afetada e mude a propriedade dos arquivos afetados</dt>
+<dd>Se você não puder localizar o arquivo que causa o problema, tente comentar as camadas
+de imagem em seu Dockerfile e remover o comentário uma camada após outra. Construa sua
+imagem e crie um contêiner para localizar a camada de imagem afetada. <p>Execute <samp class="ph codeph">chown [-R] root:root
+<var class="keyword varname">&lt;file_or_folder&gt;</var></samp> para mudar a propriedade do arquivo
+afetado que está armazenado em sua máquina local ou inclua esse comando na camada de
+imagem afetada no Dockerfile.</p>
+<p>Dockerfile de exemplo</p>
+<pre class="codeblock"><code>RUN curl -fsSL "https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz" \
+        | tar -xzC /tmp \
+  &amp;&amp; cd /tmp/git-${GIT_VERSION} \
+  &amp;&amp; ./configure \
+  &amp;&amp; make all \
+  &amp;&amp; make install \
+  &amp;&amp; chown -R root:root /tmp</code></pre>
+</dd>
+</dl>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1444" lang="pt-br" id="ts_image_export"><h3 class="topictitle3" id="d84487e1444">Não é possível exportar a imagem de seu registro de imagens privadas do <span class="keyword">Bluemix</span></h3>
+<div class="body tsBody"><div class="section tsSymptoms">Você está conectado ao <span class="keyword">IBM
+Bluemix Container Service</span> e deseja puxar uma imagem de seu
+registro privado do <span class="keyword">Bluemix</span> para a máquina
+local usando o comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp>. O comando falha indicando que <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp> não é suportado. </div><div class="section tsCauses">O comando <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp>
+não é suportado para puxar uma imagem de seu registro privado do <span class="keyword">Bluemix</span> para a máquina local. </div><div class="section tsResolve">Para exportar uma imagem de seu registro privado do <span class="keyword">Bluemix</span>, siga estas etapas. <ol><li><a href="container_cli_cfic_install.html#container_cli_login" title="Depois de instalar a CLI, efetue login para usá-la.">Efetue login no <span class="keyword">IBM
+Bluemix Container Service</span></a>. Se você já estiver conectado,
+certifique-se de que suas variáveis de ambiente não estejam configuradas para usar os comandos nativos do Docker no <span class="keyword">IBM
+Bluemix Container Service</span>. </li>
+<li>Liste suas imagens.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+<li>Puxe uma imagem de seu registro privado do <span class="keyword">Bluemix</span> para a máquina local. Use o
+nome ou o ID da imagem que foi retornado na etapa anterior.
+<pre class="codeblock"><code>docker pull <var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+</li>
+<li>Verifique se a imagem foi puxada para a máquina local. <pre class="codeblock"><code>docker images</code></pre>
+</li>
+<li>Salve a imagem em um arquivo <span class="ph filepath">.tar</span>.
+<pre class="codeblock"><code>docker export <var class="keyword varname">&lt;image_name_or_id&gt;</var> &gt; <var class="keyword varname">&lt;exported_image_name&gt;</var>.tar</code></pre>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1600" lang="pt-br" id="ts_namespace_change"><h3 class="topictitle3" id="d84487e1600">O namespace para uma organização não pode ser mudado</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Não
+é possível localizar um método para mudar o namespace.</div><div class="section tsCauses">O
+namespace de uma organização não pode ser mudado depois que ela é
+criada.</div><div class="section tsResolve">É
+possível criar outra organização e configurar o namespace para essa
+nova organização com o nome desejado.</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1657" lang="pt-br" data-hd-audience="" id="ts_image_push_login"><h3 class="topictitle3" id="d84487e1657">Login solicitado durante <samp class="ph codeph">docker push</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao tentar executar <samp class="ph codeph">docker push</samp> para incluir uma imagem no registro de
+imagens privadas do <span class="keyword">Bluemix</span>, as credenciais de login
+são solicitadas a você. Ao inserir as credenciais do Docker ou <span class="keyword">Bluemix</span>, a autenticação
+falha.</div><div class="section tsCauses">A autenticação pode falhar devido às razões a seguir. <ul><li>O token de acesso, que contém informações sobre autenticação do Cloud Foundry, está expirado.</li>
+<li>O serviço de autorização do <span class="keyword">Bluemix</span>
+não está disponível.</li>
+</ul>
+</div><div class="section tsResolve"><div class="p"><ul><li>Se você estiver usando o plug-in do <span class="keyword">IBM
+Bluemix Container Service</span>:<ol><li>Efetue login no Cloud Foundry CLI executando o comando para atualizar o token de acesso em eu
+computador.<pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+<span class="ph">O parâmetro de conexão única <span class="keyword option">--sso</span> é necessário quando você efetua login
+com um ID federado. Se essa opção for usada, abra
+<a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>
+para obter uma senha descartável. Se
+você não incluir a opção <span class="keyword option">--sso</span>, conclua estas subetapas.</span><ol type="a"><li>Para <span class="ph uicontrol">E-mail</span>, insira o
+IBMId que você usa para efetuar login no <span class="keyword">Bluemix</span>.</li>
+<li>Para <span class="ph uicontrol">Senha</span>, insira a senha para o
+IBMId que você usa para efetuar login no
+<span class="keyword">Bluemix</span>. Ao inserir
+seu nome de usuário e senha, a organização e o espaço do
+Bluemix são recuperados.</li>
+<li>Insira o número que representa uma de suas organizações do <span class="keyword">Bluemix</span>. </li>
+<li>Insira o número que representa um de seus espaços existentes do <span class="keyword">Bluemix</span>.</li>
+</ol>
+</li>
+<li>Inicialize a CLI do <span class="keyword">IBM
+Bluemix Container Service</span> para
+recriar o seu token de acesso.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</div>
+
+<p>Se o prompt ainda ocorrer depois que você efetuou login novamente, o serviço de autorização do <span class="keyword">Bluemix</span> não está disponível.
+Tentar novamente mais tarde.</p>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e1829" lang="pt-br" id="ts_ov_containers"><h2 class="topictitle2" id="d84487e1829">Resolvendo problemas de contêineres</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e1829"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e1892" lang="pt-br" id="ts_group_502"><h3 class="topictitle3" id="d84487e1892">Erro <samp class="ph codeph">502 Bad Gateway</samp> ao acessar um app</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><div class="p">Você implementou um grupo de contêiner com sucesso, mas ao abrir a URL do app, o erro
+a seguir é
+exibido.<pre class="codeblock"><code>502 Bad Gateway: Registered endpoint failed to handle the request.</code></pre>
+</div>
+</div><div class="section tsCauses"><div class="p"><ol><li>O roteamento pode estar sendo configurado ainda.</li>
+<li>O contêiner pode não estar respondendo.</li>
+<li>Pode haver um erro com o roteamento, embora o grupo de contêiner esteja sendo executado
+com sucesso.</li>
+</ol>
+</div>
+</div><div class="section tsResolve"><ol><li>Aguarde mais alguns minutos para permitir tempo suficiente para conclusão do roteamento. Pode haver uma
+espera de 5 minutos após a execução do processo do contêiner antes de o grupo de contêiner poder se conectar à
+rota especificada. </li>
+<li>Se você tiver esperado 5 minutos e suspeitar que ocorreu um erro, veja se o contêiner está
+respondendo ligando um endereço IP ao contêiner em execução e, em seguida, execute um comando curl para esse
+endereço IP e porta.<ol type="a"><li>Execute o comando a seguir para obter o ID de uma das instâncias de contêiner no grupo. Observe o
+ID do contêiner e a
+porta.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+<li>Solicite um endereço IP executando o comando a
+seguir.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li>Ligue o endereço IP à instância do contêiner executando o comando a
+seguir.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">IP_address</var> <var class="keyword varname">container_ID</var></code></pre>
+</li>
+<li>Em um navegador, insira a URL no aplicativo com o endereço IP e a porta. Exemplo:
+<span class="ph filepath">http://<var class="keyword varname">IP_address</var>:<var class="keyword varname">port</var></span><p>Se não é possível
+acessar o aplicativo, há um problema com o grupo de contêiner e o grupo deve ser
+recriado. Se é possível acessar o aplicativo, o contêiner está sendo executado com sucesso, mas há
+um erro com o roteamento. Entre em contato com o Suporte. <span class="keyword">IBM
+Bluemix</span></p>
+</li>
+</ol>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e2010" lang="pt-br" id="ts_firewall"><h3 class="topictitle3" id="d84487e2010">Solicitações de blocos de proxy interno para o serviço</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao tentar acessar o <span class="keyword">IBM
+Bluemix Container Service</span>, a conexão falhará com uma
+das mensagens de erro a seguir.
+<pre class="pre screen"><code>Conexão recusada</code></pre>
+<pre class="pre screen"><code>Conexão expirada</code></pre>
+</div><div class="section tsCauses">Você pode ter configurações de firewall que estão evitando a comunicação do seu computador com
+o <span class="keyword">IBM
+Bluemix Container Service</span>. Geralmente, as configurações
+de proxy interno são configuradas para permitir somente comunicação permissível por razões de segurança. </div><div class="section tsResolve">Em seu firewall, abra a comunicação de seu computador com o <span class="keyword">IBM
+Bluemix Container Service</span> para os endereços IP de uma região
+específica:  <ul id="ts_firewall__ul_fn5_p4l_wz"><li>Sul dos EUA:
+<pre class="codeblock"><code>169.46.9.7
+169.46.9.19
+169.46.9.24
+169.46.9.28
+169.55.211.15
+169.55.211.17
+169.55.211.21
+169.55.211.28</code></pre>
+</li>
+<li>Londres:<pre class="codeblock"><code>159.8.188.181
+159.8.188.182
+159.8.188.184
+159.8.188.188
+169.50.153.66
+169.50.153.77
+169.50.153.91
+169.50.153.94</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e2091" lang="pt-br" id="ts_group_auto_recreate_instance"><h3 class="topictitle3" id="d84487e2091">Instâncias do grupo de contêiner são recriadas repetidamente durante a inicialização pelo modo de recuperação automática do <span class="keyword">IBM
+Bluemix Container Service</span></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Você criou um grupo de contêiner e ativou a recuperação automática. Durante a inicialização do
+grupo de contêiner, instâncias de grupo não responsivas são removidas e recriadas repetidamente.</div><div class="section tsCauses"><p>O app que está em execução em seu grupo de contêiner demora muito para começar a atender na porta
+exposta. Se você tiver ativado a recuperação automática para seu grupo de contêiner, o <span class="keyword">IBM
+Bluemix Container Service</span> verificará o funcionamento de cada instância com
+uma solicitação de HTTP na porta TCP exposta após a criação do grupo. Se uma instância não estiver atendendo
+na porta exposta em 3 minutos, a instância será marcada como não responsiva e será removida,
+recriada e reiniciada. Esse processo se repetirá até que o número máximo de instâncias recriadas seja
+atingido. Em seguida, a recuperação automática será desativada. </p>
+</div><div class="section tsResolve"><p>Para executar um app em um grupo de contêiner com a recuperação automática ativada, certifique-se de que o app seja iniciado e
+atenda na porta exposta em menos de 2 minutos. Dependendo do tipo de app,
+existem métodos diferentes para assegurar uma inicialização rápida de seu app.</p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e2172" lang="pt-br" id="ts_bridge_app"><h3 class="topictitle3" id="d84487e2172">O serviço do
+<span class="keyword">Bluemix</span> não é
+ligado diretamente a um contêiner</h3>
+<div class="body tsBody"><div class="section tsSymptoms">Seu
+serviço do <span class="keyword">Bluemix</span>
+não é ligado diretamente a um contêiner usando a ligação de serviços.</div><div class="section tsCauses">Alguns
+serviços do <span class="keyword">Bluemix</span>
+não suportam ligação direta de serviços com um contêiner e levam a uma falha durante uma
+criação de contêiner. Para esses serviços, a ligação de serviços não é passada com a
+variável de ambiente <samp class="ph codeph">VCAP_SERVICES</samp>. Para contornar esse problema, é
+possível usar a CLI para criar um app Cloud Foundry que age como ponte para enviar
+<samp class="ph codeph">VCAP_SERVICES</samp> do serviço para um contêiner. </div><div class="section tsResolve"><ol><li>Selecione um espaço no qual implementar um contêiner, tal como <samp class="ph codeph">dev</samp>.</li>
+<li id="ts_bridge_app__create_cfapp">Identifique um app existente ou crie um app Cloud Foundry ao qual ligar o serviço do
+<span class="keyword">Bluemix</span>. Esse app é usado para a
+passagem das informações <samp class="ph codeph">VCAP_SERVICES</samp>, por isso é referido como app ponte.
+<div class="p">Para criar um app Cloud Foundry:<div class="note tip"><span class="tiptitle">Dica:</span> O app que você cria concluindo estas etapas
+é um item temporário para armazenar os serviços <samp class="ph codeph">VCAP_SERVICES</samp>. Para incorrer em menos custos do que
+um app em execução, esse aplicativo não é iniciado ou executado. A execução do app não é necessária para fornecer os
+<samp class="ph codeph">VCAP_SERVICES</samp> para o contêiner.</div>
+</div>
+<ol type="a"><li>Crie um diretório e um arquivo de texto em seu diretório de app de serviço. Exemplo:
+<span class="ph filepath"><var class="keyword varname">&lt;directory&gt;</var>/<var class="keyword varname">&lt;empty_file.txt&gt;</var></span>. Esse
+arquivo serve como o arquivo de origem para o app, embora não precise conter nenhum conteúdo.<ul><li>Exemplo
+do Windows:
+<span class="ph filepath">C:\Users\<var class="keyword varname">User</var>\<var class="keyword varname">containerbridge</var>\<var class="keyword varname">empty_file.txt</var></span></li>
+<li>Exemplo do Linux:
+<span class="ph filepath">/<var class="keyword varname">user_home_directory</var>/<var class="keyword varname">containerbridge</var>/<var class="keyword varname">empty_file.txt</var></span></li>
+<li>Exemplo do S.O. X:
+<span class="ph filepath">/Users/<var class="keyword varname">user_home_directory</var>/<var class="keyword varname">containerbridge</var>/<var class="keyword varname">empty_file.txt</var></span></li>
+</ul>
+</li>
+<li>Execute esse comando para criar um app de tempo de execução zero, sem custos. O app pode ter qualquer nome embora
+<var class="keyword varname">containerbridge</var> seja um nome comum uma vez que o app age como uma ponte do contêiner
+para um serviço.<p></p>
+<pre class="codeblock" id="ts_bridge_app__containerbridgecode"><code>cf push <var class="keyword varname">&lt;appname&gt;</var> -p <var class="keyword varname">&lt;directory&gt;</var> -i 1 -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -k 1M -m 64M --no-hostname --no-manifest --no-route --no-start</code></pre>
+Exemplo:
+<pre class="codeblock"><code>cf push <var class="keyword varname">containerbridge</var> -p <var class="keyword varname">containerbridge</var> -i 1 -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -k 1M -m 64M --no-hostname --no-manifest --no-route --no-start</code></pre>
+</li>
+</ol>
+</li>
+<li>Se o serviço do
+<span class="keyword">Bluemix</span> que você
+deseja ligar ainda não tiver sido incluído, inclua-o no espaço
+do <span class="keyword">Bluemix</span>.<ol type="a"><li>Para obter uma lista dos serviços do
+<span class="keyword">Bluemix</span>
+disponíveis, execute o comando <samp class="ph codeph">cf
+marketplace</samp>. A lista resultante inclui o nome do serviço do
+<span class="keyword">Bluemix</span>, seu tipo
+de plano e uma descrição do que é o serviço.</li>
+<li>Execute o comando <samp class="ph codeph">create-service</samp> e inclua o nome do serviço e o plano a partir da
+lista <samp class="ph codeph">cf marketplace</samp>. Além disso, inclua seu próprio nome de instância do
+serviço.<pre class="codeblock"><code>cf create-service <var class="keyword varname">&lt;service&gt;</var> <var class="keyword varname">&lt;plan&gt;</var> <var class="keyword varname">&lt;service_instance&gt;</var></code></pre>
+Exemplo<pre class="codeblock"><code>cf create-service <var class="keyword varname">cleardb</var> <var class="keyword varname">spark</var> <var class="keyword varname">my-clear-db</var></code></pre>
+</li>
+</ol>
+</li>
+<li>Ligue o serviço do
+<span class="keyword">Bluemix</span> ao app
+executando o comando bind-service. Repita para ligar outros serviços do
+<span class="keyword">Bluemix</span> ao app
+ponte.<pre class="codeblock"><code>cf bind-service <var class="keyword varname">&lt;appname&gt;</var> <var class="keyword varname">&lt;service_instance&gt;</var></code></pre>
+Exemplo<pre class="codeblock"><code>cf bind-service <var class="keyword varname">containerbridge</var> <var class="keyword varname">my-clear-db</var></code></pre>
+</li>
+<li>Se for solicitado para remontar o app, execute o comando a
+seguir.<pre class="codeblock"><code>cf restage <var class="keyword varname">containerbridge</var></code></pre>
+</li>
+<li>Revise as informações do serviço do
+<span class="keyword">Bluemix</span> que são
+passadas por meio do app <var class="keyword varname">containerbridge</var> executando o comando a seguir.<pre class="codeblock"><code>cf env <var class="keyword varname">&lt;appname&gt;</var> </code></pre>
+Exemplo<pre class="codeblock"><code>cf env <var class="keyword varname">containerbridge</var> </code></pre>
+<p>Os
+resultados incluem os parâmetros de serviço do <span class="keyword">Bluemix</span>
+injetados usando a variável de ambiente <samp class="ph codeph">VCAP_SERVICES</samp>. </p>
+<div class="p">Por exemplo:
+<pre class="codeblock"><code>{
+ "VCAP_SERVICES": {
+  "&lt;service_name&gt;": [
+   {
+    "credentials": {
+     "hostname": "&lt;hostname_id&gt;",
+     "jdbcUrl": "&lt;jdbc_URL&gt;",
+     "name": "&lt;encoded_name&gt;",
+     "password": "&lt;encoded_password&gt;",
+     "port": "&lt;port_number&gt;",
+     "uri": "&lt;service_URI&gt;",
+     "username": "&lt;encoded_username&gt;"
+    },
+    "label": "&lt;service_name&gt;",
+    "name": "&lt;service_instance&gt;",
+    "plan": "&lt;plan_name&gt;",
+    "tags": [
+     "&lt;tag1&gt;",
+     "&lt;tag2&gt;",
+     "&lt;tag3&gt;"
+    ]
+   } </code></pre>
+</div>
+</li>
+</ol>
+
+<div class="p">Depois de criar a ligação entre os serviços do <span class="keyword">Bluemix</span> e o app
+<var class="keyword varname">containerbridge</var>, crie um contêiner e ligue o app
+<var class="keyword varname">containerbridge</var> a ele. Para obter mais informações, consulte a
+sinalização <samp class="ph codeph">CCS_BIND_APP</samp> nas variáveis de ambiente em <a href="container_single_ui.html#container_single_cli" title="Crie um contêiner usando o comando run. Um contêiner deve ter uma imagem incluída. Se você ainda não tiver uma, será possível usar uma das imagens certificadas padrão da IBM que estão disponíveis por padrão no registro de imagens privadas de sua organização.">Criando um contêiner único</a> ou <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">Criando um grupo de
+contêiner</a>.<div class="note tip" id="ts_bridge_app__delete_bound_app"><span class="tiptitle">Dica:</span> Depois que o app de ligação estiver ligado a um contêiner, não exclua o app de ligação. Se
+você excluir um app de ligação ligado, o contêiner será interrompido. Se
+o app ponte não for mais necessário, exclua o contêiner e quaisquer outros contêineres que estiverem usando
+o app ponte antes de excluí-lo.</div>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e2517" lang="pt-br" id="su_error"><h3 class="topictitle3" id="d84487e2517"><samp class="ph codeph">Cannot create child process</samp> com o comando <samp class="ph codeph">su</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><p>Ao
+utilizar o comando do Linux de usuário substituto (<samp class="ph codeph">su</samp>) para editar os
+usuários de um contêiner, você recebe a mensagem <samp class="ph codeph">su: cannot create child process:
+Resource temporarily unavailable</samp>, mesmo o comando <samp class="ph codeph">su</samp> tendo
+funcionado no ambiente do Docker local. É possível passar por esse problema ao efetuar login em um contêiner ou quando o
+comando <samp class="ph codeph">su</samp> é executado como parte de um script dentro do contêiner. </p>
+<p>Exemplo:</p>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+<pre class="codeblock"><code>adduser <var class="keyword varname">user</var></code></pre>
+<pre class="codeblock"><code>su - <var class="keyword varname">user</var></code></pre>
+Resultado:<pre class="codeblock"><code>su: cannot create child process: Resource temporarily unavailable</code></pre>
+</div><div class="section tsCauses"><p>Esse problema ocorre com frequência em contêineres construídos com imagens do Centos 7, embora também
+possa ocorrer com outros tipos de imagem. </p>
+</div><div class="section tsResolve">É possível resolver o problema editando o Dockerfile e recriando a imagem ou
+efetuando login no contêiner em execução.<div class="p">Para resolver o problema editando o Dockerfile:<ol><li>No diretório local do qual você está criando sua imagem, crie uma pasta <span class="ph filepath">etc</span>,
+se ainda não existir uma.<pre class="codeblock"><code>mkdir etc</code></pre>
+</li>
+<li>Navegue para o diretório <samp class="ph codeph">etc</samp>.<pre class="codeblock"><code>cd etc</code></pre>
+</li>
+<li>Na pasta <span class="ph filepath">etc</span>, crie um diretório <span class="ph filepath">pam.d</span>.<pre class="codeblock"><code>mkdir pam.d</code></pre>
+</li>
+<li>Navegue para o diretório <samp class="ph codeph">pam.d</samp>.<pre class="codeblock"><code>cd pam.d</code></pre>
+</li>
+<li>No diretório <span class="ph filepath">pam.d</span>, crie um arquivo chamado <span class="ph filepath">su</span> e
+abra-o com um editor de texto.</li>
+<li>No arquivo <span class="ph filepath">su</span>, copie o texto a seguir, em que todas as
+variáveis <samp class="ph codeph">session</samp> estão configuradas como <samp class="ph codeph">optional</samp> e salve as mudanças no
+arquivo.
+<pre class="codeblock"><code>#%PAM-1.0
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth           sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth           required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         include         system-auth
+password        include         system-auth
+session         optional        system-auth
+session         optional        postlogin
+session         optional        pam_xauth.so</code></pre>
+</li>
+<li>No Dockerfile da imagem, inclua as informações
+a seguir.<pre class="codeblock"><code>RUN sed -i 's/session.*include/session        optional/' /etc/pam.d/su</code></pre>
+</li>
+<li>Recrie a imagem. Para obter mais informações, consulte
+<a href="container_images_adding_ov.html#container_images_building" title="Crie um Dockerfile para construir uma imagem. Um Dockerfile é um arquivo que inclui especificações para construir uma imagem do Docker, que é a base para um contêiner. Depois de criar o Dockerfile, será possível construir a imagem localmente ou diretamente no registro privado do Bluemix usando a interface da linha de comandos. Em seguida, a imagem ficará disponível por meio da visualização Catálogo no Bluemix.">Construindo uma imagem</a>.</li>
+<li>Recrie o contêiner único ou o grupo de contêiner. Para obter mais informações, consulte <a href="container_single_ui.html#container_single_cli" title="Crie um contêiner usando o comando run. Um contêiner deve ter uma imagem incluída. Se você ainda não tiver uma, será possível usar uma das imagens certificadas padrão da IBM que estão disponíveis por padrão no registro de imagens privadas de sua organização.">Criando um contêiner único</a> ou <a href="container_ha.html#container_group_cli" title="Crie e implemente um contêiner de grupo escalável a partir da CLI do IBM Bluemix Container Service. Um grupo de contêiner inclui dois ou mais contêineres que executam a mesma imagem. Use grupos de contêineres para executar serviços de longo prazo com cargas de trabalho que requeiram escalabilidade e confiabilidade ou para testar na escala necessária.">Criando um grupo de
+contêiner</a>.</li>
+<li>Para verificar, execute o comando
+a seguir.<pre class="codeblock"><code><span class="ph">bx ic</span> logs <var class="keyword varname">container_name</var></code></pre>
+Resultado:<pre class="codeblock"><code>%Changing password for user <var class="keyword varname">user_name</var>.
+passwd: todos os tokens de autenticação atualizados com sucesso.</code></pre>
+</li>
+</ol>
+</div>
+<div class="p">Para resolver o problema efetuando login no contêiner em execução:<ol><li>Crie o contêiner.</li>
+<li>Efetue login no contêiner.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li>Navegue para o diretório <samp class="ph codeph">etc</samp>.<pre class="codeblock"><code>cd etc</code></pre>
+</li>
+<li>Navegue para o diretório <samp class="ph codeph">pam.d</samp>.<pre class="codeblock"><code>cd pam.d</code></pre>
+</li>
+<li>Abra o editor visual usando o comando <samp class="ph codeph">vi</samp> do Linux.<pre class="codeblock"><code>vi su</code></pre>
+</li>
+<li>No arquivo <span class="ph filepath">su</span>, mude todas as variáveis de sessão para
+<samp class="ph codeph">optional</samp> e salve as mudanças no arquivo. Para obter mais informações
+sobre como usar o editor <samp class="ph codeph">vi</samp>, consulte
+<a href="https://www.washington.edu/computing/unix/vi.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Como
+usar o editor vi</a>.<pre class="codeblock"><code>#%PAM-1.0
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth           sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth           required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         include         system-auth
+password        include         system-auth
+session         optional        system-auth
+session         optional        postlogin
+session         optional        pam_xauth.so</code></pre>
+</li>
+<li>Efetue login como o usuário.<pre class="codeblock"><code>su - <var class="keyword varname">user</var></code></pre>
+</li>
+<li>Execute o comando do Linux <samp class="ph codeph">id</samp> para ver as informações de
+configuração do usuário.<pre class="codeblock"><code>id</code></pre>
+Resultado:<pre class="codeblock"><code>uid=1000(<var class="keyword varname">user</var>) gid=1000(<var class="keyword varname">user</var>) groups=1000(<var class="keyword varname">user</var>)</code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e2812" lang="pt-br" id="ts_container_shutdown"><h3 class="topictitle3" id="d84487e2812">O contêiner para e é encerrado após a criação</h3>
+<div class="body tsBody"><p class="shortdesc">Você criou um contêiner, mas ele foi encerrado imediatamente.</p>
+<div class="section tsSymptoms">Você executou um contêiner localmente e ele foi executado com sucesso, mas ao executar o contêiner no
+<span class="keyword">Bluemix</span>, você vê uma das situações a seguir.<ul><li>No painel do <span class="keyword">Bluemix</span>, o
+estado do contêiner muda de <samp class="ph codeph">Running</samp> para <samp class="ph codeph">Stopped</samp>.</li>
+<li>Na CLI, ao executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+inspect container</samp>, você vê que o status do estado é <samp class="ph codeph">Shutdown</samp>. </li>
+</ul>
+Você também tentou executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+logs</samp>, mas não localizou nenhum problema com o contêiner.</div><div class="section tsCauses"><p>Ao executar um contêiner no <span class="keyword">Bluemix</span>,
+ele é sempre executado no modo separado, semelhante à execução de <samp class="ph codeph">docker run -d</samp> quando um
+contêiner é executado localmente. Como resultado, mesmo os contêineres iniciados localmente não são executados continuamente no
+<span class="keyword">Bluemix</span>.</p>
+</div><div class="section tsResolve"><div class="p">Deve-se tornar o contêiner um aplicativo de longa execução editando o Dockerfile. Por exemplo, se
+você tiver incluído um comando para gerar a frase "hello world" a cada dez segundos, essa ação contínua
+tornará seu contêiner um aplicativo de
+longa execução.<pre class="codeblock"><code>ENTRYPOINT ["/bin/sh"]
+CMD ["-c","while true; do echo hello world; sleep 10;done"]</code></pre>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e2921" lang="pt-br" id="ts_incomplete_deletion"><h3 class="topictitle3" id="d84487e2921">O contêiner excluído continua exibido na GUI do <span class="keyword">Bluemix</span></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Na GUI do <span class="keyword">Bluemix</span>, você
+excluiu um contêiner, mas ele continua exibido na GUI do <span class="keyword">Bluemix</span> e usa cota.</div><div class="section tsCauses"><p>Na GUI do <span class="keyword">Bluemix</span>, a exclusão
+não pôde ser concluída.</p>
+</div><div class="section tsResolve"><p>Exclua o contêiner a partir da linha de comandos.</p>
+
+<div class="p">Para contêineres únicos, siga estas etapas.<ol><li>Exclua o contêiner executando uma das opções da linha de comandos a seguir.<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 1 para usar comandos bx ic para gerenciar contêineres. Os comandos do Docker são usados somente para desenvolvimento do contêiner local. (Abre em uma nova guia ou janela)"><img src="images/option1.png" alt="Opção 1 de configuração do plug-in BX IC"></a> Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> com comandos
+<span class="ph"><samp class="ph codeph">bx ic</samp></span></span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+</li>
+<li><div class="p"><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 2 configurando as variáveis de ambiente para usar comandos docker sempre que possível para gerenciar contêineres. Os comandos bx ic são usados somente quando não existe nenhuma alternativa suportada do Docker. (Abre em uma nova guia ou janela)"><img src="images/option2.png" alt="Opção 2 de configuração do plug-in BX IC"></a> Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> com comandos <samp class="ph codeph">docker</samp></span>
+<pre class="codeblock"><code>docker rm [-f] CONTAINER</code></pre>
+</div>
+</li>
+</ul>
+</li>
+<li>Verifique se o contêiner foi removido executando um dos comandos a seguir para listar todos os
+contêineres em seu espaço:<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 1 para usar comandos bx ic para gerenciar contêineres. Os comandos do Docker são usados somente para desenvolvimento do contêiner local. (Abre em uma nova guia ou janela)"><img src="images/option1.png" alt="Opção 1 de configuração do plug-in BX IC"></a> Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> com comandos
+<span class="ph"><samp class="ph codeph">bx ic</samp></span></span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 2 configurando as variáveis de ambiente para usar comandos docker sempre que possível para gerenciar contêineres. Os comandos bx ic são usados somente quando não existe nenhuma alternativa suportada do Docker. (Abre em uma nova guia ou janela)"><img src="images/option2.png" alt="Opção 2 de configuração do plug-in BX IC"></a> Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> com comandos <samp class="ph codeph">docker</samp></span>
+<pre class="codeblock"><code>docker ps -a</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+<div class="p">Para grupos de contêineres, siga estas etapas. <ol><li>Exclua o grupo de contêiner executando o comando a seguir.<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 1 para usar comandos bx ic para gerenciar contêineres. Os comandos do Docker são usados somente para desenvolvimento do contêiner local. (Abre em uma nova guia ou janela)"> <img src="images/option1.png" alt="Opção 1 de configuração de plug-in BX IC"></a>
+<a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 2 configurando as variáveis de ambiente para usar comandos docker sempre que possível para gerenciar contêineres. Os comandos bx ic são usados somente quando não existe nenhuma alternativa suportada do Docker. (Abre em uma nova guia ou janela)"> <img src="images/option2.png" alt="Opção 2 de configuração do plug-in BX IC"></a>
+Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span></span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li>Verifique se o contêiner foi removido executando o comando para listar todos os contêineres em
+seu espaço.<ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 1 para usar comandos bx ic para gerenciar contêineres. Os comandos do Docker são usados somente para desenvolvimento do contêiner local. (Abre em uma nova guia ou janela)"> <img src="images/option1.png" alt="Opção 1 de configuração de plug-in BX IC"></a>
+<a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="Durante o bx ic login, você selecionou a Opção 2 configurando as variáveis de ambiente para usar comandos docker sempre que possível para gerenciar contêineres. Os comandos bx ic são usados somente quando não existe nenhuma alternativa suportada do Docker. (Abre em uma nova guia ou janela)"> <img src="images/option2.png" alt="Opção 2 de configuração do plug-in BX IC"></a>
+Plug-in do <span class="keyword">IBM
+Bluemix Container Service</span></span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+<p>Se você executar os comandos e o contêiner continuar sendo exibido na GUI do <span class="keyword">Bluemix</span>, espere para ver se ele é removido
+mais tarde. </p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e3254" lang="pt-br" id="ts_group_network_failure"><h3 class="topictitle3" id="d84487e3254">O grupo de contêiner está mostrando um status HAS_INACTIVE_INSTANCES</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+group-inspect</samp>, o grupo de contêiner está exibindo um status HAS_INACTIVE_INSTANCES.</div><div class="section tsCauses"><p>Se a rede falhar ao ser configurada quando o grupo for criado ou falhar na verificação de funcionamento para
+uma ou mais instâncias, o estado da instância mudará para <samp class="ph codeph">INACTIVE</samp>. Se alguma instância em
+um grupo estiver inativa, o estado do grupo mudará para HAS_INACTIVE_INSTANCES.</p>
+</div><div class="section tsResolve"><p>Se o problema ocorrer quando a verificação de funcionamento falhar para uma instância, o problema poderá ser resolvido sem
+nenhuma ação necessária. Se o problema ocorrer quando o grupo for criado pela primeira vez, será possível tentar recriar
+o grupo. Se o problema ocorrer novamente após a recriação, a rede poderá não ser configurável para o
+app quando ele for implementado como um grupo. Tente implementar o app como um contêiner único em vez disso.</p>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e3327" lang="pt-br" id="ts_ov_compose"><h2 class="topictitle2" id="d84487e3327">Resolvendo problemas do Docker Compose</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e3327"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e3388" lang="pt-br" id="ts_compose_insecure_connection"><h3 class="topictitle3" id="d84487e3388">Aviso de conexão HTTPS não segura é exibido ao executar comandos do Docker Compose</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao
+executar comandos do Docker Compose na CLI, um aviso semelhante a um dos exemplos a
+seguir é exibido. Outras mensagens relacionadas ao erro podem ser localizadas na <a href="https://urllib3.readthedocs.org/en/latest/security.html" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Documentação
+de desenvolvimento de urlib3</a>.<div class="p"><pre class="pre msgblock"><code>/.../requests/packages/urllib3/util/ssl_.py:315: SNIMissingWarning: Uma solicitação HTTPS 
+foi feita, mas a extensão SNI (Subject Name Indication) para o TLS não está disponível nessa 
+plataforma. Isso pode fazer com que o servidor apresente um certificado TLS incorreto, que pode causar 
+falhas de validação. Para obter mais informações, consulte 
+https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning. SNIMissingWarning</code></pre>
+
+<pre class="pre msgblock"><code>/.../requests/packages/urllib3/util/ssl_.py:120: InsecurePlatformWarning: um objeto 
+SSLContext true não está disponível. Isso evita que urllib3 configure o SSL adequadamente 
+e pode fazer com que determinadas conexões SSL falhem. Para obter mais informações, consulte 
+https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning. InsecurePlatformWarning</code></pre>
+</div>
+</div><div class="section tsCauses">Essa mensagem
+de erro é típica para sistemas operacionais Linux e causada por uma verificação
+ausente de solicitações de HTTPS. </div><div class="section tsResolve"><ul><li>Opção 1: instale o <samp class="ph codeph">ndg-httpsclient</samp> para evitar mensagens de erro e avisos
+relacionados ao SSL.<pre class="codeblock"><code>pip install ndg-httpsclient==0.4.0</code></pre>
+</li>
+<li>Opção 2: se o <samp class="ph codeph">ndg-httpsclient</samp> já estiver instalado em seu computador, faça upgrade do
+pacote para a versão mais recente. <pre class="codeblock"><code>pip install --upgrade ndg-httpsclient</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e3469" lang="pt-br" id="ts_compose_commands_failed"><h3 class="topictitle3" id="d84487e3469">O erro Nenhum módulo nomeado fila é exibido ao executar comandos do Docker Compose</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Assim que você executar comandos do Docker Compose em sua CLI, uma mensagem de erro semelhante ao
+exemplo a seguir será exibida. <div class="p"><pre class="pre msgblock"><code>File "/usr/local/bin/docker-compose", line 9, in &lt;module&gt; 
+load_entry_point('docker-compose==1.6.2', 'console_scripts', 'docker-compose')() File 
+"/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 357, 
+in load_entry_point return get_distribution(dist).load_entry_point(group, name) File 
+"/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 2394, 
+in load_entry_point return ep.load() File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", 
+line 2108, in load entry = __import__(self.module_name, globals(),globals(), ['__name__']) 
+File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 26, in &lt;module&gt; from ..project import NoSuchService 
+File "/Library/Python/2.7/site-packages/compose/project.py", line 10, in &lt;module&gt; from . import parallel 
+File "/Library/Python/2.7/site-packages/compose/parallel.py", line 9, in &lt;module&gt; from six.moves.queue import Empty ImportError: 
+No module named queue</code></pre>
+</div>
+</div><div class="section tsCauses">O caminho do
+Python está apontando para o diretório errado. O pacote Docker Compose Python
+não pode ser localizado. </div><div class="section tsResolve">Mude o caminho do Python para o diretório correto.
+<pre class="codeblock"><code>export PYTHONPATH=/Library/Python/2.7/site-packages/:$PYTHONPATH</code></pre>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e3532" lang="pt-br" id="ts_ov_volumes"><h2 class="topictitle2" id="d84487e3532">Resolução de problemas de armazenamento de dados</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e3532"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e3595" lang="pt-br" id="ts_vol_owner"><h3 class="topictitle3" id="d84487e3595">Erro de permissão ao mudar o proprietário de um diretório de volume montado em um contêiner</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Você obtém um erro de permissão quando tenta mudar a propriedade de um arquivo ou diretório
+para um volume montado em um contêiner.</div><div class="section tsCauses"><span class="ph" id="ts_vol_owner__containers_namespace">Para o <span class="keyword">IBM
+Bluemix Container Service</span>, o <a href="https://docs.docker.com/engine/security/security/#kernel-namespaces" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">recurso de namespace do usuário</a> está ativado para o Docker Engine.</span> A raiz efetiva
+dentro do contêiner é mapeada para um usuário não raiz no host de cálculo. A origem do volume
+montado é um Network File System (NFS). Como o NFS não está ciente de namespaces do usuário, todas as verificações
+não de usuário são executadas para as operações em arquivos e diretórios montados no contêiner. </div><div class="section tsResolve"><p></p>
+<ol><li>No Dockerfile para uma imagem, inclua as linhas a seguir para criar um usuário um ID do usuário (UID)
+disponível. Por exemplo, é possível nomear o usuário como <var class="keyword varname">volumeeditor</var>.<pre class="codeblock"><code>RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">volumeeditor</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">volumeeditor</var></code></pre>
+</li>
+<li>Construa e envie por push a imagem para seu registro de imagens privadas do <span class="keyword">Bluemix</span>.</li>
+<li>Crie um contêiner com a imagem na qual o caminho do volume está
+montado.<div class="note tip"><span class="tiptitle">Dica:</span> <span class="ph">Execute <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> para recuperar
+seu namespace e substitua <var class="keyword varname">&lt;my_namespace&gt;</var> por suas informações de namespace.</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --volume <var class="keyword varname">volume_name</var>:<var class="keyword varname">/path/to/files</var> --name <var class="keyword varname">fixVolumePermissions</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image</var></code></pre>
+</li>
+<li>Efetue login no contêiner.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">container_name</var> bash</code></pre>
+</li>
+<li>Defina uma variável de ambiente denominada <kbd class="ph userinput">MOUNTPATH</kbd> para o caminho
+de montagem.<pre class="codeblock"><code>MOUNTPATH="<var class="keyword varname">/path/to/files</var>"</code></pre>
+</li>
+<li>Inclua o usuário no grupo
+<samp class="ph codeph">root</samp>.<pre class="codeblock"><code>adduser <var class="keyword varname">volumeeditor</var> root</code></pre>
+</li>
+<li>Configure permissões para que todos os membros do grupo tenham acesso de leitura e gravação à montagem do volume.
+<pre class="codeblock"><code>chmod 775 $MOUNTPATH</code></pre>
+</li>
+<li>Crie uma pasta no caminho de montagem e configure as permissões de leitura e
+gravação. Neste exemplo, a pasta é denominada <var class="keyword varname">data</var>.<pre class="codeblock"><code>su -c "mkdir -p $MOUNTPATH/<var class="keyword varname">data</var>" <var class="keyword varname">volumeeditor</var></code></pre>
+<pre class="codeblock"><code>su -c "chmod 700 $MOUNTPATH/<var class="keyword varname">data</var>" <var class="keyword varname">volumeeditor</var></code></pre>
+</li>
+<li>Verifique se o usuário <var class="keyword varname">volumeeditor</var> pode acessar os arquivos e diretórios no
+caminho de montagem.<pre class="codeblock"><code>sudo -u <var class="keyword varname">volumeeditor</var> ls -al $MOUNTPATH</code></pre>
+</li>
+<li>Opcional: vincule uma pasta no contêiner à pasta <var class="keyword varname">data</var> no volume.
+Esse
+link associa as permissões de gravação de $MOUNTPATH/<var class="keyword varname">data</var> a qualquer
+pasta no contêiner.<pre class="codeblock"><code>ln -sf $MOUNTPATH/<var class="keyword varname">data</var> <var class="keyword varname">/folder/in/container/</var></code></pre>
+</li>
+<li> Se as edições puderem ser feitas sem um erro de permissão, remova o usuário raiz do grupo
+<var class="keyword varname">volumeeditor</var>.<pre class="codeblock"><code>deluser <var class="keyword varname">volumeeditor</var> root</code></pre>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e3818" lang="pt-br" id="ts_vol_group_overwrite"><h3 class="topictitle3" id="d84487e3818">Os logs de instâncias do grupo de contêiner são sobrescritos em um volume</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Quando você criou um grupo de contêiner, você montou um volume e os logs foram gerados a partir de
+cada instância do grupo de contêiner para o volume. Cada instância do grupo de contêiner grava nos mesmos arquivos
+e os arquivos são sobrescritos por cada uma das instâncias.
+<div class="p">Exemplo:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create –p 9080 –m <var class="keyword varname">64</var> -v log_vol:/opt/ibm/logs -e LOG_LOCATIONS=/opt/ibm/logs/messages.log,/opt/ibm/logs/debug.log,/opt/ibm/logs/trace.log -–name <var class="keyword varname">my_container_group</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty:latest</code></pre>
+</div>
+</div><div class="section tsCauses">Cada instância do contêiner está gravando um arquivo no volume como se fosse o único gravador.
+Cada instância possui um cache local na memória. Os arquivos no volume são constantemente substituídos pelos
+dados em cache de cada instância do contêiner.</div><div class="section tsResolve">Ajuste o nome do arquivo de log para incluir um identificador para que os arquivos sejam diferentes
+para cada instância.  Por exemplo, inclua a variável <samp class="ph codeph">$HOSTNAME</samp> no nome do arquivo de
+log que é gerado pelo app e especificado quando o grupo de contêiner é
+criado.<div class="p">Exemplo:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create –p 9080 –m <var class="keyword varname">64</var> -v log_vol:/opt/ibm/logs -e LOG_LOCATIONS=/opt/ibm/logs/messages.$HOSTNAME.log,/opt/ibm/logs/debug.$HOSTNAME.log,/opt/ibm/logs/trace.$HOSTNAME.log -–name <var class="keyword varname">my_container_group</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty:latest</code></pre>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e3909" lang="pt-br" id="ts_vol_performance"><h3 class="topictitle3" id="d84487e3909">Transferir dados de ou para um volume demora mais do que o esperado</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ler ou gravar dados em um volume demora mais do que o esperado.</div><div class="section tsCauses">No <span class="keyword">IBM
+Bluemix Container Service</span>, os volumes não
+possuem acesso ao host local. Portanto, todos os volumes são montados em um compartilhamento de arquivo NFS. O
+desempenho do volume é determinado pelo tamanho e pelo IOPS (entrada/saída por segundo) de seu compartilhamento
+de arquivo, junto à carga de trabalho de seu aplicativo. O compartilhamento de arquivo em que seu volume está hospedado pode não
+ser adequado para a carga de trabalho de seus volumes e contêineres. Além disso, múltiplos volumes em um compartilhamento de
+arquivo podem competir pelos recursos do compartilhamento de arquivo.<p>Para criar um novo compartilhamento de arquivo, deve-se ter a função de gerenciador
+de organização. Para obter informações detalhadas, consulte <a href="../iam/users_roles.html">Usuários e funções</a>.</p>
+</div><div class="section tsResolve"><ol><li>Determine o ID do compartilhamento de arquivo em que seu volume está
+hospedado.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect <var class="keyword varname">my_volume</var></code></pre>
+<pre class="codeblock"><code>{
+    "fsId": "<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>", 
+    "hostPath": "<span class="ph filepath">/vol/fa277ff4-8a64-435b-9b75-0f11d59a3ae4/my_volume</span>", 
+    "otherSpaceVisibility": [], 
+    "spaceGuid": "fa277ff4-8a64-435b-9b75-0f11d59a3ae4", 
+    "volName": "<var class="keyword varname">my_volume</var>"
+}</code></pre>
+</li>
+<li>Visualize seu compartilhamento de arquivo para determinar seu tamanho e
+IOPS.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</code></pre>
+<pre class="codeblock"><code>Name                                   Size   IOPS/GB   Created               State   
+<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>   20     4.00      2016-05-20 13:48:10   READY   </code></pre>
+</li>
+<li>Visualize os tamanhos disponíveis em GB para os compartilhamentos de
+arquivos.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume fs-flavor</code></pre>
+<pre class="codeblock"><code>[
+    20, 
+    40, 
+    80, 
+    100, 
+    250, 
+    500, 
+    1000, 
+    2000, 
+    4000, 
+    8000, 
+    12000
+]</code></pre>
+</li>
+<li>Determine o tamanho e o IOPS necessários para a carga de trabalho de seus apps. Os valores válidos de IOPS são 0,25, 2
+ou 4 IOPS por GB. O tamanho do compartilhamento de arquivo é multiplicado pelo IOPS por GB para determinar o total de IOPS
+do compartilhamento de arquivo. Esta tabela inclui exemplos de como os diferentes tamanhos de compartilhamento de arquivo em 4 IOPS por GB
+são escalados. <div class="tablenoborder"><table summary="" id="ts_vol_performance__table_zw1_2f3_kw" class="defaultstyle"><caption><span class="tablecap">Tabela 1. Exemplos de tamanhos de compartilhamento de arquivo e IOPS por GB</span></caption><thead><tr><th id="d84487e4028" class="thleft"> Tamanhos de compartilhamento de arquivo</th>
+<th id="d84487e4030" class="thleft">IOPS por GB</th>
+<th id="d84487e4032" class="thleft">Total de IOPS</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d84487e4028 ">20 GB</td>
+<td headers="d84487e4030 ">4</td>
+<td headers="d84487e4032 ">80</td>
+</tr>
+<tr><td headers="d84487e4028 ">100 GB</td>
+<td headers="d84487e4030 ">4</td>
+<td headers="d84487e4032 ">400</td>
+</tr>
+<tr><td headers="d84487e4028 ">1.000 GB</td>
+<td headers="d84487e4030 ">4</td>
+<td headers="d84487e4032 ">4.000</td>
+</tr>
+<tr><td headers="d84487e4028 ">4.000 GB</td>
+<td headers="d84487e4030 ">4</td>
+<td headers="d84487e4032 ">16.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li>Criar um novo compartilhamento de arquivo. O primeiro número é o tamanho em GB. O segundo número é o IOPS
+de compartilhamento
+de arquivo.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create <var class="keyword varname">my_new_fs</var> <var class="keyword varname">1000</var> <var class="keyword varname">4</var></code></pre>
+</li>
+<li>Verifique o novo compartilhamento de arquivo e aguarde o status ser exibido como
+pronto.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</code></pre>
+</li>
+<li>Crie seu volume no novo compartilhamento de
+arquivo.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create <var class="keyword varname">my_new_volume</var> <var class="keyword varname">my_new_fs</var></code></pre>
+</li>
+<li>Execute um contêiner ou um grupo de contêiner a partir de sua imagem com o novo volume montado.</li>
+<li>Faça backup dos dados a partir de <var class="keyword varname">my_volume</var> e copie os dados para
+<var class="keyword varname">my_new_volume</var>. Consulte <a href="container_volumes_ov.html#container_volumes_backup" title="Os volumes do contêiner são hospedados no armazenamento persistente, mas não têm backups. Se você precisar de um backup dos dados de volume, será possível usar bx ic cp para criar um backup manual.">Fazendo backup e restaurando dados</a> para obter mais informações.</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84487e4119" lang="pt-br" id="ts_vol_mount_option"><h3 class="topictitle3" id="d84487e4119">Erro de análise sintática ao criar um contêiner com um volume a partir da CLI</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">Ao criar um único contêiner ou um grupo de contêiner a partir da CLI, você recebe uma mensagem
+com falha.<div class="p">Exemplo<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name my_container -n my_host -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -m 2048 --min 1 --max 2 --desired 1 -p 9080 --auto -v my_volume:/my/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</div>
+<div class="p">Resultado<pre class="codeblock"><code>docker: Error parsing reference: “my_volume:/my/path” is not a valid repository/tag.</code></pre>
+</div>
+</div><div class="section tsCauses">A CLI for Cloud Foundry versão 6.17 e mais recente usa o parâmetro <span class="keyword option">-v</span>
+para outro propósito.</div><div class="section tsResolve">Em seu comando, mude a opção <span class="keyword option">-v</span> para a opção <span class="keyword option">--volume</span>.<div class="p">Exemplo<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name my_container -n my_host -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -m 2048 --min 1 --max 2 --desired 1 -p 9080 --auto --volume my_volume:/my/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e4214" lang="pt-br" id="ts_known_issues"><h2 class="topictitle2" id="d84487e4214">Problemas conhecidos</h2>
+<div class="body conbody"><p class="shortdesc">Saiba mais sobre os problemas conhecidos que ocorrem no IBM
+Containers.</p>
+</div>
+<aside role="complementary" aria-labelledby="d84487e4214"></aside><article class="topic concept nested2" role="article" aria-labelledby="d84487e4266" id="ki_docker"><h3 class="topictitle3" id="d84487e4266">Docker e <span class="keyword">IBM
+Bluemix Container Service</span></h3>
+<div class="body conbody"><dl><dt class="dlterm">Alguns comandos do Docker não são suportados no plug-in do <span class="keyword">IBM
+Bluemix Container Service</span> (<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</dt>
+<dd><p>Somente determinados comandos do Docker são suportados em <samp class="ph codeph">(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</samp>. É possível visualizar uma lista integral de
+comandos suportados na <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_native-docker">Referência de comando docker</a>. Por exemplo, <samp class="ph codeph">tag</samp> não está
+disponível em <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>, mas
+<samp class="ph codeph">docker tag</samp> pode ser usado localmente e, seguida, a imagem atualizada pode ser enviada por push para o
+registro do <span class="keyword">Bluemix</span>.</p>
+</dd>
+<dt class="dlterm">Problemas comuns entre o Docker e o Windows</dt>
+<dd><p>Existem problemas comuns para instalar e configurar o Docker em computadores do Windows. Para obter mais
+informações sobre esses problemas comuns, revise <a href="https://developer.ibm.com/bluemix/2015/04/16/installing-docker-windows-fixes-common-problems/" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Blog: Instalando o Docker for Windows: Correções para problemas comuns</a> e <a href="http://stackoverflow.com/questions/tagged/boot2docker" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Posts do
+Stack Overflow identificados com boot2docker</a>.</p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84487e4334" id="ki_images"><h3 class="topictitle3" id="d84487e4334">Imagens</h3>
+<div class="body conbody"><dl><dt class="dlterm">A publicação e o envio de imagens grandes falham</dt>
+<dd><p>Ao executar um comando do Docker para enviar por push ou puxar uma imagem grande do registro privado do
+<span class="keyword">Bluemix</span> de sua organização, a solicitação falha. Para determinar se existe um problema com a imagem, primeiro verifique se a imagem pode ser enviada por push para
+DockerHub. Se não existir problema com a imagem, se possível, reduza o tamanho da imagem.</p>
+</dd>
+<dt class="dlterm"><a name="ki_images__image_size"><!-- --></a>O tamanho de uma imagem no <span class="keyword">Bluemix</span>
+corresponde a seu tamanho localmente</dt>
+<dd><p><span class="ph" id="ki_images__image_size_ph">Ao enviar por push uma imagem para seu registro privado do <span class="keyword">Bluemix</span>, o tamanho relatado para a
+imagem é menor do que o tamanho da mesma imagem em seu mecanismo local do Docker. A diferença entre
+os tamanhos não indica que ocorreu um problema quando a imagem foi enviada por push. O tamanho compactado da
+imagem é relatado no <span class="keyword">IBM
+Bluemix Container Service</span>.</span></p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84487e4372" id="ki_logmet"><h3 class="topictitle3" id="d84487e4372">Monitorando e criando logs</h3>
+<div class="body conbody"><dl><dt class="dlterm">Caracteres extras na saída para <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp></dt>
+<dd>Ao executar <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp>,
+caracteres extras, como <samp class="ph codeph">&amp;</samp>, são exibidos no início de cada linha. Esse
+problema ocorre quando os logs de docker recebidos são analisados por NGINX.</dd>
+<dt class="dlterm">Adições do arquivo de log não podem ser especificadas com expressões</dt>
+<dd><p>Não é possível usar filtros ou expressões curingas para especificar os arquivos de log que
+devem ser coletados. Por exemplo, não é possível especificar
+<samp class="ph codeph">/var/log/*.log</samp>. Em vez disso, liste cada arquivo de log individualmente.</p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84487e4405" id="ki_containers"><h3 class="topictitle3" id="d84487e4405">Contêineres únicos e grupos de contêiner</h3>
+<div class="body conbody"><dl><dt class="dlterm">Conexão com falha após a criação de um contêiner</dt>
+<dd><p>Em razão de uma limitação na arquitetura de rede do Docker do <span class="keyword">IBM
+Bluemix Container Service</span>, o acesso à rede de saída pode não funcionar
+na inicialização inicial do contêiner. Se o contêiner tentar
+fazer uma conexão de rede de saída para retornar um código de erro ou para lançar uma exceção se a rede
+não estiver disponível, as saídas de contêiner e um estado "Travado" serão exibidos. </p>
+
+<p>Para permitir que a rede seja inicializada e
+permitir que a implementação do contêiner continue, deve-se ter uma instrução de suspensão antes de iniciar quaisquer
+processos que requeiram conectividade de saída. Crie um Dockerfile customizado para agrupar quaisquer comandos de inicialização
+existentes do servidor no Dockerfile de base. Para obter um exemplo, consulte o <a href="https://github.com/IBM-Bluemix/lets-chat-bluemix/tree/master/lets-chat" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">aplicativo de amostra Let's Chat Bluemix</a>.</p>
+</dd>
+<dt class="dlterm">Conectividade de entrada não é imediata</dt>
+<dd><p>A conectividade de entrada não é imediata para grupos de contêineres e contêineres únicos, incluindo
+rotas e apps externos. Aguarde até que a conectividade se torne disponível, o que pode levar até 5
+minutos.</p>
+</dd>
+<dt class="dlterm">Diferentes unidades padrão de medida usada em <samp class="ph codeph">docker run -m</samp> e <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m</samp></dt>
+<dd>Quando nenhuma unidade de medida é especificada com <samp class="ph codeph">docker run -m</samp>, bytes é usado como
+a unidade padrão de medida. Quando nenhuma unidade de medida é especificada com <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m</samp>, MB é usado como a unidade padrão
+de medida.</dd>
+<dt class="dlterm">O limite de dados do usuário impede que um contêiner seja criado</dt>
+<dd>Se você tiver muitos serviços ligados a um contêiner, ele não poderá ser criado. Cada
+serviço injeta dados no contêiner e é contado para um limite de 64 KB. Ao criar um
+contêiner que excede esse limite, você receberá uma mensagem, <samp class="ph systemoutput">Falha
+ao CRIAR recurso... Dados muitos grandes do usuário</samp>. Se você vir essa
+mensagem, remova um serviço do contêiner.</dd>
+<dt class="dlterm"><a name="ki_containers__port25"><!-- --></a>A porta 25 não está disponível para exposição em um contêiner</dt>
+<dd>A porta 25 é bloqueada contra uso pela SoftLayer, que faz parte da arquitetura do <span class="keyword">IBM
+Bluemix Container Service</span>. Esse problema afeta
+o uso de alguns serviços SMTP em contêineres. Para obter mais informações sobre o motivo de bloqueio dessa porta,
+consulte o artigo <a href="http://knowledgelayer.softlayer.com/content/outbound-email-port-25" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">E-mail de saída na porta 25</a> na documentação
+da SoftLayer.</dd>
+<dt class="dlterm"><a name="ki_containers__containerbuildingprocess"><!-- --></a>O processo de construção ou rede do contêiner não é concluído</dt>
+<dd><div class="p">Se um contêiner permanece no estado de construção ou rede por muito tempo, pode ser necessário remover
+o contêiner e criar um novo contêiner a partir da mesma imagem. É possível usar os comandos da CLI <span class="ph"><samp class="ph codeph">bx ic</samp></span> a seguir:<ol><li><span class="ph">Recuperar uma lista de contêineres que estão em execução no espaço. Por padrão,
+somente contêineres em execução são exibidos.</span> Para obter
+mais informações, revise a <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__ps">Referência da CLI
+<span class="ph">bx ic</span> ps</a>.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="ph">Remover um ou mais contêineres.</span> Para
+obter mais informações, revise a <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__rm">Referência da CLI <span class="ph">bx ic</span>
+rm</a>.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm -f <var class="keyword varname">container_ID</var></code></pre>
+</li>
+<li><span class="ph">Iniciar um novo contêiner no serviço de nuvem do contêiner a partir de um nome de
+imagem.</span> Para obter
+mais informações, revise a <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__run">Referência da CLI <span class="ph">bx ic</span>
+run</a>.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</code></pre>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="dlterm">A recuperação automática não é imediata para grupos de contêiner</dt>
+<dd><p>A recuperação automática para grupos de contêineres pode demorar mais de 15 minutos para que novos sistemas
+fiquem on-line. Aguarde até que a recuperação automática se torne disponível, o que pode demorar mais de 15
+minutos.</p>
+</dd>
+<dt class="dlterm">O comando <samp class="ph codeph">cf delete-orphaned-routes</samp> exclui rotas dos grupos de
+contêiner</dt>
+<dd><p>Cloud Foundry não reconhece rotas que são mapeadas para grupos
+de contêineres da mesma forma que reconhece rotas como ligadas aos
+aplicativos. Não execute o comando <samp class="ph codeph">cf
+delete-orphaned-routes</samp> ao usar grupos de contêineres.</p>
+</dd>
+</dl>
+</div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84487e4558" lang="pt-br" id="ts_getting_help"><h2 class="topictitle2" id="d84487e4558">Obtendo ajuda e suporte para o <span class="keyword">IBM
+Bluemix Container Service</span></h2>
+<div class="body conbody"><p class="shortdesc">Onde você inicia a resolução de problemas de um contêiner? </p>
+<div class="p"><ul><li>Para ver se o <span class="keyword">Bluemix</span> está
+disponível, <a href="https://developer.ibm.com/bluemix/support/#status" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">verifique
+a página de status do <span class="keyword">Bluemix</span></a>.</li>
+<li>Revise os fóruns para ver se outros usuários tiveram o mesmo problema. Ao usar os fóruns para
+fazer uma pergunta, marque sua pergunta para que ela seja vista pelas equipes de desenvolvimento do <span class="keyword">Bluemix</span>.<ul><li>Se você tiver questões técnicas sobre como desenvolver ou implementar um app com o <span class="keyword">IBM
+Bluemix Container Service</span>, poste sua pergunta no <a href="http://stackoverflow.com/search?q=bluemix+containers" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Stack
+Overflow</a> e marque-a com <samp class="ph codeph">ibm-bluemix</samp> e
+<samp class="ph codeph">containers</samp>.</li>
+<li>Para perguntas sobre o serviço e instruções de introdução, use o fórum do <a href="https://developer.ibm.com/answers/topics/containers/?smartspace=bluemix" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">IBM developerWorks dW Answers</a>. Inclua as tags <samp class="ph codeph">bluemix</samp>
+e <samp class="ph codeph">containers</samp>.</li>
+</ul>
+Consulte
+<a href="../support/index.html#getting-help" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Obtendo
+ajuda</a> para obter mais detalhes sobre o uso dos fóruns.</li>
+<li>Entre em contato com o Suporte IBM. Para obter informações sobre como abrir um chamado de suporte IBM ou sobre níveis de suporte e severidades de chamado, consulte <a href="../support/index.html#contacting-support" rel="external" target="_blank" title="(Abre em uma nova guia ou janela)">Entrando em contato com o suporte</a>.</li>
+</ul>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d84487e4558"></aside></article></article></div></main></body></html>

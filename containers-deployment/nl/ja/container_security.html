@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service は、Linux と Docker のセキュリティー機能を最適化した安全で信頼できるクラウド・プラットフォームを提供します。 IBM Bluemix Container Service を使用してコンテナーを作成して実行すると、コンテナーとネットワークの分離、ホスト・データとリソースへのアクセスの制限、セキュアなコンテナー・デプロイメントによるメリットがアプリにもたらされます。">
+<meta name="keywords" content="セキュリティー, IBM Containers, コンテナー, 仮想プライベート・ネットワーク, VPN, データ・センター, on-prem, サービス">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>単一コンテナーとスケーラブル・コンテナーのセキュリティー</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d74496e6" id="container_security"><h1 class="topictitle1" id="d74496e6"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>のセキュリティー</h1>
+<div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix® Container Service</span> は、Linux と Docker のセキュリティー機能を最適化した安全で信頼できるクラウド・プラットフォームを提供します。
+<span class="keyword">IBM
+Bluemix Container Service</span> を使用してコンテナーを作成して実行すると、コンテナーとネットワークの分離、ホスト・データとリソースへのアクセスの制限、セキュアなコンテナー・デプロイメントによるメリットがアプリにもたらされます。</div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <span class="ph"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix</span> Public の <span class="keyword">IBM
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></span></div>
+</div>
+
+
+<div class="p">このページでは、次について説明します。<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_security.html#builtin">組み込みのセキュリティー設定</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_security.html#container_security_host" title="IBM Bluemix Container Service は、コンテナーを確実に分離して計算ホスト・リソースへのアクセスを制限するために、Linux カーネルと Docker のセキュリティー機能を最適化しています。">ホスト・セキュリティー設定を計算する</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_security.html#container_security_network" title="同一のプライベート・ネットワーク上のコンテナー間で、また異なる Bluemix スペースにおけるコンテナー間で、さらには、Bluemix スペースとリモート・ネットワーク間における安全な通信を確保する IBM Bluemix Container Service に組み込まれているフィーチャーのリストを確認します。">プライベート・コンテナー・ネットワーク・セキュリティー設定</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_security.html#container_cli_login_exec" title="実行中のコンテナーにログインする必要がある場合は、bx ic exec を使用できます。"><samp class="ph codeph">exec</samp> を使用してコンテナーにログインする</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_security.html#container_vpn" title="Bluemix のプライベート・コンテナー・ネットワーク内の単一コンテナーとコンテナー・グループを、 企業のデータ・センターにセキュアに接続できます。 IBM VPN は、業界標準の Internet Protocol Security (IPsec) プロトコル・スイートに基づき、インターネット上にセキュアなエンドツーエンドの通信チャネルを確立します。 IPsec プロトコルは、VPN エンドポイント間で交換されるパッケージを暗号化して、ネットワーク・レベルのピア認証、データ保全性、およびデータ機密性を提供します。 Bluemix 内のコンテナーと企業のデータ・センターの間にセキュアな接続をセットアップするためには、お客様のオンプレミスのデータ・センターに IPsec VPN ゲートウェイまたは SoftLayer サーバーを設置する必要があります。 IBM VPN サービスを使用して、VPN ゲートウェイを 1 スペースにつき 1 つ構成し、異なる宛先への接続を最大で 16 個定義することができます。"><span class="keyword">Bluemix</span> 内のコンテナーを社内データ・センターに VPN で接続する</a></div>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d74496e6">
+<ul class="ullinks">
+<li class="ulchildlink"><span class="ulchildlinktext"><a href="Chunk1894969864.dita">イメージのセキュリティー</a></span><br>
+</li>
+</ul>
+</aside><article class="topic concept nested1" role="article" aria-labelledby="d74496e185" id="builtin"><h2 class="topictitle2" id="d74496e185">組み込みのセキュリティー設定</h2>
+<div class="body conbody"><p><a href="../api/content/containers/images/container_security.png" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><img id="builtin__image_tdd_lyz_nz" src="images/container_security.png" width="500" alt="IBM Containers のセキュリティー"></a></p>
+<div class="tablenoborder"><table summary="" id="builtin__table_y15_trz_zw" class="defaultstyle"><caption><span class="tablecap">表 1. 組み込みの <span class="keyword">IBM
+Bluemix Container Service</span> セキュリティー設定</span></caption><thead><tr><th id="d74496e207" class="thleft">レベル</th>
+<th id="d74496e209" class="thleft">説明</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d74496e207 ">計算ホスト</td>
+<td headers="d74496e209 ">すべてのコンテナーは、独立した分離プロセスとして計算ホスト上で実行され、制限付きでリソースにアクセスできます。
+追加構成なしで、組み込みのセキュリティー設定を利用して、Linux カーネルと Docker デーモンをサービス妨害 (DOS) 攻撃から保護することができます。
+<p>詳しくは、<a href="container_security.html#container_security_host" title="IBM Bluemix Container Service は、コンテナーを確実に分離して計算ホスト・リソースへのアクセスを制限するために、Linux カーネルと Docker のセキュリティー機能を最適化しています。">計算ホストのセキュリティー</a>を参照してください。</p>
+</td>
+</tr>
+<tr><td headers="d74496e207 ">プライベート・コンテナー・ネットワーク</td>
+<td headers="d74496e209 ">すべてのコンテナーは、分離されたセキュアなプライベート・ネットワーク内で実行されます。このネットワークでは、悪意のあるアクティビティーを検出して対処するためにインバウンドとアウトバウンドのネットワーク・トラフィックがモニターされます。
+パブリック・ネットワーク・アクセスを使用せずにアプリをセットアップしたり、サービスを選択的に公開したりできます。
+<p>社内データ・センターまたは他の <span class="keyword">Bluemix</span> スペースにコンテナーを安全に接続するには、<a href="container_security.html#container_security_network" title="同一のプライベート・ネットワーク上のコンテナー間で、また異なる Bluemix スペースにおけるコンテナー間で、さらには、Bluemix スペースとリモート・ネットワーク間における安全な通信を確保する IBM Bluemix Container Service に組み込まれているフィーチャーのリストを確認します。">IBM VPN サービスを使用して仮想プライベート・ネットワークをセットアップします</a>。</p>
+</td>
+</tr>
+<tr><td headers="d74496e207 ">Docker イメージ</td>
+<td headers="d74496e209 ">すべての組織には、保護された Docker v2 プライベート・イメージ・レジストリーが割り当てられます。このレジストリーにイメージが格納され、組織内のすべてのユーザーによって共有されます。
+<p><span class="keyword">IBM
+Bluemix Container Service</span> に初めてログインすると、すべての組織は名前空間を設定するよう求められます。その名前空間が、組織のプライベート・レジストリーを識別する <span class="ph filepath">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">namespace</var></span> という形式の固有の URL を作成するために使用されます。</p>
+<p>プライベート・レジストリーにイメージを追加するには、独自のイメージを作成するか、既存のローカル・イメージを追加するか、または Docker Hub からイメージを直接コピーします。</p>
+<p>安全なコンテナー・デプロイメントを保証するために、すべてのイメージが Vulnerability Advisor によってスキャンされます。Vulnerability Advisor は、潜在的な脆弱性がないかスキャンし、推奨を行い、脆弱性を解決するための方法を示します。</p>
+詳細については、<a href="va/va_index.html" title="Vulnerability Advisor は、デプロイメントの前にコンテナー・イメージのセキュリティー状況を検査するほか、実行中のコンテナーの状況も検査します。">Vulnerability Advisor によるコンテナーとイメージのセキュリティーの管理</a>を参照してください。</td>
+</tr>
+<tr><td headers="d74496e207 ">Docker コンテナー</td>
+<td headers="d74496e209 ">Vulnerability Advisor は、組織内で実行中のコンテナーの状況を検査し、コンテナーが引き続き安全で組織のポリシーに準拠していることを確認します。Vulnerability Advisor は、潜在的な脆弱性がないかスキャンし、推奨を行い、脆弱性を解決するための方法を示します。
+<p>詳細については、<a href="va/va_index.html" title="Vulnerability Advisor は、デプロイメントの前にコンテナー・イメージのセキュリティー状況を検査するほか、実行中のコンテナーの状況も検査します。">Vulnerability Advisor によるコンテナーとイメージのセキュリティーの管理</a>を参照してください。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</article><article class="topic concept nested1" role="article" aria-labelledby="d74496e311" lang="ja-jp" id="container_security_host"><h2 class="topictitle2" id="d74496e311"><span class="keyword">IBM
+Bluemix Container Service</span> 計算ホストのセキュリティー設定</h2>
+<div class="body conbody"><p class="shortdesc"><span class="keyword">IBM
+Bluemix Container Service</span> は、コンテナーを確実に分離して計算ホスト・リソースへのアクセスを制限するために、Linux カーネルと Docker のセキュリティー機能を最適化しています。</p>
+<dl><dt class="dlterm">十分な管理と保護が確保された Docker デーモン</dt>
+<dd>IBM 計算ホストで実行される Docker デーモンは、ユーザーが直接アクセスすることなくセットアップされ、IBM のみが構成できます。
+すべての Docker デーモン・ソケットは TLS 証明書によって保護されています。</dd>
+<dt class="dlterm">有効な Docker ユーザー名前空間</dt>
+<dd><a href="https://docs.docker.com/engine/security/security/">Docker ユーザー名前空間</a>フィーチャーは、計算ホスト上の Docker Engine で有効になっています。
+ユーザー名前空間フィーチャーによって、コンテナー内で実行されるプロセスが、同じ計算ホストで実行される他のすべてのプロセスとコンテナーから分離されます。コンテナー内の有効な root ユーザーは、計算ホスト上の非 root ユーザーにマップされます。
+root ユーザーがコンテナーの外に抜け出したとしても、そのユーザーに、計算ホストで実行されるファイル、プロセス、または他のコンテナーを操作する権限は一切ありません。</dd>
+<dt class="dlterm">特権コンテナーの使用不可</dt>
+<dd><samp class="ph codeph">run</samp> コマンドの <samp class="ph codeph">--privileged</samp> オプションはサポートされません。
+コンテナーには、計算ホスト上のデバイスとハード・ディスクに対するアクセス権がありません。</dd>
+<dt class="dlterm">メモリー、CPU、ディスク・スペースに関する管理対象制御グループ (cgroups)</dt>
+<dd>同じ計算ホスト上で実行されるコンテナーは、メモリー、CPU、ディスク・スペースを共有します。特定のコンテナーが、使用可能なすべてのリソースを消費したり、アプリケーションやホスト・システムをダウンさせたりすることがないように、コンテナーに割り当てることができるメモリー、CPU、ディスク・スペースの最大量を制限します。
+<p>実行時にコンテナーで使用できるメモリー、CPU、ディスク・スペースの量は、コンテナー作成時に選択するコンテナー・サイズによって決まります。このように制限を設けることによって、計算ホスト上のすべてのコンテナーが、使用可能なホスト・リソースを公平に共有できます。特定のコンテナーに問題が発生しても、リソースに上限が設定されているため、計算ホスト上にある他のコンテナーでは安定したパフォーマンスと動作が保証されます。</p>
+</dd>
+<dt class="dlterm">計算ホスト・カーネルの最適化</dt>
+<dd>計算ホストのカーネルで、特定のユーザーまたはグループが計算ホスト上で実行できるスレッドとプロセスの総数を制限します。
+この最適化により、ホストの過負荷を防止し、ユーザーの最大値に達するまではプロセス・スロットが使い尽くされないようにします。</dd>
+<dt class="dlterm">継続的な計算ホストのモニタリング</dt>
+<dd>IBM はすべての計算ホストを継続的にモニターして、Fork 爆弾や他の処理レベルのサービス妨害 (DOS) 攻撃を制御して対処します。</dd>
+<dt class="dlterm">Docker コンテナーの AppArmor プロファイルの有効化</dt>
+<dd>各計算ホストは、環境を保護して計算ホスト上のコンテナーの機能を制限するために、IBM 固有の <a href="http://wiki.apparmor.net/index.php/Documentation" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">AppArmor</a> プロファイルを利用しています。
+AppArmor は、フォルダー、ファイル、ネットワーク・ドメインに対するアクセスや、データ作成/変更の権限を制御する Linux カーネルのセキュリティー・モジュールです。</dd>
+<dt class="dlterm">計算ホスト上のローカル・ボリューム・マウントの無効化</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> は、コンテナーに対するローカル・ボリュームまたはローカル/ホスト・ディレクトリーのマウントをサポートしていません。代わりに、組織規模のボリュームを使用して、コンテナーを再始動してもデータを保持し、複数のコンテナーでデータを利用できるようにします。ボリュームは、分離されたファイル共有上でホストされます。そこでは、安全にアプリ・データが保管され、ファイルに対するアクセスや権限が管理されます。
+<p>組織規模のボリュームをコンテナーにマウントするには、その前にそれを作成する必要があります。ボリュームは <a href="container_volumes_ov.html#container_volumes_ui" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。 Bluemix GUI から、コンテナーのボリュームを作成できます。"><span class="keyword">Bluemix</span> GUI</a> または <a href="container_volumes_ov.html#container_volumes_cli" title="ボリュームとは、アプリが作成するデータ、またはアプリを実行するために必要なファイルを永続的に保管する場所です。コマンド・ラインから、コンテナーのボリュームを作成できます。">CLI</a> で作成できます。</p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested1" role="article" aria-labelledby="d74496e439" lang="ja-jp" id="container_security_network"><h2 class="topictitle2" id="d74496e439"><span class="keyword">IBM
+Bluemix Container Service</span> プライベート・コンテナー・ネットワークのセキュリティー設定</h2>
+<div class="body conbody"><p class="shortdesc">同一のプライベート・ネットワーク上のコンテナー間で、また異なる <span class="keyword">Bluemix</span> スペースにおけるコンテナー間で、さらには、<span class="keyword">Bluemix</span> スペースとリモート・ネットワーク間における安全な通信を確保する <span class="keyword">IBM
+Bluemix Container Service</span> に組み込まれているフィーチャーのリストを確認します。</p>
+<dl><dt class="dlterm">スペースごとのプライベート L2 分離コンテナー・ネットワーク</dt>
+<dd><span class="ph">コンテナーのプライベート・ネットワークによって、1 つのスペースの中で実行される複数の単一コンテナーやコンテナー・グループに対して個々に安全な環境が作成されます。
+同じプライベート・ネットワークに接続された各コンテナーは、プライベート IP アドレスを使用して、そのプライベート・ネットワーク内の他のコンテナーとの間でデータを送受信できます。パブリック・ポートと、単一コンテナー用のパブリック IP アドレスまたはコンテナー・グループ用のパブリック経路のいずれかがバインドされるまで、コンテナーをパブリックに使用することはできません。</span><p><span class="keyword">Bluemix</span> では、すべてのスペースに、デフォルトの <span class="keyword">IBM
+Bluemix Container Service</span> ネットワーク設定を適用したコンテナー・プライベート・ネットワークが備わっています。コンテナーを作成すると、自動的にスペースのデフォルトのプライベート・ネットワークに接続され、プライベート IP アドレスが割り当てられます。</p>
+</dd>
+<dt class="dlterm">コンテナーのプライベート保持、またはネットワーク・セキュリティー・グループを介した一般向けサービスの選択的公開</dt>
+<dd>コンテナーはその一つ一つが IBM 独自のネットワーク・セキュリティー・グループによって保護されており、このネットワーク・セキュリティー・グループは、インバウンド・ネットワーク・トラフィックを制御し、プライベート・ネットワーク・ゲートウェイ・レベルでのソフトウェア・ファイアウォールとして動作します。プライベート・ネットワーク・ゲートウェイ経由で送信されるデータは、ネットワーク・セキュリティー・グループのルールに対する準拠性が検査された後に、宛先コンテナーに渡されるかまたはブロックされます。
+<p>コンテナーを作成してもパブリックに公開しない場合は、デフォルトのプライベート・ネットワーク・セキュリティー・グループを使用してセットアップします。このセキュリティー・グループでは、コンテナー間でプライベート IP アドレスを使用してプライベートなネットワーク通信を行うことができます。
+デフォルトでは、すべてのコンテナー・ポートが自動的にプライベート・ネットワークに公開されます。コンテナー・ポートをホスト・ポートにマップする必要はありません。</p>
+<p>アプリをパブリックで使用できるようにするには、パブリック・ポートを公開し、パブリック IP アドレスを単一コンテナーにバインドするか、またはパブリック経路をコンテナー・グループにバインドする必要があります。
+<span class="ph" id="container_security_network__public_nsg"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</samp> コマンドで <samp class="ph codeph">-p</samp> オプションを使用してパブリック・ポートを公開する場合は、公開したポートでのみパブリック・データの送受信を許可するパブリック・ネットワーク・セキュリティー・グループをコンテナー用に作成します。
+その他のすべてのパブリック・ポートは閉じられるため、それらのポートを使用してインターネットからアプリにアクセスすることはできません。</span></p>
+</dd>
+<dt class="dlterm">継続的なエンタープライズ・ネットワーク・モニタリング</dt>
+<dd><span class="keyword">IBM
+Bluemix Container Service</span> のすべてのネットワーク・トラフィックを IBM はモニターし、悪意のあるアクティビティーを検出して対処します。</dd>
+<dt class="dlterm">Docker <samp class="ph codeph">exec</samp>、<samp class="ph codeph">attach</samp>、<samp class="ph codeph">logs</samp> の各コマンドのフル・サポート</dt>
+<dd><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp>、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> attach</samp>、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp> の各コマンドを使用して、コンテナーにログインしたり、実行時に詳細出力を表示したりできます。
+これらのコマンドを使用すると、実行時にコンテナーにアクセスしてモニターするために非セキュアな SSH デーモンを実行しなくて済みます。
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp> を使用してコンテナーに安全にログインする方法について詳しくは、<a href="container_security.html#container_cli_login_exec" title="実行中のコンテナーにログインする必要がある場合は、bx ic exec を使用できます。">exec を使用したコンテナーへのログイン</a>を参照してください。</p>
+</dd>
+<dt class="dlterm">他のスペースおよびリモート・ネットワーク内にあるサービスに、セキュアなプライベート・ネットワーク・アクセスを行うための VPN</dt>
+<dd>IBM® Virtual Private Network サービスを使用して、プライベートなコンテナー・ネットワーク内のコンテナーを安全に接続したり、社内データ・センターに安全に接続したりできます。<p data-hd-audience="yellow">詳しくは、<a href="container_security.html#container_vpn" title="Bluemix のプライベート・コンテナー・ネットワーク内の単一コンテナーとコンテナー・グループを、 企業のデータ・センターにセキュアに接続できます。 IBM VPN は、業界標準の Internet Protocol Security (IPsec) プロトコル・スイートに基づき、インターネット上にセキュアなエンドツーエンドの通信チャネルを確立します。 IPsec プロトコルは、VPN エンドポイント間で交換されるパッケージを暗号化して、ネットワーク・レベルのピア認証、データ保全性、およびデータ機密性を提供します。 Bluemix 内のコンテナーと企業のデータ・センターの間にセキュアな接続をセットアップするためには、お客様のオンプレミスのデータ・センターに IPsec VPN ゲートウェイまたは SoftLayer サーバーを設置する必要があります。 IBM VPN サービスを使用して、VPN ゲートウェイを 1 スペースにつき 1 つ構成し、異なる宛先への接続を最大で 16 個定義することができます。">コンテナーと社内データ・センターの間の VPN 接続のセットアップ</a>を参照してください。</p>
+</dd>
+</dl>
+</div>
+<article class="topic concept nested2" role="article" aria-labelledby="d74496e628" lang="ja-jp" id="container_cli_login_exec"><h3 class="topictitle3" id="d74496e628"><samp class="ph codeph">exec</samp> を使用したコンテナーへのログイン</h3>
+<div class="body conbody"><p class="shortdesc">実行中のコンテナーにログインする必要がある場合は、<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp> を使用できます。</p>
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+exec</samp> コマンドの一般的な用途には、bash ウィンドウを開いて、コンテナーに割り当てられたボリュームのファイルを表示することなどがあります。<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec</samp> コマンドは、実行状態のコンテナーに対してのみ実行されます。
+コンテナーを稼働中の状態に保つには、長期実行コマンドでコンテナーを開始する必要があります。
+コンテナーが一時停止または停止している場合、コンテナーにログインするためには、その前に長期実行コマンドでコンテナーを再始動する必要があります。</p>
+<section role="region" aria-labelledby="d74496e692"><h4 class="sectiontitle" id="d74496e692">コマンドとパラメーター</h4>
+<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec [-d] [-it ] [-u USER] CONTAINER CMD </span></code></pre>
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span></div>
+</section><section role="region" aria-labelledby="d74496e725"><h4 class="sectiontitle" id="d74496e725">例</h4>
+<div class="p"><span class="ph">このサンプル・コマンドは、コンテナー <var class="keyword varname">my_container</var> 内でインタラクティブ bash ターミナルを実行します。</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</div>
+
+<div class="p"><span class="ph">このサンプル・コマンドは、コンテナー <var class="keyword varname">my_container</var> 内で date コマンドを実行します。</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec <var class="keyword varname">my_container</var> date</code></pre>
+</div>
+</section></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d74496e758" id="container_vpn"><h3 class="topictitle3" id="d74496e758">仮想プライベート・ネットワークをセットアップして社内データ・センターにコンテナーを接続する</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph" id="vpn_def"><span class="keyword">Bluemix</span> のプライベート・コンテナー・ネットワーク内の単一コンテナーとコンテナー・グループを、
+企業のデータ・センターにセキュアに接続できます。
+<span class="keyword">IBM
+VPN</span> は、業界標準の Internet Protocol Security (IPsec) プロトコル・スイートに基づき、インターネット上にセキュアなエンドツーエンドの通信チャネルを確立します。
+IPsec プロトコルは、VPN エンドポイント間で交換されるパッケージを暗号化して、ネットワーク・レベルのピア認証、データ保全性、およびデータ機密性を提供します。
+<span class="keyword">Bluemix</span> 内のコンテナーと企業のデータ・センターの間にセキュアな接続をセットアップするためには、お客様のオンプレミスのデータ・センターに IPsec VPN ゲートウェイまたは SoftLayer サーバーを設置する必要があります。
+<span class="keyword">IBM
+VPN</span> サービスを使用して、VPN ゲートウェイを 1 スペースにつき 1 つ構成し、異なる宛先への接続を最大で 16 個定義することができます。</span></p>
+<div class="section context"><p>社内データ・センターにコンテナーを接続するには、以下のステップを実行します。</p>
+</div><ol class="steps" id="container_vpn__vpn_steps"><li class="step stepexpand"><span class="cmd">社内データ・センターに接続するスペース内に、少なくとも 1 つの<a href="container_single_ui.html#container_single_ui" title="単一コンテナーは、アプリやサービスの開発時に単純なテストを実行するために、または高可用性を必要としない短期間のプロセスのために使用します。独自のネットワーキング・フロントエンドを使用するために、パブリック IP アドレスをコンテナーに割り当てることができます。">単一コンテナー</a>、または<a href="container_ha.html#container_group_ui" title="スケーラブル・コンテナー・グループを Bluemix GUI から作成およびデプロイします。1 つのコンテナー・グループには、同じイメージを実行する複数のコンテナーが含まれます。 コンテナー・グループは、拡張容易性や信頼性が必要なワークロードを長時間実行するサービスを提供する場合や、必要なスケールでテストを行う場合に使用します。">コンテナー・グループ</a>を作成します。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="container_integrations.html#container_integrations_binding" title="IBM Bluemix はサービスのリストを持ち、アプリ開発者に代わってそれらのサービスを管理します。コンテナーで使用する Bluemix サービスを追加するためには、このサービスのインスタンスを要求し、サービスをコンテナーにバインドする必要があります。">サービスのバインド</a>のトピックのステップ 1 から 5 までを実行することにより、スペース内に <span class="keyword">IBM
+VPN</span> サービスのインスタンスを作成します。</span> <div class="steps note"><span class="notetitle">注:</span> <span class="keyword">IBM
+VPN</span> サービス・インスタンスは、社内データ・センターに接続するコンテナーを作成したのと同じスペース内に作成する必要があります。</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="../services/vpn/index.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)"><span class="keyword">IBM
+VPN</span> の概説</a>のトピックに示されている手順を実行して VPN ゲートウェイを構成し、社内データ・センターとの接続をセットアップします。</span></li>
+</ol>
+</div>
+</article></article></article></div></main></body></html>

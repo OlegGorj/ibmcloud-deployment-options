@@ -1,0 +1,495 @@
+<!DOCTYPE html><html lang="fr-fr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="Gérez vos applications résidant dans des conteneurs Docker sur le cloud IBM via IBM Bluemix Container Service. Un conteneur est un moyen standard permettant de conditionner une application et toutes ses dépendances. L'application peut ainsi être déplacée d'un environnement à l'autre et exécutée sans modifications. Celles-ci bénéficient également de l'isolation et de l'allocation des ressources, tout en étant plus portables et efficaces que des machines virtuelles, par exemple.">
+<meta name="keywords" content="conteneurs uniques, IBM Bluemix Container Service, groupes de conteneurs, groupes évolutifs, commande migrate, conteneur unique, interface CLI, docker rm, bx ic, rm, IBM Containers, conteneurs, suppression, groupe de conteneurs, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "fr-fr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>Exécution de conteneurs uniques et évolutifs dans IBM Bluemix Container Service</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d94174e6" id="cs_classic"><h1 class="topictitle1" id="d94174e6">Exécution de <span class="ph">conteneurs uniques et évolutifs</span> dans <span class="keyword">IBM
+Bluemix Container Service</span>
+</h1>
+<div class="abstract"><div class="shortdesc">Gérez vos applications résidant dans des conteneurs Docker sur le cloud IBM via <span class="keyword">IBM®
+Bluemix Container Service</span>. <span class="ph">Un conteneur est un moyen standard permettant de
+conditionner une application et toutes ses dépendances. L'application peut ainsi être
+déplacée d'un environnement à l'autre et exécutée sans modifications. </span> Celles-ci bénéficient également de l'isolation et de l'allocation des ressources, tout en étant plus portables et efficaces que des machines virtuelles, par exemple.
+</div>
+
+
+<p>Vous pouvez utilisez <span class="ph">conteneurs uniques et évolutifs</span> pour déployer vos
+applications plutôt que des clusters, mais les clusters vous offrent davantage d'options
+pour la personnalisation de votre environnement. Pensez à utiliser
+des <a href="cs_ov.html" title="IBM Bluemix Container Service combine Docker et Kubernetes afin de proposer des outils performants, une expérience utilisateur intuitive et une sécurité et un isolement intégrés afin d'automatiser le déploiement, l'opération, la mise à l'échelle et la surveillance des applications conteneurisées dans un cluster d'hôtes de traitement indépendants via les API Kubernetes.">clusters</a> comme outil
+d'orchestration des conteneurs à la place de
+<span class="ph">conteneurs uniques et évolutifs</span>.</p>
+</div>
+<aside role="complementary" aria-labelledby="d94174e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d94174e107" id="cs_classic_migrating"><h2 class="topictitle2" id="d94174e107">Migration de <span class="ph">conteneurs uniques et évolutifs</span> vers des clusters Kubernetes</h2>
+<div class="body taskbody"><p class="shortdesc">Vous pouvez recréer les <span class="ph">conteneurs uniques et évolutifs</span> dans des clusters Kubernetes.</p>
+<div class="section context" id="cs_classic_migrating__context_iy5_jgr_mz"><div class="p">Cette page couvre les aspects suivants
+:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_containers" title="Vous pouvez utiliser les propriétés des commandes de création de conteneurs uniques et évolutifs et créer des script de configuration afin de déployer des nacelles de conteneurs similaires dans des clusters Kubernetes.">Recréation de conteneurs uniques et évolutifs dans des clusters</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_autoscaling">Migration du dimensionnement automatique</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_compose">Migration de configurations Docker Compose vers des clusters</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_single_remove">Retrait de conteneurs uniques</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_group_remove">Suppression de groupes de conteneurs</a></div>
+</div>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d94174e170" id="migrating_containers"><h3 class="topictitle3" id="d94174e170">Recréation de <span class="ph">conteneurs uniques et évolutifs</span> dans des clusters</h3>
+<div class="body taskbody"><p class="shortdesc">Vous pouvez utiliser les propriétés des commandes de création de <span class="ph">conteneurs uniques et évolutifs</span>
+et créer des script de configuration afin de déployer des nacelles de conteneurs similaires dans des clusters Kubernetes.</p>
+<div class="section context" id="migrating_containers__context_r35_hpq_mz"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d94174e183" id="migrate_groups"><h4 class="topictitle4" id="d94174e183">Exemple de groupe de conteneurs</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">Si vous aviez utilisé par le passé des groupes de conteneurs, vous pouvez créer une configuration similaire dans un cluster. </span>
+ Si vous utilisez le service VPN pour votre groupe de conteneurs et disposez d'un compte payant, <a href="https://knowledgelayer.softlayer.com/procedure/how-order-vyatta" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">vous devez également commander un produit Vyatta pour le réseau local virtuel de votre VLAN.</a>.</div>
+<div class="section context" id="migrate_groups__context_mdr_dhq_rz"><p>Vous pourriez avoir créé un groupe de conteneurs via la commande suivante. Cliquez sur une option  de commande pour découvrir comment implémenter une fonctionnalité similaire dans un cluster.</p>
+
+<div class="p"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create <a href="cs_classic.html#migrate_groups__group_anti">--anti</a>
+<a href="cs_classic.html#migrate_groups__group_auto">--auto</a>
+<a href="cs_classic.html#migrate_groups__group_domain">-d
+<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></a>
+<a href="cs_classic.html#migrate_groups__group_host">-n
+<var class="keyword varname">mycontainerhost</var></a>
+<a href="cs_classic.html#migrate_groups__group_desired">--desired 3</a>
+<a href="cs_classic.html#migrate_groups__group_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">nom_instance_service</var></a>
+<a href="cs_classic.html#migrate_groups__group_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_groups__group_max">--max
+5</a>
+<a href="cs_classic.html#migrate_groups__group_min">--min 2</a>
+<a href="cs_classic.html#migrate_groups__group_name">--name
+<var class="keyword varname">nom_groupe_conteneurs</var></a>
+<a href="cs_classic.html#migrate_groups__group_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_groups__group_volume">--volume <var class="keyword varname">nom_volume</var>:/<var class="keyword varname">chemin_répertoire</var></a>
+<a href="cs_classic.html#migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp><div class="steps note"><span class="notetitle">Remarque :</span> Si vous avez utilisé la commande <samp class="ph codeph">cf ic group create</samp> avec l'option <samp class="ph codeph">--ip</samp>, notez que les adresses IP flottantes existantes ne peuvent pas être migrées vers un cluster Kubernetes. Pour exposer un service sur une adresse IP publique, vous devez créer un script de configuration pour déployer un type de service NodePort ou LoadBalancer. Ceci a pour effet d'exposer le service sur l'adresse IP publique de votre cluster Kubernetes. <a href="cs_planning.html#cs_planning_public_network">En savoir plus sur les options de configuration de déploiement public.</a></div>
+</div>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_groups__group_anti">--anti</dt>
+<dd>Dissémine les nacelles de conteneurs sur des noeuds d'agent différents pour une plus haute disponibilité.
+<pre class="codeblock"><code>annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_auto">--auto</dt>
+<dd>Dans un cluster standard, indique d'utiliser le service Load balancer ou Ingress pour permettre une reprise automatique de vos conteneurs.
+<a href="cs_planning_public_network.html" title="Lorsque vous créez un cluster, chaque cluster doit être connecté à un réseau local virtuel public dont IBM est le propriétaire (clusters lite) ou configuré dans le compte Bluemix Infrastructure (SoftLayer) du client (clusters standard). Le réseau local virtuel public détermine l'adresse IP publique affectée à un noeud d'agent lors de la création du cluster.">En savoir plus sur les options de configuration de déploiement public</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_domain">-d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></dt>
+<dd>Dans un cluster standard, indique d'utiliser le service Load balancer ou Ingress pour définir un domaine. <a href="cs_planning_public_network.html" title="Lorsque vous créez un cluster, chaque cluster doit être connecté à un réseau local virtuel public dont IBM est le propriétaire (clusters lite) ou configuré dans le compte Bluemix Infrastructure (SoftLayer) du client (clusters standard). Le réseau local virtuel public détermine l'adresse IP publique affectée à un noeud d'agent lors de la création du cluster.">En savoir plus sur les options de configuration de déploiement public</a>.<pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_host">-n <var class="keyword varname">hôte_conteneur</var></dt>
+<dd>Dans un cluster standard, indique d'utiliser le service Load balancer ou Ingress pour définir un hôte. <a href="cs_planning_public_network.html" title="Lorsque vous créez un cluster, chaque cluster doit être connecté à un réseau local virtuel public dont IBM est le propriétaire (clusters lite) ou configuré dans le compte Bluemix Infrastructure (SoftLayer) du client (clusters standard). Le réseau local virtuel public détermine l'adresse IP publique affectée à un noeud d'agent lors de la création du cluster.">En savoir plus sur les options de configuration de déploiement public</a>.<pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_desired">--desired 3</dt>
+<dd>Pour définir le nombre d'instances d'application voulu, entrez un nombre de répliques.<pre class="codeblock"><code>spec:
+  replicas: 3</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">nom_instance_service</var></dt>
+<dd id="migrate_groups__service_bind_dl">Tout d'abord, <a href="cs_cluster_service.html" title="Ajoutez une instance de service Bluemix existante à votre cluster pour permettre aux utilisateurs du cluster d'accéder et d'utiliser le service Bluemix lorsqu'ils déploient une application dans le cluster.">ajoutez le
+service au cluster</a> en créant une valeur confidentielle. Cette tâche ponctuelle rend le service disponible à n'importe quelle application dans le cluster. Ensuite,  <a href="cs_apps_volume_claim.html" title="Créez une réservation de volume persistant pour procurer un stockage de fichiers NFS. Cette réservation peut être montée sur un conteneur dans une nacelle pour garantir que les données soient disponibles même en cas de panne ou de fermeture de la nacelle.">ajoutez cette valeur confidentielle et un chemin de montage pour la valeur confidentielle</a> dans le script de configuration du déploiement. <p>Tous les <span class="keyword">Bluemix</span> services qui gèrent les clés de service sont pris en charge par la fonctionnalité Kubernetes. En d'autres termes, si vous aviez à utiliser la méthode de pont d'application Cloud Foundry pour connecter des services à <span class="ph">conteneurs uniques et évolutifs</span>
+(CCS_BIND_APP), l'utilisation de ce service n'est pas prise en charge avec les clusters Kubernetes. Si vous utilisez la méthode de liaison directe de service (CCS_BIND_SRV), l'utilisation de ce service est prise en charge avec Kubernetes.</p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_memory">-m 1024</dt>
+<dd id="migrate_groups__memory_dl">Au lieu de la taille, définissez des demandes d'UC et de mémoire, ainsi que des limites, pour la nacelle de conteneur.
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">En savoir plus sur la manière de déterminer les valeurs pour l'UC et la mémoire.</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_max">--max 5</dt>
+<dd>Utilisez le type de script de configuration HorizontalPodAutoscaler au lieu du type de déploiement utilisé dans cet exemple. En utilisant la mise à l'échelle horizontale automatique, vous pouvez définir un nombre maximal de nacelles. <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">En savoir plus sur la mise à l'échelle automatique horizontale.</a><pre class="codeblock"><code>maxReplicas: 5</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_min">--min 2</dt>
+<dd>Utilisez le type de script de configuration HorizontalPodAutoscaler au lieu du type de déploiement utilisé dans cet exemple. En utilisant la mise à l'échelle horizontale automatique, vous pouvez définir un nombre minimal de nacelles. <a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">En savoir plus sur la mise à l'échelle automatique horizontale.</a><pre class="codeblock"><code>minReplicas: 2</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_name">--name <var class="keyword varname">groupe_conteneurs</var></dt>
+<dd id="migrate_groups__name_dl">Nom de la ressource. Vous pouvez également affecter des libellés aux ressources. <img id="migrate_groups__image_jzl_b3y_rz" src="sout.gif" alt="Lien externe">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">En savoir plus sur les libelés Kubernetes</a>.<pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_port">-p <var class="keyword varname">9080</var></dt>
+<dd id="migrate_groups__port_dl">Port à exposer au trafic externe.<pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_volume">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">chemin_répertoire</var></dt>
+<dd id="migrate_groups__volume_dl">Tout d'abord, <a href="cs_apps_volume_claim.html" title="Créez une réservation de volume persistant pour procurer un stockage de fichiers NFS. Cette réservation peut être montée sur un conteneur dans une nacelle pour garantir que les données soient disponibles même en cas de panne ou de fermeture de la nacelle.">créez une réservation de volume persistant</a>, après quoi un volume persistant avec la taille et la classe de stockage requis sera créé dynamiquement pour vous. Ensuite, <a href="cs_apps_volume_claim.html" title="Créez une réservation de volume persistant pour procurer un stockage de fichiers NFS. Cette réservation peut être montée sur un conteneur dans une nacelle pour garantir que les données soient disponibles même en cas de panne ou de fermeture de la nacelle.">ajoutez la classe de réservation et un chemin de montage</a> au script de configuration.<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd id="migrate_groups__image_dl">Image depuis laquelle générer le conteneur. Vous pouvez continuer à utiliser les images de votre registre
+d'images <span class="keyword">Bluemix</span>, Docker Hub, ou de votre propre registre. <a href="cs_planning_images.html" title="Une image Docker est la base de chaque conteneur que vous créez. L'image est créée depuis un Dockerfile, lequel est un fichier contenant des instructions pour générer l'image. Un Dockerfile peut référencer dans ses instructions des artefacts de génération stockés séparément, comme une application, sa configuration, et ses dépendances.">En savoir plus sur les options de configuration du registre</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_groups__postreq_rm5_hcx_rz"><div class="p">A partir des valeurs de l'exemple de commande de groupe de conteneurs, utilisez le script de configuration pour déployer des nacelles de conteneurs similaires dans un cluster :<pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d94174e503" id="migrate_single"><h4 class="topictitle4" id="d94174e503">Exemple de conteneur unique</h4>
+<div class="body taskbody"><div class="section context" id="migrate_single__context_kck_5mq_wz"><p>Vous pourriez avoir créé un conteneur unique à l'aide de la commande suivante. Cliquez sur une option  de commande pour découvrir comment implémenter une fonctionnalité similaire dans un cluster.</p>
+
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run <a href="cs_classic.html#migrate_single__single_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_single__single_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">nom_instance_service</var></a>
+<a href="cs_classic.html#migrate_single__single_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_single__single_name">--name
+<var class="keyword varname">nom_conteneur</var></a>
+<a href="cs_classic.html#migrate_single__single_volumes">--volume <var class="keyword varname">nom_volume</var>:/<var class="keyword varname">chemin_répertoire</var></a>
+<a href="cs_classic.html#migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp></p>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_single__single_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">nom_instance_service</var></dt>
+<dd>Tout d'abord, <a href="cs_cluster_service.html" title="Ajoutez une instance de service Bluemix existante à votre cluster pour permettre aux utilisateurs du cluster d'accéder et d'utiliser le service Bluemix lorsqu'ils déploient une application dans le cluster.">ajoutez le
+service au cluster</a> en créant une valeur confidentielle. Cette tâche ponctuelle rend le service disponible à n'importe quelle application dans le cluster. Ensuite,  <a href="cs_apps_volume_claim.html" title="Créez une réservation de volume persistant pour procurer un stockage de fichiers NFS. Cette réservation peut être montée sur un conteneur dans une nacelle pour garantir que les données soient disponibles même en cas de panne ou de fermeture de la nacelle.">ajoutez cette valeur confidentielle et un chemin de montage pour la valeur confidentielle</a> dans le script de configuration du déploiement. <p>Tous les <span class="keyword">Bluemix</span> services qui gèrent les clés de service sont pris en charge par la fonctionnalité Kubernetes. En d'autres termes, si vous aviez à utiliser la méthode de pont d'application Cloud Foundry pour connecter des services à <span class="ph">conteneurs uniques et évolutifs</span>
+(CCS_BIND_APP), l'utilisation de ce service n'est pas prise en charge avec les clusters Kubernetes. Si vous utilisez la méthode de liaison directe de service (CCS_BIND_SRV), l'utilisation de ce service est prise en charge avec Kubernetes.</p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_memory">-m 1024</dt>
+<dd>Au lieu de la taille, définissez des demandes d'UC et de mémoire, ainsi que des limites, pour la nacelle de conteneur.
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">En savoir plus sur la manière de déterminer les valeurs pour l'UC et la mémoire.</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_name">--name <var class="keyword varname">nom_groupe_conteneurs</var></dt>
+<dd>Nom de la ressource. Vous pouvez également affecter des libellés aux ressources. <img id="migrate_single__d46261e242" src="sout.gif" alt="Lien externe">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">En savoir plus sur les libelés Kubernetes</a>.<pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_port">-p <var class="keyword varname">9080</var></dt>
+<dd>Port à exposer au trafic externe.<pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_volumes">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">chemin_répertoire</var></dt>
+<dd>Tout d'abord, <a href="cs_apps_volume_claim.html" title="Créez une réservation de volume persistant pour procurer un stockage de fichiers NFS. Cette réservation peut être montée sur un conteneur dans une nacelle pour garantir que les données soient disponibles même en cas de panne ou de fermeture de la nacelle.">créez une réservation de volume persistant</a>, après quoi un volume persistant avec la taille et la classe de stockage requis sera créé dynamiquement pour vous. Ensuite, <a href="cs_apps_volume_claim.html" title="Créez une réservation de volume persistant pour procurer un stockage de fichiers NFS. Cette réservation peut être montée sur un conteneur dans une nacelle pour garantir que les données soient disponibles même en cas de panne ou de fermeture de la nacelle.">ajoutez la classe de réservation et un chemin de montage</a> au script de configuration.<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd>Image depuis laquelle générer le conteneur. Vous pouvez continuer à utiliser les images de votre registre
+d'images <span class="keyword">Bluemix</span>, Docker Hub, ou de votre propre registre. <a href="cs_planning_images.html" title="Une image Docker est la base de chaque conteneur que vous créez. L'image est créée depuis un Dockerfile, lequel est un fichier contenant des instructions pour générer l'image. Un Dockerfile peut référencer dans ses instructions des artefacts de génération stockés séparément, comme une application, sa configuration, et ses dépendances.">En savoir plus sur les options de configuration du registre</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_single__postreq_wvj_vmq_wz"><div class="p">En utilisant les valeurs de l'exemple de conteneur unique, utilisez le script de configuration suivant pour déployer une nacelle de conteneur similaire dans un cluster :<pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d94174e671" id="migrating_autoscaling"><h3 class="topictitle3" id="d94174e671">Migration vers la mise à l'échelle automatique Kubernetes</h3>
+<div class="body taskbody"><p class="li stepsection"><p><a href="cs_ov.html" title="IBM Bluemix Container Service combine Docker et Kubernetes afin de proposer des outils performants, une expérience utilisateur intuitive et une sécurité et un isolement intégrés afin d'automatiser le déploiement, l'opération, la mise à l'échelle et la surveillance des applications conteneurisées dans un cluster d'hôtes de traitement indépendants via les API Kubernetes.">Kubernetes</a>
+vous permet d'activer la
+<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">mise
+à l'échelle automatique de nacelle horizontale</a> pour mettre à l'échelle vos
+applications en fonction de l'unité centrale. </p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">Installez les
+<a href="cs_cli_install.html" title="Vous pouvez utiliser l'interface CLI ou l'API IBM Bluemix Container Service pour créer et gérer vos clusters Kubernetes.">interfaces de ligne de
+commande</a> requises.</span></li>
+<li class="step stepexpand"><span class="cmd">Créez un cluster en suivant les étapes décrites dans <a href="container_index.html#clusters" title="Kubernetes est un outil d'orchestration dédié à la planification de conteneurs d'application sur un cluster de machines de traitement. Kubernetes permet aux développeurs de développer rapidement des applications hautement disponibles en exploitant la puissance et la flexibilité de conteneurs.">&gt;Initiation aux clusters Kubernetes dans Bluemix</a>. Prenez soin de définir votre cluster pour répliquer votre groupe de conteneurs en cours, y compris la journalisation, la surveillance, l'assistant de vulnérabilité et toute autre personnalisation dont vous disposez.</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_cli_configure.html" title="Vous pouvez utiliser les commandes fournies avec l'interface de ligne de commande Kubernetes pour gérer les clusters dans Bluemix. Après avoir créé un cluster, définissez le contexte de votre interface de ligne de commande locale vers ce cluster à l'aide d'une variable d'environnement. Vous pouvez ensuite exécuter les commandes Kubernetes kubectl pour utiliser votre cluster dans Bluemix.">Définissez le
+contexte</a> de votre cluster.</span></li>
+<li class="step stepexpand"><span class="cmd">Déployez l'application existante sur votre cluster <a href="cs_apps_cli.html" title="Après avoir créé un cluster, vous pouvez y déployer une application à l'aide de l'interface CLI de Kubernetes.">à partir de l'interface de ligne de commande</a>.</span> Lorsque vous déployez votre application, vous devez demander l'unité centrale.
+
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46365e114" class="defaultstyle"><thead><tr><th colspan="2" id="d94174e753" class="thleft"><span class="ph"><img src="images/idea.png" alt="Cette icône indique l'existence d'informations supplémentaires sur l'exécution de cette étape de la tâche."></span> Description des composantes de cette
+commande</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94174e753 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d94174e753 ">Application que vous désirez déployer.</td>
+</tr>
+<tr><td style="width: 50%" headers="d94174e753 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d94174e753 ">Unité centrale requise pour votre conteneur, exprimée en milli-cores. Par exemple, <samp class="ph codeph">--requests=200m</samp>.</td>
+</tr>
+<tr><td style="width: 50%" headers="d94174e753 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d94174e753 ">Lorsque ce paramètre a pour valeur true, un service externe est créé.</td>
+</tr>
+<tr><td style="width: 50%" headers="d94174e753 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d94174e753 ">Port sur lequel votre application est disponible en externe.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">Remarque :</span> Pour des déploiements plus complexes, vous devrez peut-être créer un <a href="cs_apps_cli.html" title="Après avoir créé un cluster, vous pouvez y déployer une application à l'aide de l'interface CLI de Kubernetes.">script de déploiement</a>.</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Créez un programme de mise à l'échelle automatique de nacelle et définissez votre règle.</span>  Pour plus d'informations sur l'utilisation de la commande <samp class="ph codeph">kubetcl
+autoscale</samp>, voir la
+<a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">documentation
+Kubernetes</a>.
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46365e172" class="defaultstyle"><thead><tr><th colspan="2" id="d94174e813" class="thleft"><span class="ph"><img src="images/idea.png" alt="Cette icône indique l'existence d'informations supplémentaires sur l'exécution de cette étape de la tâche."></span> Description des composantes de cette
+commande</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94174e813 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d94174e813 ">Utilisation d'UC moyenne gérée par le programme de mise à l'échelle automatique de nacelle, exprimée en pourcentage.</td>
+</tr>
+<tr><td style="width: 50%" headers="d94174e813 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d94174e813 ">Nombre minimum de capsules déployées utilisées pour gérer le pourcentage d'utilisation d'UC spécifié.</td>
+</tr>
+<tr><td style="width: 50%" headers="d94174e813 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d94174e813 ">Nombre maximum de capsules déployées utilisées pour gérer le pourcentage d'utilisation d'UC spécifié.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">Vérifiez que votre application fonctionne correctement.</span> <ul><li>Vérifiez votre tableau de bord de service pour vous assurer que votre application est en cours d'exécution.</li>
+<li>Vérifiez votre application pour vous assurer que les modifications majeures ont été implémentées.</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd"><a href="container_ha.html#container_group_remove" title="Pour optimiser l'utilisation de votre quota, supprimez de temps en temps les groupes de conteneurs inutilisés.">Mettez hors service et retirez</a> votre instance origine d'IBM Containers.</span></li>
+</ol>
+</div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94174e853" id="migrating_compose"><h3 class="topictitle3" id="d94174e853">Migration de configurations Docker Compose vers des clusters</h3>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context"><span class="ph">Si vous aviez utilisé Docker Compose pour déployer vos conteneurs, <a href="https://kubernetes.io/docs/tools/kompose/user-guide/" rel="external" target="_blank" title="(S'ouvre dans un nouvel onglet ou une nouvelle fenêtre)">vous pouvez utiliser l'outil
+Kubernetes Kompose</a> pour migrer vos scripts de configuration Docker Compose vers des scripts de configuration déployant des conteneurs dans des clusters Kubernetes. </span></div><div class="section postreq" id="migrating_compose__postreq_sdm_kmd_5z">A présent que vous avez migré vos conteneurs vers des ressources Kubernetes dans des
+clusters, consultez la rubrique <a href="cs_apps_dashboard.html" title="Ouvrez un tableau de bord Kubernetes sur votre système local pour consulter des informations sur un cluster et ses noeuds d'agent.">Lancement du tableau de bord Kubernetes pour IBM Bluemix Container Service</a> pour voir comment ces ressources opèrent.</div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94174e872" lang="fr-fr" id="container_single_remove"><h3 class="topictitle3" id="d94174e872">Suppression de conteneurs uniques</h3>
+<div class="body taskbody"><p class="shortdesc">Pour optimiser l'utilisation de votre quota, supprimez de temps en temps les conteneurs inutilisés.</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Supprimez un conteneur à l'aide de l'une des méthodes suivantes :</span> <ul class="ul choices"><li class="li choice">Dans l'interface graphique <span class="keyword">Bluemix</span><ol type="a"><li>Dans le tableau de bord <span class="keyword">Bluemix</span>, sélectionnez le conteneur que vous souhaitez supprimer.</li>
+<li>Développez le menu <span class="ph uicontrol">Plus d'actions...</span>, puis cliquez sur <span class="ph uicontrol">Supprimer</span>.</li>
+</ol>
+<ul><li>Dans la vignette du conteneur, cliquez sur l'icône en forme d'engrenage, puis sur <span class="ph uicontrol">Supprimer le conteneur</span>. </li>
+</ul>
+</li>
+<li class="li choice">Depuis l'interface CLI
+*<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTENEUR [CONTENEUR] </span></code></pre>
+<div class="steps note"><span class="notetitle">Remarque :</span> <span class="ph" id="container_single_remove__d42512e178">*Dans cette commande, vous pouvez remplacer
+<samp class="ph codeph"><span class="ph">bx ic</span></samp>
+par <samp class="ph codeph">docker</samp> lorsque vous
+<a href="container_cli_cfic_install.html#container_cli_login" title="Après son installation, connectez-vous à l'interface de ligne de commande pour l'utiliser.">êtes connecté à
+<span class="keyword">IBM
+Bluemix Container Service</span></a> et
+que vous avez défini vos variables d'environnement afin d'utiliser des commandes Docker
+natives.</span><span class="ph" id="container_single_remove__d42512e190">Vous pouvez utiliser des commandes Docker
+natives dans toutes les étapes accompagnées d'un astérisque (*) de cette rubrique. </span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">Facultatif  : <span class="cmd">Vérifiez que le conteneur a été supprimé en exécutant la commande suivante et en confirmant que le conteneur n'apparaît pas dans la liste.*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94174e872"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d94174e1022" lang="fr-fr" id="container_group_remove"><h3 class="topictitle3" id="d94174e1022">Suppression de groupes de conteneurs</h3>
+<div class="body taskbody"><p class="shortdesc">Pour optimiser l'utilisation de votre quota, supprimez de temps en temps les groupes de conteneurs inutilisés.</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">Important :</span>  Supprimez la route depuis le groupe de conteneurs en exécutant l'une des commandes suivantes avant de supprimer un groupe de conteneurs ou avant de supprimer une route à l'aide de la commande <samp class="ph codeph">cf
+delete-route</samp>.
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">hôte</var> -d <var class="keyword varname">domaine</var> <var class="keyword varname">nom_ou_ID_groupe</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Supprimez un groupe de conteneurs à l'aide d'une des méthodes suivantes.</span> <ul class="ul choices"><li class="li choice">Dans l'interface graphique <span class="keyword">Bluemix</span>, sélectionnez votre groupe de conteneurs et cliquez sur <span class="ph uicontrol">Supprimer</span> dans le menu <span class="ph uicontrol">Autres actions...</span>. </li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUPE [GROUPE]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">Facultatif  : <span class="cmd">Vérifiez que le groupe de conteneurs a été supprimé en exécutant la commande suivante et en confirmant que le groupe
+de conteneurs n'apparaît pas dans la liste.</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94174e1022"></aside></article></article></article></div></main></body></html>

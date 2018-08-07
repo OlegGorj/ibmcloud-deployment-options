@@ -1,0 +1,475 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service を使用して、IBM クラウドの Docker コンテナーの中でアプリを管理します。 コンテナーとは、アプリとそのすべての従属物をパッケージ化して、アプリを変更せずに環境間で移動して実行できるようにするための標準的な手段です。コンテナーには、リソースの分離と割り振りの点での利点があり、しかも仮想マシンなどよりも移植可能性と効率性が高くなっています。">
+<meta name="keywords" content="単一コンテナー, IBM Bluemix Container Service, コンテナー・グループ, スケーラブル・グループ, マイグレーション, CLI, docker rm, bx ic, rm, IBM Containers, コンテナー, 削除, group-remove">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service での単一コンテナーとスケーラブル・コンテナーの実行</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d94125e6" id="cs_classic"><h1 class="topictitle1" id="d94125e6"><span class="keyword">IBM
+Bluemix Container Service</span> での<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>の実行 </h1>
+<div class="abstract"><div class="shortdesc"><span class="keyword">IBM®
+Bluemix® Container Service</span> を使用して、IBM クラウドの Docker コンテナーの中でアプリを管理します。
+<span class="ph">コンテナーとは、アプリとそのすべての従属物をパッケージ化して、アプリを変更せずに環境間で移動して実行できるようにするための標準的な手段です。</span>コンテナーには、リソースの分離と割り振りの点での利点があり、しかも仮想マシンなどよりも移植可能性と効率性が高くなっています。
+</div>
+
+
+<p>クラスターではなく<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>を使用してアプリをデプロイすることができますが、クラスターを使用すれば、環境をカスタマイズするための幅広いオプションを利用できます。
+コンテナーのオーケストレーション・ツールとして、<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>ではなく<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター</a>を使用することを検討してください。</p>
+</div>
+<aside role="complementary" aria-labelledby="d94125e6"></aside><article class="topic task nested1" role="article" aria-labelledby="d94125e105" id="cs_classic_migrating"><h2 class="topictitle2" id="d94125e105">Kubernetes クラスターへの<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>のマイグレーション</h2>
+<div class="body taskbody"><p class="shortdesc">Kubernetes クラスターに<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>を再作成できます。</p>
+<div class="section context" id="cs_classic_migrating__context_iy5_jgr_mz"><div class="p">このページでは、次の事柄について説明します。
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_containers" title="単一コンテナーとスケーラブル・コンテナー作成コマンドからプロパティーを取り込んで、Kubernetes クラスター内に同様のコンテナー・ポッドをデプロイするための構成スクリプトを作成できます。">クラスターへの単一コンテナーとスケーラブル・コンテナーの再作成</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_autoscaling">自動スケーリングのマイグレーション</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#migrating_compose">クラスターへの Docker Compose 構成のマイグレーション</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_single_remove">単一コンテナーの削除</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="cs_classic.html#container_group_remove">コンテナー・グループの削除</a></div>
+</div>
+</div></div>
+<article class="topic task nested2" role="article" aria-labelledby="d94125e167" id="migrating_containers"><h3 class="topictitle3" id="d94125e167">クラスターへの<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>の再作成</h3>
+<div class="body taskbody"><p class="shortdesc"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>作成コマンドからプロパティーを取り込んで、Kubernetes クラスター内に同様のコンテナー・ポッドをデプロイするための構成スクリプトを作成できます。</p>
+<div class="section context" id="migrating_containers__context_r35_hpq_mz"></div></div>
+<article class="topic task nested3" role="article" aria-labelledby="d94125e179" id="migrate_groups"><h4 class="topictitle4" id="d94125e179">コンテナー・グループの例</h4>
+<div class="body taskbody"><div class="abstract"><span class="shortdesc">過去にコンテナー・グループを使用した場合は、クラスター内に同様のセットアップを作成できます。</span>
+ コンテナー・グループに VPN サービスを以前使用していて、有料アカウントを現在使用している場合は、<a href="https://knowledgelayer.softlayer.com/procedure/how-order-vyatta" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">クラスターの VLAN 用に Vyatta も注文する必要があります</a>。</div>
+<div class="section context" id="migrate_groups__context_mdr_dhq_rz"><p>ここでは、次のコマンドを使用してコンテナー・グループが作成されていることを想定しています。同様の機能をクラスターに実装する方法を知るには、コマンド・オプションをクリックしてください。</p>
+
+<div class="p"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create <a href="cs_classic.html#migrate_groups__group_anti">--anti</a>
+<a href="cs_classic.html#migrate_groups__group_auto">--auto</a>
+<a href="cs_classic.html#migrate_groups__group_domain">-d
+<span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></a>
+<a href="cs_classic.html#migrate_groups__group_host">-n
+<var class="keyword varname">mycontainerhost</var></a>
+<a href="cs_classic.html#migrate_groups__group_desired">--desired 3</a>
+<a href="cs_classic.html#migrate_groups__group_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></a>
+<a href="cs_classic.html#migrate_groups__group_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_groups__group_max">--max
+5</a>
+<a href="cs_classic.html#migrate_groups__group_min">--min 2</a>
+<a href="cs_classic.html#migrate_groups__group_name">--name
+<var class="keyword varname">my_container_group</var></a>
+<a href="cs_classic.html#migrate_groups__group_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_groups__group_volume">--volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory_path</var></a>
+<a href="cs_classic.html#migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp><div class="steps note"><span class="notetitle">注:</span> <samp class="ph codeph">--ip</samp> オプションを指定して <samp class="ph codeph">cf ic group create</samp> コマンドを使用した場合、既存の浮動 IP アドレスは Kubernetes クラスターにマイグレーションできないということに注意してください。パブリック IP アドレスでサービスを公開するには、NodePort または LoadBalancer サービス・タイプをデプロイするための構成スクリプトを作成します。
+このセットアップにより、Kubernetes クラスターのパブリック IP アドレスでサービスが公開されます。<a href="cs_planning.html#cs_planning_public_network">パブリック・デプロイメント・セットアップ・オプションについて詳しくは、こちらをご覧ください。</a></div>
+</div>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_groups__group_anti">--anti</dt>
+<dd>可用性を高めるために、異なるワーカー・ノード間にコンテナー・ポッドを分散させます。
+<pre class="codeblock"><code>annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_auto">--auto</dt>
+<dd>標準クラスターでは、ロード・バランサーまたは Ingress を使用してコンテナーの自動リカバリーを可能にします。
+<a href="cs_planning_public_network.html" title="クラスターを作成したら、どのクラスターも、IBM 所有のパブリック VLAN (ライト・クラスター)、またはお客様の Bluemix Infrastructure (SoftLayer) アカウントにセットアップしたパブリック VLAN (標準クラスター) に接続する必要があります。 ワーカー・ノードに割り当てられるパブリック IP アドレスは、クラスター作成時にパブリック VLAN によって決定されます。">パブリック・デプロイメント・セットアップ・オプションについて詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_domain">-d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span></dt>
+<dd>標準クラスターでは、ロード・バランサーまたは Ingress を使用してドメインを定義します。<a href="cs_planning_public_network.html" title="クラスターを作成したら、どのクラスターも、IBM 所有のパブリック VLAN (ライト・クラスター)、またはお客様の Bluemix Infrastructure (SoftLayer) アカウントにセットアップしたパブリック VLAN (標準クラスター) に接続する必要があります。 ワーカー・ノードに割り当てられるパブリック IP アドレスは、クラスター作成時にパブリック VLAN によって決定されます。">パブリック・デプロイメント・セットアップ・オプションについて詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_host">-n <var class="keyword varname">mycontainerhost</var></dt>
+<dd>標準クラスターでは、ロード・バランサーまたは Ingress を使用してホストを定義します。<a href="cs_planning_public_network.html" title="クラスターを作成したら、どのクラスターも、IBM 所有のパブリック VLAN (ライト・クラスター)、またはお客様の Bluemix Infrastructure (SoftLayer) アカウントにセットアップしたパブリック VLAN (標準クラスター) に接続する必要があります。 ワーカー・ノードに割り当てられるパブリック IP アドレスは、クラスター作成時にパブリック VLAN によって決定されます。">パブリック・デプロイメント・セットアップ・オプションについて詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>type: LoadBalancer</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_desired">--desired 3</dt>
+<dd>必要なアプリ・インスタンス数を定義するために、レプリカの数を入力します。
+<pre class="codeblock"><code>spec:
+  replicas: 3</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></dt>
+<dd id="migrate_groups__service_bind_dl">まず、シークレットを作成して<a href="cs_cluster_service.html" title="既存の Bluemix サービス・インスタンスをクラスターに追加すると、クラスターのユーザーがアプリをクラスターにデプロイする際にその Bluemix サービスにアクセスして使用できるようになります。">クラスターにサービスを追加</a>します。このタスクは、サービス用のシークレットをクラスター内のアプリで使用できるようにする一回限りのタスクです。
+次に、デプロイメント用構成スクリプト内に、<a href="cs_apps_volume_claim.html" title="NFS ファイル・ストレージのプロビジョンのために永続ボリューム請求を作成できます。 この請求をポッド内のコンテナーにマウントすれば、ポッドのクラッシュ時やシャットダウン時にもデータを利用できます。">そのシークレットとそのシークレットへのマウント・パスを追加</a>します。<p>サービス・キーをサポートする <span class="keyword">Bluemix</span> サービスはすべて、Kubernetes 機能とともに使用することに関してサポートされます。言い換えると、<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>にサービスを接続するために Cloud Foundry アプリ・ブリッジ・メソッド (CCS_BIND_APP) を使用する必要があった場合、そのサービスを Kubernetes クラスターで使用することはサポートされません。直接サービス・バインディング・メソッド (CCS_BIND_SRV) を使用していた場合、そのサービスは Kubernetes で使用することに関してサポートされます。</p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_memory">-m 1024</dt>
+<dd id="migrate_groups__memory_dl">サイズの代わりに、コンテナー・ポッドの CPU とメモリーの要求と制限を定義します。
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">CPU とメモリーの値を決定する方法について詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_max">--max 5</dt>
+<dd>この例で使用されているデプロイメント・タイプの代わりに、HorizontalPodAutoscaler タイプの構成スクリプトを使用します。水平自動スケーリングでは、ポッドの最大数を設定できます。<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">水平自動スケーリングの詳細は、こちらをご覧ください。</a><pre class="codeblock"><code>maxReplicas: 5</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_min">--min 2</dt>
+<dd>この例で使用されているデプロイメント・タイプの代わりに、HorizontalPodAutoscaler タイプの構成スクリプトを使用します。水平自動スケーリングでは、ポッドの最小数を設定できます。<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">水平自動スケーリングの詳細は、こちらをご覧ください。</a><pre class="codeblock"><code>minReplicas: 2</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_name">--name <var class="keyword varname">my_container_group</var></dt>
+<dd id="migrate_groups__name_dl">リソースの名前。リソースのラベルを割り当てることもできます。<img id="migrate_groups__image_jzl_b3y_rz" src="sout.gif" alt="外部リンク">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Kubernetes ラベルの詳細は、こちらをご覧ください。</a><pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_port">-p <var class="keyword varname">9080</var></dt>
+<dd id="migrate_groups__port_dl">外部トラフィックに公開するポート。<pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_volume">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">directory_path</var></dt>
+<dd id="migrate_groups__volume_dl">まず、<a href="cs_apps_volume_claim.html" title="NFS ファイル・ストレージのプロビジョンのために永続ボリューム請求を作成できます。 この請求をポッド内のコンテナーにマウントすれば、ポッドのクラッシュ時やシャットダウン時にもデータを利用できます。">永続ボリューム請求を作成</a>します。そうすると、要求したストレージ・サイズとストレージ・クラスの永続ボリュームが動的に作成されます。
+次に、構成スクリプトに<a href="cs_apps_volume_claim.html" title="NFS ファイル・ストレージのプロビジョンのために永続ボリューム請求を作成できます。 この請求をポッド内のコンテナーにマウントすれば、ポッドのクラッシュ時やシャットダウン時にもデータを利用できます。">請求名とマウント・パスを追加</a>します。
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_groups__group_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd id="migrate_groups__image_dl">コンテナーの作成に使用するイメージ。
+<span class="keyword">Bluemix</span> イメージ・レジストリー、Docker Hub、または独自のレジストリーに含まれるイメージを引き続き使用できます。
+<a href="cs_planning_images.html" title="Docker イメージは、作成するすべてのコンテナーの基礎となるものです。イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) から作成されます。Dockerfile の別個に保管されている指示の中で、ビルド成果物 (アプリ、アプリの構成、その従属関係) が参照されることもあります。">レジストリー・セットアップ・オプションについて詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_groups__postreq_rm5_hcx_rz"><div class="p">コンテナー・グループの例のコマンドの値を使用し、次の構成スクリプトで、同様のコンテナー・ポッドをクラスターにデプロイします。
+<pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+      annotations:
+        scheduler.alpha.kubernetes.io/affinity: &gt;
+            {
+              "podAntiAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": [
+                  {
+                    "labelSelector": {
+                      "matchExpressions": [
+                        {
+                          "key": "app",
+                          "operator": "In",
+                          "values": ["ibmliberty"]
+                        }
+                      ]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                 }
+                ]
+               }
+             }
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article><article class="topic task nested3" role="article" aria-labelledby="d94125e495" id="migrate_single"><h4 class="topictitle4" id="d94125e495">単一のコンテナーの例</h4>
+<div class="body taskbody"><div class="section context" id="migrate_single__context_kck_5mq_wz"><p>ここでは、次のコマンドを使用して単一のコンテナーが作成されていることを想定しています。同様の機能をクラスターに実装する方法を知るには、コマンド・オプションをクリックしてください。
+</p>
+
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run <a href="cs_classic.html#migrate_single__single_port">-p
+<var class="keyword varname">9080</var></a>
+<a href="cs_classic.html#migrate_single__single_service_bind">-e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></a>
+<a href="cs_classic.html#migrate_single__single_memory">-m
+1024</a>
+<a href="cs_classic.html#migrate_single__single_name">--name
+<var class="keyword varname">my_container</var></a>
+<a href="cs_classic.html#migrate_single__single_volumes">--volume <var class="keyword varname">my_volume</var>:/<var class="keyword varname">directory_path</var></a>
+<a href="cs_classic.html#migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></a></samp></p>
+
+<div class="p"><dl><dt class="dlterm" id="migrate_single__single_service_bind">--e CCS_BIND_SRV=<var class="keyword varname">my_service_instance</var></dt>
+<dd>まず、シークレットを作成して<a href="cs_cluster_service.html" title="既存の Bluemix サービス・インスタンスをクラスターに追加すると、クラスターのユーザーがアプリをクラスターにデプロイする際にその Bluemix サービスにアクセスして使用できるようになります。">クラスターにサービスを追加</a>します。このタスクは、サービス用のシークレットをクラスター内のアプリで使用できるようにする一回限りのタスクです。
+次に、デプロイメント用構成スクリプト内に、<a href="cs_apps_volume_claim.html" title="NFS ファイル・ストレージのプロビジョンのために永続ボリューム請求を作成できます。 この請求をポッド内のコンテナーにマウントすれば、ポッドのクラッシュ時やシャットダウン時にもデータを利用できます。">そのシークレットとそのシークレットへのマウント・パスを追加</a>します。<p>サービス・キーをサポートする <span class="keyword">Bluemix</span> サービスはすべて、Kubernetes 機能とともに使用することに関してサポートされます。言い換えると、<span class="ph">単一コンテナーとスケーラブル・コンテナー</span>にサービスを接続するために Cloud Foundry アプリ・ブリッジ・メソッド (CCS_BIND_APP) を使用する必要があった場合、そのサービスを Kubernetes クラスターで使用することはサポートされません。直接サービス・バインディング・メソッド (CCS_BIND_SRV) を使用していた場合、そのサービスは Kubernetes で使用することに関してサポートされます。</p>
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/service-bind
+              name: service-bind
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_memory">-m 1024</dt>
+<dd>サイズの代わりに、コンテナー・ポッドの CPU とメモリーの要求と制限を定義します。
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">CPU とメモリーの値を決定する方法について詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>        resources:
+          limits:
+            cpu: 250m
+            memory: 2000Mi
+          requests:
+            cpu: 125m
+            memory: 1000Mi</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_name">--name <var class="keyword varname">my_container_group</var></dt>
+<dd>リソースの名前。リソースのラベルを割り当てることもできます。<img id="migrate_single__d46260e238" src="sout.gif" alt="外部リンク">
+<a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Kubernetes ラベルの詳細は、こちらをご覧ください。</a><pre class="codeblock"><code>metadata:
+ name: ibmliberty</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_port">-p <var class="keyword varname">9080</var></dt>
+<dd>外部トラフィックに公開するポート。<pre class="codeblock"><code>ports:
+        - containerPort: 9080</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_volumes">--volume <var class="keyword varname">volume</var>:/<var class="keyword varname">directory_path</var></dt>
+<dd>まず、<a href="cs_apps_volume_claim.html" title="NFS ファイル・ストレージのプロビジョンのために永続ボリューム請求を作成できます。 この請求をポッド内のコンテナーにマウントすれば、ポッドのクラッシュ時やシャットダウン時にもデータを利用できます。">永続ボリューム請求を作成</a>します。そうすると、要求したストレージ・サイズとストレージ・クラスの永続ボリュームが動的に作成されます。
+次に、構成スクリプトに<a href="cs_apps_volume_claim.html" title="NFS ファイル・ストレージのプロビジョンのために永続ボリューム請求を作成できます。 この請求をポッド内のコンテナーにマウントすれば、ポッドのクラッシュ時やシャットダウン時にもデータを利用できます。">請求名とマウント・パスを追加</a>します。
+<pre class="codeblock"><code>      containers:
+        - name: ibmliberty
+          image: "registry.ng.bluemix.net/ibmliberty:latest
+          volumeMounts:
+            - mountPath: /opt/volumemount
+              name: myvol
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc</code></pre>
+</dd>
+<dt class="dlterm" id="migrate_single__single_image">registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">ibmliberty</var></dt>
+<dd>コンテナーの作成に使用するイメージ。
+<span class="keyword">Bluemix</span> イメージ・レジストリー、Docker Hub、または独自のレジストリーに含まれるイメージを引き続き使用できます。
+<a href="cs_planning_images.html" title="Docker イメージは、作成するすべてのコンテナーの基礎となるものです。イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) から作成されます。Dockerfile の別個に保管されている指示の中で、ビルド成果物 (アプリ、アプリの構成、その従属関係) が参照されることもあります。">レジストリー・セットアップ・オプションについて詳しくは、こちらをご覧ください。</a><pre class="codeblock"><code>    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest</code></pre>
+</dd>
+</dl>
+</div>
+</div><div class="section postreq" id="migrate_single__postreq_wvj_vmq_wz"><div class="p">単一のコンテナーの例のコマンドの値を使用し、次の構成スクリプトで、同様のコンテナー・ポッドをクラスターにデプロイします。
+<pre class="codeblock"><code>apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: ibmliberty
+spec:
+  template:
+    metadata:
+      labels:
+        app: ibmliberty
+    spec:
+      containers:
+      - name: ibmliberty
+        image: registry.ng.bluemix.net/ibmliberty:latest
+        ports:
+        - containerPort: 9080
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /opt/service-bind
+          name: service-bind
+        - mountPath: /opt/volumemount
+          name: myvol
+      volumes:
+        - name: service-bind
+          secret:
+            defaultMode: 420
+            secretName: service-bind-secret
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: mypvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-loadbalancer-service
+  labels:
+    run: ibmliberty
+spec:
+  selector:
+    run: ibmliberty
+  type: LoadBalancer
+  ports:
+   - protocol: TCP
+     port: 9080</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic task nested2" role="article" aria-labelledby="d94125e662" id="migrating_autoscaling"><h3 class="topictitle3" id="d94125e662">Kubernetes 自動スケーリングへのマイグレーション</h3>
+<div class="body taskbody"><p class="li stepsection"><p><a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">Kubernetes</a> では、<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">水平ポッド自動スケーリング</a>の機能を有効にして、CPU の使用率に基づいて自分のアプリをスケーリングできます。</p>
+</p><ol class="steps"><li class="step stepexpand"><span class="cmd">必要な <a href="cs_cli_install.html" title="IBM Bluemix Container Service CLI または API を使用して、Kubernetes クラスターを作成して管理できます。">CLI</a> をインストールします。</span></li>
+<li class="step stepexpand"><span class="cmd">クラスターを作成します。この作業は、<a href="container_index.html#clusters" title="Kubernetes は、コンピュート・マシン・クラスターのアプリ・コンテナーのスケジュールを管理するためのオーケストレーション・ツールです。Kubernetes を使用すると、開発者はコンテナーの処理能力や柔軟性を活用して、可用性の高いアプリケーションを短時間で開発できます。">Bluemix での Kubernetes クラスターの概説</a>にある手順に従って行います。
+現在のコンテナー・グループを複製するようにクラスターをセットアップしてください。その際に、ロギング、モニタリング、脆弱性アドバイザー、その他のすべてのカスタマイズを複製するのも忘れないでください。</span></li>
+<li class="step stepexpand"><span class="cmd">クラスターの<a href="cs_cli_configure.html" title="Kubernetes CLI に用意されているコマンドを使用して、Bluemix のクラスターを管理することができます。 クラスターを作成したら、環境変数を使用してローカル CLI のコンテキストをそのクラスターに設定します。 その後、Kubernetes のさまざまな kubectl コマンドを実行して、Bluemix のクラスターを操作することができます。">コンテキストを設定</a>します。</span></li>
+<li class="step stepexpand"><span class="cmd"><a href="cs_apps_cli.html" title="クラスターを作成したら、Kubernetes CLI を使用してそのクラスターにアプリをデプロイできます。">CLI を使用して、</a>既存のアプリをクラスターにデプロイします。</span> アプリをデプロイする時に、CPU を要求する必要があります。
+<pre class="codeblock"><code>kubectl run &lt;name&gt; --image=&lt;image&gt; --requests=cpu=&lt;cpu&gt; --expose --port=&lt;port_number&gt;</code></pre>
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46364e113" class="defaultstyle"><thead><tr><th colspan="2" id="d94125e743" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94125e743 "><samp class="ph codeph">--image</samp></td>
+<td style="width: 50%" headers="d94125e743 ">デプロイするアプリケーション。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94125e743 "><samp class="ph codeph">--requests=cpu</samp></td>
+<td style="width: 50%" headers="d94125e743 ">コンテナーで必要な CPU。ミリコア単位で指定します。
+例えば、<samp class="ph codeph">--requests=200m</samp> のように指定します。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94125e743 "><samp class="ph codeph">--expose</samp></td>
+<td style="width: 50%" headers="d94125e743 ">外部サービスを作成する場合は、true にします。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94125e743 "><samp class="ph codeph">--port</samp></td>
+<td style="width: 50%" headers="d94125e743 ">外部からアプリを使用するためのポート。</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="steps note"><span class="notetitle">注:</span> デプロイメントがかなり複雑になる場合は、<a href="cs_apps_cli.html" title="クラスターを作成したら、Kubernetes CLI を使用してそのクラスターにアプリをデプロイできます。">デプロイメント・スクリプト</a>を作成する必要があります。</div>
+</li>
+<li class="step stepexpand"><span class="cmd">水平ポッド自動スケーリング機能を作成し、ポリシーを定義します。</span>  <samp class="ph codeph">kubetcl autoscale</samp> コマンドの使い方について詳しくは、<a href="https://kubernetes.io/docs/user-guide/kubectl/v1.5/#autoscale" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Kubernetes の資料</a>を参照してください。
+<pre class="codeblock"><code>kubectl autoscale deployment &lt;deployment_name&gt; --cpu-percent=&lt;percentage&gt; --min=&lt;min_value&gt; --max=&lt;max_value&gt;</code></pre>
+
+
+<div class="tablenoborder"><table summary="" id="migrating_autoscaling__d46364e171" class="defaultstyle"><thead><tr><th colspan="2" id="d94125e803" class="thleft"><span class="ph"><img src="images/idea.png" alt="このアイコンは、このタスクのステップの詳細情報があることを示しています。"></span> このコマンドの構成要素について</th>
+</tr>
+</thead>
+<tbody><tr><td style="width: 50%" headers="d94125e803 "><samp class="ph codeph">--cpu-percent</samp></td>
+<td style="width: 50%" headers="d94125e803 ">水平ポッド自動スケーリング機能で維持する CPU 使用率の平均値。パーセントで指定します。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94125e803 "><samp class="ph codeph">--min</samp></td>
+<td style="width: 50%" headers="d94125e803 ">指定した CPU 使用率を維持するために使用するデプロイ済みのポッドの最小数。</td>
+</tr>
+<tr><td style="width: 50%" headers="d94125e803 "><samp class="ph codeph">--max</samp></td>
+<td style="width: 50%" headers="d94125e803 ">指定した CPU 使用率を維持するために使用するデプロイ済みのポッドの最大数。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">アプリケーションが正常に動作するか確認します。</span> <ul><li>サービス・ダッシュボードを調べて、アプリが実行されていることを確認します。</li>
+<li>アプリに対する重要な変更内容が実装されているか確認します。</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">コンテナーの元のインスタンスを<a href="container_ha.html#container_group_remove" title="割り当て量を最大限使用できるよう、未使用のコンテナー・グループを時々削除してください。">プロビジョン解除して削除します</a>。</span></li>
+</ol>
+</div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94125e844" id="migrating_compose"><h3 class="topictitle3" id="d94125e844">クラスターへの Docker Compose 構成のマイグレーション</h3>
+<div class="body taskbody"><p class="shortdesc"></p>
+<div class="section context"><span class="ph">Docker Compose を使用してコンテナーをデプロイした場合は、<a href="https://kubernetes.io/docs/tools/kompose/user-guide/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Kubernetes の Kompose ツールを使用</a>して、Kubernetes クラスターにコンテナーをデプロイするための構成スクリプトに Docker Compose 構成スクリプトをマイグレーションできます。</span></div><div class="section postreq" id="migrating_compose__postreq_sdm_kmd_5z">クラスター内の Kubernetes リソースにコンテナーをマイグレーションしたので、<a href="cs_apps_dashboard.html" title="ローカル・システムで Kubernetes ダッシュボードを開くと、クラスターとそのすべてのワーカー・ノードに関する情報が表示されます。">IBM Bluemix Container Service での Kubernetes ダッシュボードの起動</a>を参照して、それらのリソースの実行状況を確認します。</div></div>
+</article><article class="topic task nested2" role="article" aria-labelledby="d94125e863" lang="ja-jp" id="container_single_remove"><h3 class="topictitle3" id="d94125e863">単一コンテナーの削除</h3>
+<div class="body taskbody"><p class="shortdesc">割り当て量を最大限使用できるよう、未使用のコンテナーを時々削除してください。</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">以下のいずれかの方法を使用して、コンテナーを削除します。</span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI から<ol type="a"><li><span class="keyword">Bluemix</span> ダッシュボードで、削除するコンテナーを選択します。</li>
+<li><span class="ph uicontrol">「その他のアクション... (More actions...)」</span>メニューを展開し、<span class="ph uicontrol">「削除」</span>をクリックします。</li>
+</ol>
+<ul><li>コンテナーのタイルで、歯車アイコンをクリックして、<span class="ph uicontrol">「コンテナーの削除」</span>をクリックします。</li>
+</ul>
+</li>
+<li class="li choice">CLI から
+*<pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_single_remove__d42512e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_single_remove__d42512e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行し、リストにコンテナーが含まれないことを確認して、コンテナーが削除されたことを検証します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94125e863"></aside></article><article class="topic task nested2" role="article" aria-labelledby="d94125e1011" lang="ja-jp" id="container_group_remove"><h3 class="topictitle3" id="d94125e1011">コンテナー・グループの削除</h3>
+<div class="body taskbody"><p class="shortdesc">割り当て量を最大限使用できるよう、未使用のコンテナー・グループを時々削除してください。</p>
+<div class="section prereq"><div class="note important"><span class="importanttitle">重要:</span>  コンテナー・グループを削除する前、または <samp class="ph codeph">cf delete-route</samp> コマンドを使用して経路を削除する前に、以下のいずれかのコマンドを実行することによって、コンテナー・グループから経路を除去します。
+<div class="p"><ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> route-unmap -n <var class="keyword varname">host</var> -d <var class="keyword varname">domain</var> <var class="keyword varname">group_name_or_ID</var></code></pre>
+</li>
+</ul>
+</div>
+</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">以下のいずれかの方法を使用して、コンテナー・グループを削除します。</span> <ul class="ul choices"><li class="li choice"><span class="keyword">Bluemix</span> GUI から、コンテナー・グループを選択して、<span class="ph uicontrol">「その他のアクション... (More actions...)」</span>メニューから<span class="ph uicontrol">「削除」</span>をクリックします。</li>
+<li class="li choice"><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行し、リストにコンテナー・グループが含まれないことを確認して、コンテナー・グループが削除されたことを検証します。</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d94125e1011"></aside></article></article></article></div></main></body></html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="zh-tw">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="容器映像檔是您建立的每個容器的基礎。映像檔是從 Dockerfile 建立的，Dockerfile 檔案中包含建置映像檔以及建置構件（例如應用程式、應用程式的配置及其相依關係）的指示。請將容器映像檔想像成執行檔（.exe 或 .bin）。執行這個可執行的應用程式檔案之後，即會建立應用程式的實例。當您執行容器時，會從映像檔建立容器實例。">
+<meta name="keywords" content="映像檔, 容器, IBM Containers, Docker Hub, 專用登錄, 推送, 取回, 建立, 移除">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "zh-tw",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>將 Docker 映像檔新增至專用登錄，以用於 IBM Bluemix Container Service</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="title" id="container_images_adding_ov"><h1 class="topictitle1" id="title">將 Docker 映像檔新增至組織的專用 <span class="keyword">Bluemix</span> 映像檔登錄</h1>
+<div class="abstract"><div class="shortdesc"><span class="ph" id="shortdesc"><span class="ph" data-hd-otherprops="registry_check">容器映像檔是您建立的每個容器的基礎。映像檔是從 Dockerfile 建立的，Dockerfile 檔案中包含建置映像檔以及建置構件（例如應用程式、應用程式的配置及其相依關係）的指示。請將容器映像檔想像成執行檔（<span class="ph filepath">.exe</span> 或 <span class="ph filepath">.bin</span>）。執行這個可執行的應用程式檔案之後，即會建立應用程式的實例。當您執行容器時，會從映像檔建立容器實例。</span></span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">小心：</span> 不提供<span class="ph"><span class="ph">單一及可擴充容器</span>的免費試用。<a href="cs_ov.html" title="IBM Bluemix Container Service 會結合 Docker 與 Kubernetes 來提供功能強大的工具、直覺式使用者體驗和內建安全和隔離，以使用 Kubernetes API，透過獨立運算主機叢集來自動進行容器化應用程式的部署、作業、擴充及監視。">瞭解在「<span class="keyword">Bluemix®</span> 公用」上，如何在 <span class="keyword">IBM®
+Bluemix Container Service</span> 中進行叢集管理並移轉至 Kubernetes。</a></span></div>
+</div>
+
+
+<div class="p">在此頁面中：
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#about_images">關於映像檔</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_copying" title="您可以將映像檔從下列其中一個位置複製到組織的專用 Bluemix 登錄。">複製映像檔</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_pulling" title="您可以從 Docker Hub 或專用登錄取回映像檔，並在本端進行修改，然後將它推送至組織的專用 Bluemix 登錄。">推送本端映像檔</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_building" title="建立 Dockerfile 來建置映像檔。Dockerfile 是一種檔案，其包含用來建置 Docker 映像檔的規格，這是容器的基準。建立 Dockerfile 之後，您可以使用指令行介面，在本端建置映像檔或直接將映像檔建置在專用 Bluemix 登錄中。然後，便可以在 Bluemix 中，透過「型錄」視圖使用映像檔。">建立映像檔</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_remove" title="您可以移除未使用的映像檔，讓您的專用 Bluemix 映像檔登錄井然有序。請注意，無法從專用 Bluemix 登錄移除公用 IBM 映像檔。">移除映像檔</a></div>
+</div>
+</div>
+<article class="topic task nested1" role="article" aria-labelledby="d56739e154" id="about_images"><h2 class="topictitle2" id="d56739e154">關於映像檔</h2>
+<div class="body taskbody"><div class="section context" id="about_images__context_kw3_f21_4z"><p><span class="ph">您可以使用 <span class="keyword">IBM
+Bluemix Container Service</span> 所提供的 IBM 認證映像檔（例如 IBM Liberty 及 IBM Node 映像檔），也可以建立自己的映像檔。</span>大部分使用者會從 Docker Hub 新增映像檔，或自訂現有映像檔，然後執行這些映像檔。您可以執行兩者的組合。</p>
+
+<div class="note important"><span class="importanttitle">重要：</span> 在 <span class="keyword">IBM
+Bluemix Container Service</span> 中，每一個映像檔最多有 10 GB 的大小可當作單一容器或可擴充容器群組來執行。</div>
+
+<p>請先考慮組織的安全需求，再從映像檔建置容器。<span class="keyword">IBM
+Bluemix Container Service</span> 提供<a href="https://console.bluemix.net/docs/containers/va/va_index.html" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">漏洞警告器</a>來評量映像檔中的潛在安全漏洞，再將其列在報告中，供您檢閱及解決。</p>
+
+<dl><dt class="dlterm">IBM 公用映像檔</dt>
+<dd>從 <span class="keyword">IBM
+Bluemix Container Service</span> 所提供的其中一個 <a href="container_images.html#images" title="您可以從 IBM 映像檔建立容器。映像檔可以部署為單一容器或多個可擴充容器群組。">IBM 公用映像檔</a>（例如 IBM Liberty 及 IBM Node 映像檔）開始測試 <span class="keyword">IBM
+Bluemix Container Service</span> 的特性。然後，您可以使用其中一個映像檔作為主映像檔，修改 Dockerfile，建置您自己的映像檔，上面有您自己的應用程式碼。</dd>
+<dt class="dlterm">Docker Hub 中的映像檔</dt>
+<dd><a href="container_images_adding_ov.html#container_images_copying" title="您可以將映像檔從下列其中一個位置複製到組織的專用 Bluemix 登錄。">從 Docker Hub 直接複製映像檔</a>到專用 <span class="keyword">Bluemix</span> 登錄，或<a href="container_images_adding_ov.html#container_images_pulling" title="您可以從 Docker Hub 或專用登錄取回映像檔，並在本端進行修改，然後將它推送至組織的專用 Bluemix 登錄。">從 Docker Hub 取回映像檔</a>，在本端進行修改，然後直接在登錄中建置。</dd>
+<dt class="dlterm">建立您自己的映像檔</dt>
+<dd>如果您有已在本端 Docker 環境中使用的容器映像檔，則可以<a href="container_images_adding_ov.html#container_images_pulling" title="您可以從 Docker Hub 或專用登錄取回映像檔，並在本端進行修改，然後將它推送至組織的專用 Bluemix 登錄。">將它們推送至專用 <span class="keyword">Bluemix</span> 登錄</a>，以在 <span class="keyword">IBM
+Bluemix Container Service</span> 中使用它們。您也可以建立自己的 Dockerfile，在本端進行建置及測試，然後將它推送至專用映像檔登錄。</dd>
+</dl>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56739e285" lang="zh-tw" id="container_images_copying"><h2 class="topictitle2" id="d56739e285">從指令行將映像檔複製到專用 <span class="keyword">Bluemix</span> 登錄</h2>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc">您可以將映像檔從下列其中一個位置複製到組織的專用 <span class="keyword">Bluemix</span> 登錄。</div>
+
+
+<ul><li>Docker Hub：若要複製 Docker Hub 中的映像檔，此映像檔必須標示為 <span class="ph uicontrol">public</span>（公用）。只要映像檔可以公開存取，而且不需要鑑別，您就可以從個人管理的映像檔登錄中複製映像檔。<p>若要將專用映像檔變更為公用映像檔，請登入
+<a href="http://hub.docker.com" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Docker Hub</a>，按一下 <span class="ph menucascade"><span class="ph uicontrol">Repositories</span> &gt; <span class="ph uicontrol"><var class="keyword varname">&lt;your_image&gt;</var></span> &gt; <span class="ph uicontrol">Settings</span> &gt; <span class="ph uicontrol">Make Public</span></span>。</p>
+</li>
+<li>您的專用 <span class="keyword">Bluemix</span> 登錄：您可能要複製 IBM 所提供的公用映像檔或新增至登錄的映像檔，以建立具有不同名稱的新映像檔。</li>
+</ul>
+</div>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">從 Docker Hub 或專用 <span class="keyword">Bluemix</span> 登錄中複製映像檔。</span> 您可以執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi</samp> 指令，將已複製的映像檔直接新增至專用登錄，而不需要先將它下載至您的電腦。
+<div class="p"><div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>，以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+</div>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">&lt;source_image&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> </code></pre>
+
+
+<p>從 Docker Hub 複製映像檔的範例</p>
+
+
+<ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_sinatra</var>:<var class="keyword varname">new</var></code></pre>
+</li>
+</ul>
+
+
+<div class="p">從專用 <span class="keyword">Bluemix</span> 登錄複製現有映像檔的範例<ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;my_image&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">new</var></code></pre>
+</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</samp> 指令，以驗證映像檔存在於您的登錄中。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<div class="steps note"><span class="notetitle">註：</span> *<span class="ph">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span></div>
+</li>
+</ol>
+<div class="section postreq"><p id="container_images_copying__result">新的映像檔位於您的專用 <span class="keyword">Bluemix</span> 登錄中。「漏洞警告器」會自動掃描映像檔中的安全問題。您可以在「<span class="keyword wintitle">型錄</span>」的「容器映像檔」區段中尋找映像檔，來檢閱漏洞掃描的結果。請遵循<a href="va/va_index.html" title="「漏洞警告器」會檢查容器映像檔在部署之前的安全狀態，也會檢查執行中容器的狀態。">漏洞警告器</a>文件來修正掃描所識別的任何漏洞，並重新推送映像檔。然後，您可以從 <span class="keyword">Bluemix</span> GUI 或指令行中選取映像檔並建立容器。如果映像檔未顯示在「<span class="keyword wintitle">型錄</span>」中，請驗證您已登入 <span class="keyword">Bluemix</span>。</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56739e558" lang="zh-tw" id="container_images_pulling"><h2 class="topictitle2" id="d56739e558">從指令行將本端映像檔推送至專用 <span class="keyword">Bluemix</span> 登錄</h2>
+<div class="body taskbody"><p class="shortdesc">您可以從 Docker Hub 或專用登錄取回映像檔，並在本端進行修改，然後將它推送至組織的專用 <span class="keyword">Bluemix</span> 登錄。</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">註：</span> 如果您已登入 <span class="keyword">IBM
+Bluemix Container Service</span> 外掛程式，並設定環境變數以對 <span class="keyword">IBM
+Bluemix Container Service</span> 使用原生 Docker 指令，請開啟新的指令行公用程式階段作業，並在未設定環境變數的情況下重新登入 <span class="keyword">IBM
+Bluemix Container Service</span>，以對本端電腦上的 Docker Engine 執行 <samp class="ph codeph">docker</samp> 指令。透過未設定原生 Docker 指令環境變數的第二個指令行公用程式階段作業來完成此作業。</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">如果在電腦本端沒有映像檔，請執行 <samp class="ph codeph">pull</samp> 指令，將映像檔下載至電腦。</span> <div class="p"><pre class="codeblock"><code>docker pull <var class="keyword varname">source_image</var>:<var class="keyword varname">tag</var></code></pre>
+</div>
+
+
+<p>從 Docker Hub 取回映像檔的範例：</p>
+
+
+<div class="p"><pre class="codeblock"><code>docker pull <var class="keyword varname">training/sinatra</var>:<var class="keyword varname">latest</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">使用專用 <span class="keyword">Bluemix</span> 登錄、新名稱及標籤值，來標記本端映像檔。</span> 使用登錄資訊及名稱來標記映像檔，可告訴 Docker 在稍後步驟要於何處推送映像檔。標籤是用來更輕鬆地識別映像檔實例（例如，新增版本標籤）。<span class="ph" id="container_images_pulling__image_name_info">僅在映像檔名稱中使用小寫英數字元或底線 (_)。其他符號（例如連字號 (-) 或斜線 (/)）可能會防止將映像檔推送至映像檔登錄。</span>
+<div class="p"><div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>，以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+</div>
+
+<div class="steps note"><span class="notetitle">註：</span> 如果您已在本端變更 Dockerfile 映像檔，請先確定映像檔的大小上限為 10 GB，再標記映像檔，並將映像檔推送至 <span class="keyword">Bluemix</span> 登錄。</div>
+
+<pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+
+<p>範例：</p>
+
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">new_sinatra</var>:version1</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">使用下列指令，將映像檔推送至專用 <span class="keyword">Bluemix</span> 登錄。</span> <div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">image_name</var></code></pre>
+</div>
+
+
+<p>範例：</p>
+
+
+<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">myimage</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">執行 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>images</samp> 指令，以驗證映像檔存在於您的映像檔登錄中。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>新的映像檔位於您的專用 <span class="keyword">Bluemix</span> 登錄中。「漏洞警告器」會自動掃描映像檔中的安全問題。您可以在「<span class="keyword wintitle">型錄</span>」的「容器映像檔」區段中尋找映像檔，來檢閱漏洞掃描的結果。請遵循<a href="va/va_index.html" title="「漏洞警告器」會檢查容器映像檔在部署之前的安全狀態，也會檢查執行中容器的狀態。">漏洞警告器</a>文件來修正掃描所識別的任何漏洞，並重新推送映像檔。然後，您可以從 <span class="keyword">Bluemix</span> GUI 或指令行中選取映像檔並建立容器。如果映像檔未顯示在「<span class="keyword wintitle">型錄</span>」中，請驗證您已登入 <span class="keyword">Bluemix</span>。</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56739e831" lang="zh-tw" id="container_images_building"><h2 class="topictitle2" id="d56739e831">使用指令行介面 (CLI) 建立您自己的映像檔</h2>
+<div class="body taskbody"><p class="shortdesc">建立 Dockerfile 來建置映像檔。Dockerfile 是一種檔案，其包含用來建置 Docker 映像檔的規格，這是容器的基準。建立 Dockerfile 之後，您可以使用指令行介面，在本端建置映像檔或直接將映像檔建置在專用 <span class="keyword">Bluemix</span> 登錄中。然後，便可以在 <span class="keyword">Bluemix</span> 中，透過「<span class="keyword wintitle">型錄</span>」視圖使用映像檔。</p>
+<div class="section context"><ul><li>若要進一步瞭解 Dockerfile，請參閱 <a href="https://docs.docker.com/engine/reference/builder/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Dockerfile Reference</a>。</li>
+<li>您可以複製其中一個 IBM 信任的映像檔 Dockerfile 以開始使用。如需範例 Dockerfile，請參閱 <a href="../images/docker_image_ibmliberty/ibmliberty_starter.html">IBM Liberty Profile</a>、<a href="../images/ibmnode_strong_pm/ibmnode-strong-pm_starter.html">IBM Node（含 Strongloop）</a>及 <a href="../images/docker_image_ibmnode/ibmnode_starter.html">IBM Node</a>。</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">建立可儲存 Dockerfile 及相關應用程式碼的本端目錄。導覽至目錄。</span></li>
+<li class="step stepexpand"><span class="cmd">建立 Dockerfile。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">在本端目錄中建立 Dockerfile。</span> <pre class="codeblock"><code>touch Dockerfile</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">使用文字編輯器，以開啟 Dockerfile。請將下列指示新增至 Dockerfile。</span> <div class="note tip"><span class="tiptitle">提示：</span> <samp class="ph codeph">FROM</samp> 是必要項目，但其他指示則為選用項目。</div>
+ <pre class="codeblock"><code>FROM <var class="keyword varname">Image_Name</var>
+LABEL <var class="keyword varname">Key</var>="<var class="keyword varname">Value</var>"
+EXPOSE <var class="keyword varname">Port</var>
+ CMD ["......"]</code></pre>
+ <p>範例</p>
+
+
+<pre class="codeblock"><code>FROM registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty 
+LABEL <var class="keyword varname">description</var>="This is my test Dockerfile"
+EXPOSE <var class="keyword varname">9080</var></code></pre>
+
+
+<p>此範例使用 IBM Liberty 作為基礎映像檔、新增標籤至映像檔 meta 資料，並且公開埠 9080。如需其他 Dockerfile 指令，請參閱 <a href="https://docs.docker.com/engine/reference/builder/" rel="external" target="_blank" title="（在新分頁或視窗中開啟）">Dockerfile Reference</a>。</p>
+
+
+<div class="note important"><span class="importanttitle">重要：</span> 如果您建立自己的 Dockerfile，請確定映像檔具有在 <span class="keyword">IBM
+Bluemix Container Service</span> 中執行的最大大小 10 GB。</div>
+
+
+<div class="steps note"><span class="notetitle">註：</span> 容器啟動時，<span class="keyword">IBM
+Bluemix Container Service</span> 會設定專用容器網路，並將專用 IP 位址指派給容器。如果您的應用程式在應用程式啟動時需要作用中的網路連線，請<a href="container_planning.html#network_delay" title="容器啟動時，IBM Bluemix Container Service 會設定專用容器網路、公開容器埠，以及將專用 IP 位址指派給容器。此處理程序可能需要數秒的時間。如果您的應用程式在應用程式啟動時需要作用中的網路連線，則可能尚未設定容器專用網路，這樣可能會導致應用程式損毀。若要確保 IBM Bluemix Container Service 網路設定在應用程式啟動之前完成，請考慮實作下列其中一個解決方案來處理網路延遲。">將 sleep 指令新增至 Dockerfile 或調整應用程式碼以對 IP 位址進行連線測試，直到可供使用為止</a>，以確保在應用程式啟動之前完成 <span class="keyword">IBM
+Bluemix Container Service</span> 網路設定。</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_images_building__build_push"><span class="cmd">選擇直接在 <span class="keyword">Bluemix</span> 中建置映像檔，或先在本端建置及測試映像檔，然後再將它推送至 <span class="keyword">Bluemix</span>。</span> <ul><li>若要在 <span class="keyword">Bluemix</span> 中直接建置映像檔，請執行下列指令。*<div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>，以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+範例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_images_building__d34451e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_images_building__d34451e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+<li>若要在本端建置映像檔，然後將映像檔推送至 <span class="keyword">Bluemix</span>，請遵循下列步驟。<div class="p"><ol type="a"><li>如果您是使用 <span class="keyword">IBM
+Bluemix Container Service</span> 的外掛程式，請重新登入。針對選項 2，請不要設定環境變數，讓 <samp class="ph codeph">docker</samp> 指令因而傳送至本端機器上的 Docker Engine。<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>從 Dockerfile 本端建置映像檔。<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">範例<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>使用下列指令，從映像檔中執行容器來測試新應用程式是否在本端執行，其中 <var class="keyword varname">Port</var> 是適用於 HTTP 資料流量的埠。<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">範例<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>如果應用程式正確地執行，則會在 CLI 輸出中顯示容器 ID。若要檢閱容器的日誌，請執行 <samp class="ph codeph">docker logs <var class="keyword varname">&lt;container_name_or_id&gt;</var>。</samp></p>
+</li>
+<li id="container_images_building__tag">使用專用 <span class="keyword">Bluemix</span> 登錄及新名稱來標記本端映像檔。<span class="ph">僅在映像檔名稱中使用小寫英數字元或底線 (_)。其他符號（例如連字號 (-) 或斜線 (/)）可能會防止將映像檔推送至映像檔登錄。</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>範例</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>使用下列指令，將映像檔推送至專用 <span class="keyword">Bluemix</span> 登錄。<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">範例<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">重要：</span> <span class="ph">當您將映像檔推送至專用 <span class="keyword">Bluemix</span> 登錄時，針對映像檔報告的大小小於本端 Docker Engine 中相同映像檔的大小。大小之間的差異並不表示在推送映像檔時發生問題。在 <span class="keyword">IBM
+Bluemix Container Service</span> 中報告壓縮的映像檔大小。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand" id="container_images_building__verify_image"><span class="cmd">驗證已將映像檔推送至 <span class="keyword">Bluemix</span> 登錄。*</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="container_images_building__va">選擇性的： <span class="cmd">檢閱映像檔漏洞。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">從 <span class="keyword">Bluemix</span> GUI 中，移至型錄，然後選取<span class="ph uicontrol">容器</span>。</span></li>
+<li class="li substep substepexpand"><span class="cmd">按一下您所新增的映像檔。</span></li>
+<li class="li substep substepexpand"><span class="cmd">在<span class="ph uicontrol">漏洞評量</span>區段中，檢閱漏洞評量的狀態。</span> 即會以下列其中一種狀況顯示狀態：
+<ul><li><span class="keyword wintitle">可安心部署</span> - 未發現重大漏洞。</li>
+<li><span class="keyword wintitle">小心部署</span> - 發現要解決的重大漏洞。</li>
+<li><span class="keyword wintitle">已封鎖部署</span> - 發現重大漏洞，且必須予以解決，才能部署映像檔。</li>
+<li><span class="keyword wintitle">未完成</span> - 掃描未完成。掃描可能仍在執行中，或映像檔的作業系統可能不相容。請稍候，然後重試掃描。如果掃描仍未完成，請重新推送映像檔來啟動新的掃描。掃描未完成的映像檔，不會遭到部署封鎖。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56739e1347" lang="zh-tw" id="container_images_remove"><h2 class="topictitle2" id="d56739e1347">使用指令行介面 (CLI) 從專用 <span class="keyword">Bluemix</span> 映像檔登錄移除映像檔</h2>
+<div class="body taskbody"><p class="shortdesc">您可以移除未使用的映像檔，讓您的專用 <span class="keyword">Bluemix</span> 映像檔登錄井然有序。請注意，無法從專用 <span class="keyword">Bluemix</span> 登錄移除公用 IBM 映像檔。</p>
+<div class="section prereq">開始之前，請移除任何正在使用映像檔的容器。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">若要移除映像檔，請執行下列指令。* </span> <div class="note tip"><span class="tiptitle">提示：</span> <span class="ph">執行 <samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>，以擷取名稱空間，並將 <var class="keyword varname">&lt;my_namespace&gt;</var> 取代為您的名稱空間資訊。</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+範例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+<div class="steps note"><span class="notetitle">註：</span> <span class="ph" id="container_images_remove__d35530e180">*<a href="container_cli_cfic_install.html#container_cli_login" title="在安裝 CLI 之後，請登入以使用它。">登入 <span class="keyword">IBM
+Bluemix Container Service</span></a> 並設定環境變數以使用原生 Docker 指令時，可以將此指令中的 <samp class="ph codeph"><span class="ph">bx ic</span></samp> 取代為 <samp class="ph codeph">docker</samp>。</span><span class="ph" id="container_images_remove__d35530e192">您可以在本主題中所有標上星號 (*) 的步驟中使用原生 Docker 指令。</span></div>
+</li>
+<li class="step stepexpand">選擇性的： <span class="cmd">驗證已移除映像檔，方法為執行下列指令，並確認映像檔並未出現在清單中。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+</ol>
+</div>
+</article></article></div></main></body></html>

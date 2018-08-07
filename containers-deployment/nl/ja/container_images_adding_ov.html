@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="コンテナー・イメージとは、作成するすべてのコンテナーの基本です。 イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。 コンテナー・イメージは、実行可能ファイル (.exe または .bin) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。 コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。">
+<meta name="keywords" content="イメージ, コンテナー, IBM Containers, Docker ハブ, 専用レジストリー, push, pull, 作成, 削除">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>IBM Bluemix Container Service で使用するプライベート・レジストリーへの Docker イメージの追加</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="title" id="container_images_adding_ov"><h1 class="topictitle1" id="title">組織のプライベート <span class="keyword">Bluemix</span> イメージ・レジストリーへの Docker イメージの追加</h1>
+<div class="abstract"><div class="shortdesc"><span class="ph" id="shortdesc"><span class="ph" data-hd-otherprops="registry_check">コンテナー・イメージとは、作成するすべてのコンテナーの基本です。
+イメージは、Dockerfile (イメージをビルドするための指示が入ったファイル) と、ビルド成果物 (アプリ、アプリの構成、およびその従属関係) から作成されます。
+コンテナー・イメージは、実行可能ファイル (<span class="ph filepath">.exe</span> または <span class="ph filepath">.bin</span>) と見なすことができます。実行可能アプリ・ファイルを実行すると、すぐにアプリのインスタンスが作成されます。
+コンテナーを実行するときには、イメージからコンテナー・インスタンスを作成します。</span></span></div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">重要:</span> <span class="ph"><span class="ph">単一コンテナーとスケーラブル・コンテナー</span>はありません。<a href="cs_ov.html" title="IBM Bluemix Container Service は、Docker と Kubernetes を結合させて、強力なツール、直観的なユーザー・エクスペリエンス、標準装備のセキュリティーと分離機能を提供します。Kubernetes API を使用することによって、独立したコンピュート・ホストから成るクラスター上でのコンテナー化アプリのデプロイメント、操作、スケーリング、モニタリングを自動化することができます。">クラスター管理について学び、<span class="keyword">Bluemix®</span> Public の <span class="keyword">IBM®
+Bluemix Container Service</span> の Kubernetes にマイグレーションします。</a></span></div>
+</div>
+
+
+<div class="p">このページでは、次について説明します。
+<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#about_images">イメージについて</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_copying" title="以下のいずれかのロケーションから組織のプライベート Bluemix レジストリーへイメージをコピーできます。">イメージをコピーする</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_pulling" title="Docker Hub または専用レジストリーからイメージをプルし、ローカルでそのイメージに変更を加え、組織の専用 Bluemix レジストリーにプッシュすることができます。">ローカル・イメージをプッシュする</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_building" title="イメージをビルドする Dockerfile を作成します。 Dockerfile は、コンテナーの基礎である Docker イメージをビルドするための指定を含むファイルです。Dockerfile を作成した後は、コマンド・ライン・インターフェースを使用して、イメージをローカルにビルドするか、専用 Bluemix レジストリーに直接ビルドすることができます。そうすると、そのイメージは、Bluemix の「カタログ」ビューを介して使用可能になります。">イメージを作成する</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; • <a href="container_images_adding_ov.html#container_images_remove" title="プライベート Bluemix イメージ・レジストリーの編成を保つために、未使用のイメージを削除することができます。パブリック IBM イメージをプライベート Bluemix レジストリーから削除することはできないことにご注意ください。">イメージを削除する</a></div>
+</div>
+</div>
+<article class="topic task nested1" role="article" aria-labelledby="d56780e153" id="about_images"><h2 class="topictitle2" id="d56780e153">イメージについて</h2>
+<div class="body taskbody"><div class="section context" id="about_images__context_kw3_f21_4z"><p><span class="ph">IBM Liberty イメージや IBM Node イメージなど、<span class="keyword">IBM
+Bluemix Container Service</span> によって用意されている IBM 認定イメージを使用するか、独自のイメージを作成することができます。</span>
+ほとんどのユーザーは、
+Docker Hub からイメージを追加するか、既存のイメージをカスタマイズし、それらのイメージを実行します。両方を組み合わせる場合もあります。</p>
+
+<div class="note important"><span class="importanttitle">重要:</span> <span class="keyword">IBM
+Bluemix Container Service</span> で単一コンテナーまたはスケーラブルなコンテナー・グループとして実行できる各イメージの最大サイズは 10 GB です。</div>
+
+<p>イメージからコンテナーをビルドする前に、組織のセキュリティー要件を検討してください。<span class="keyword">IBM
+Bluemix Container Service</span> は、イメージのセキュリティー脆弱性の可能性を評価し、結果をリストしたレポートを作成する <a href="https://console.bluemix.net/docs/containers/va/va_index.html" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Vulnerability Advisor</a> を提供しています。これにより、脆弱性を確認して解決することができます。</p>
+
+<dl><dt class="dlterm">IBM パブリック・イメージ</dt>
+<dd>手始めに、IBM Liberty や IBM Node のイメージなどの、<span class="keyword">IBM
+Bluemix Container Service</span> に用意されている <a href="container_images.html#images" title="コンテナーは IBM イメージから作成することができます。イメージは、単一コンテナーとしてもスケーラブル・コンテナー・グループとしてもデプロイできます。">IBM パブリック・イメージ</a>のいずれかを使用して、<span class="keyword">IBM
+Bluemix Container Service</span> の機能をテストします。
+そして、それらのイメージのいずれかを親イメージとして使用し、Dockerfile を変更し、独自のアプリ・コードを使用して、親イメージの上に独自のイメージをビルドできます。</dd>
+<dt class="dlterm">Docker Hub のイメージ</dt>
+<dd><a href="container_images_adding_ov.html#container_images_copying" title="以下のいずれかのロケーションから組織のプライベート Bluemix レジストリーへイメージをコピーできます。">イメージを Docker Hub から直接</a>プライベート <span class="keyword">Bluemix</span> レジストリーにコピーするか、または<a href="container_images_adding_ov.html#container_images_pulling" title="Docker Hub または専用レジストリーからイメージをプルし、ローカルでそのイメージに変更を加え、組織の専用 Bluemix レジストリーにプッシュすることができます。">イメージを Docker Hub からプル</a>し、ローカルで変更を加えた後、レジストリー内で直接ビルドします。</dd>
+<dt class="dlterm">独自イメージの作成</dt>
+<dd>ローカル Docker 環境で既に使用しているコンテナー・イメージがある場合は、それらを <span class="keyword">IBM
+Bluemix Container Service</span> で使用するために、<a href="container_images_adding_ov.html#container_images_pulling" title="Docker Hub または専用レジストリーからイメージをプルし、ローカルでそのイメージに変更を加え、組織の専用 Bluemix レジストリーにプッシュすることができます。">それらをプライベート <span class="keyword">Bluemix</span> レジストリーにプッシュ</a>することができます。また、独自の Dockerfile をローカルに作成し、ビルドし、テストした後、プライベート・イメージ・レジストリーにプッシュすることもできます。</dd>
+</dl>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56780e282" lang="ja-jp" id="container_images_copying"><h2 class="topictitle2" id="d56780e282">コマンド・ラインからのプライベート <span class="keyword">Bluemix</span> レジストリーへのイメージのコピー</h2>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc">以下のいずれかのロケーションから組織のプライベート <span class="keyword">Bluemix</span> レジストリーへイメージをコピーできます。</div>
+
+
+<ul><li>Docker Hub: Docker Hub からイメージをコピーするには、そのイメージが<span class="ph uicontrol">「パブリック」</span>としてマーク付けされていなければなりません。パブリックにアクセス可能で認証が不要であれば、個人でホストされたイメージ・レジストリーからイメージをコピーすることも可能です。<p>プライベート・イメージをパブリック・イメージに変更するには、<a href="http://hub.docker.com" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Docker
+Hub</a> にログインし、<span class="ph menucascade"><span class="ph uicontrol">「リポジトリー」</span> &gt; <span class="ph uicontrol"><var class="keyword varname">&lt;your_image&gt;</var></span> &gt; <span class="ph uicontrol">「設定」</span> &gt; <span class="ph uicontrol">「パブリックに設定 (Make Public)」</span></span>とクリックします。</p>
+</li>
+<li>専用 <span class="keyword">Bluemix</span> レジストリー: IBM によって提供されるパブリック・イメージのコピーから、またはレジストリーに追加したイメージから、別の名前で新しいイメージを作成することができます。</li>
+</ul>
+</div>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">Docker Hub または専用 <span class="keyword">Bluemix</span> レジストリーからイメージをコピーします。</span> <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi</samp> コマンドを実行すると、コピーしたイメージを、最初にコンピューターにダウンロードすることなく、専用レジストリーに直接追加できます。
+<div class="p"><div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+</div>
+ <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">&lt;source_image&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> </code></pre>
+
+
+<p>Docker Hub からイメージをコピーする例</p>
+
+
+<ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_sinatra</var>:<var class="keyword varname">new</var></code></pre>
+</li>
+</ul>
+
+
+<div class="p">既存のイメージを専用 <span class="keyword">Bluemix</span> レジストリーからコピーする例<ul><li><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> cpi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;my_image&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">new</var></code></pre>
+</li>
+</ul>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>images</samp> コマンドを実行することによって、レジストリー内にイメージが存在することを確認します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+
+
+<div class="steps note"><span class="notetitle">注:</span> *<span class="ph">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span></div>
+</li>
+</ol>
+<div class="section postreq"><p id="container_images_copying__result">プライベート <span class="keyword">Bluemix</span> レジストリー内で新しいイメージを使用できます。
+イメージはセキュリティー問題を見つけるために Vulnerability Advisor によって自動的にスキャンされます。
+脆弱点スキャンの結果は<span class="keyword wintitle">カタログ</span>の「コンテナー・イメージ (Container Images)」セクションでイメージを見つけることによって検討できます。<a href="va/va_index.html" title="Vulnerability Advisor は、デプロイメントの前にコンテナー・イメージのセキュリティー状況を検査するほか、実行中のコンテナーの状況も検査します。">Vulnerability Advisor</a> の資料に従って、
+スキャンで識別された脆弱性があれば修正し、イメージを再プッシュします。
+その後、このイメージを選択して、<span class="keyword">Bluemix</span> GUI またはコマンド・ラインからコンテナーを作成することができます。イメージが<span class="keyword wintitle">カタログ</span>に表示されない場合は、<span class="keyword">Bluemix</span> にログインしていることを確認してください。</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56780e551" lang="ja-jp" id="container_images_pulling"><h2 class="topictitle2" id="d56780e551">コマンド・ラインからのプライベート <span class="keyword">Bluemix</span> レジストリーへのローカル・イメージのプッシュ</h2>
+<div class="body taskbody"><p class="shortdesc">Docker Hub または専用レジストリーからイメージをプルし、ローカルでそのイメージに変更を加え、組織の専用 <span class="keyword">Bluemix</span> レジストリーにプッシュすることができます。</p>
+<div class="section prereq"><div class="steps note"><span class="notetitle">注:</span> <span class="keyword">IBM
+Bluemix Container Service</span> プラグインにログインし、
+<span class="keyword">IBM
+Bluemix Container Service</span> に対してネイティブの Docker コマンドを使用するように環境変数を設定した場合は、新しいコマンド・ライン・ユーティリティー・セッションを開き、ローカル・コンピューター上の Docker エンジンに対して <samp class="ph codeph">docker</samp> コマンドを実行するための環境変数を設定しないで再度 <span class="keyword">IBM
+Bluemix Container Service</span> にログインしてください。このタスクは、ネイティブ Docker コマンド用の環境変数が設定されていない、この 2 つ目のコマンド・ライン・ユーティリティー・セッションで実行してください。</div>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">コンピューターにローカルにイメージを保有していない場合、<samp class="ph codeph">pull</samp> コマンドを実行してイメージをコンピューターにダウンロードします。</span> <div class="p"><pre class="codeblock"><code>docker pull <var class="keyword varname">source_image</var>:<var class="keyword varname">tag</var></code></pre>
+</div>
+
+
+<p>Docker Hub からイメージをプルする例:</p>
+
+
+<div class="p"><pre class="codeblock"><code>docker pull <var class="keyword varname">training/sinatra</var>:<var class="keyword varname">latest</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">プライベート <span class="keyword">Bluemix</span> レジストリー、新しい名前、タグ値でローカル・イメージにタグを付けます。</span> レジストリー情報および名前によってイメージにタグ付けすることで、後のステップでイメージをプッシュする場所を Docker に指示します。バージョン・タグを追加するなど、タグを使用するとイメージ・インスタンスの識別が簡単になります。<span class="ph" id="container_images_pulling__image_name_info">イメージ名には小文字の英数字または下線 (_) のみを使用してください。
+ハイフン (-) やスラッシュ (/) などその他の記号を使用すると、イメージをイメージ・レジストリーへプッシュできない場合があります。</span>
+<div class="p"><div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+</div>
+
+<div class="steps note"><span class="notetitle">注:</span> Dockerfile イメージをローカルで変更した場合は、イメージにタグを付けて <span class="keyword">Bluemix</span> レジストリーにプッシュする前に、イメージの最大サイズが 10 GB であることを確認してください。</div>
+
+<pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+
+<p>例:</p>
+
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">training/sinatra</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">new_sinatra</var>:version1</code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd">以下のコマンドを使用して、イメージをプライベート <span class="keyword">Bluemix</span> レジストリーへプッシュします。</span> <div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">image_name</var></code></pre>
+</div>
+
+
+<p>例:</p>
+
+
+<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">mynamespace</var>/<var class="keyword varname">myimage</var></code></pre>
+</div>
+</li>
+<li class="step stepexpand"><span class="cmd"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>images</samp> コマンドを実行することによって、イメージ・レジストリー内にイメージが存在することを確認します。</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+</ol>
+<div class="section postreq"><p>プライベート <span class="keyword">Bluemix</span> レジストリー内で新しいイメージを使用できます。
+イメージはセキュリティー問題を見つけるために Vulnerability Advisor によって自動的にスキャンされます。
+脆弱点スキャンの結果は<span class="keyword wintitle">カタログ</span>の「コンテナー・イメージ (Container Images)」セクションでイメージを見つけることによって検討できます。<a href="va/va_index.html" title="Vulnerability Advisor は、デプロイメントの前にコンテナー・イメージのセキュリティー状況を検査するほか、実行中のコンテナーの状況も検査します。">Vulnerability Advisor</a> の資料に従って、
+スキャンで識別された脆弱性があれば修正し、イメージを再プッシュします。
+その後、このイメージを選択して、<span class="keyword">Bluemix</span> GUI またはコマンド・ラインからコンテナーを作成することができます。イメージが<span class="keyword wintitle">カタログ</span>に表示されない場合は、<span class="keyword">Bluemix</span> にログインしていることを確認してください。</p>
+</div></div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56780e820" lang="ja-jp" id="container_images_building"><h2 class="topictitle2" id="d56780e820">コマンド・ライン・インターフェース (CLI) を使用した独自のイメージの作成</h2>
+<div class="body taskbody"><p class="shortdesc">イメージをビルドする Dockerfile を作成します。
+Dockerfile は、コンテナーの基礎である Docker イメージをビルドするための指定を含むファイルです。Dockerfile を作成した後は、コマンド・ライン・インターフェースを使用して、イメージをローカルにビルドするか、専用 <span class="keyword">Bluemix</span> レジストリーに直接ビルドすることができます。そうすると、そのイメージは、<span class="keyword">Bluemix</span> の<span class="keyword wintitle">「カタログ」</span>ビューを介して使用可能になります。</p>
+<div class="section context"><ul><li>Dockerfile について詳しくは、<a href="https://docs.docker.com/engine/reference/builder/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Dockerfile Reference</a> を参照してください。</li>
+<li>始めるために、IBM 認定イメージ Dockerfile のいずれかをコピーできます。Dockerfile のサンプルは、<a href="../images/docker_image_ibmliberty/ibmliberty_starter.html">IBM Liberty Profile</a>、<a href="../images/ibmnode_strong_pm/ibmnode-strong-pm_starter.html">IBM Node with Strongloop</a>、および <a href="../images/docker_image_ibmnode/ibmnode_starter.html">IBM Node</a>を参照してください。</li>
+</ul>
+</div><ol class="steps"><li class="step stepexpand"><span class="cmd">Dockerfile および関連するアプリ・コードを格納するためのローカル・ディレクトリーを作成します。ディレクトリーに移動します。</span></li>
+<li class="step stepexpand"><span class="cmd">Dockerfile を作成します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd">ローカル・ディレクトリーに Dockerfile を作成します。</span> <pre class="codeblock"><code>touch Dockerfile</code></pre>
+</li>
+<li class="li substep substepexpand"><span class="cmd">テキスト・エディターを使用して Dockerfile を開きます。Dockerfile に、次の指示を追加します。</span> <div class="note tip"><span class="tiptitle">ヒント:</span> <samp class="ph codeph">FROM</samp> は必須ですが、他の説明はオプションです。</div>
+ <pre class="codeblock"><code>FROM <var class="keyword varname">Image_Name</var>
+LABEL <var class="keyword varname">Key</var>="<var class="keyword varname">Value</var>"
+EXPOSE <var class="keyword varname">Port</var>
+ CMD ["......"]</code></pre>
+ <p>例</p>
+
+
+<pre class="codeblock"><code>FROM registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty
+LABEL <var class="keyword varname">description</var>="This is my test Dockerfile"
+EXPOSE <var class="keyword varname">9080</var></code></pre>
+
+
+<p>この例では IBM Liberty をベース・イメージとして使用し、イメージのメタデータにラベルを追加して、ポート 9080 を公開します。追加の Dockerfile コマンドについては、<a href="https://docs.docker.com/engine/reference/builder/" rel="external" target="_blank" title="(新しいタブまたはウィンドウで開く)">Dockerfile
+Reference</a> を参照してください。</p>
+
+
+<div class="note important"><span class="importanttitle">重要:</span> 独自の Dockerfile を作成する場合は、<span class="keyword">IBM
+Bluemix Container Service</span> で実行されるイメージの最大サイズが 10 GB であることを確認してください。</div>
+
+
+<div class="steps note"><span class="notetitle">注:</span> コンテナーが開始されると、<span class="keyword">IBM
+Bluemix Container Service</span> はプライベート・コンテナー・ネットワークをセットアップし、コンテナーにプライベート IP アドレスを割り当てます。
+アプリがその開始時にアクティブなネットワーク接続を必要とする場合は、<a href="container_planning.html#network_delay" title="コンテナーが開始されると、IBM Bluemix Container Service はプライベート・コンテナー・ネットワークをセットアップし、コンテナー・ポートを公開し、コンテナーにプライベート IP アドレスを割り当てます。 この処理には数秒かかる場合があります。 アプリがその開始時にアクティブなネットワーク接続を必要とする場合に、コンテナーのプライベート・ネットワークがまだセットアップされていない可能性があり、アプリが異常終了する原因になることがあります。 アプリが開始される前に IBM Bluemix Container Service ネットワーキングが完了するように、以下のいずれかの解決方法を実施してネットワーク遅延を操作することを検討してください。">Dockerfile に sleep コマンドを追加するか、アプリ・コードを調整して IP アドレスが使用可能になるまでそこに ping します</a>。このようにして、アプリ開始前に <span class="keyword">IBM
+Bluemix Container Service</span> ネットワーキングが完了するようにします。</div>
+</li>
+</ol>
+</li>
+<li class="step stepexpand" id="container_images_building__build_push"><span class="cmd"><span class="keyword">Bluemix</span> でイメージを直接ビルドするか、またはイメージをローカルにビルドしてテストし、その後でそのイメージを <span class="keyword">Bluemix</span> にプッシュするかを選択します。</span> <ul><li><span class="keyword">Bluemix</span> でイメージを直接ビルドするには、以下のコマンドを実行します。*<div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> build -t registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_images_building__d34470e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_images_building__d34470e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li>イメージをローカルにビルドし、その後でイメージを <span class="keyword">Bluemix</span> にプッシュするには、以下のステップを実行します。<div class="p"><ol type="a"><li><span class="keyword">IBM
+Bluemix Container Service</span> 用プラグインを使用している場合、再ログインします。<samp class="ph codeph">docker</samp> コマンドがローカル・マシンの Docker エンジンに送られるように、
+オプション 2 の環境変数を設定しないでください。
+<div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</div>
+</li>
+<li>Dockerfile からイメージをローカルにビルドします。
+<div class="p"><pre class="codeblock"><code>docker build -t <var class="keyword varname">&lt;image_name&gt;</var>:<var class="keyword varname">&lt;tag&gt;</var> <var class="keyword varname">&lt;dockerfile_location&gt;</var></code></pre>
+</div>
+<div class="p">例<pre class="codeblock"><code>docker build -t <var class="keyword varname">my_ibmliberty_image</var>:<var class="keyword varname">v1</var> .</code></pre>
+</div>
+</li>
+<li>以下のコマンドを使用して、イメージからコンテナーを実行して、新規アプリがローカルで実行されることをテストします。ここで、<var class="keyword varname">Port</var> は HTTP トラフィック用のポートです。
+<div class="p"><pre class="codeblock"><code>docker run -d --name <var class="keyword varname">&lt;container_name&gt;</var> <var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">例<pre class="codeblock"><code>docker run -d --name <var class="keyword varname">my_container</var> <var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+<p>アプリが正しく実行されていれば、CLI 出力にコンテナー ID が表示されます。コンテナーのログを確認するには、<samp class="ph codeph">docker logs <var class="keyword varname">&lt;container_name_or_id&gt;</var></samp> を実行します。</p>
+</li>
+<li id="container_images_building__tag">プライベート <span class="keyword">Bluemix</span> レジストリーおよび新規名でローカル・イメージにタグを付けます。<span class="ph">イメージ名には小文字の英数字または下線 (_) のみを使用してください。
+ハイフン (-) やスラッシュ (/) などその他の記号を使用すると、イメージをイメージ・レジストリーへプッシュできない場合があります。</span><div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">&lt;current_image_name_or_ID&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var>  registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;new_image_name&gt;</var>:<var class="keyword varname">&lt;optional_tag&gt;</var> </code></pre>
+</div>
+<p>例</p>
+<div class="p"><pre class="codeblock"><code>docker tag <var class="keyword varname">my_ibmliberty_image</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+<li>以下のコマンドを使用して、イメージをプライベート <span class="keyword">Bluemix</span> レジストリーへプッシュします。<div class="p"><pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+</div>
+<div class="p">例<pre class="codeblock"><code>docker push registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">my_namespace</var>/<var class="keyword varname">my_ibmliberty_image</var></code></pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="note important"><span class="importanttitle">重要:</span> <span class="ph">プライベート <span class="keyword">Bluemix</span> レジストリーにイメージをプッシュすると、イメージについて報告されるサイズは、ローカル Docker エンジンにおける同じイメージのサイズより小さくなります。これらのサイズに差があるからと言って、イメージがプッシュされた際に問題が発生したということではありません。<span class="keyword">IBM
+Bluemix Container Service</span> では、イメージの圧縮サイズが報告されます。</span></div>
+</li>
+</ul>
+</li>
+<li class="step stepexpand" id="container_images_building__verify_image"><span class="cmd">イメージが <span class="keyword">Bluemix</span> レジストリーに追加されたことを確認します。*</span> <div class="p"><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</div>
+</li>
+<li class="step stepexpand" id="container_images_building__va">オプション: <span class="cmd">イメージの脆弱性を確認します。</span> <ol type="a" class="ol substeps"><li class="li substep substepexpand"><span class="cmd"><span class="keyword">Bluemix</span> GUI から、カタログに進んで<span class="ph uicontrol">「コンテナー」</span>を選択します。</span></li>
+<li class="li substep substepexpand"><span class="cmd">追加したイメージをクリックします。</span></li>
+<li class="li substep substepexpand"><span class="cmd"><span class="ph uicontrol">脆弱性評価</span> セクションで、脆弱性評価の状況を確認します。</span> 状況は、以下のいずれかの条件で示されます。
+<ul><li><span class="keyword wintitle">安全にデプロイ可能</span> - 重大な脆弱性は検出されませんでした。</li>
+<li><span class="keyword wintitle">デプロイに注意が必要</span> - 重大な脆弱性が検出されました。対処が必要です。</li>
+<li><span class="keyword wintitle">デプロイメントはブロックされました</span> - 重大な脆弱性が検出されました。イメージをデプロイする前に確認が必要です。</li>
+<li><span class="keyword wintitle">不完全</span> - スキャンは完了していません。
+スキャンはまだ実行中であるか、イメージのオペレーティング・システムに互換性がない可能性があります。
+待機してからスキャンを再試行してください。
+それでもスキャンが完了しない場合は、再度イメージをプッシュして、新規スキャンを開始します。
+スキャンが不完全なイメージは、デプロイメントについてブロックされません。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</article><article class="topic task nested1" role="article" aria-labelledby="d56780e1329" lang="ja-jp" id="container_images_remove"><h2 class="topictitle2" id="d56780e1329">コマンド・ライン・インターフェース (CLI) を使用したプライベート <span class="keyword">Bluemix</span> イメージ・レジストリーからのイメージの削除 (CLI)</h2>
+<div class="body taskbody"><p class="shortdesc">プライベート <span class="keyword">Bluemix</span> イメージ・レジストリーの編成を保つために、未使用のイメージを削除することができます。パブリック IBM イメージをプライベート <span class="keyword">Bluemix</span> レジストリーから削除することはできないことにご注意ください。</p>
+<div class="section prereq">開始する前に、イメージを使用しているすべてのコンテナーを削除してください。</div><ol class="steps"><li class="step stepexpand"><span class="cmd">イメージを削除するには、以下のコマンドを実行します。*</span> <div class="note tip"><span class="tiptitle">ヒント:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp> を実行して名前空間を取得し、<var class="keyword varname">&lt;my_namespace&gt;</var> をその名前空間情報に置き換えます。</span></div>
+
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">&lt;image_name&gt;</var></code></pre>
+例<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rmi registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">my_image</var></code></pre>
+
+<div class="steps note"><span class="notetitle">注:</span> <span class="ph" id="container_images_remove__d35549e176">* このコマンドでは、<a href="container_cli_cfic_install.html#container_cli_login" title="CLI をインストールすると、ログインして CLI を使用できます。"><span class="keyword">IBM
+Bluemix Container Service</span> にログインして</a>ネイティブの Docker コマンドを使用するように環境変数を設定すると、<samp class="ph codeph"><span class="ph">bx ic</span></samp> を <samp class="ph codeph">docker</samp> に置き換えることができます。</span><span class="ph" id="container_images_remove__d35549e188">このトピックでは、アスタリスク (*) のマークがあるすべてのステップでネイティブの Docker コマンドを使用できます。</span></div>
+</li>
+<li class="step stepexpand">オプション: <span class="cmd">以下のコマンドを実行し、リストにイメージが含まれないことを確認して、イメージが削除されたことを検証します。*</span> <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> images</code></pre>
+</li>
+</ol>
+</div>
+</article></article></div></main></body></html>

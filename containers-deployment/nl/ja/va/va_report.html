@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="ja-jp">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2015, 2016">
+
+<meta name="description" content="脆弱性レポートを確認した後の、報告された脆弱性を修正する方法について説明します。">
+<meta name="keywords" content="Vulnerability Advisor, 脆弱性, コンテナーのセキュリティー, イメージのセキュリティー">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ja-jp",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>コンテナーまたはイメージの脆弱性の解決</title>
+</head>
+<body id="va_report"><main role="main"><article role="article" aria-labelledby="d246e2"><h1 class="topictitle1" id="d246e2">コンテナーまたはイメージの脆弱性の解決</h1>
+<div class="body taskbody"><p class="shortdesc">脆弱性レポートを確認した後の、報告された脆弱性を修正する方法について説明します。</p>
+<div class="section context"><p>Vulnerability Advisor は、報告された脆弱性に関する修正アクションを提示します。報告された脆弱性の中には、Dockerfile を更新することで修正できるものがあります。一般的な脆弱性をより迅速に解決するためには、以下のコード例を使用して、Dockerfile にソリューションを実装します。</p>
+
+<div class="p" id="va_report__common_vulnerabilities">
+
+<dl><dt class="dlterm">パスワードの最大使用日数</dt>
+<dd>脆弱性:
+<pre class="pre screen"><code>Maximum password age must be set to 90 days. :
+PASS_MAX_DAYS not set to be 90 in /etc/login.defs. It is currently 99999.
+Minimum password length must be 8. : Minimum password length is not specified 
+in /etc/pam.d/common-password. Default is 6. It is recommended to be at least 8.</code></pre>
+</dd>
+<dd class="ddexpand">修正: Dockerfile に以下のコードを追加してパスワード準拠性を設定します。<pre class="codeblock"><code># Set password length and expiry for compliance with vulnerability advisor
+RUN sed -i 's/ˆPASS_MAX_DAYS.*/PASS_MAX_DAYS   90/' /etc/login.defs
+RUN sed -i 's/sha512/sha512 minlen=8/' /etc/pam.d/common-password</code></pre>
+</dd>
+<dt class="dlterm">SSH の脆弱性</dt>
+<dd>脆弱性: <pre class="pre screen"><code>SSH server should not be installed.</code></pre>
+</dd>
+<dd class="ddexpand">修正:
+<p>SSH を使用する代わりに、<samp class="ph codeph">docker attach</samp> または <samp class="ph codeph">docker exec</samp> を使用してコンテナーにアクセスします。
+Dockerfile に以下のコードを追加して、コンテナーから SSH サーバーを削除します。</p>
+<pre class="codeblock"><code># Remove SSH for compliance with vulnerability advisor
+RUN apt-get purge -y openssh-server
+RUN apt-get remove -y openssh-sftp-server
+RUN apt-get -y autoremove</code></pre>
+</dd>
+</dl>
+</div>
+</div></div>
+</article></main></body></html>

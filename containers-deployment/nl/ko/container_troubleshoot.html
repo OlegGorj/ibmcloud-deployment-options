@@ -1,0 +1,1039 @@
+<!DOCTYPE html><html lang="ko-kr">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="dcterms.date" content="2017-11-10">
+<meta name="dcterms.rights" content="© Copyright IBM Corp. 2014, 2017">
+
+<meta name="description" content="IBM Bluemix Container Service를 사용하는 중에 문제점이나 질문이 있으면 정보를 검색하거나 포럼을 통해 질문을 함으로써 도움을 받을 수 있습니다. 지원 티켓을 열 수도 있습니다.">
+<meta name="keywords" content="문제점 해결, 지원, IBM Containers, 컨테이너, 디버그, 실패, cli, 할당량, 이미지, 딜리버리 파이프라인, liberty, 단일 컨테이너, 컨테이너 그룹, 자동 복구, 그룹 인스턴스 장애, 그룹 인스턴스 충돌, 삭제, network_degraded, docker compose, 데이터 스토리지, 볼륨">
+<meta name="geo.country" content="ZZ">
+<script>
+    digitalData = {
+      page: {
+        pageInfo: {
+  language: "ko-kr",
+
+  version: "v18",
+  ibm: {
+  country: "ZZ",
+  type: "CT701"
+  
+         }
+       }
+     }
+   };
+  </script><link rel="stylesheet" type="text/css" href="./ibmdita.css">
+<title>단일 및 확장 가능 컨테이너 문제점 해결</title>
+</head>
+<body><main role="main"><div><article class="nested0" role="article" aria-labelledby="d84501e6" id="container_troubleshoot"><h1 class="topictitle1" id="d84501e6"><span class="ph">단일 및 확장 가능 컨테이너</span> 문제점 해결</h1>
+<div class="body taskbody"><div class="abstract"><div class="shortdesc"> <span class="keyword">IBM®
+Bluemix® Container Service</span>를 사용하는 중에
+문제점이나 질문이 있으면 정보를 검색하거나 포럼을 통해 질문을 함으로써 도움을 받을 수 있습니다. 지원 티켓을 열 수도 있습니다. </div>
+
+
+<div class="p"><div class="note attention"><span class="attentiontitle">주의:</span> <span class="ph"><span class="ph">단일 및 확장 가능 컨테이너</span>의 무료 평가판은 사용할 수 없습니다. 
+<a href="cs_ov.html" title="IBM Bluemix Container Service는 Kubernetes API를 사용하여 독립적인 컴퓨팅 호스트의 클러스터에서 컨테이너화된 앱의 배치, 오퍼레이션, 스케일링 및 모니터링을 자동화하는 강력한 도구, 직관적인 사용자 경험, 기본 제공 보안 및 격리를 제공할 수 있도록 Docker 및 Kubernetes를 결합합니다.">클러스터 관리에 대해 알아보고
+<span class="keyword">Bluemix</span> 퍼블릭에서
+<span class="keyword">IBM
+Bluemix Container Service</span>의 Kubernetes로 마이그레이션하십시오. </a></span></div>
+</div>
+
+
+<div class="p">이 페이지의
+내용:<div class="lines">&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_debug_containers" title="컨테이너를 디버그해야 하는 옵션을 보고 실패의 근본 원인을 찾습니다.">컨테이너 디버깅 및 로그 보기</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_cli">CLI 설정 문제점 해결</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_orgs">할당량 문제 해결</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_images">이미지 문제점 해결</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_containers">컨테이너 문제점 해결</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_compose">Docker Compose 문제점 해결</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_ov_volumes">데이터 스토리지 문제점 해결</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_known_issues" title="IBM Containers에서 발생하는 알려진 문제점을 알아봅니다.">알려진 문제점</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;• <a href="container_troubleshoot.html#ts_getting_help" title="어디에서부터 컨테이너 문제점 해결을 시작하십니까?">IBM Bluemix Container Service에 대한 도움 및 지원 받기</a></div>
+</div>
+</div>
+</div>
+<article class="topic task nested1" role="article" aria-labelledby="d84501e151" lang="ko-kr" id="ts_debug_containers"><h2 class="topictitle2" id="d84501e151">컨테이너 디버깅 및 로그 보기</h2>
+<div class="body taskbody"><p class="shortdesc">컨테이너를 디버그해야 하는 옵션을 보고 실패의 근본 원인을 찾습니다.</p>
+<ol class="steps"><li class="step stepexpand"><span class="cmd">컨테이너를 나열하고 현재 상태를 검토하십시오. </span> <ul><li><span class="keyword option">단일 컨테이너</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="keyword option">컨테이너 그룹</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups</code></pre>
+</li>
+</ul>
+</li>
+<li class="step stepexpand">옵션: <span class="cmd"><a href="container_cli_reference_cfic.html#container_cli_reference_cfic_states" title="bx ic inspect 명령을 실행하고 상태 필드를 찾아 현재 컨테이너 상태를 볼 수 있습니다. 컨테이너 상태는 컨테이너 인스턴스의 가용성과 발생했을 수도 있는 문제에 대한 추가 정보를 제공할 수 있습니다.">각 상태가 의미하는 내용</a>을 확인하고 컨테이너가 실패하지 않게 하는 팁을 검토하십시오. </span></li>
+<li class="step stepexpand"><span class="cmd">컨테이너가 실패하거나 충돌되면 컨테이너를 검사하여 실패의 근본 원인을 찾으십시오.</span> 오류 메시지는 응답의 <span class="ph uicontrol">실패</span> 섹션에서 볼 수 있습니다.
+<ul><li><span class="keyword option">단일 컨테이너</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li><span class="keyword option">컨테이너 그룹</span><ol type="a"><li>컨테이너 그룹을 검사하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-inspect <var class="keyword varname">GROUP</var></code></pre>
+</li>
+<li>추가 정보를 보려면 컨테이너 그룹의 인스턴스를 나열하고 각 인스턴스를 검사하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">GROUP</var></code></pre>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect <var class="keyword varname">GROUP_INSTANCE</var></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">앱이 실패로 종료된 경우 앱의 로그를 검색하십시오. </span> <div class="steps note"><span class="notetitle">참고:</span> 이 명령은 앱이 표준 STDOUT 및 STDERR 출력 스트림에 로그를 작성한 경우에만 사용할 수 있습니다. 이러한 표준 출력 스트림에 작성하면 컨테이너가 종료되거나 충돌된 경우에도 컨테이너 로그를 볼 수 있습니다. </div>
+
+
+<ul><li><span class="keyword option">단일 컨테이너</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li><span class="keyword option">컨테이너 그룹</span><ol type="a"><li>컨테이너 그룹의 컨테이너 인스턴스를 나열하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-instances <var class="keyword varname">GROUP</var></code></pre>
+</li>
+<li>각 인스턴스에 대해 로그를 검색하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs <var class="keyword varname">GROUP_INSTANCE</var></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li class="step stepexpand"><span class="cmd">자동 복구로 재작성된 컨테이너 그룹의 인스턴스와 같이 더 이상 사용 가능하지 않은
+컨테이너의 로그에 액세스해야 하는 경우에는 Kibana를 사용하여 로그를 보십시오. </span> <p><samp class="ph codeph"><span class="ph filepath">https://logmet.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/</span></samp></p>
+
+
+<p>로그는 Kibana에서 최대 7일 동안 사용할 수 있습니다.</p>
+</li>
+<li class="step stepexpand"><span class="cmd">로그가 컨테이너 내부의 파일로 저장된 경우 컨테이너에 로그인하여 검토해야 합니다. </span> <div class="note important"><span class="importanttitle">중요사항:</span> 실행 중인 컨테이너에만 로그인할 수 있습니다. 컨테이너가 충돌되고 다시 시작할 수 없는 경우 컨테이너의 로그에 액세스할 수 없을 수도 있습니다. 표준 STDOUT 및 STDERR 출력 스트림에 쓰도록 앱을 변경하여 컨테이너가 더 이상 액세스 가능하지 않더라도 로그 파일에 액세스할 수 있게 하십시오. </div>
+
+
+<ol type="a"><li>컨테이너가 실행 중이 아니면 컨테이너를 시작하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> start <var class="keyword varname">CONTAINER</var></code></pre>
+</li>
+<li>실행 중인 컨테이너에 로그인하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">CONTAINER</var> bash</code></pre>
+</li>
+<li>로그 파일로 이동하여 로그를 검토하십시오. </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">로그가 볼륨에 저장되었고 컨테이너를 더 이상 시작할 수 없으면 새 컨테이너를 작성하여 볼륨에 액세스하십시오. </span> <ol type="a"><li>로그 파일이 저장된 볼륨에 마운트된 새 컨테이너를 작성하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --name logcontainer -m 64 --volume <var class="keyword varname">MOUNT_PATH_TO_VOLUME</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</li>
+<li>실행 중인 컨테이너에 로그인하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it logcontainer bash</code></pre>
+</li>
+<li>볼륨 마운트 경로로 이동하고 로그 파일을 검토하십시오. </li>
+</ol>
+</li>
+<li class="step stepexpand"><span class="cmd">컨테이너 디버깅에 대해 추가 지원이 필요하면 <a href="../support/index.html#contacting-support" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)"><span class="keyword">Bluemix</span>지원 티켓</a>을 여십시오. </span></li>
+</ol>
+</div>
+<aside role="complementary" aria-labelledby="d84501e151"></aside></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e413" lang="ko-kr" id="ts_ov_cli"><h2 class="topictitle2" id="d84501e413">CLI 설정 문제점 해결</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e413"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e474" lang="ko-kr" id="ts_cf_ic_rpc"><h3 class="topictitle3" id="d84501e474">init 중에 메소드 오류<samp class="ph codeph">(rpc)</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+init</samp>을 실행하려고 시도하는 경우 다음 메시지 중 하나가 표시됩니다. <ul><li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rpc: can't find method
+CliRpcCmd.IsLoggedIn</samp></li>
+<li><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rpc: can't find method
+CliRpcCmd.IsMinCliVersion</samp></li>
+</ul>
+</div><div class="section tsCauses">설치된 Cloud Foundry 버전이 <span class="keyword">IBM
+Bluemix Container Service</span>에서 지원하는 것보다 이전 버전입니다.</div><div class="section tsResolve"><ol><li><samp class="ph codeph">cf -v</samp>를 실행하여 설치된 Cloud Foundry CLI 버전을 확인하십시오.</li>
+<li>설치된 버전이 <span class="ph">6.14.0</span> 미만이면
+<a href="https://github.com/cloudfoundry/cli/releases" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Cloud Foundry CLI를 업데이트</a>하십시오. </li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e575" lang="ko-kr" id="ts_cf_ic_registry_error"><h3 class="topictitle3" id="d84501e575"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp> 중에 레지스트리 인증 오류 발생</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+init</samp>을 실행하는 경우 다음 인증 오류 메시지 중 하나가 표시됩니다. <div class="p"><ul><li><pre class="codeblock"><code>Could not authenticate with IBM Containers registry at registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>
+****exit status 1
+****time="2015-07-31T08:58:32-04:00" level=fatal msg="Post http:///var/run/docker.sock/v1.18/auth: dial 
+unix /var/run/docker.sock: no such file or directory. Are you trying to connect to a TLS-enabled daemon without TLS?”</code></pre>
+</li>
+<li><pre class="codeblock"><code>** Retrieving client certificates from IBM Containers
+Authentication failure. Check your username and password
+Invalid token format. Please generate new token.</code></pre>
+</li>
+</ul>
+</div>
+</div><div class="section tsCauses"><span class="ph"><samp class="ph codeph">bx ic</samp></span> 전제조건 중 하나가
+충족되지 않았거나 <span class="keyword">IBM
+Bluemix Container Service</span>를 사용할 수 없습니다. </div><div class="section tsResolve"><ol><li>Docker 디먼이 실행 중인지 확인하십시오. 실행되고 있지 않은 경우에는 해당 디먼을 시작한 후 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp>을 다시 실행하십시오. </li>
+<li><samp class="ph codeph">bx login</samp>을 실행하여 Cloud Foundry CLI에 로그인되어 있는지 확인하십시오. 그런 다음 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</samp>을
+실행하여 플러그인에 다시 로그인하십시오. </li>
+<li><span class="keyword">IBM
+Bluemix Container Service</span>의 가용성을 확인하십시오.
+<a href="https://developer.ibm.com/bluemix/support/#status" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)"><span class="keyword">Bluemix</span> 상태 페이지에서
+정보를 확인하십시오.</a></li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e701" lang="ko-kr" id="ts_sudo"><h3 class="topictitle3" id="d84501e701"><span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령에 Sudo가 필요함</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"> 
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령을 실행할 때는
+모든 명령에서 <samp class="ph codeph">sudo</samp> 접두부를 사용해야 합니다. </div><div class="section tsCauses">기본적으로, <span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령이 루트 인증으로
+실행되어야 하기 때문에 운영 체제에 따라 <samp class="ph codeph">sudo</samp> 접두부가 필요할 수 있습니다. </div><div class="section tsResolve"><samp class="ph codeph">sudo</samp> 없이 <samp class="ph codeph">docker</samp> 및 <span class="ph"><samp class="ph codeph">bx ic</samp></span>
+명령을 실행하려면, 다음 명령을 실행한 후에 (Linux인 경우에는) 로그아웃 이후 다시 로그인해야 합니다.
+<pre class="codeblock"><code>sudo usermod -a -G docker <var class="keyword varname">&lt;CURRENT_USER&gt;</var></code></pre>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e791" lang="ko-kr" id="ts_ov_orgs"><h2 class="topictitle2" id="d84501e791">할당량 문제 해결 </h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e791"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e852" lang="ko-kr" id="ts_quota_space"><h3 class="topictitle3" id="d84501e852">조직의 할당량이 충분하지 않으므로 컨테이너를 작성할 수 없음</h3>
+<div class="body tsBody"><div class="section tsSymptoms">컨테이너를 작성할 때 사용자 영역에 할당량이 충분하지 않다는 메시지가 표시됩니다.<pre class="pre msgblock"><code>BXNUI0110E: IBM Containers 리소스를 할당할 수 없습니다. 조직 할당량이 충분하지 않아서 새 영역에 할당할 수 없습니다. 조직 '<var class="keyword varname">organization</var>' 유동 IP를 초과할 수 없습니다.
+IBM <span class="keyword">Bluemix</span> 조직 관리를 사용하여 할당량 할당을 조정하십시오.</code></pre>
+</div><div class="section tsCauses">이 메시지는 할당량이 충분히 지정되지 않은 영역에서 컨테이너 작성을 시도할 때 표시될 수 있습니다. 
+기본적으로, 컨테이너 서비스 관련 작업을 위해 해당 영역에 할당되려면 모든 영역에서 2개의 IP 주소와 2GB의 메모리가 필요합니다. </div><div class="section tsResolve"><div class="p">여러 영역에 걸쳐 메모리와 IP 할당량을 분배하려면 다음을 수행하십시오. <ol><li><span class="ph">계정 세부사항의 조직 관리에서 조직을 선택하십시오. </span></li>
+<li><span class="ph">할당량 섹션에서 컨테이너의 세부사항을 보십시오. </span></li>
+<li><span class="ph uicontrol">편집</span>을 클릭하고 조직의 영역들 간에 메모리와 IP 주소를 할당하십시오.</li>
+<li>조직의 임의 영역에서 컨테이너를 작성하십시오.</li>
+</ol>
+</div>
+
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e933" lang="ko-kr" id="ts_trial_upgrade"><h3 class="topictitle3" id="d84501e933">지불 계정이 있는데도 할당량을 편집할 수 없음</h3>
+<div class="body tsBody"><div class="section tsSymptoms">컨테이너 할당량을 수정할 수 없습니다. </div><div class="section tsCauses">조직의 관리자와 대금 청구 정보가 일치하지 않습니다. </div><div class="section tsResolve"><div class="p">로그인한 사용자가 조직의 관리자여야 합니다. 소유자를 검증하려면 다음 단계를 완료하십시오. <ol><li><span class="ph">계정 세부사항의 조직 관리에서 조직을 선택하십시오. </span></li>
+<li>사용자 목록에서 조직의 관리자와 로그인한 ID가 동일한지 확인하십시오.</li>
+<li>계정에서 로그아웃한 후 다시 로그인하십시오.</li>
+</ol>
+이 단계를 완료하고도 컨테이너 할당량을 편집할 수 없으면 IBM 지원 센터에 문의하십시오.</div>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e998" lang="ko-kr" id="ts_ov_images"><h2 class="topictitle2" id="d84501e998">이미지 문제점 해결</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e998"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1059" lang="ko-kr" id="ts_firewall_images"><h3 class="topictitle3" id="d84501e1059">이미지를 푸시하기 위한 내부 프록시 블록 요청</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">특정 <span class="keyword">Bluemix</span> 지역 내에
+컨테이너를 작성하려면, 이미지를 푸시하여 해당 지역 내의 레지스트리에 컨테이너를 작성해야 합니다. 그 레지스트리로 이미지를 푸시하려고 할 때 다음 오류 메시지 중 하나가 표시되면서 연결에 실패합니다.
+<pre class="pre screen"><code>Connection refused</code></pre>
+<pre class="pre screen"><code>Connection timed out</code></pre>
+</div><div class="section tsCauses">사용자의 컴퓨터에서 <span class="keyword">Bluemix</span> 레지스트리로
+통신을 금지하고 있는 방화벽 설정이 있을 수 있습니다. 대개 보안상의 이유로 허용 가능한 통신만 허용하도록 내부 프록시
+설정이 구성됩니다. </div><div class="section tsResolve">방화벽에서 사용자의 컴퓨터에서 지역 특정 IP 주소를 위한 레지스트리로 통신을 여십시오. <ul id="ts_firewall_images__ul_on4_rfj_wz"><li>미국 남부:<pre class="codeblock"><code>169.55.39.122
+169.55.39.124
+169.55.39.126
+169.55.211.14
+169.46.9.2
+169.46.9.3
+169.46.9.20
+169.46.9.21</code></pre>
+</li>
+<li>영국:<pre class="codeblock"><code>159.8.188.168
+159.8.188.169
+159.8.188.174
+159.8.188.179
+169.50.153.69
+169.50.153.76
+169.50.153.81
+169.50.153.85</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1124" lang="ko-kr" id="ts_liberty_image"><h3 class="topictitle3" id="d84501e1124">IBM WebSphere Application Server Liberty
+이미지의 문제점</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><span class="keyword">IBM
+Bluemix Container Service</span>에 있는 IBM
+WebSphere® Application Server Liberty 이미지 중 하나를 사용할 때 문제점이 발생합니다.</div><div class="section tsCauses"><p>이미지가 올바르게 설정되지 않았을 수 있습니다.</p>
+</div><div class="section tsResolve"><p>특히 이 <span class="ph filepath">Dockerfile</span> 이미지와 관련된 문제가 발생할 경우
+<a href="https://github.com/WASdev/ci.docker/issues" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">GitHub 문제 트래커</a>를 사용하십시오. IBM
+WebSphere Application Server Liberty에 관련한 더 일반적인 문제의 경우
+<a href="https://developer.ibm.com/wasdev/help/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">WASdev 커뮤니티</a>로 이동하여 도움을 받을 수 있습니다.</p>
+
+<p><span class="keyword">IBM
+Bluemix Container Service</span>의 IBM
+WebSphere Application Server Liberty 이미지에 대한 자세한 정보는 <a href="../images/docker_image_ibmliberty/ibmliberty_starter.html">IBM
+WebSphere Application Server Liberty 이미지</a>를 참조하십시오.</p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1250" lang="ko-kr" id="ts_image_baduserid"><h3 class="topictitle3" id="d84501e1250">개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에서 이미지를 가져올 수 없음</h3>
+<div class="body tsBody"><div class="section tsSymptoms">개인용 <span class="keyword">Bluemix</span> 레지스트리의 컨테이너 이미지에서 컨테이너를 작성했지만 컨테이너가 계속
+<span class="ph uicontrol">빌드 중</span> 상태입니다. <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> inspect</samp> 명령을 실행하면
+CLI 응답의 <span class="ph uicontrol">Env</span> 섹션에 다음 오류 메시지가 표시됩니다.
+<pre class="codeblock"><code>"Env": [
+            "metadata_exit_code=-1",
+            "logging_password=",
+            "space_id=0e65c436-9413-46e2-8b42-ff06aa74ac21",
+            "logstash_target=logmet.opvis.bluemix.net:9091",
+            "metadata_err_msg=Cannot pull image from registry: Pull failed with error message failed 
+             to register layer: ApplyLayer exit status 1 stdout:  stderr: Container ID 1234567890 
+             cannot be mapped to a host ID",
+            "metrics_target=logmet.opvis.bluemix.net:9095",
+            "metadata_running=1"</code></pre>
+</div><div class="section tsCauses"><span class="keyword">IBM
+Bluemix Container Service</span>에서는
+<a href="https://docs.docker.com/engine/security/security/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Docker
+사용자 네임스페이스 기능</a>이 Docker Engine에서 사용으로 설정됩니다. 사용자 네임스페이스 기능은
+처음에 Docker 버전 1.10에서 도입되었으며 컨테이너의 루트 사용자를 컨테이너 외부의
+루트가 아닌 사용자에 맵핑할 수 있는 가능성을 제공합니다. 이 방법으로 컨테이너 내부에서
+루트 조치를 수행할 수 있는 사용자의 권한은 컨테이너 외부에서 제한될 수 있으므로 호스트와
+다른 컨테이너에 있는 파일은 액세스, 변경 또는 제거할 수 없습니다. <div class="steps note"><span class="notetitle">참고:</span> Docker 사용자 네임스페이스는
+<a href="container_planning.html#container_planning_namespace" title="IBM Bluemix Container Service의 개인용 이미지를 저장하고 관리하기 위해, 모든 조직은 Bluemix에서 자신의 개인용 고유 Docker 이미지 레지스트리를 설정해야 합니다. 개인용 레지스트리의 이 이름을 네임스페이스라고 하며, 이는 Bluemix 내에서 고유해야 합니다.">개인용 이미지 레지스트리</a>를 식별하도록
+<span class="keyword">Bluemix</span>에서 설정한 네임스페이스와는 다릅니다. </div>
+<p><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+run</samp> 명령을 사용하여 컨테이너 이미지에서 컨테이너를 작성하는 경우
+개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에서 IBM Cloud Docker Engine으로
+이미지를 로드합니다. 그러면 Docker Engine에서 각 컨테이너 계층을 작성하기 시작합니다. 컨테이너
+이미지에 지정된 내용에 따라 로컬 시스템의 앱 파일을 컨테이너에 추가할 수도
+있습니다. 이 모든 파일은 로컬 시스템에서 사용자 ID(UID)와 그룹 ID(GID)를 사용하여 작성합니다.
+UID와 GID는 로컬 시스템에서의 사용자 권한을 표시합니다. 이 파일을 컨테이너에
+추가하려는 경우 각 UID와 GID가 컨테이너 내부의 UID와 GID에 맵핑합니다.
+컨테이너의 맵핑된 UID와 GID의 권한은 로컬 시스템과 다를 수
+있습니다. 예를 들어, 로컬 시스템의 루트가 아닌 UID와 GID가 컨테이너의 루트 사용자에
+맵핑됩니다. 그러면 사용자가 컨테이너에서 루트 사용자의 역할을 수행하고
+컨테이너 파일에 액세스, 변경 및 제거할 수 있습니다. 컨테이너가 격리된 환경에서 실행 중이므로,
+컨테이너 외부에서는 루트가 아닌 권한이 지정되므로 UID와 GID가 호스트의 파일에 액세스할 수 없습니다. </p>
+<p>로컬 시스템의 UID와 GID를 컨테이너 내부의 UID와 GID에 맵핑하려면 사용자 네임스페이스
+기능은 0 - 65536의 UID와 GID로 모든 파일을 작성해야 합니다. </p>
+<p>표시되는
+오류는 이 범위를 벗어나는 UID 또는 GID에서 파일을 작성하고 이 파일이 컨테이너 이미지 계층 중 하나에 포함될 때 발생합니다. 이미지에서 컨테이너를 작성할 때 Docker Engine은 이미지의 각 계층을 빌드합니다.범위에서 벗어난 UID 또는 GID의 파일이 발견되면 UID 또는 GID가 컨테이너 내부에서 유효한 ID에 맵핑될 수 없으므로 Docker Engine이 실패합니다. Docker Engine은 또한 하나의 이미지 계층에 사용되고 다음 이미지 계층에서 제거되면 실패합니다. </p>
+</div><div class="section tsResolve"><dl><dt class="dlterm">로컬 Docker Engine에서 사용자 네임스페이스를 사용</dt>
+<dd>로컬에서 컨테이너 이미지를 빌드할 때 로컬 Docker Engine에서
+사용자 네임스페이스 기능을 사용하게 하십시오. 그러면 유효한 사용자 네임스페이스 범위 밖에 있는 로컬 시스템의
+모든 UID 및 GID가 자동으로 범위 내에 있는 유효한 ID에 맵핑됩니다. 개인용
+<span class="keyword">Bluemix</span> 이미지 레지스트리에 컨테이너 이미지를 푸시하기 전에 이미지를 로컬로 테스트하고 <span class="keyword">IBM
+Bluemix Container Service</span>에서 사용하십시오. 사용자 네임스페이스 기능을 사용하는 방법에 대한
+자세한 정보는 <a href="https://docs.docker.com/engine/reference/commandline/daemon/#starting-the-daemon-with-user-namespaces-enabled" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">사용자 네임스페이스를 사용으로 설정하여 디먼 시작</a>을 참조하십시오. </dd>
+<dt class="dlterm">영향을 받은 이미지 계층을 주석 처리하고 영향 받은 파일의 소유권을 변경</dt>
+<dd>문제를 일으키는 파일을 찾을 수 없으면 Dockerfile의 이미지 계층을 주석 처리하고 계층을 차례로 주석 해제해 보십시오. 이미지를 빌드하고 컨테이너를 작성하여 영향 받은 이미지 계층을 찾으십시오. <p><samp class="ph codeph">chown [-R] root:root
+<var class="keyword varname">&lt;file_or_folder&gt;</var></samp> 를 실행하여 로컬 머신에 저장된 영향 받은 파일의 소유권을 변경하거나 이 명령을 Dockerfile의 영향 받은 이미지 계층에 추가하십시오.</p>
+<p>예제 Dockerfile</p>
+<pre class="codeblock"><code>RUN curl -fsSL "https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz" \
+        | tar -xzC /tmp \
+  &amp;&amp; cd /tmp/git-${GIT_VERSION} \
+  &amp;&amp; ./configure \
+  &amp;&amp; make all \
+  &amp;&amp; make install \
+  &amp;&amp; chown -R root:root /tmp</code></pre>
+</dd>
+</dl>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1421" lang="ko-kr" id="ts_image_export"><h3 class="topictitle3" id="d84501e1421">개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에서 이미지를 내보낼 수 없음</h3>
+<div class="body tsBody"><div class="section tsSymptoms"><span class="keyword">IBM
+Bluemix Container Service</span>에 로그인하고
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp> 명령을 사용하여
+개인용 <span class="keyword">Bluemix</span> 레지스트리에서 로컬 시스템으로
+이미지를 가져오려고 합니다. <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp>이 지원되지 않는다는 메시지와 함께 명령이 실패합니다.</div><div class="section tsCauses">개인용 <span class="keyword">Bluemix</span> 레지스트리에서 로컬 시스템으로 이미지를
+가져오는 데는 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> pull</samp> 명령이 지원되지 않습니다. </div><div class="section tsResolve">개인용 <span class="keyword">Bluemix</span> 레지스트리에서 이미지를 내보내려면 다음 단계를 따르십시오.<ol><li><a href="container_cli_cfic_install.html#container_cli_login" title="CLI를 설치한 후 CLI를 사용하기 위해 로그인합니다."><span class="keyword">IBM
+Bluemix Container Service</span>에 로그인하십시오</a>. 이미 로그인한 경우
+<span class="keyword">IBM
+Bluemix Container Service</span>에 대해 기본 Docker 명령을 사용하도록 환경 변수가 설정되지 않게 하십시오.</li>
+<li>이미지를 나열하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+images</code></pre>
+</li>
+<li>개인용 <span class="keyword">Bluemix</span> 레지스트리에서 로컬 시스템으로 이미지를 가져오십시오. 이전 단계에서
+리턴된 이미지의 이름 또는 ID를 사용하십시오.
+<pre class="codeblock"><code>docker pull <var class="keyword varname">&lt;image_name_or_id&gt;</var></code></pre>
+</li>
+<li>로컬 시스템에 이미지를 가져왔는지 확인하십시오. <pre class="codeblock"><code>docker images</code></pre>
+</li>
+<li>이미지를 <span class="ph filepath">.tar</span> 파일에 저장하십시오.
+<pre class="codeblock"><code>docker export <var class="keyword varname">&lt;image_name_or_id&gt;</var> &gt; <var class="keyword varname">&lt;exported_image_name&gt;</var>.tar</code></pre>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1577" lang="ko-kr" id="ts_namespace_change"><h3 class="topictitle3" id="d84501e1577">조직의 네임스페이스를 변경할 수 없음</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">네임스페이스를 변경할 방법을 찾을 수 없습니다. </div><div class="section tsCauses">작성 후에는 조직의 네임스페이스를 변경할 수 없습니다. </div><div class="section tsResolve">다른 조직을 작성하고 이 조직에 대한 네임스페이스를 원하는 이름으로 설정하십시오. </div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1635" lang="ko-kr" data-hd-audience="" id="ts_image_push_login"><h3 class="topictitle3" id="d84501e1635"><samp class="ph codeph">docker push</samp> 중에 로그인 프롬프트가 표시됨</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">개인용 <span class="keyword">Bluemix</span> 이미지
+레지스트리에 이미지를 추가하기 위해 <samp class="ph codeph">docker push</samp>를 실행할 때 로그인 신임 정보를
+입력하도록 프롬프트가 표시됩니다. Docker 또는 <span class="keyword">Bluemix</span> 신임 정보를 입력하면 인증에
+실패합니다.</div><div class="section tsCauses">다음과 같은 이유로 인해 인증에 실패할 수 있습니다. <ul><li>Cloud Foundry 인증 정보가 포함된 운반자 토큰이 만료됨.</li>
+<li><span class="keyword">Bluemix</span> 권한 부여 서비스를 사용할 수
+없음.</li>
+</ul>
+</div><div class="section tsResolve"><div class="p"><ul><li><span class="keyword">IBM
+Bluemix Container Service</span> 플러그인을 사용하는 경우 다음을 수행하십시오.<ol><li>다음 명령을 실행해 Cloud Foundry CLI에 로그인하여 컴퓨터의 운반자 토큰을 새로
+고치십시오.<pre class="codeblock"><code>bx login [-a api.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>] [-sso]</code></pre>
+<span class="ph">싱글 사인온 매개변수 <span class="keyword option">-sso</span>는 연합 ID로 로그인할 때 필요합니다. 이 옵션이 사용되면 <a href="https://login.ng.bluemix.net/UAALoginServerWAR/passcode" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">https://login.ng.bluemix.net/UAALoginServerWAR/passcode</a>를 열고 일회성 패스코드를 얻으십시오. <span class="keyword option">--sso</span> 옵션을 포함하지 않는 경우에는 다음의 하위 단계를 완료하십시오.</span><ol type="a"><li><span class="ph uicontrol">이메일</span>에 대해
+<span class="keyword">Bluemix</span>에
+로그인하는 데 사용하는 IBMId를 입력하십시오. </li>
+<li><span class="ph uicontrol">비밀번호</span>에 대해 <span class="keyword">Bluemix</span>에
+로그인하는 데 사용하는 IBMId의 비밀번호를 입력하십시오. 사용자 이름 및 비밀번호를 입력하면 사용자의 Bluemix 조직 및 영역이 검색됩니다. </li>
+<li><span class="keyword">Bluemix</span> 조직 중 하나를 표시하는 번호를 입력하십시오. </li>
+<li>기존 <span class="keyword">Bluemix</span> 영역 중 하나를 표시하는 번호를 입력하십시오. </li>
+</ol>
+</li>
+<li>운반자 토큰을 다시 작성하려면 <span class="keyword">IBM
+Bluemix Container Service</span> CLI를 초기화하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> init</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+</div>
+
+<p>다시 로그인한 후에도 프롬프트가 표시되는 경우에는 현재 <span class="keyword">Bluemix</span> 권한 부여 서비스를 사용할 수 없는 상태입니다.
+나중에 다시 시도하십시오.</p>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e1802" lang="ko-kr" id="ts_ov_containers"><h2 class="topictitle2" id="d84501e1802">컨테이너 문제점 해결</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e1802"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1865" lang="ko-kr" id="ts_group_502"><h3 class="topictitle3" id="d84501e1865">앱에 액세스할 때 <samp class="ph codeph">502 Bad Gateway</samp> 오류 발생</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><div class="p">컨테이너 그룹을 정상적으로 배치했지만, 앱에 대해 URL을 열 때 다음 오류가 표시됩니다. <pre class="codeblock"><code>502 Bad Gateway: Registered endpoint failed to handle the request.</code></pre>
+</div>
+</div><div class="section tsCauses"><div class="p"><ol><li>라우팅이 아직 설정 중일 수 있습니다. </li>
+<li>컨테이너가 응답하지 않을 수 있습니다. </li>
+<li>컨테이너 그룹이 정상적으로 실행 중이지만 라우팅에 오류가 있을 수 있습니다. </li>
+</ol>
+</div>
+</div><div class="section tsResolve"><ol><li>라우팅이 완료될 충분한 시간이 허용되도록 추가로 수 분을 대기합니다. 
+컨테이너 그룹이 지정된 라우트에 연결할 수 있기 전에 컨테이너 프로세스 실행 이후 5분 동안 대기할 수 있습니다. </li>
+<li>5분 동안 대기했으며 오류 발생이 의심되는 경우, IP 주소를 실행 중인 컨테이너에 바인딩하여
+컨테이너가 응답 중인지 확인한 후에 해당 IP 주소 및 포트에 대해 curl 명령을 실행하십시오. <ol type="a"><li>다음 명령을 실행하여 그룹에서 컨테이너 인스턴스 중 하나의 ID를 가져오십시오. 컨테이너 ID 및 포트를 기록해 놓으십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps</code></pre>
+</li>
+<li>다음 명령을 실행하여 IP 주소를 요청하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-request</code></pre>
+</li>
+<li>다음 명령을 실행하여 IP 주소를 컨테이너 인스턴스에 바인드하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ip-bind <var class="keyword varname">IP_address</var> <var class="keyword varname">container_ID</var></code></pre>
+</li>
+<li>브라우저에서 IP 주소 및 포트로 애플리케이션에 대한 URL을 입력하십시오. 
+예: <span class="ph filepath">http://<var class="keyword varname">IP_address</var>:<var class="keyword varname">port</var></span><p>애플리케이션에 액세스할 수 없으면 컨테이너 그룹에 문제점이 있으며 그룹을 재작성해야 합니다. 
+애플리케이션에 액세스할 수 있으면 컨테이너가 정상적으로 실행 중이지만 라우팅에 오류가 있습니다. 
+<span class="keyword">IBM
+Bluemix</span> 지원 센터에 문의하십시오. </p>
+</li>
+</ol>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e1984" lang="ko-kr" id="ts_firewall"><h3 class="topictitle3" id="d84501e1984">서비스에 대한 내부 프록시 블록 요청</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><span class="keyword">IBM
+Bluemix Container Service</span>에 액세스할 때 다음 오류 메시지 중 하나가 표시되면서 연결에 실패합니다.
+<pre class="pre screen"><code>Connection refused</code></pre>
+<pre class="pre screen"><code>Connection timed out</code></pre>
+</div><div class="section tsCauses">사용자의 컴퓨터에서 <span class="keyword">IBM
+Bluemix Container Service</span>로
+통신을 금지하고 있는 방화벽 설정이 있을 수 있습니다. 대개 보안상의 이유로 허용 가능한 통신만 허용하도록 내부 프록시
+설정이 구성됩니다. </div><div class="section tsResolve">방화벽에서 사용자의 컴퓨터에서 지역 특정 IP 주소를 위한 <span class="keyword">IBM
+Bluemix Container Service</span>로 통신을 여십시오. <ul id="ts_firewall__ul_fn5_p4l_wz"><li>미국 남부:<pre class="codeblock"><code>169.46.9.7
+169.46.9.19
+169.46.9.24
+169.46.9.28
+169.55.211.15
+169.55.211.17
+169.55.211.21
+169.55.211.28</code></pre>
+</li>
+<li>런던:<pre class="codeblock"><code>159.8.188.181
+159.8.188.182
+159.8.188.184
+159.8.188.188
+169.50.153.66
+169.50.153.77
+169.50.153.91
+169.50.153.94</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e2064" lang="ko-kr" id="ts_group_auto_recreate_instance"><h3 class="topictitle3" id="d84501e2064"><span class="keyword">IBM
+Bluemix Container Service</span> 자동 복구 모드에서 시작 중에 컨테이너 그룹 인스턴스를 반복해서 다시 작성</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">컨테이너 그룹을 작성하고 자동 복구를 사용으로 설정했습니다. 컨테이너 그룹의 시작 동안 응답이 없는 그룹 인스턴스가 제거되고 반복해서 다시 작성됩니다.</div><div class="section tsCauses"><p>컨테이너 그룹에서 실행 중인 앱이 노출된 포트 청취를 시작하는 데 시간이 너무 오래
+걸립니다. 컨테이너 그룹에 자동 복구를 사용으로 설정한 경우 <span class="keyword">IBM
+Bluemix Container Service</span>가 그룹 작성 후 노출된 TCP 포트에서 HTTP 요청으로 각 인스턴스의 상태를 검사합니다. 인스턴스가 3분 이내에 노출된 포트에서 청취하지 않을 경우 인스턴스를 응답 없음으로 표시한 후 제거하고 다시 작성하여 다시 시작합니다. 최대 다시 작성된 인스턴스 수에 도달할
+때까지 이 프로세스를 반복합니다. 그런 다음 자동 복구를 사용 안함으로 설정합니다. </p>
+</div><div class="section tsResolve"><p>자동 복구를 사용하는 컨테이너 그룹에서 앱을 실행하려면
+2분 이내에 앱이 시작되고 노출된 포트에서 청취하는지 확인하십시오. 앱의 유형에 따라
+다른 방법으로 앱을 빨리 시작하게 할 수 있습니다. </p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e2145" lang="ko-kr" id="ts_bridge_app"><h3 class="topictitle3" id="d84501e2145"><span class="keyword">Bluemix</span> 서비스가 컨테이너에 직접 바인드되지 않음</h3>
+<div class="body tsBody"><div class="section tsSymptoms"><span class="keyword">Bluemix</span> 서비스가 서비스 바인딩을 사용하여 컨테이너에 직접 바인드하지 않습니다. </div><div class="section tsCauses">일부 <span class="keyword">Bluemix</span>
+서비스는 컨테이너에 대한 직접적 바인딩을 지원하지 않으며 컨테이너 작성 동안 실패를 일으킵니다. 이 서비스의 경우
+서비스 바인딩은 환경 변수 <samp class="ph codeph">VCAP_SERVICES</samp>를 컨테이너에 전달하지 않습니다.
+이 문제점을 임시로 해결하려면 CLI를 사용하여 서비스에서 컨테이너로 <samp class="ph codeph">VCAP_SERVICES</samp>를
+전송하는 데 필요한 브릿지 역할을 수행하는 Cloud Foundry 앱을 작성하십시오. </div><div class="section tsResolve"><ol><li>컨테이너를 배치할 영역(예: <samp class="ph codeph">dev</samp>)을 선택하십시오.</li>
+<li id="ts_bridge_app__create_cfapp">기존 앱을 식별하거나 <span class="keyword">Bluemix</span> 서비스가 바인드될 Cloud Foundry 앱을 작성하십시오. 이 앱이
+<samp class="ph codeph">VCAP_SERVICES</samp> 정보의 전달에 사용되므로, 이를 브릿지 앱이라고 합니다.
+<div class="p">Cloud Foundry 앱을 작성하려면 다음을 수행하십시오.<div class="note tip"><span class="tiptitle">팁:</span> 이 단계를 완료하여 작성하는 앱이
+<samp class="ph codeph">VCAP_SERVICES</samp> 서비스를 저장하는 플레이스홀더입니다. 실행 중인 앱보다
+비용을 줄이기 위해 이 앱을 시작하거나 실행하지 않습니다. 컨테이너에 <samp class="ph codeph">VCAP_SERVICES</samp>를
+제공하기 위해 이 앱을 실행할 필요가 없습니다. </div>
+</div>
+<ol type="a"><li>작업 중인 앱 디렉토리에서 디렉토리와 텍스트 파일을 작성하십시오. 예:
+<span class="ph filepath"><var class="keyword varname">&lt;directory&gt;</var>/<var class="keyword varname">&lt;empty_file.txt&gt;</var></span>. 이 파일은 앱의 소스 파일로 사용되지만,
+컨텐츠를 포함할 필요는 없습니다. <ul><li>Windows 예:
+<span class="ph filepath">C:\Users\<var class="keyword varname">User</var>\<var class="keyword varname">containerbridge</var>\<var class="keyword varname">empty_file.txt</var></span></li>
+<li>Linux 예:
+<span class="ph filepath">/<var class="keyword varname">user_home_directory</var>/<var class="keyword varname">containerbridge</var>/<var class="keyword varname">empty_file.txt</var></span></li>
+<li>OS X 예:
+<span class="ph filepath">/Users/<var class="keyword varname">user_home_directory</var>/<var class="keyword varname">containerbridge</var>/<var class="keyword varname">empty_file.txt</var></span></li>
+</ul>
+</li>
+<li>아무런 비용 없이 제로 런타임 앱을 작성하려면 다음 명령을 실행하십시오. 이 앱에는 어떤 이름이든
+지정할 수 있지만 이 앱은 컨테이너로부터 서비스로의 브릿지 역할을 수행하므로 일반적으로 사용되는 이름은
+<var class="keyword varname">containerbridge</var>입니다. <p></p>
+<pre class="codeblock" id="ts_bridge_app__containerbridgecode"><code>cf push <var class="keyword varname">&lt;appname&gt;</var> -p <var class="keyword varname">&lt;directory&gt;</var> -i 1 -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -k 1M -m 64M --no-hostname --no-manifest --no-route --no-start</code></pre>
+예:
+<pre class="codeblock"><code>cf push <var class="keyword varname">containerbridge</var> -p <var class="keyword varname">containerbridge</var> -i 1 -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -k 1M -m 64M --no-hostname --no-manifest --no-route --no-start</code></pre>
+</li>
+</ol>
+</li>
+<li>바인드할 <span class="keyword">Bluemix</span> 서비스가 아직 추가되지 않은 경우에는
+해당 서비스를 <span class="keyword">Bluemix</span> 영역에 추가하십시오. <ol type="a"><li>사용 가능한 <span class="keyword">Bluemix</span> 서비스의 목록을 가져오려면
+<samp class="ph codeph">cf marketplace</samp> 명령을 실행하십시오. 결과 목록에는
+<span class="keyword">Bluemix</span> 서비스의 이름,
+해당 플랜 유형 및 서비스에 대한 설명이 포함되어 있습니다. </li>
+<li><samp class="ph codeph">create-service</samp> 명령을 실행하고 <samp class="ph codeph">cf marketplace</samp> 목록의 서비스 이름과 서비스 플랜을 포함하십시오.
+또한 서비스에 대한 사용자 자체 인스턴스 이름을 포함하십시오.<pre class="codeblock"><code>cf create-service <var class="keyword varname">&lt;service&gt;</var> <var class="keyword varname">&lt;plan&gt;</var> <var class="keyword varname">&lt;service_instance&gt;</var></code></pre>
+예<pre class="codeblock"><code>cf create-service <var class="keyword varname">cleardb</var> <var class="keyword varname">spark</var> <var class="keyword varname">my-clear-db</var></code></pre>
+</li>
+</ol>
+</li>
+<li>bind-service 명령을 실행하여 <span class="keyword">Bluemix</span> 서비스를 앱에 바인드하십시오. 
+반복하여 기타 <span class="keyword">Bluemix</span> 서비스를 브릿지 앱에 바인드하십시오. <pre class="codeblock"><code>cf bind-service <var class="keyword varname">&lt;appname&gt;</var> <var class="keyword varname">&lt;service_instance&gt;</var></code></pre>
+예<pre class="codeblock"><code>cf bind-service <var class="keyword varname">containerbridge</var> <var class="keyword varname">my-clear-db</var></code></pre>
+</li>
+<li>앱을 다시 스테이징하도록 프롬프트되면 다음 명령을
+실행하십시오.<pre class="codeblock"><code>cf restage <var class="keyword varname">containerbridge</var></code></pre>
+</li>
+<li>다음 명령을 실행하여 <var class="keyword varname">containerbridge</var> 앱을 통해 전달되는
+<span class="keyword">Bluemix</span> 서비스에 대한 정보를 검토하십시오. <pre class="codeblock"><code>cf env <var class="keyword varname">&lt;appname&gt;</var> </code></pre>
+예<pre class="codeblock"><code>cf env <var class="keyword varname">containerbridge</var> </code></pre>
+<p><samp class="ph codeph">VCAP_SERVICES</samp> 환경 변수를 사용하여 삽입된 <span class="keyword">Bluemix</span> 서비스 매개변수가
+결과에 포함됩니다. </p>
+<div class="p">예:<pre class="codeblock"><code>{
+ "VCAP_SERVICES": {
+  "&lt;service_name&gt;": [
+   {
+    "credentials": {
+     "hostname": "&lt;hostname_id&gt;",
+     "jdbcUrl": "&lt;jdbc_URL&gt;",
+     "name": "&lt;encoded_name&gt;",
+     "password": "&lt;encoded_password&gt;",
+     "port": "&lt;port_number&gt;",
+     "uri": "&lt;service_URI&gt;",
+     "username": "&lt;encoded_username&gt;"
+    },
+    "label": "&lt;service_name&gt;",
+    "name": "&lt;service_instance&gt;",
+    "plan": "&lt;plan_name&gt;",
+    "tags": [
+     "&lt;tag1&gt;",
+     "&lt;tag2&gt;",
+     "&lt;tag3&gt;"
+    ]
+   } </code></pre>
+</div>
+</li>
+</ol>
+
+<div class="p"><span class="keyword">Bluemix</span> 서비스 및 <var class="keyword varname">containerbridge</var> 앱 간에
+바인딩을 작성한 후에 컨테이너를 작성하고 이에 <var class="keyword varname">containerbridge</var> 앱을 바인드하십시오. 자세한 정보는 <a href="container_single_ui.html#container_single_cli" title="run 명령을 사용하여 컨테이너를 작성합니다. 컨테이너는 그 안에 이미지를 포함해야 합니다. 아직 이미지가 없으면 조직의 개인용 이미지 레지스트리에서 기본적으로 사용할 수 있는 기본 IBM 인증 이미지 중 하나를 사용할 수 있습니다.">단일 컨테이너 작성</a> 또는
+<a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">컨테이너 그룹 작성</a>의
+환경 변수에 있는 <samp class="ph codeph">CCS_BIND_APP</samp> 플래그를 참조하십시오. <div class="note tip" id="ts_bridge_app__delete_bound_app"><span class="tiptitle">팁:</span> 브릿지 앱이 컨테이너에 바인딩된 후 브릿지 앱을 삭제하지 마십시오. 바인딩된 브릿지 앱을 삭제하면
+컨테이너가 정지됩니다. 더 이상
+브릿지 앱이 필요하지 않으면 브릿지 앱을 삭제하기 전에 컨테이너와 브릿지 앱을 사용하는 다른 컨테이너를
+삭제하십시오.</div>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e2482" lang="ko-kr" id="su_error"><h3 class="topictitle3" id="d84501e2482"><samp class="ph codeph">su</samp> 명령으로 <samp class="ph codeph">하위 프로세스를 작성할 수 없음</samp></h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><p>컨테이너에 대한 사용자 편집을 위해 대체 사용자(<samp class="ph codeph">su</samp>) Linux 명령을 사용하면
+<samp class="ph codeph">su</samp> 명령이 로컬 Docker 환경에서 작동했더라도 <samp class="ph codeph">su: 하위 프로세스를 작성할 수 없음. 리소스를
+일시적으로 사용할 수 없음</samp> 메시지를 수신합니다. 컨테이너에 로그인하거나
+<samp class="ph codeph">su</samp> 명령이 컨테이너 내에서 스크립트의 일부로서 실행될 때 이 문제가 발생할 수 있습니다. </p>
+<p>예:</p>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+<pre class="codeblock"><code>adduser <var class="keyword varname">user</var></code></pre>
+<pre class="codeblock"><code>su - <var class="keyword varname">user</var></code></pre>
+결과:<pre class="codeblock"><code>su: cannot create child process: Resource temporarily unavailable</code></pre>
+</div><div class="section tsCauses"><p>기타 이미지 유형에서도 발생할 수 있지만, 이 문제는 종종 Centos 7 이미지로 빌드된 컨테이너에서 발생합니다. </p>
+</div><div class="section tsResolve">Dockerfile을 편집하고 이미지를 재작성함으로써 또는 실행 중인 컨테이너에 로그인함으로써 문제를 해결할 수 있습니다. <div class="p">Dockerfile을 편집하여 문제를 해결하려면 다음을 수행하십시오. <ol><li>이미지가 작성되는 로컬 디렉토리에서, 아직 없으면 <span class="ph filepath">etc</span> 폴더를 작성하십시오. <pre class="codeblock"><code>mkdir etc</code></pre>
+</li>
+<li><samp class="ph codeph">etc</samp> 디렉토리에 이동하십시오. <pre class="codeblock"><code>cd etc</code></pre>
+</li>
+<li><span class="ph filepath">etc</span> 폴더에서 <span class="ph filepath">pam.d</span> 디렉토리를 작성하십시오. <pre class="codeblock"><code>mkdir pam.d</code></pre>
+</li>
+<li><samp class="ph codeph">pam.d</samp> 디렉토리에 이동하십시오. <pre class="codeblock"><code>cd pam.d</code></pre>
+</li>
+<li><span class="ph filepath">pam.d</span> 디렉토리에서 이름이 <span class="ph filepath">su</span>인 파일을 작성하고 이를 텍스트 편집기에서 여십시오. </li>
+<li><span class="ph filepath">su</span> 파일에서, 모든 <samp class="ph codeph">session</samp> 변수가
+<samp class="ph codeph">optional</samp>로 설정된 다음의 텍스트에서 복사하고 변경사항을 파일에 저장하십시오.
+<pre class="codeblock"><code>#%PAM-1.0
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth           sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth           required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         include         system-auth
+password        include         system-auth
+session         optional        system-auth
+session         optional        postlogin
+session         optional        pam_xauth.so</code></pre>
+</li>
+<li>이미지의 Dockerfile에서 다음 정보를 포함하십시오. <pre class="codeblock"><code>RUN sed -i 's/session.*include/session        optional/' /etc/pam.d/su</code></pre>
+</li>
+<li>이미지를 재작성하십시오. 자세한 정보는 <a href="container_images_adding_ov.html#container_images_building" title="이미지를 빌드할 수 있도록 Dockerfile을 작성합니다. Dockerfile은 컨테이너의 기초인 Docker 이미지를 빌드하는 데 필요한 스펙이 포함된 파일입니다. Dockerfile이 작성되면, 명령행 인터페이스를 사용하여 개인용 Bluemix 레지스트리에 직접 또는 로컬로 이미지를 빌드할 수 있습니다. 그리고 이미지는 Bluemix의 카탈로그 보기에서 사용 가능합니다.">이미지 빌드</a>의 내용을 참조하십시오.</li>
+<li>단일 컨테이너 또는 컨테이너 그룹을 재작성하십시오. 자세한 정보는
+<a href="container_single_ui.html#container_single_cli" title="run 명령을 사용하여 컨테이너를 작성합니다. 컨테이너는 그 안에 이미지를 포함해야 합니다. 아직 이미지가 없으면 조직의 개인용 이미지 레지스트리에서 기본적으로 사용할 수 있는 기본 IBM 인증 이미지 중 하나를 사용할 수 있습니다.">단일 컨테이너 작성</a> 또는
+<a href="container_ha.html#container_group_cli" title="IBM Bluemix Container Service CLI에서 확장 가능한 그룹 컨테이너를 작성하고 배치합니다. 컨테이너 그룹에는 동일한 이미지를 실행하는 두 개 이상의 컨테이너가 포함됩니다. 확장성 및 신뢰성이 요구되는 워크로드가 포함된 장기적 서비스를 실행하거나 필요한 스케일로 테스트할 때 컨테이너 그룹을 사용하십시오.">컨테이너 그룹 작성</a>을 참조하십시오. </li>
+<li>확인하려면 다음 명령을 실행하십시오. <pre class="codeblock"><code><span class="ph">bx ic</span> logs <var class="keyword varname">container_name</var></code></pre>
+결과:<pre class="codeblock"><code>%Changing password for user <var class="keyword varname">user_name</var>.
+passwd: all authentication tokens updated successfully.</code></pre>
+</li>
+</ol>
+</div>
+<div class="p">실행 중인 컨테이너에 로그인하여 문제를 해결하려면 다음을 수행하십시오. <ol><li>컨테이너를 작성하십시오. </li>
+<li>컨테이너에 로그인하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">my_container</var> bash</code></pre>
+</li>
+<li><samp class="ph codeph">etc</samp> 디렉토리에 이동하십시오. <pre class="codeblock"><code>cd etc</code></pre>
+</li>
+<li><samp class="ph codeph">pam.d</samp> 디렉토리에 이동하십시오. <pre class="codeblock"><code>cd pam.d</code></pre>
+</li>
+<li>Linux <samp class="ph codeph">vi</samp> 명령을 사용하여 Visual Editor를 여십시오. <pre class="codeblock"><code>vi su</code></pre>
+</li>
+<li><span class="ph filepath">su</span> 파일에서 세션 변수를 모두 <samp class="ph codeph">optional</samp>로 변경하고
+파일에 변경사항을 저장하십시오. <samp class="ph codeph">vi</samp> 편집기 사용에 대한 자세한 정보는 <a href="https://www.washington.edu/computing/unix/vi.html" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">vi
+편집기 사용 방법</a>을 참조하십시오. <pre class="codeblock"><code>#%PAM-1.0
+auth            sufficient      pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth           sufficient      pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth           required        pam_wheel.so use_uid
+auth            substack        system-auth
+auth            include         postlogin
+account         sufficient      pam_succeed_if.so uid = 0 use_uid quiet
+account         include         system-auth
+password        include         system-auth
+session         optional        system-auth
+session         optional        postlogin
+session         optional        pam_xauth.so</code></pre>
+</li>
+<li>사용자로 로그인하십시오. <pre class="codeblock"><code>su - <var class="keyword varname">user</var></code></pre>
+</li>
+<li>사용자를 위한 구성 정보를 보려면 <samp class="ph codeph">id</samp> Linux 명령을 실행하십시오. <pre class="codeblock"><code>id</code></pre>
+결과:<pre class="codeblock"><code>uid=1000(<var class="keyword varname">user</var>) gid=1000(<var class="keyword varname">user</var>) groups=1000(<var class="keyword varname">user</var>)</code></pre>
+</li>
+</ol>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e2767" lang="ko-kr" id="ts_container_shutdown"><h3 class="topictitle3" id="d84501e2767">컨테이너 작성 후 컨테이너가 중지 및 종료됨</h3>
+<div class="body tsBody"><p class="shortdesc">컨테이너를 작성했지만 즉시 종료됩니다.</p>
+<div class="section tsSymptoms">로컬에서 컨테이너를 성공적으로 실행했지만
+<span class="keyword">Bluemix</span>에서 컨테이너를 실행하면 다음 상황 중 하나가 발생합니다.<ul><li><span class="keyword">Bluemix</span> 대시보드에서
+컨테이너 상태가 <samp class="ph codeph">실행 중</samp>에서 <samp class="ph codeph">중지됨</samp>으로 변경됩니다.</li>
+<li>CLI에서 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+inspect container</samp>를 실행할 때, 해당 상태가 <samp class="ph codeph">종료</samp>로 표시됩니다. </li>
+</ul>
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp>도
+실행했지만 컨테이너의 문제를 찾지 못했습니다. </div><div class="section tsCauses"><p><span class="keyword">Bluemix</span>에서 컨테이너를 실행할 때
+컨테이너는 항상 분리 모드로 실행됩니다. 즉, 컨테이너를 로컬로 실행할 때 <samp class="ph codeph">docker run -d</samp>를
+실행하는 경우와 비슷합니다. 결과적으로, 로컬에서 시작되는 컨테이너라도
+<span class="keyword">Bluemix</span>에서는 계속 실행되지 않습니다.</p>
+</div><div class="section tsResolve"><div class="p">Dockerfile을 편집하여 컨테이너를 장기 실행 애플리케이션으로 만들어야 합니다. 예를 들어,
+10초마다 "hello world"라는 문구를 출력하는 명령을 추가하면, 해당 조치를 통해
+컨테이너가 장기 실행 애플리케이션이
+됩니다. <pre class="codeblock"><code>ENTRYPOINT ["/bin/sh"]
+CMD ["-c","while true; do echo hello world; sleep 10;done"]</code></pre>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e2873" lang="ko-kr" id="ts_incomplete_deletion"><h3 class="topictitle3" id="d84501e2873">삭제된 컨테이너가 계속 <span class="keyword">Bluemix</span> GUI에 표시됨</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><span class="keyword">Bluemix</span> GUI에서 컨테이너를 삭제했지만, 해당 컨테이너가 <span class="keyword">Bluemix</span> GUI에 계속 표시되어 할당량을 사용합니다. </div><div class="section tsCauses"><p><span class="keyword">Bluemix</span> GUI에서 삭제를 완료할 수 없습니다.</p>
+</div><div class="section tsResolve"><p>명령행에서 컨테이너를 삭제하십시오. </p>
+
+<div class="p">단일 컨테이너의 경우, 다음 단계를 따르십시오.<ol><li>다음 명령행 옵션 중 하나를 실행하여 컨테이너를 삭제하십시오. <ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="bx ic login 중에 컨테이너를 관리하는 데 bx ic 명령을 사용하도록 옵션 1을 선택했습니다. Docker 명령은 로컬 컨테이너 개발에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option1.png" alt="BX IC 플러그인 구성 옵션 1"></a>
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령의 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm [-f] CONTAINER [CONTAINER] </span></code></pre>
+</li>
+<li><div class="p"><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="bx ic login 중에 가급적이면 docker 명령을 사용하여 컨테이너를 관리하도록 환경 변수를 구성하여 옵션 2를 선택했습니다. bx ic 명령은 지원되는 Docker 대안이 없는 경우에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option2.png" alt="BX IC 플러그인 구성 옵션 2"></a>
+<samp class="ph codeph">docker</samp> 명령의 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</span>
+<pre class="codeblock"><code>docker rm [-f] CONTAINER</code></pre>
+</div>
+</li>
+</ul>
+</li>
+<li>다음 명령 중 하나를 실행하고 영역에 있는 모든 컨테이너를 나열하여 해당 컨테이너가
+제거되었는지 확인하십시오. <ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="bx ic login 중에 컨테이너를 관리하는 데 bx ic 명령을 사용하도록 옵션 1을 선택했습니다. Docker 명령은 로컬 컨테이너 개발에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option1.png" alt="BX IC 플러그인 구성 옵션 1"></a>
+<span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령의 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</span><pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="bx ic login 중에 가급적이면 docker 명령을 사용하여 컨테이너를 관리하도록 환경 변수를 구성하여 옵션 2를 선택했습니다. bx ic 명령은 지원되는 Docker 대안이 없는 경우에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option2.png" alt="BX IC 플러그인 구성 옵션 2"></a>
+<samp class="ph codeph">docker</samp> 명령의 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</span>
+<pre class="codeblock"><code>docker ps -a</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+<div class="p">컨테이너 그룹의 경우, 다음 단계를 따르십시오. <ol><li>다음 명령을 실행하여 컨테이너 그룹을 삭제하십시오. <ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="bx ic login 중에 bx ic 명령을 사용하여 컨테이너를 관리하도록 옵션 1을 선택했습니다. Docker 명령은 로컬 컨테이너 개발에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option1.png" alt="BX IC 플러그인 구성 옵션 1"></a>
+<a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="bx ic login 중에 가급적이면 docker 명령을 사용하여 컨테이너를 관리하도록 환경 변수를 구성하여 옵션 2를 선택했습니다. bx ic 명령은 지원되는 Docker 대안이 없는 경우에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option2.png" alt="BX IC 플러그인 구성 옵션 2"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-remove [-f] GROUP [GROUP]</span></code></pre>
+</li>
+</ul>
+</li>
+<li>명령을 실행하여 영역에 있는 모든 컨테이너를 나열하여 컨테이너가 제거되었는지 확인하십시오. <ul><li><span class="ph"><a href="container_cli_cfic_install.html#container_cli_login__option1_li" rel="external" target="_blank" title="bx ic login 중에 bx ic 명령을 사용하여 컨테이너를 관리하도록 옵션 1을 선택했습니다. Docker 명령은 로컬 컨테이너 개발에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option1.png" alt="BX IC 플러그인 구성 옵션 1"></a>
+<a href="container_cli_cfic_install.html#container_cli_login__option2_li" rel="external" target="_blank" title="bx ic login 중에 가급적이면 docker 명령을 사용하여 컨테이너를 관리하도록 환경 변수를 구성하여 옵션 2를 선택했습니다. bx ic 명령은 지원되는 Docker 대안이 없는 경우에만 사용됩니다. (새로운 탭이나 창으로 열기)"><img src="images/option2.png" alt="BX IC 플러그인 구성 옵션 2"></a>
+<span class="keyword">IBM
+Bluemix Container Service</span> 플러그인</span><pre class="codeblock"><code><span class="ph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> groups [-q] </span></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+
+<p>명령을 실행한 후에도 컨테이너가 <span class="keyword">Bluemix</span> GUI에 계속 표시될 경우 잠시 기다렸다 컨테이너가 나중에 제거되었는지 확인하십시오. </p>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e3200" lang="ko-kr" id="ts_group_network_failure"><h3 class="topictitle3" id="d84501e3200">컨테이너 그룹이 HAS_INACTIVE_INSTANCES 상태를 표시함</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span>
+group-inspect</samp>를 실행하는 경우 컨테이너 그룹이 HAS_INACTIVE_INSTANCES 상태를 표시합니다. </div><div class="section tsCauses"><p>그룹이 작성될 때 네트워킹이 구성에 실패하거나 하나 이상의 인스턴스에 대한
+상태 검사에 실패하는 경우 인스턴스 상태가 <samp class="ph codeph">INACTIVE</samp>로 변경됩니다. 
+그룹의 임의의 인스턴스가 비활성이면, 그룹 상태가 HAS_INACTIVE_INSTANCES로 변경됩니다. </p>
+</div><div class="section tsResolve"><p>인스턴스에 대한 상태 검사에 실패하는 경우 문제가 발생하면
+필요한 조치 없이 문제가 해결될 수 있습니다. 그룹이 처음으로 작성될 때 문제가 발생하는 경우 그룹 재작성을 시도해 볼 수 있습니다.
+재작성 후에도 문제가 다시 발생하는 경우, 앱이 그룹으로 배치될 때 네트워킹 구성이
+가능하지 않은 것일 수 있습니다. 앱을 단일 컨테이너로 대신 배치해 보십시오. </p>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e3273" lang="ko-kr" id="ts_ov_compose"><h2 class="topictitle2" id="d84501e3273">Docker Compose 문제점 해결</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e3273"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e3335" lang="ko-kr" id="ts_compose_insecure_connection"><h3 class="topictitle3" id="d84501e3335">Docker Compose 명령 실행 시 안전하지 않은 HTTPS 연결 경고가 표시됨</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">CLI에서 Docker Compose 명령을 실행하면
+다음 예 중 하나와 비슷한 경고가 표시됩니다. 다른 관련 오류 메시지는 <a href="https://urllib3.readthedocs.org/en/latest/security.html" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">urlib3
+개발 문서</a>에서 찾을 수 있습니다. <div class="p"><pre class="pre msgblock"><code>/.../requests/packages/urllib3/util/ssl_.py:315: SNIMissingWarning: An HTTPS request 
+has been made, but the SNI (Subject Name Indication) extension to TLS is not available on this 
+platform. This may cause the server to present an incorrect TLS
+certificate, which can cause validation failures. For more information, see
+https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning.
+SNIMissingWarning</code></pre>
+
+<pre class="pre msgblock"><code>/.../requests/packages/urllib3/util/ssl_.py:120: InsecurePlatformWarning: A true 
+SSLContext object is not available. This prevents urllib3 from
+configuring SSL appropriately and may cause certain SSL connections to fail. For more information,
+see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+InsecurePlatformWarning</code></pre>
+</div>
+</div><div class="section tsCauses">이 오류 메시지는 Linux 운영 체제의 경우 일반적인 메시지이며
+HTTPS 요청의 검증 누락으로 인해 발생합니다. </div><div class="section tsResolve"><ul><li>옵션 1: <samp class="ph codeph">ndg-httpsclient</samp>를 설치하여 SSL 관련 오류 메시지 및
+경고를 발생하지 않도록 하십시오. <pre class="codeblock"><code>pip install ndg-httpsclient==0.4.0</code></pre>
+</li>
+<li>옵션 2: <samp class="ph codeph">ndg-httpsclient</samp>가 이미 사용자의 컴퓨터에 설치되어 있는 경우,
+패키지를 최신 버전으로 업그레이드하십시오. <pre class="codeblock"><code>pip install --upgrade ndg-httpsclient</code></pre>
+</li>
+</ul>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e3416" lang="ko-kr" id="ts_compose_commands_failed"><h3 class="topictitle3" id="d84501e3416">Docker Compose 명령 실행 시 모듈 이름 지정된 큐 없음 오류가 표시됨</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">CLI에서 Docker Compose 명령을 실행하는 즉시
+다음 예와 비슷한 오류 메시지가 표시됩니다. <div class="p"><pre class="pre msgblock"><code>File "/usr/local/bin/docker-compose", line 9, in &lt;module&gt; 
+load_entry_point('docker-compose==1.6.2', 'console_scripts', 'docker-compose')() File 
+"/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 357, 
+in load_entry_point return get_distribution(dist).load_entry_point(group, name) File 
+"/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", line 2394, 
+in load_entry_point return ep.load() File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/pkg_resources.py", 
+line 2108, in load entry = __import__(self.module_name, globals(),globals(), ['__name__']) 
+File "/Library/Python/2.7/site-packages/compose/cli/main.py", line 26, in &lt;module&gt; from ..project import NoSuchService 
+File "/Library/Python/2.7/site-packages/compose/project.py", line 10, in &lt;module&gt; from . import parallel File "/Library/Python/2.7/site-packages/compose/parallel.py",
+line 9, in &lt;module&gt; from six.moves.queue import Empty ImportError: No module named
+queue</code></pre>
+</div>
+</div><div class="section tsCauses">Python 경로가 잘못된 디렉토리를 가리키고 있습니다. Docker Compose Python 패키지를 찾을 수 없습니다. </div><div class="section tsResolve">올바른 디렉토리로 Python 경로를 변경하십시오.
+<pre class="codeblock"><code>export PYTHONPATH=/Library/Python/2.7/site-packages/:$PYTHONPATH</code></pre>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e3479" lang="ko-kr" id="ts_ov_volumes"><h2 class="topictitle2" id="d84501e3479">데이터 스토리지 문제점 해결</h2>
+<div class="body conbody"><p class="shortdesc"></p>
+<p></p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e3479"></aside><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e3542" lang="ko-kr" id="ts_vol_owner"><h3 class="topictitle3" id="d84501e3542">컨테이너에서 마운트된 볼륨 디렉토리의 소유자를 변경하는 중에 권한 오류 발생</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">컨테이너에서 마운트된 볼륨에 대한 파일 또는 디렉토리의 소유권을 변경할 때
+권한 오류가 발생합니다. </div><div class="section tsCauses"><span class="ph" id="ts_vol_owner__containers_namespace"><span class="keyword">IBM
+Bluemix Container Service</span>의 경우,
+<a href="https://docs.docker.com/engine/security/security/#kernel-namespaces" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">사용자 네임스페이스
+기능</a>이 Docker Engine에 대해 사용됩니다.</span> 컨테이너에 있는 유효 루트는 컴퓨팅 호스트의 루트가 아닌 사용자에 맵핑됩니다.
+마운트된 볼륨의 소스는 NFS(Network File System)입니다. NFS는 사용자 네임스페이스를 인식하지 않으므로
+컨테이너에서 마운트된 파일 및 디렉토리에 대한 조작에 대해 모든 비사용자 검사가 수행됩니다.</div><div class="section tsResolve"><p></p>
+<ol><li>이미지에 대한 Dockerfile에서 다음 행을 추가하여 사용 가능한 사용자 ID(UID)를 가진
+사용자를 작성하십시오. 예를 들어, 사용자의 이름을 <var class="keyword varname">volumeeditor</var>로 지정할 수 있습니다. <pre class="codeblock"><code>RUN groupadd --gid <var class="keyword varname">1010</var> <var class="keyword varname">volumeeditor</var>
+RUN useradd --uid <var class="keyword varname">1010</var> --gid <var class="keyword varname">1010</var> -m --shell /bin/bash <var class="keyword varname">volumeeditor</var></code></pre>
+</li>
+<li>이미지를 빌드하고 개인용 <span class="keyword">Bluemix</span> 이미지 레지스트리에 푸시하십시오. </li>
+<li>볼륨 경로가 마운트되는 이미지를 사용하여 컨테이너를 작성하십시오.
+<div class="note tip"><span class="tiptitle">팁:</span> <span class="ph"><samp class="ph codeph"><span class="ph">bx ic</span> namespace-get</samp>을 실행하여
+네임스페이스를 검색하고 <var class="keyword varname">&lt;my_namespace&gt;</var>를 자신의 네임스페이스 정보로 대체하십시오. </span></div>
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run --volume <var class="keyword varname">volume_name</var>:<var class="keyword varname">/path/to/files</var> --name <var class="keyword varname">fixVolumePermissions</var> registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/<var class="keyword varname">&lt;my_namespace&gt;</var>/<var class="keyword varname">image</var></code></pre>
+</li>
+<li>컨테이너에 로그인하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> exec -it <var class="keyword varname">container_name</var> bash</code></pre>
+</li>
+<li>마운트 경로에 대해 이름이 <kbd class="ph userinput">MOUNTPATH</kbd>인 환경 변수를 정의하십시오.
+<pre class="codeblock"><code>MOUNTPATH="<var class="keyword varname">/path/to/files</var>"</code></pre>
+</li>
+<li><samp class="ph codeph">root</samp> 그룹에 사용자를 추가하십시오. <pre class="codeblock"><code>adduser <var class="keyword varname">volumeeditor</var> root</code></pre>
+</li>
+<li>모든 그룹 구성원에 볼륨 마운트에 대한 읽기 및 쓰기 액세스 권한이 있도록 권한을 설정하십시오.
+<pre class="codeblock"><code>chmod 775 $MOUNTPATH</code></pre>
+</li>
+<li>마운트 경로에서 폴더를 작성하고 읽기 및 쓰기 권한을 설정하십시오. 이 예제에서
+폴더의 이름은
+<var class="keyword varname">data</var>입니다.<pre class="codeblock"><code>su -c "mkdir -p $MOUNTPATH/<var class="keyword varname">data</var>" <var class="keyword varname">volumeeditor</var></code></pre>
+<pre class="codeblock"><code>su -c "chmod 700 $MOUNTPATH/<var class="keyword varname">data</var>" <var class="keyword varname">volumeeditor</var></code></pre>
+</li>
+<li>사용자 <var class="keyword varname">volumeeditor</var>가 마운트 경로에 있는 파일 및 디렉토리에 액세스할 수 있는지 확인하십시오.
+<pre class="codeblock"><code>sudo -u <var class="keyword varname">volumeeditor</var> ls -al $MOUNTPATH</code></pre>
+</li>
+<li>선택사항: 컨테이너의 폴더를 볼륨의 <var class="keyword varname">data</var> 폴더에 링크하십시오.
+이 링크는 $MOUNTPATH/<var class="keyword varname">data</var>의 쓰기 권한을
+컨테이너의 폴더와
+연관시킵니다.<pre class="codeblock"><code>ln -sf $MOUNTPATH/<var class="keyword varname">data</var> <var class="keyword varname">/folder/in/container/</var></code></pre>
+</li>
+<li> 권한 오류 없이 편집을 수행할 수 있는 경우 <var class="keyword varname">volumeeditor</var> 그룹 루트 사용자를 제거하십시오.
+<pre class="codeblock"><code>deluser <var class="keyword varname">volumeeditor</var> root</code></pre>
+</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e3762" lang="ko-kr" id="ts_vol_group_overwrite"><h3 class="topictitle3" id="d84501e3762">볼륨에서 컨테이너 그룹 인스턴스의 로그 겹쳐쓰기</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">컨테인 그룹을 작성할 때 볼륨을 마운트하고 각 컨테이너 그룹 인스턴스에서 볼륨으로 로그를 출력했습니다. 각 컨테이너 그룹 인스턴스는 동일한 파일에 작성되고
+각 인스턴스가 파일을 겹쳐씁니다.
+<div class="p">예:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create –p 9080 –m <var class="keyword varname">64</var> -v log_vol:/opt/ibm/logs -e LOG_LOCATIONS=/opt/ibm/logs/messages.log,/opt/ibm/logs/debug.log,/opt/ibm/logs/trace.log -–name <var class="keyword varname">my_container_group</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty:latest</code></pre>
+</div>
+</div><div class="section tsCauses">각 컨테이너 인스턴스가 유일한 기록기인 것처럼 볼륨에 파일을 작성합니다.
+각 인스턴스는 메모리에 로컬 캐시가 있습니다. 각 컨테이너 인스턴스에서 캐시된 데이터가
+볼륨의 파일을 반복적으로 대체합니다.</div><div class="section tsResolve">인스턴스마다 파일이 달라지게 ID를 포함하도록 로그 파일의 이름을
+조정하십시오. 예를 들어, 컨테이너 그룹을 작성할 때 지정하고 앱에서
+생성한 로그 파일 이름에 <samp class="ph codeph">$HOSTNAME</samp> 변수를
+포함하십시오.<div class="p">예:<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create –p 9080 –m <var class="keyword varname">64</var> -v log_vol:/opt/ibm/logs -e LOG_LOCATIONS=/opt/ibm/logs/messages.$HOSTNAME.log,/opt/ibm/logs/debug.$HOSTNAME.log,/opt/ibm/logs/trace.$HOSTNAME.log -–name <var class="keyword varname">my_container_group</var> registry.<var class="keyword varname" data-hd-keyref="DomainName">domain_name</var>/ibmliberty:latest</code></pre>
+</div>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e3853" lang="ko-kr" id="ts_vol_performance"><h3 class="topictitle3" id="d84501e3853">볼륨에/에서 데이터를 전송하는 데 예상보다 시간이 오래 걸림</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">볼륨에/에서 읽거나 쓰는 데 예상보다 오래 걸립니다. </div><div class="section tsCauses"><span class="keyword">IBM
+Bluemix Container Service</span>에서 볼륨은
+로컬 호스트에 대한 액세스 권한이 없습니다. 그러므로 모든 볼륨이 NFS 파일 공유에 마운트됩니다. 볼륨의 성능은
+애플리케이션의 작업 로드와 함께 파일 공유의 크기 및 IOPS(초당 입출력(I/O))로
+나타냅니다. 볼륨이 호스트되는 파일 공유가 볼륨과 컨테이너의
+워크로드에 적합하지 않을 수도 있습니다. 또한 한 파일 공유에 있는 여러 볼륨이
+파일 공유 리소스를 사용하기 위해 경쟁할 수 있습니다. <p>새 파일 공유를 작성하려면 조직 관리자 역할이 있어야 합니다. 자세한 정보는 <a href="../iam/users_roles.html">사용자 및 역할</a>을 참조하십시오.</p>
+</div><div class="section tsResolve"><ol><li>볼륨이 호스트되는 파일 공유의 ID를
+판별합니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-inspect <var class="keyword varname">my_volume</var></code></pre>
+<pre class="codeblock"><code>{
+    "fsId": "<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>", 
+    "hostPath": "<span class="ph filepath">/vol/fa277ff4-8a64-435b-9b75-0f11d59a3ae4/my_volume</span>", 
+    "otherSpaceVisibility": [], 
+    "spaceGuid": "fa277ff4-8a64-435b-9b75-0f11d59a3ae4", 
+    "volName": "<var class="keyword varname">my_volume</var>"
+}</code></pre>
+</li>
+<li>파일 공유를 확인하여 해당 크기와 IOPS를
+판별합니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</code></pre>
+<pre class="codeblock"><code>Name                                   Size   IOPS/GB   Created               State
+<var class="keyword varname">fa277ff4-8a64-435b-9b75-0f11d59a3ae4</var>   20     4.00      2016-05-20 13:48:10   READY   </code></pre>
+</li>
+<li>파일 공유에 사용 가능한 크기(GB)를
+확인합니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume fs-flavor</code></pre>
+<pre class="codeblock"><code>[
+    20, 
+    40, 
+    80, 
+    100, 
+    250, 
+    500, 
+    1000, 
+    2000, 
+    4000, 
+    8000, 
+    12000
+]</code></pre>
+</li>
+<li>앱의 워크로드에 필요한 크기와 IOPS을 판별하십시오. 올바른 IOPS 값은 GB당
+0.25IOPS, 2IOPS 또는 4IOPS입니다. 파일 공유 크기와 GB당 IOPS를 함께 곱하여 파일 공유의
+총 IOPS를 판별합니다. 이 테이블에는 GB당 4IOPS의 여러 다른 공유
+크기가 스케일링하는 방식의 예가 들어 있습니다. <div class="tablenoborder"><table summary="" id="ts_vol_performance__table_zw1_2f3_kw" class="defaultstyle"><caption><span class="tablecap">표 1. 파일 공유 크기와 GB당 IOPS의 예</span></caption><thead><tr><th id="d84501e3971" class="thleft"> 파일 공유 크기</th>
+<th id="d84501e3973" class="thleft">GB당 IOPS</th>
+<th id="d84501e3975" class="thleft">총 IOPS</th>
+</tr>
+</thead>
+<tbody><tr><td headers="d84501e3971 ">20GB</td>
+<td headers="d84501e3973 ">4</td>
+<td headers="d84501e3975 ">80</td>
+</tr>
+<tr><td headers="d84501e3971 ">100GB</td>
+<td headers="d84501e3973 ">4</td>
+<td headers="d84501e3975 ">400</td>
+</tr>
+<tr><td headers="d84501e3971 ">1,000GB</td>
+<td headers="d84501e3973 ">4</td>
+<td headers="d84501e3975 ">4,000</td>
+</tr>
+<tr><td headers="d84501e3971 ">4,000GB</td>
+<td headers="d84501e3973 ">4</td>
+<td headers="d84501e3975 ">16,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li>새 파일 공유를 작성합니다. 첫 번째 숫자는 GB 단위의 크기입니다. 두 번째 숫자는
+파일 공유
+IOPS입니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs-create <var class="keyword varname">my_new_fs</var> <var class="keyword varname">1000</var> <var class="keyword varname">4</var></code></pre>
+</li>
+<li>새 파일 공유를 확인하고 상태가 준비로 표시될 때까지
+기다립니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-fs</code></pre>
+</li>
+<li>새 파일 공유에 볼륨을
+작성합니다.<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> volume-create <var class="keyword varname">my_new_volume</var> <var class="keyword varname">my_new_fs</var></code></pre>
+</li>
+<li>새 볼륨이 마운트된 이미지에서 컨테이너 또는 컨테이너 그룹을 실행합니다.</li>
+<li><var class="keyword varname">my_volume</var>에서 데이터를 백업하고
+데이터를 <var class="keyword varname">my_new_volume</var>에 복사합니다. 자세한 정보는 <a href="container_volumes_ov.html#container_volumes_backup" title="컨테이너 볼륨은 지속적 스토리지에서 호스팅되지만 백업은 없습니다. 볼륨 데이터를 백업행 하는 경우 bx ic cp를 사용하여 수동 백업을 작성할 수 있습니다.">데이터 백업 및 복원</a>을 참조하십시오.</li>
+</ol>
+</div></div>
+</article><article class="topic tsTroubleshooting nested2" role="article" aria-labelledby="d84501e4061" lang="ko-kr" id="ts_vol_mount_option"><h3 class="topictitle3" id="d84501e4061">CLI에서 볼륨을 사용하여 컨테이너를 작성할 때 구문 분석 오류 발생</h3>
+<div class="body tsBody"><p class="shortdesc"></p>
+<div class="section tsSymptoms">CLI에서 단일 컨테이너 또는 컨테이너 그룹을 작성할 때 실패 메시지가
+표시됩니다. <div class="p">예<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name my_container -n my_host -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -m 2048 --min 1 --max 2 --desired 1 -p 9080 --auto -v my_volume:/my/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</div>
+<div class="p">결과
+<pre class="codeblock"><code>docker: Error parsing reference: “my_volume:/my/path” is not a valid repository/tag.</code></pre>
+</div>
+</div><div class="section tsCauses">Cloud Foundry 버전 6.17 이상용 CLI에서는 다른 용도로 <span class="keyword option">-v</span>
+매개변수를 사용합니다.</div><div class="section tsResolve">명령에서 <span class="keyword option">-v</span> 옵션을 <span class="keyword option">--volume</span> 옵션으로
+변경하십시오. <div class="p">예<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> group-create --name my_container -n my_host -d <span class="keyword" data-hd-keyref="APPDomain">AppDomainName</span> -m 2048 --min 1 --max 2 --desired 1 -p 9080 --auto --volume my_volume:/my/path registry.<span class="keyword" data-hd-keyref="DomainName">DomainName</span>/ibmliberty</code></pre>
+</div>
+</div></div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e4156" lang="ko-kr" id="ts_known_issues"><h2 class="topictitle2" id="d84501e4156">알려진 문제점</h2>
+<div class="body conbody"><p class="shortdesc">IBM Containers에서 발생하는 알려진 문제점을 알아봅니다. </p>
+</div>
+<aside role="complementary" aria-labelledby="d84501e4156"></aside><article class="topic concept nested2" role="article" aria-labelledby="d84501e4207" id="ki_docker"><h3 class="topictitle3" id="d84501e4207">Docker 및 <span class="keyword">IBM
+Bluemix Container Service</span></h3>
+<div class="body conbody"><dl><dt class="dlterm">일부 Docker 명령은 <span class="keyword">IBM
+Bluemix Container Service</span> 플러그인(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)에서 지원되지 않습니다.</dt>
+<dd><p>특정 Docker 명령만 <samp class="ph codeph">(<span class="ph"><samp class="ph codeph">bx ic</samp></span>)</samp>에서 지원됩니다.
+지원되는 명령의 전체 목록은 <a href="../containers/container_cli_reference_cfic.html#container_cli_reference_native-docker">docker 명령 참조</a>에서 볼 수 있습니다.
+예를 들어, <samp class="ph codeph">tag</samp>는 <samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span></samp>에서
+사용할 수 없지만 <samp class="ph codeph">docker tag</samp>를 로컬로 사용한 후 업데이트된 이미지를
+<span class="keyword">Bluemix</span> 레지스트리에 푸시할 수 있습니다. </p>
+</dd>
+<dt class="dlterm">Docker와 Windows의 공통 문제</dt>
+<dd><p>Windows 컴퓨터에서 Docker의 설치 및 구성과 관련된 공통 문제가 있습니다. 이 공통 문제에 대한 자세한 정보를 확인하려면
+<a href="https://developer.ibm.com/bluemix/2015/04/16/installing-docker-windows-fixes-common-problems/" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">블로그: Windows용 Docker 설치: 공통 문제점에 대한 수정사항</a> 및
+<a href="http://stackoverflow.com/questions/tagged/boot2docker" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">boot2docker 태그가 지정된 Stack Overflow 게시물</a>을 검토하십시오. </p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84501e4275" id="ki_images"><h3 class="topictitle3" id="d84501e4275">이미지</h3>
+<div class="body conbody"><dl><dt class="dlterm">큰 이미지의 푸시 및 가져오기에 실패함</dt>
+<dd><p>Docker 명령을 실행하여 조직의 개인용 <span class="keyword">Bluemix</span> 레지스트리에서
+큰 이미지를 푸시하거나 가져오는 경우 요청에 실패합니다. 이미지에 문제가 있는지 판별하려면 먼저 이미지를 DockerHub에 푸시할 수 있는지
+확인하십시오. 이미지에 문제가 없는 경우 (가능하면) 이미지의 크기를 줄이십시오.</p>
+</dd>
+<dt class="dlterm"><a name="ki_images__image_size"><!-- --></a><span class="keyword">Bluemix</span>에서 이미지 크기가
+로컬에서 이미지 크기와 일치하지 않음</dt>
+<dd><p><span class="ph" id="ki_images__image_size_ph">개인용 <span class="keyword">Bluemix</span> 레지스트리에 이미지를 푸시하면 이미지와 관련하여 보고된
+크기가 로컬 Docker 엔진에 있는 동일한 이미지의 크기보다 작습니다. 크기가 다르다고 해서 이미지를 푸시할 때 문제가 발생한 것은 아닙니다.
+이미지의 압축 크기는 <span class="keyword">IBM
+Bluemix Container Service</span>에서 보고됩니다. </span></p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84501e4312" id="ki_logmet"><h3 class="topictitle3" id="d84501e4312">모니터링 및 로깅</h3>
+<div class="body conbody"><dl><dt class="dlterm"><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp>의 출력에 있는 추가 문자</dt>
+<dd><samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> logs</samp>를 실행하면
+추가 문자(예: <samp class="ph codeph">&amp;</samp>)가 각 행의 시작에 표시됩니다. NGINX에서 수신
+Docker 로그를 구문 분석할 때 이 문제가 발생합니다.</dd>
+<dt class="dlterm">표현식을 사용하여 로그 파일 추가를 지정할 수 없음</dt>
+<dd><p>수집할 로그 파일을 지정하기 위해 필터 또는 와일드카드 표현식을 사용할 수 없습니다. 예를 들면, <samp class="ph codeph">/var/log/*.log</samp>는 지정할 수 없습니다. 대신, 각 로그 파일을 개별적으로 나열하십시오. </p>
+</dd>
+</dl>
+</div>
+</article><article class="topic concept nested2" role="article" aria-labelledby="d84501e4344" id="ki_containers"><h3 class="topictitle3" id="d84501e4344">단일 컨테이너 및 컨테이너 그룹</h3>
+<div class="body conbody"><dl><dt class="dlterm">컨테이너 작성 후 연결 실패</dt>
+<dd><p><span class="keyword">IBM
+Bluemix Container Service</span>의
+Docker 네트워킹 아키텍처 제한사항으로 인해 컨테이너가 처음 시작될 때 아웃바운드 네트워크
+액세스가 작동하지 않을 수 있습니다. 컨테이너가 아웃바운드 네트워크 연결을 시도할 때 네트워크를 사용할 수 없는 경우
+오류 코드를 리턴하거나 예외 처리(throw)를 하면 컨테이너가 종료하고 "충돌됨" 상태가 표시됩니다.</p>
+
+<p>네트워킹 초기화를 허용하고 컨테이너 배치를
+계속 진행하도록 하려면 아웃바운드 연결이 필요한 프로세스를 시작하기 전에 휴면 명령문이
+있어야 합니다. 기본 Dockerfile에서 기존 서버 스타트업 명령을
+랩핑하는 사용자 정의 Dockerfile을 작성하십시오. 예는
+<a href="https://github.com/IBM-Bluemix/lets-chat-bluemix/tree/master/lets-chat" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Let's Chat Bluemix 샘플 애플리케이션</a>을
+참조하십시오. </p>
+</dd>
+<dt class="dlterm">인바운드 연결이 즉각적이지 않음</dt>
+<dd><p>인바운드 연결은 컨테이너 그룹 및 단일 컨테이너 둘 다(라우트 및 외부 앱 포함)에 대해
+즉각적이지 않습니다. 연결이 사용 가능해질 때까지 기다리십시오. 최대 5분이 소요될 수 있습니다.</p>
+</dd>
+<dt class="dlterm"><samp class="ph codeph">docker run -m</samp> 및
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m</samp>에서 서로 다른 기본 측정 단위가 사용됨</dt>
+<dd><samp class="ph codeph">docker run -m</samp>에서 측정 단위를 지정하지 않으면, 바이트가 기본 측정 단위로서 사용됩니다. 
+<samp class="ph codeph"><span class="ph"><samp class="ph codeph">bx ic</samp></span> run -m</samp>에서 측정 단위를 지정하지 않으면,
+MB가 기본 측정 단위로서 사용됩니다. </dd>
+<dt class="dlterm">사용자 데이터 한계는 컨테이너가 작성되는 것을 방지</dt>
+<dd>컨테이너에 너무 많은 서비스가 바인드된 경우 컨테이너를 작성할 수 없습니다. 각 서비스는 컨테이너에 데이터를 삽입하고 64KB 한계에 포함되어 계산됩니다. 이 한계를 초과하는 컨테이너를 작성하면 <samp class="ph systemoutput">Resource CREATE failed... User data too
+large</samp> 메시지를 수신합니다. 이 메시지가 표시되면 컨테이너에서 서비스를 제거하십시오. </dd>
+<dt class="dlterm"><a name="ki_containers__port25"><!-- --></a>포트 25를 컨테이너에서 노출에 사용할 수 없음</dt>
+<dd>포트 25는 <span class="keyword">IBM
+Bluemix Container Service</span>
+아키텍처의 일부인 SoftLayer에서 사용하지 못하도록 차단됩니다. 
+이 문제는 컨테이너에서 일부 SMTP 서비스의 사용에 영향을 주지 않습니다. 
+이 포트가 차단되는 이유에 대한 자세한 정보는 SoftLayer 문서에서
+<a href="http://knowledgelayer.softlayer.com/content/outbound-email-port-25" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">포트 25의
+아웃바운드 이메일</a> 항목을 참조하십시오. </dd>
+<dt class="dlterm"><a name="ki_containers__containerbuildingprocess"><!-- --></a>컨테이너 빌딩 또는 네트워킹 프로세스가 완료되지 않음</dt>
+<dd><div class="p">컨테이너가 빌딩 또는 네트워킹 상태에 너무 오래 머물러 있는 경우에는 해당 컨테이너를 제거한 후
+동일한 이미지로부터 새 컨테이너를 작성해야 할 수도 있습니다. 다음과 같은 CLI <span class="ph"><samp class="ph codeph">bx ic</samp></span> 명령을 사용할 수 있습니다. <ol><li><span class="ph">해당 영역에서 실행 중인 컨테이너의 목록을 검색합니다. 기본적으로는
+실행 중인 컨테이너만 표시됩니다.</span> 자세한 정보를 보려면
+<a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__ps">CLI <span class="ph">bx ic</span> ps
+참조</a>를 검토하십시오. <pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> ps -a</code></pre>
+</li>
+<li><span class="ph">하나 이상의 컨테이너를 제거하십시오.</span> 자세한 정보를 보려면
+<a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__rm">CLI <span class="ph">bx ic</span> rm
+참조</a>를 검토하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> rm -f <var class="keyword varname">container_ID</var></code></pre>
+</li>
+<li><span class="ph">이미지 이름으로부터 컨테이너 클라우드 서비스에서 새 컨테이너를
+시작합니다.</span> 자세한 정보를 보려면
+<a href="../containers/container_cli_reference_cfic.html#container_cli_reference_cfic__run">CLI <span class="ph">bx ic</span>
+run 참조</a>를 검토하십시오.
+<pre class="codeblock"><code><span class="ph"><samp class="ph codeph">bx ic</samp></span> run</code></pre>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="dlterm">컨테이너 그룹에 대해 자동 복구가 즉각적이지 않음</dt>
+<dd><p>컨테이너 그룹의 자동 복구는 새 시스템이 온라인 상태가 될 때까지 15분 이상 소요될 수 있습니다.자동 복구가 사용 가능해질 때까지 기다리십시오. 15분 이상이 소요될 수 있습니다.</p>
+</dd>
+<dt class="dlterm"><samp class="ph codeph">cf delete-orphaned-routes</samp> 명령으로 컨테이너 그룹에서 라우트를 삭제함</dt>
+<dd><p>Cloud Foundry가 애플리케이션에 바인드된 라우트를 인식하는 것과 같은 방식으로,
+컨테이너 그룹에 맵핑된 라우트를 인식하지 않습니다.
+컨테이너 그룹을 사용할 때에는 <samp class="ph codeph">cf
+delete-orphaned-routes</samp> 명령을 실행하지 마십시오. </p>
+</dd>
+</dl>
+</div>
+</article></article><article class="topic concept nested1" role="article" aria-labelledby="d84501e4494" lang="ko-kr" id="ts_getting_help"><h2 class="topictitle2" id="d84501e4494"><span class="keyword">IBM
+Bluemix Container Service</span>에 대한 도움 및 지원 받기</h2>
+<div class="body conbody"><p class="shortdesc">어디에서부터 컨테이너 문제점 해결을 시작하십니까?</p>
+<div class="p"><ul><li><span class="keyword">Bluemix</span>가 사용 가능한지 확인하려면
+<a href="https://developer.ibm.com/bluemix/support/#status" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)"><span class="keyword">Bluemix</span>
+상태 페이지를 확인</a>하십시오.</li>
+<li>포럼을 검토하여 다른 사용자에게도 동일한 문제가 발생하는지 여부를 확인하십시오. 포럼을 사용하여 질문을 할 때는
+<span class="keyword">Bluemix</span> 개발 팀이 볼 수 있도록
+질문에 태그를 지정하십시오. <ul><li><span class="keyword">IBM
+Bluemix Container Service</span>를 사용하여 앱을 개발하거나 배치하는 것에 관한 기술적 질문이 있는 경우, <a href="http://stackoverflow.com/search?q=bluemix+containers" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">Stack
+Overflow</a>에 질문을 게시하고 <samp class="ph codeph">ibm-bluemix</samp> 및 <samp class="ph codeph">containers</samp>로
+태그를 지정하십시오.</li>
+<li>서비스 및 시작하기 지시사항에 대한 질문의 경우에는
+<a href="https://developer.ibm.com/answers/topics/containers/?smartspace=bluemix" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">IBM
+developerWorks dW 응답</a> 포럼을 사용하십시오. <samp class="ph codeph">bluemix</samp> 및 <samp class="ph codeph">containers</samp> 태그를 포함하십시오. </li>
+</ul>
+포럼 사용에 대한 세부사항은
+<a href="../support/index.html#getting-help" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">도움 받기</a>를 참조하십시오. </li>
+<li>IBM 지원 센터에 문의하십시오. IBM 지원 티켓 열기에 대한 정보나 지원 레벨 및 티켓 심각도에 대한 정보는
+<a href="../support/index.html#contacting-support" rel="external" target="_blank" title="(새로운 탭이나 창으로 열기)">지원 문의</a>를 참조하십시오. </li>
+</ul>
+</div>
+</div>
+<aside role="complementary" aria-labelledby="d84501e4494"></aside></article></article></div></main></body></html>
